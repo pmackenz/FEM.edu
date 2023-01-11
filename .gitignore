@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Sphinx documentation
+sphinx/build
+
+
+.DS_Store
