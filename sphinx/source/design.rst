@@ -14,9 +14,9 @@ The program will need and use the following objects:
 .. toctree::
 	:maxdepth: 3
 
-	node.rst
-	element.rst
-	material.rst
-	system.rst
-	plotter.rst
+	design/node.rst
+	design/element.rst
+	design/material.rst
+	design/system.rst
+	design/plotter.rst
 

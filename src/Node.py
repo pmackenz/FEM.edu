@@ -7,6 +7,13 @@ class Node():
     """
 
     def __init__(self, x ,y, u=0, v=0):
+        """
+
+        :param x:
+        :param y:
+        :param u:
+        :param v:
+        """
         self.pos      = np.array([x,y])
         self.index    = -1
         self.disp     = np.array([u,v])
@@ -31,25 +38,57 @@ class Node():
         return "Node({},{},u={},v={})".format(self.pos[0],self.pos[1],self.disp[0],self.disp[1])
 
     def fixDOF(self, idx):
+        """
+
+        :param idx:
+        """
         self.fixity[idx] = True
 
     def __floordiv__(self, other):
+        """
+
+        :param other:
+        :return: self
+        """
         self.fixDOF(other)
         return self
 
     def isFixed(self, idx):
+        """
+
+        :param idx:
+        """
         return self.fixity[idx]
 
     def setDisp(self, u, v):
+        """
+
+        :param u:
+        :param v:
+        """
         self.disp = np.array([u,v])
 
     def getDisp(self):
+        """
+
+        :return: nodal displacement vector
+        """
         return self.disp
 
     def getPos(self):
+        """
+
+        :return: initial position vector
+        """
         return self.pos
 
     def getDeformedPos(self, factor=1.0):
+        """
+        Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
+
+        :param factor: deformation magnification factor, :math:`f`.
+        :return: deformed position vector, :math:`{\\bf x}`.
+        """
         return self.pos + factor * self.disp
 
     def addLoad(self, Px, Py):

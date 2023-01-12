@@ -23,19 +23,44 @@ class Plotter():
         return str(self)
 
     def setMesh(self, vert, lines):
+        """
+
+        :param vert:
+        :param lines:
+        """
         self.vertices = np.array(vert)
         self.lines    = np.array(lines)
 
     def setDisplacements(self, disp):
+        """
+
+        :param disp:
+        """
         self.disp = np.array(disp)
 
     def setValues(self, vals):
+        """
+
+        :param vals:
+        """
         self.values = np.array(vals)
 
     def setReactions(self, R):
+        """
+
+        :param R: array of nodal force vectors
+        """
         self.reactions = np.array(R)
 
     def displacementPlot(self, file=None):
+        """
+        Create a deformed system plot
+
+        If **file** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param file: filename (str)
+        """
         fig, axs = plt.subplots()
 
         # plot the undeformed lines
@@ -66,6 +91,15 @@ class Plotter():
         plt.show()
 
     def valuePlot(self, deformed=False, file=None):
+        """
+        Create a plot using colors to identify magnitude of internal force.
+
+        If **file** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param deformed: True | **False**
+        :param file: filename (str)
+        """
         fig, axs = plt.subplots()
 
         # plot the lines
@@ -102,6 +136,11 @@ class Plotter():
         plt.show()
 
     def addForces(self, axs):
+        """
+        add nodal forces to the plot shown in **axs**
+
+        :param axs: axis on which to plot
+        """
         if len(self.reactions) == len(self.vertices):
             Fx = []
             Fy = []

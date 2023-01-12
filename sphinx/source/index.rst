@@ -11,6 +11,7 @@ Welcome to PyFEM's documentation!
    :caption: Contents:
 
    design.rst
+   implementation.rst
 
 
 

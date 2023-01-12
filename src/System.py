@@ -11,6 +11,9 @@ class System():
     """
 
     def __init__(self):
+        """
+
+        """
         self.nodes    = []
         self.elements = []
         self.plotter  = Plotter()
@@ -29,6 +32,10 @@ class System():
         return "System()"
 
     def addNode(self, newNode):
+        """
+
+        :param newNode: a :ref:`Node` object
+        """
         newNode.index = len(self.nodes)
         self.nodes.append(newNode)
 
@@ -42,9 +49,17 @@ class System():
         return self
 
     def addElement(self, newElement):
+        """
+
+        :param newElement: a :ref:`Element` object
+        """
         self.elements.append(newElement)
 
     def solve(self):
+        """
+
+        """
+
         # compute size parameters
         ndof = 2*len(self.nodes)
         Rsys = np.zeros(ndof)
@@ -117,6 +132,10 @@ class System():
         self.disp = U
 
     def plot(self, factor=1.0):
+        """
+
+        :param factor: deformation magnification factor
+        """
 
         vertices = [ node.getPos() for node in self.nodes ]
         lines    = [ [ elem.nodes[k].index for k in [0,1] ] for elem in self.elements ]
@@ -135,6 +154,10 @@ class System():
         self.plotter.valuePlot()
 
     def report(self):
+        """
+        print a text-based summary report
+
+        """
         s  = "\nTruss Analysis Report\n"
         s += "=====================\n"
         s += "\nNodes:\n"
@@ -150,14 +173,23 @@ class System():
         print(s)
 
     def resetDisp(self):
+        """
+        Resets the displacement vector.
+        """
         for node in self.nodes:
             node.resetDisp()
 
     def resetLoad(self):
+        """
+        Resets the load vector.
+        """
         for node in self.nodes:
             node.resetLoad()
 
     def resetAll(self):
+        """
+        Resets load and displacement vectors.
+        """
         self.resetDisp()
         self.resetLoad()
 

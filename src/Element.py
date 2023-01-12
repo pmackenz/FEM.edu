@@ -4,10 +4,16 @@ from Material import *
 
 class Element():
     """
-    class: representing a single element
+    abstract class: representing a single generic element
     """
 
     def __init__(self, node0, node1, material):
+        """
+
+        :param node0:
+        :param node1:
+        :param material:
+        """
         self.nodes    = [node0, node1]
         self.material = material
         self.force    = 0.0
@@ -33,9 +39,17 @@ class Element():
                                      repr(self.material))
 
     def getAxialForce(self):
+        """
+
+        :return:
+        """
         return None
 
     def getForce(self):
+        """
+
+        :return:
+        """
         self.updateState()
         return self.Forces
 
@@ -44,10 +58,17 @@ class Element():
         return None
 
     def getStiffness(self):
+        """
+
+        :return:
+        """
         self.updateState()
         return self.Kt
 
     def updateState(self):
+        """
+
+        """
         msg = "{}(Element): updateState() method has not been implemented".format(self.__class__.__name__)
         raise NotImplementedError(msg)
 

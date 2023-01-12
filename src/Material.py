@@ -4,11 +4,15 @@ import matplotlib.pyplot as plt
 
 class Material():
     """
-    class: representing a generic material
+    abstract class: representing a generic material
 
     """
 
     def __init__(self, params={'E':1.0, 'A':1.0, 'nu':0.0, 'fy':1.0e30}):
+        """
+
+        :param params:
+        """
         self.parameters = params
 
         # make sure all necessary parameters exist
@@ -52,7 +56,6 @@ class Material():
         update state for a user provided axial strain value
 
         :param eps:  strain or strain tensor
-        :return: n/a
         """
         # update stress state
         E  = self.parameters['E']
