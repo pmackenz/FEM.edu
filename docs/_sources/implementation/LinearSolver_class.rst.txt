@@ -1,13 +1,13 @@
-Truss class
+Linear Solver class
 ==========================
 
 Parent class
 ---------------
-* :doc:`Element_class`
+* :doc:`Solver_class`
 
 Class doc
 -------------
 
-.. automodule:: Truss
+.. automodule:: LinearSolver
   :members:
 

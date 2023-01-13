@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solver &mdash; PyFEM 0.3 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Plotter" href="plotter.html" />
+    <link rel="prev" title="System" href="system.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> PyFEM
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../design.html">Program Design</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="node.html">Node</a></li>
+<li class="toctree-l2"><a class="reference internal" href="element.html">Element</a></li>
+<li class="toctree-l2"><a class="reference internal" href="material.html">Material</a></li>
+<li class="toctree-l2"><a class="reference internal" href="system.html">System</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Solver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plotter.html">Plotter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PyFEM</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../design.html">Program Design</a> &raquo;</li>
+      <li>Solver</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/design/solver.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="solver">
+<h1>Solver<a class="headerlink" href="#solver" title="Permalink to this heading"></a></h1>
+<p>Creates an instance of a Solver</p>
+<table class="colwidths-given docutils align-default" id="id1">
+<caption><span class="caption-text">System class methods</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>method</p></th>
+<th class="head"><p>input</p></th>
+<th class="head"><p>returns</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>__init__(…)</cite></p></td>
+<td></td>
+<td></td>
+<td><p>constructor.</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>addNode(newNode)</cite></p></td>
+<td><p><cite>Node(…)</cite> object</p></td>
+<td></td>
+<td><p>add one <cite>Node()</cite> object to your list of elements (the model)</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>addElement(newElem)</cite></p></td>
+<td><p><cite>Element(…)</cite> object</p></td>
+<td></td>
+<td><p>add one <cite>Element()</cite> object to your list of elements (the model)</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>solve()</cite></p></td>
+<td></td>
+<td></td>
+<td><p>assemble <span class="math notranslate nohighlight">\([K_t]\)</span> and <span class="math notranslate nohighlight">\(\{P\}\)</span>, solve for <span class="math notranslate nohighlight">\(\{u\} = [K_t]^{-1}\{P\}\)</span>,
+loop through nodes and update nodal displacement, compute unbalanced force <span class="math notranslate nohighlight">\(\{R\}
+= \{P\} - \{F\}\)</span></p></td>
+</tr>
+<tr class="row-even"><td><p><cite>plot(factor=1.0)</cite></p></td>
+<td></td>
+<td></td>
+<td><p>collect node info and send it to the plotter. Request the plot.</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>report()</cite></p></td>
+<td></td>
+<td></td>
+<td><p>print a summary report: list of nodal position, load, displacement, unbalanced force.</p></td>
+</tr>
+</tbody>
+</table>
+<table class="colwidths-given docutils align-default" id="id2">
+<caption><span class="caption-text">System class variables</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>name</p></th>
+<th class="head"><p>type</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><cite>nodes</cite></p></td>
+<td><p>List of <cite>Node()</cite> objects</p></td>
+<td><p>holds all the nodes in the model</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>elements</cite></p></td>
+<td><p>List of <cite>Element()</cite> objects</p></td>
+<td><p>holds all the elements in the model</p></td>
+</tr>
+<tr class="row-even"><td><p><cite>disp</cite></p></td>
+<td><p><cite>np.array([…])</cite></p></td>
+<td><p>system sized displacement vector</p></td>
+</tr>
+<tr class="row-odd"><td><p><cite>loads</cite></p></td>
+<td><p><cite>np.array([…])</cite></p></td>
+<td><p>system sized load vector</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Equations</strong></p>
+<ol class="arabic simple">
+<li><p>each element has <cite>node0 = elem.nodes[0]</cite> and <cite>node1 = elem.nodes[1]</cite></p></li>
+<li><p>node indices <cite>i = node0.index</cite> and <cite>j = node1.index</cite></p></li>
+<li><p>a local d.o.f. <span class="math notranslate nohighlight">\(u\to k=0\)</span> or <span class="math notranslate nohighlight">\(v\to k=1\)</span> of node <span class="math notranslate nohighlight">\(i\)</span> belongs at global index <span class="math notranslate nohighlight">\(K = 4*i + k\)</span></p></li>
+<li><p>a local d.o.f. <span class="math notranslate nohighlight">\(u\to m=0\)</span> or <span class="math notranslate nohighlight">\(v\to m=1\)</span> of node <span class="math notranslate nohighlight">\(j\)</span> belongs at global index <span class="math notranslate nohighlight">\(M = 4*j + m\)</span></p></li>
+</ol>
+<p><em>Assembly</em>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\({\bf F}\)</span>: element force from <cite>elem.getForce()</cite></p></li>
+<li><p><span class="math notranslate nohighlight">\({\bf K_t}\)</span>: element stiffness from <cite>elem.getStiffness()</cite></p></li>
+<li><p><span class="math notranslate nohighlight">\({\bf R}_{sys}\)</span>: system force</p></li>
+<li><p><span class="math notranslate nohighlight">\({\bf K_t}_{sys}\)</span>: system stiffness</p></li>
+</ul>
+<ol class="arabic simple" start="5">
+<li><p>Loop over <cite>nodes</cite>: <span class="math notranslate nohighlight">\({\bf R}_{sys}[K] = nodes[i].getLoad()[k]\)</span>   (this should return 0 if no load at this node and d.o.f.)</p></li>
+<li><p>Loop over <cite>elements</cite>: <span class="math notranslate nohighlight">\({\bf R}_{sys}[K] = {\bf R}_{sys}[K] -  {\bf F}[i][k]\)</span></p></li>
+<li><p>Loop over <cite>elements</cite>: <span class="math notranslate nohighlight">\({\bf K_t}_{sys}[K,M] = {\bf K_t}_{sys}[K,M] +  {\bf K_t}[i,j][k,m]\)</span></p></li>
+<li><p>Loop over <cite>nodes</cite>: if a d.o.f. at <em>K</em> is fixed, set <span class="math notranslate nohighlight">\({\bf R}_{sys}[K] = 0\)</span> and <span class="math notranslate nohighlight">\({\bf K_t}_{sys}[K,K] = 1.0e20\)</span>.</p></li>
+<li><p>Solve system of equations:  <span class="math notranslate nohighlight">\({\bf U} = {\bf K_t}_{sys}^{-1}\,{\bf R}_{sys}\)</span></p></li>
+<li><p>Loop over <cite>nodes</cite>: <span class="math notranslate nohighlight">\(nodes[i].setDisp(u,v)\)</span> using <span class="math notranslate nohighlight">\(u = {\bf U}[2*i]\)</span> and <span class="math notranslate nohighlight">\(v = {\bf U}[2*i+1]\)</span></p></li>
+<li><p>Recompute: <span class="math notranslate nohighlight">\({\bf R}_{sys}\)</span> as in steps 5 and 6 (<strong>do not repeat steps 7-11</strong>).  If
+everything was done correctly, fixed d.o.f.s will contain the support reactions and free
+d.o.f.s should hold numeric zeros.</p></li>
+</ol>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="system.html" class="btn btn-neutral float-left" title="System" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="plotter.html" class="btn btn-neutral float-right" title="Plotter" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Peter Mackenzie-Helnwein.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
