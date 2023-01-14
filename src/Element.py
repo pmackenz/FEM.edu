@@ -3,8 +3,6 @@ from Node import *
 from Material import *
 
 
-
-# Test
 class Element():
     """
     abstract class: representing a single generic element
