@@ -2,6 +2,7 @@ import numpy as np
 from Node import *
 from Material import *
 
+
 class Element():
     """
     abstract class: representing a single generic element
