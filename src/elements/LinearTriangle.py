@@ -116,6 +116,7 @@ class LinearTriangle(Element):
             ts * self.area * self.thickness,
             tt * self.area * self.thickness,
             tu * self.area * self.thickness
+            ]
 
         # material tangent stiffness
         Cep = self.material.getStiffness()
