@@ -15,10 +15,11 @@ release = '0.3'
 # https://www.jetbrains.com/pycharm/guide/tutorials/sphinx_sites/documentation/
 import os
 import sys
+# sys.path.insert(0, os.path.abspath("../../src/elements"))
+# sys.path.insert(0, os.path.abspath("../../src/materials"))
+# sys.path.insert(0, os.path.abspath("../../src/solver"))
+sys.path.insert(0, os.path.abspath("../../"))
 sys.path.insert(0, os.path.abspath("."))
-sys.path.insert(0, os.path.abspath("../src"))
-sys.path.insert(0, os.path.abspath("../../src"))
-sys.path.insert(0, os.path.abspath("../../../src"))
 
 
 # -- General configuration ---------------------------------------------------

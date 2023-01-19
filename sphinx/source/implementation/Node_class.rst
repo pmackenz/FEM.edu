@@ -1,7 +1,7 @@
 Node class
 ================
 
-.. automodule:: Node
+.. automodule:: src.Node
   :members:
 
 

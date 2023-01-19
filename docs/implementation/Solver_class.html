@@ -43,8 +43,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solver class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
@@ -86,14 +86,14 @@
   <section id="solver-class">
 <h1>Solver class<a class="headerlink" href="#solver-class" title="Permalink to this heading"></a></h1>
 <p>This is an abstract class for defining a general solver interface.</p>
-<span class="target" id="module-Solver"></span><dl class="py class">
-<dt class="sig sig-object py" id="Solver.Solver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><a class="headerlink" href="#Solver.Solver" title="Permalink to this definition"></a></dt>
+<span class="target" id="module-src.solver.Solver"></span><dl class="py class">
+<dt class="sig sig-object py" id="src.solver.Solver.Solver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.solver.Solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><a class="headerlink" href="#src.solver.Solver.Solver" title="Permalink to this definition"></a></dt>
 <dd><p>Abstract class for any solver implementation.</p>
 <p>This class describes the functions needed by any solver</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Solver.Solver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.solver.Solver.Solver.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -102,8 +102,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Solver.Solver.initialize">
-<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Solver.Solver.initialize" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.solver.Solver.Solver.initialize">
+<span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.solver.Solver.Solver.initialize" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -112,8 +112,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Solver.Solver.reset">
-<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Solver.Solver.reset" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.solver.Solver.Solver.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.solver.Solver.Solver.reset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -122,8 +122,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Solver.Solver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Solver.Solver.solve" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.solver.Solver.Solver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>

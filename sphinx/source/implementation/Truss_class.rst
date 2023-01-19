@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: Truss
+.. automodule:: src.elements.Truss
   :members:
 

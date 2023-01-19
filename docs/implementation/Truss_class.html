@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Material class" href="Material_class.html" />
-    <link rel="prev" title="Element class" href="Element_class.html" /> 
+    <link rel="next" title="LinearTriangle class" href="LinearTriangle_class.html" />
+    <link rel="prev" title="Element classes" href="Element_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,14 +43,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="Element_class.html">Element class</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="Element_class.html">Element classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Element_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Truss class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
@@ -73,7 +74,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-          <li><a href="Element_class.html">Element class</a> &raquo;</li>
+          <li><a href="Element_class.html">Element classes</a> &raquo;</li>
       <li>Truss class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/implementation/Truss_class.rst.txt" rel="nofollow"> View page source</a>
@@ -89,18 +90,18 @@
 <section id="parent-class">
 <h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="Element_class.html"><span class="doc">Element class</span></a></p></li>
+<li><p><a class="reference internal" href="Element_class.html"><span class="doc">Element classes</span></a></p></li>
 </ul>
 </section>
-<section id="module-Truss">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-Truss" title="Permalink to this heading"></a></h2>
+<section id="module-src.elements.Truss">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-src.elements.Truss" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="Truss.Truss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Truss.</span></span><span class="sig-name descname"><span class="pre">Truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Truss.Truss" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Truss.Truss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.elements.Truss.</span></span><span class="sig-name descname"><span class="pre">Truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Truss.Truss" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single truss element</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Truss.Truss.getAxialForce">
-<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Truss.Truss.getAxialForce" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Truss.Truss.getAxialForce">
+<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Truss.Truss.getAxialForce" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -109,8 +110,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Truss.Truss.updateState">
-<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Truss.Truss.updateState" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Truss.Truss.updateState">
+<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Truss.Truss.updateState" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -122,8 +123,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Element_class.html" class="btn btn-neutral float-left" title="Element class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Material_class.html" class="btn btn-neutral float-right" title="Material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Element_class.html" class="btn btn-neutral float-left" title="Element classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="LinearTriangle_class.html" class="btn btn-neutral float-right" title="LinearTriangle class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

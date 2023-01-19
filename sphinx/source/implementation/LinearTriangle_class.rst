@@ -1,13 +1,12 @@
-Linear Solver class
+LinearTriangle class
 ==========================
 
 Parent class
 ---------------
-* :doc:`Solver_class`
+* :doc:`Element_class`
 
 Class doc
 -------------
 
-.. automodule:: src.solver.LinearSolver
+.. automodule:: src.elements.LinearTriangle
   :members:
-

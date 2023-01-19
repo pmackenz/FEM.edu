@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Material classes &mdash; PyFEM 0.3 documentation</title>
+  <title>PlaneStrain material class &mdash; PyFEM 0.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="FiberMaterial material class" href="FiberMaterial.html" />
-    <link rel="prev" title="LinearTriangle class" href="LinearTriangle_class.html" /> 
+    <link rel="next" title="System class" href="System_class.html" />
+    <link rel="prev" title="FiberMaterial material class" href="FiberMaterial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,10 +44,10 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Material classes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
+<li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Material_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">PlaneStrain material class</a></li>
 </ul>
 </li>
 </ul>
@@ -74,9 +74,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-      <li>Material classes</li>
+          <li><a href="Material_class.html">Material classes</a> &raquo;</li>
+      <li>PlaneStrain material class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/Material_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/PlaneStrain.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -84,55 +85,36 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-src.materials.Material">
-<span id="material-classes"></span><h1>Material classes<a class="headerlink" href="#module-src.materials.Material" title="Permalink to this heading"></a></h1>
+  <section id="planestrain-material-class">
+<h1>PlaneStrain material class<a class="headerlink" href="#planestrain-material-class" title="Permalink to this heading"></a></h1>
+<section id="parent-class">
+<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="Material_class.html"><span class="doc">Material classes</span></a></p></li>
+</ul>
+</section>
+<section id="module-src.materials.PlaneStrain">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-src.materials.PlaneStrain" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="src.materials.Material.Material">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.materials.Material.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'A':</span> <span class="pre">1.0,</span> <span class="pre">'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.Material.Material" title="Permalink to this definition"></a></dt>
-<dd><p>abstract class: representing a generic material</p>
+<dt class="sig sig-object py" id="src.materials.PlaneStrain.PlaneStrain">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.materials.PlaneStrain.</span></span><span class="sig-name descname"><span class="pre">PlaneStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0,</span> <span class="pre">'t':</span> <span class="pre">1.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.PlaneStrain.PlaneStrain" title="Permalink to this definition"></a></dt>
+<dd><p>class: representing a 2d Plane Stress Material</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="src.materials.Material.Material.getStiffness">
-<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.Material.Material.getStiffness" title="Permalink to this definition"></a></dt>
-<dd><p>request axial stiffness</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>Et … tangent material stiffness</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.materials.Material.Material.getStress">
-<span class="sig-name descname"><span class="pre">getStress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.Material.Material.getStress" title="Permalink to this definition"></a></dt>
-<dd><p>request axial stress</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>sigma</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="src.materials.Material.Material.setStrain">
-<span class="sig-name descname"><span class="pre">setStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.Material.Material.setStrain" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.materials.PlaneStrain.PlaneStrain.setStrain">
+<span class="sig-name descname"><span class="pre">setStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.materials.PlaneStrain.PlaneStrain.setStrain" title="Permalink to this definition"></a></dt>
 <dd><p>update state for a user provided axial strain value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>eps</strong> – strain or strain tensor</p>
 </dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>n/a</p>
+</dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-<section id="derived-classes">
-<h2>Derived Classes<a class="headerlink" href="#derived-classes" title="Permalink to this heading"></a></h2>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
-<li class="toctree-l1"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
-</ul>
-</div>
 </section>
 </section>
 
@@ -140,8 +122,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="LinearTriangle_class.html" class="btn btn-neutral float-left" title="LinearTriangle class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="FiberMaterial.html" class="btn btn-neutral float-right" title="FiberMaterial material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="FiberMaterial.html" class="btn btn-neutral float-left" title="FiberMaterial material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="System_class.html" class="btn btn-neutral float-right" title="System class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

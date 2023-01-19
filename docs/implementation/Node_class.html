@@ -20,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Element class" href="Element_class.html" />
+    <link rel="next" title="Element classes" href="Element_class.html" />
     <link rel="prev" title="Implementation" href="../implementation.html" /> 
 </head>
 
@@ -44,8 +44,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
@@ -78,15 +78,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-Node">
-<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-Node" title="Permalink to this heading"></a></h1>
+  <section id="module-src.Node">
+<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-src.Node" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="Node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.fixDOF">
-<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.fixDOF">
+<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>idx</strong> – </p>
@@ -95,8 +95,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.getDeformedPos">
-<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.getDeformedPos">
+<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
 <dd><p>Return deformed position <span class="math notranslate nohighlight">\({\bf x} = {\bf X} + f \: {\bf u}\)</span></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -109,8 +109,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.getDisp">
-<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.getDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.getDisp">
+<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>nodal displacement vector</p>
@@ -119,8 +119,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.getPos">
-<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.getPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.getPos">
+<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getPos" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>initial position vector</p>
@@ -129,8 +129,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.isFixed">
-<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.isFixed" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.isFixed">
+<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>idx</strong> – </p>
@@ -139,8 +139,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Node.Node.setDisp">
-<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Node.Node.setDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Node.Node.setDisp">
+<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -160,7 +160,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../implementation.html" class="btn btn-neutral float-left" title="Implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Element_class.html" class="btn btn-neutral float-right" title="Element class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Element_class.html" class="btn btn-neutral float-right" title="Element classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

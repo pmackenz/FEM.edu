@@ -4,8 +4,8 @@ import sys
 
 sys.path.insert(0, os.path.abspath(".."))
 
-from Node import *
-from materials import Material
+from ..Node import *
+from ..materials import Material
 
 
 class Element():
