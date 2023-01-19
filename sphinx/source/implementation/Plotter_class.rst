@@ -1,6 +1,6 @@
 Plotter class
 ==========================
 
-.. automodule:: Plotter
+.. automodule:: src.Plotter
   :members:
 

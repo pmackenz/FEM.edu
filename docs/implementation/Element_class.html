@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Element class &mdash; PyFEM 0.3 documentation</title>
+  <title>Element classes &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> PyFEM
+            <a href="../index.html" class="icon icon-home"> FEM.edu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -43,14 +43,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Element class</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Element classes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
@@ -64,7 +65,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">PyFEM</a>
+          <a href="../index.html">FEM.edu</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -73,7 +74,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-      <li>Element class</li>
+      <li>Element classes</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/implementation/Element_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -83,15 +84,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-Element">
-<span id="element-class"></span><h1>Element class<a class="headerlink" href="#module-Element" title="Permalink to this heading"></a></h1>
+  <section id="module-src.elements.Element">
+<span id="element-classes"></span><h1>Element classes<a class="headerlink" href="#module-src.elements.Element" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="Element.Element">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Element.Element" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Element.Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Element.Element" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a single generic element</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Element.Element.getAxialForce">
-<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Element.Element.getAxialForce" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Element.Element.getAxialForce">
+<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Element.Element.getAxialForce" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -100,8 +101,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Element.Element.getForce">
-<span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Element.Element.getForce" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Element.Element.getForce">
+<span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Element.Element.getForce" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -110,8 +111,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Element.Element.getStiffness">
-<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Element.Element.getStiffness" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Element.Element.getStiffness">
+<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Element.Element.getStiffness" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -120,8 +121,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Element.Element.updateState">
-<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Element.Element.updateState" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.elements.Element.Element.updateState">
+<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.elements.Element.Element.updateState" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -131,6 +132,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
 </div>
 </section>

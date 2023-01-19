@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from Material import *
+from ..materials import Material
 
 
 class PlaneStress(Material):

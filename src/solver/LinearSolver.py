@@ -1,4 +1,4 @@
-from Solver import *
+from .Solver import *
 
 class LinearSolver(Solver):
     """

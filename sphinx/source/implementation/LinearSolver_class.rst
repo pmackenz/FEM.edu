@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: LinearSolver
+.. automodule:: src.solver.LinearSolver
   :members:
 

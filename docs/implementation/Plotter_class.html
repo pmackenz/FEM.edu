@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plotter class &mdash; PyFEM 0.3 documentation</title>
+  <title>Plotter class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -27,7 +27,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
         <div class="wy-side-nav-search" >
-            <a href="../index.html" class="icon icon-home"> PyFEM
+            <a href="../index.html" class="icon icon-home"> FEM.edu
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
@@ -42,8 +42,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Plotter class</a></li>
@@ -57,7 +57,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="../index.html">PyFEM</a>
+          <a href="../index.html">FEM.edu</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -76,15 +76,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-Plotter">
-<span id="plotter-class"></span><h1>Plotter class<a class="headerlink" href="#module-Plotter" title="Permalink to this heading"></a></h1>
+  <section id="module-src.Plotter">
+<span id="plotter-class"></span><h1>Plotter class<a class="headerlink" href="#module-src.Plotter" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="Plotter.Plotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#Plotter.Plotter" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#src.Plotter.Plotter" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a Plotter object</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.addForces">
-<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.addForces" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.addForces">
+<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.addForces" title="Permalink to this definition"></a></dt>
 <dd><p>add nodal forces to the plot shown in <strong>axs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -94,8 +94,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.displacementPlot">
-<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.displacementPlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.displacementPlot">
+<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.displacementPlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a deformed system plot</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -107,8 +107,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.setDisplacements">
-<span class="sig-name descname"><span class="pre">setDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.setDisplacements" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.setDisplacements">
+<span class="sig-name descname"><span class="pre">setDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setDisplacements" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>disp</strong> – </p>
@@ -117,8 +117,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.setMesh">
-<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.setMesh" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.setMesh">
+<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setMesh" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -130,8 +130,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.setReactions">
-<span class="sig-name descname"><span class="pre">setReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.setReactions" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.setReactions">
+<span class="sig-name descname"><span class="pre">setReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setReactions" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>R</strong> – array of nodal force vectors</p>
@@ -140,8 +140,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.setValues">
-<span class="sig-name descname"><span class="pre">setValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.setValues" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.setValues">
+<span class="sig-name descname"><span class="pre">setValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setValues" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>vals</strong> – </p>
@@ -150,8 +150,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="Plotter.Plotter.valuePlot">
-<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="src.Plotter.Plotter.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a plot using colors to identify magnitude of internal force.</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>

@@ -6,19 +6,20 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'PyFEM'
+project = 'FEM.edu'
 copyright = '2023, Peter Mackenzie-Helnwein'
 author = 'Peter Mackenzie-Helnwein'
-release = '0.3'
+release = '0.4'
 
 # -- add current folder to path
 # https://www.jetbrains.com/pycharm/guide/tutorials/sphinx_sites/documentation/
 import os
 import sys
+# sys.path.insert(0, os.path.abspath("../../src/elements"))
+# sys.path.insert(0, os.path.abspath("../../src/materials"))
+# sys.path.insert(0, os.path.abspath("../../src/solver"))
+sys.path.insert(0, os.path.abspath("../../"))
 sys.path.insert(0, os.path.abspath("."))
-sys.path.insert(0, os.path.abspath("../src"))
-sys.path.insert(0, os.path.abspath("../../src"))
-sys.path.insert(0, os.path.abspath("../../../src"))
 
 
 # -- General configuration ---------------------------------------------------
