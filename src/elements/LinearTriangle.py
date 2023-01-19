@@ -1,3 +1,4 @@
+import numpy as np
 from Element import *
 
 class LinearTriangle(Element):
@@ -13,6 +14,28 @@ class LinearTriangle(Element):
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
                           [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
                           [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))] ]
+
+        # covariant base vectors
+
+        base1 = node1.getPos() - node0.getPos()
+        base2 = node1.getPos() - node0.getPos()
+        base0 = -base1 - base2
+
+        self.covariant_bases = np.vstack((base0,base1,base2))
+
+        # metric
+
+        gcov = np.vstack((base1, base2))
+        self.GIJ = gcov @ gcov.T
+
+        self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
+
+        # dual base vectors
+
+        self.contra_base = self.covariant_bases @ self.GIJ.I
+
+        pass
+
 
     def __str__(self):
         s = \
