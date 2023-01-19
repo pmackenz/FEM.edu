@@ -8,89 +8,129 @@ class LinearTriangle(Element):
     """
 
     def __init__(self, node0, node1, node2, material):
-        self.nodes    = [node0, node1, node2]
-        self.material = material
+        super().__init__((node0, node1, node2), material)
+
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) , np.zeros(2) ]
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
                           [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
                           [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))] ]
 
-        # covariant base vectors
-
+        # covariant base vectors (reference system)
         base1 = node1.getPos() - node0.getPos()
-        base2 = node1.getPos() - node0.getPos()
-        base0 = -base1 - base2
+        base2 = node2.getPos() - node0.getPos()
+        self.gcov = np.vstack((base1, base2))
 
-        self.covariant_bases = np.vstack((base0,base1,base2))
+        # metric (reference system)
+        self.GIJ = self.gcov @ self.gcov.T
 
-        # metric
-
-        gcov = np.vstack((base1, base2))
-        self.GIJ = gcov @ gcov.T
+        # dual base vectors (reference system)
+        self.gcont = np.linalg.inv(self.GIJ) @ self.gcov
 
         self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
 
-        # dual base vectors
-
-        self.contra_base = self.covariant_bases @ self.GIJ.I
-
-        pass
-
-
     def __str__(self):
         s = \
-"""Truss: node {} to node {}:
+"""LinearTriangle: nodes {} {} {}:
    material properties: {}  strain:{}   stress:{}  
    internal force: {}
-   Pe: [ {} {} ]""".format( self.nodes[0].index, self.nodes[1].index,
+   Pe: [ {} {} ]""".format( self.nodes[0].index, self.nodes[1].index, self.nodes[2].index,
                             repr(self.material), self.material.getStrain(),
                             self.material.getStress(),
                             self.force, *self.Forces[1] )
         return s
 
     def __repr__(self):
-        return "Truss({},{},{})".format( repr(self.nodes[0]),
-                                         repr(self.nodes[1]),
-                                         repr(self.material))
+        return "LinearTriangle({},{},{},{})".format( repr(self.nodes[0]),
+                                                     repr(self.nodes[1]),
+                                                     repr(self.nodes[2]),
+                                                     repr(self.material))
 
     def updateState(self):
-        X0 = self.nodes[0].getPos()
-        U0 = self.nodes[0].getDisp()
-        X1 = self.nodes[1].getPos()
-        U1 = self.nodes[1].getDisp()
-        X2 = self.nodes[1].getPos()
-        U2 = self.nodes[1].getDisp()
 
-        G1 = X1 - X0
-        G2 = X2 - X0
+        node0 = self.nodes[0]
+        node1 = self.nodes[1]
+        node2 = self.nodes[2]
 
-        area = np.linalg.norm(np.cross(G1, G2)) / 2.
+        Gs = self.gcont[0]
+        Gt = self.gcont[1]
+        Gu = -Gs - Gt
 
-        g1 = G1 + U1 - U0
-        g2 = G2 + U2 - U0
+        # covariant base vectors (current system)
 
-        DPhi0 = np.column_stack(G1,G2)
-        DPhi  = np.column_stack(g1,g2)
+        gs = node1.getDeformedPos() - node0.getDeformedPos()
+        gt = node2.getDeformedPos() - node0.getDeformedPos()
+        gu = -gs - gt
 
-        F = DPhi @ DPhi0.I
+        # metric (current system)
+        gcov = np.vstack((gs, gt))
+        gIJ = gcov @ gcov.T
 
-        eps = 0.5 * ( F.T @ F - np.eye(2) )
+        # deformation gradient
+        F = np.outer(gs, Gs) + np.outer(gt, Gt)
+
+        convective_strain = 0.5 * (gIJ - self.GIJ)
+        almansi_strain = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(np.size(gs)) )
+
+        # Dphi0_inv = np.linalg.inv(self.gcov.T)
+        # val = Dphi0_inv.T @ convective_strain @ Dphi0_inv  # same as almansi_strain
+
+        eps = almansi_strain
+
+        # update the material state
 
         strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
 
         self.material.setStrain(strain)
-        self.force = self.material.getStress()
 
-        Pe = self.force * area
+        # 2nd Piola-Kirchhoff stress
+        stress = self.material.getStress()
+
+        S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
+
+        # 1st Piola-Kirchhoff stress
+        P = F @ S
+
+        # store stress for reporting
+        self.stress = P
+
+        # tractions
+        ts = P @ Gs
+        tt = P @ Gt
+        tu = P @ Gu
+
+        # initialize arrays
+        BI = []
+        Kt = []
+        for i in range(3):
+            BI.append( np.zeros((nstrain, ndim)) )
+            Krow = []
+            for j in range(3):
+                Krow.append( np.zeros((ndim,ndim)) )
+            Kt.append( Krow )
+
+        # compute the kinematic matrices
+
+        # internal force
+        self.Forces = [
+            ts * self.area * self.thickness,
+            tt * self.area * self.thickness,
+            tu * self.area * self.thickness
+
+        # material tangent stiffness
+        Cep = self.material.getStiffness()
+
+        # geometric tangent stiffness
+
+        Pe = self.force * self.area
         self.Forces = [-Pe, Pe]
 
-        Et = self.material.getStiffness()
+
         ke = (Et * area / ell) * np.outer(Nvec, Nvec)
         self.Kt = [[ke,-ke],[-ke,ke]]
 
     def getStress(self):
-        return None
+        return self.Stress
 
 
 if __name__ == "__main__":

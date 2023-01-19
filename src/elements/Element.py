@@ -2,26 +2,21 @@ import numpy as np
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath(".."))
-
-from ..Node import *
-from ..materials import Material
-
 
 class Element():
     """
     abstract class: representing a single generic element
     """
 
-    def __init__(self, node0, node1, material):
+    def __init__(self, nodes, material):
         """
 
-        :param node0:
-        :param node1:
+        :param nodes:
         :param material:
         """
-        self.nodes    = [node0, node1]
+        self.nodes    = nodes
         self.material = material
+
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) ]
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
@@ -80,6 +75,12 @@ class Element():
 
 
 if __name__ == "__main__":
+
+    sys.path.insert(0, os.path.abspath(".."))
+
+    from Node import *
+    from materials import Material
+
     # testing the Element class
     nd0 = Node(0.0, 0.0)
     nd0.index = 0

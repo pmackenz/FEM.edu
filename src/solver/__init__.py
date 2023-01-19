@@ -1,7 +1,7 @@
-all = (
+__all__ = (
     'Solver',
     'LinearSolver',
 )
 
 from .Solver import *
-from .LinearSolver import *
+# from .LinearSolver import *

@@ -2,12 +2,12 @@
 documentation string inside `__init__.py`
 """
 
-all = (
+__all__ = (
     "Element",
     "LinearTriangle",
     "Truss",
 )
 
 from .Element import *
-from .LinearTriangle import *
-from .Truss import *
+# from .LinearTriangle import *
+# from .Truss import *

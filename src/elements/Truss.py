@@ -6,9 +6,9 @@ class Truss(Element):
     class: representing a single truss element
     """
 
-    def __init__(self, node0, node1, material):
-        self.nodes    = [node0, node1]
-        self.material = material
+    def __init__(self, nodei, nodej, material):
+        super().__init__((nodei, nodej), material)
+
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) ]
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
