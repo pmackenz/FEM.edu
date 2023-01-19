@@ -1,6 +1,5 @@
-from src.Node import *
 from src.elements.Truss import *
-from src.elements.LinearTriangle import LinearTriangle
+from src.elements.LinearTriangle import *
 from src.materials.FiberMaterial import *
 from src.System import *
 
@@ -43,7 +42,6 @@ def problem1():
 
     # create plots
     model.plot(factor=1.)
-
 
 def problem2():
     # initialize a system model
@@ -193,7 +191,7 @@ def problem4():
 
 
 if __name__ == "__main__":
-    #problem1()
-    #problem2()
-    #problem3()
-    problem4()
+    # problem1()
+    problem2()
+    # problem3()
+    # problem4()
