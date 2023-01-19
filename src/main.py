@@ -1,6 +1,6 @@
 from Node import *
-from Truss import *
-from FiberMaterial import *
+from elements import Truss
+from materials import FiberMaterial
 from System import *
 
 def problem1():

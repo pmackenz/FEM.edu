@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from Material import *
+from .Material import *
 
 
 class FiberMaterial(Material):

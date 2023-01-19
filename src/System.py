@@ -1,7 +1,8 @@
 import numpy as np
 
 from Node import *
-from Element import *
+from elements import Element
+from materials import Material
 from Plotter import *
 
 

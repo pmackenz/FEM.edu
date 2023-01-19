@@ -1,5 +1,5 @@
 import numpy as np
-from Element import *
+from .Element import *
 
 class LinearTriangle(Element):
     """
