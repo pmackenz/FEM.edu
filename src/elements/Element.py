@@ -1,6 +1,11 @@
 import numpy as np
-from Node import *
-from Material import *
+import os
+import sys
+
+sys.path.insert(0, os.path.abspath(".."))
+
+from ..Node import *
+from ..materials import Material
 
 
 class Element():
@@ -23,10 +28,10 @@ class Element():
 
     def __str__(self):
         s = \
-"""{}: node {} to node {}:
-   material properties: {}  strain:{}   stress:{}  
-   internal force: {}
-   Pe: [ {} {} ]""".format( self.__class__,
+        """{}: node {} to node {}:
+    material properties: {}  strain:{}   stress:{}  
+    internal force: {}
+    Pe: [ {} {} ]""".format( self.__class__,
                             self.nodes[0].index, self.nodes[1].index,
                             repr(self.material), self.material.getStrain(),
                             self.material.getStress(),
@@ -81,7 +86,8 @@ if __name__ == "__main__":
     nd1 = Node(3.0, 2.0)
     nd1.index = 1
     params = {'E':100, 'A':1.5, 'fy':1.0e20}
-    elem = Element(nd0, nd1, Material(params))
+    mat = Material(params)
+    elem = Element(nd0, nd1, mat)
 
     print(nd0)
     print(nd1)

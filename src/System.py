@@ -1,8 +1,9 @@
 import numpy as np
 
-from Node import *
-from Element import *
-from Plotter import *
+from .Node import *
+from .elements import Element
+from .materials import Material
+from .Plotter import *
 
 
 class System():

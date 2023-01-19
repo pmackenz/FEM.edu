@@ -1,4 +1,5 @@
-from Element import *
+from .Element import *
+from ..Node import *
 
 class Truss(Element):
     """

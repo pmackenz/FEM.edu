@@ -1,7 +1,7 @@
-from Node import *
-from Truss import *
-from FiberMaterial import *
-from System import *
+from .Node import *
+from .elements import Truss
+from .materials import FiberMaterial
+from .System import *
 
 def problem1():
     # initialize a system model

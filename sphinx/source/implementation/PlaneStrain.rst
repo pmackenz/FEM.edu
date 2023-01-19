@@ -1,13 +1,12 @@
-Linear Solver class
+PlaneStrain material class
 ==========================
 
 Parent class
 ---------------
-* :doc:`Solver_class`
+* :doc:`Material_class`
 
 Class doc
 -------------
 
-.. automodule:: src.solver.LinearSolver
+.. automodule:: src.materials.PlaneStrain
   :members:
-

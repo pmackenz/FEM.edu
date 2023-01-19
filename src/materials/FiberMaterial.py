@@ -1,30 +1,33 @@
 import matplotlib.pyplot as plt
 
-from ..materials import Material
+from .Material import *
 
 
-class PlaneStress(Material):
+class FiberMaterial(Material):
     """
-    class: representing a 2d Plane Stress Material
+    class: representing a 1d Fiber Material
 
     """
 
-    def __init__(self, params={'E':1.0, 't':1.0, 'nu':0.0, 'fy':1.0e30}):
+    def __init__(self, params={'E':1.0, 'A':1.0, 'nu':0.0, 'fy':1.0e30}):
         super().__init__(params = params)
 
         # make sure all necessary parameters exist
         if 'E' not in self.parameters:
             self.parameters['E']  = 1.0
         if 'A' not in self.parameters:
-            self.parameters['t']  = 1.0
+            self.parameters['A']  = 1.0
         if 'nu' not in self.parameters:
             self.parameters['nu'] = 0.0
         if 'fy' not in self.parameters:
             self.parameters['fy'] = 1.0e30
 
         # initialize strain
-        self.plastic_strain = np.zeros(3)
-        self.setStrain({'xx':0.0, 'yy':0.0, 'xy':0.0})
+        self.plastic_strain = 0.0
+        self.setStrain(0.0)
+
+    def getArea(self):
+        return self.parameters['A']
 
     def setStrain(self, eps):
         """
@@ -33,41 +36,23 @@ class PlaneStress(Material):
         :param eps:  strain or strain tensor
         :return: n/a
         """
-        self.strain = np.array([eps['xx'],eps['yy'],eps['xy']])
-
         # update stress state
         E  = self.parameters['E']
-        t  = self.parameters['t']
-        nu = self.parameters['nu']
         fy = self.parameters['fy']
 
-        # default consistency parameter
-        gamma = 0.0
-
-        self.Et = E*t/(1. - nu*nu) * np.array([[1.,nu,0.],[nu,1.,0.],[0.,0.,(1.-nu)/2.]])
-
-        Cinv = 1/(E*t) * np.array([[1.,-nu,0.],[-nu,1.,0.],[0.,0.,2.*(1.+nu)]])
-        Phi  = np.array([[2.,-1.,0.],[-1.,2.,0.],[0.,0.,6.]])
-
         # elastic predictor
-        self.sig = self.Et @ ( self.strain - self.plastic_strain )
+        self.sig = E * (eps - self.plastic_strain)
+        self.Et = E
 
         # check yield condition
-        (sxx, syy, sxy) = self.sig
-        f = self.sig @ Phi @ self.sig / 2. - (t*fy)**2
-
-        gamma = 0.0
-        Xi = self.Et
+        f = np.abs(self.sig) - fy
 
         # plastic corrector as needed
         if f >= 0.0:
-            # loop
-            r = Phi @ self.sig
-            Xixr = Xi @ r
-            gamma += f / (r @ Xixr)
-            Xi = (Cinv + gamma * Phi).I
-            self.sig = Xi @ ( self.strain - self.plastic_strain )
-            self.Et  = Xi
+            depsP = np.sign(self.sig) * f/E
+            self.sig -= E * depsP
+            self.plastic_strain += depsP
+            self.Et = 0.0
 
             print("material entering plastic state")
 
@@ -76,19 +61,10 @@ class PlaneStress(Material):
     def getStrain(self):
         return self.sig / self.parameters['E'] + self.plastic_strain
 
-    def updateState(self):
-        # update state now that the global analysis has converged
-        E  = self.parameters['E']
-        t  = self.parameters['t']
-        nu = self.parameters['nu']
-
-        Cinv = 1 / (E * t) * np.array([[1., -nu, 0.], [-nu, 1., 0.], [0., 0., 2. * (1. + nu)]])
-        self.plastic_strain = self.strain - Cinv @ self.sig
-
 
 if __name__ == "__main__":
     # testing the Node class
-    mat = PlaneStress(params={'E':100.0, 'nu':0.0, 'fy':1.0})
+    mat = FiberMaterial(params={'E':100.0, 'nu':0.0, 'fy':1.0})
 
     eps = 0.02 * np.sin( np.linspace(0, 2.*np.pi, 100) )
 
