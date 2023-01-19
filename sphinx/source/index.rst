@@ -4,7 +4,7 @@
    contain the root `toctree` directive.
 
 #####################################
-Welcome to PyFEM's documentation!
+Welcome to the FEM.edu documentation!
 #####################################
 
 .. toctree::

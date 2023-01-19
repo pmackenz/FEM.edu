@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'PyFEM'
+project = 'FEM.edu'
 copyright = '2023, Peter Mackenzie-Helnwein'
 author = 'Peter Mackenzie-Helnwein'
-release = '0.3'
+release = '0.4'
 
 # -- add current folder to path
 # https://www.jetbrains.com/pycharm/guide/tutorials/sphinx_sites/documentation/
