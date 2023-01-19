@@ -1,7 +1,7 @@
 import numpy as np
 
 from .Node     import *
-from plotter   import Plotter
+from plotter.Plotter import *
 
 
 class System():
