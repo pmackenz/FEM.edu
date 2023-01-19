@@ -1,6 +1,6 @@
 import numpy as np
 from .Element import *
-from domain import Node
+from domain.Node import *
 
 class LinearTriangle(Element):
     """
@@ -92,7 +92,7 @@ class LinearTriangle(Element):
         P = F @ S
 
         # store stress for reporting
-        self.stress = P
+        self.stress = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
 
         # tractions
         ts = P @ Gs
@@ -113,9 +113,9 @@ class LinearTriangle(Element):
 
         # internal force
         self.Forces = [
-            ts * self.area * self.thickness,
-            tt * self.area * self.thickness,
-            tu * self.area * self.thickness
+            ts * self.area * self.material.getThickness(),
+            tt * self.area * self.material.getThickness(),
+            tu * self.area * self.material.getThickness()
             ]
 
         # material tangent stiffness

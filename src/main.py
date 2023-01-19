@@ -4,8 +4,9 @@ sys.path.insert(0, os.path.abspath("."))
 from domain.System import *
 from domain.Node import *
 from elements.Truss import *
-from elements.LinearTriangle import LinearTriangle
+from elements.LinearTriangle import *
 from materials.FiberMaterial import *
+from materials.PlaneStress import *
 
 #from domain import *
 
@@ -184,7 +185,7 @@ def problem4():
     nd1 = Node( 10.0, 10.0)
     nd2 = Node(  0.0, 20.0)
 
-    mat = Material(params)
+    mat = PlaneStress(params)
 
     elem1 = LinearTriangle(nd0, nd1, nd2, mat)
 
