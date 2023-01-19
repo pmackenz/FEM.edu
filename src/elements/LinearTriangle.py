@@ -1,6 +1,6 @@
 import numpy as np
 from .Element import *
-from ..Node import *
+from domain import Node
 
 class LinearTriangle(Element):
     """
