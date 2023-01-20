@@ -1,6 +1,6 @@
 System class
 ==========================
 
-.. automodule:: src.System
+.. automodule:: domain.System
   :members:
 

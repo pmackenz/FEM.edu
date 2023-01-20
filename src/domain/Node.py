@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Node():
     """
     class: representing a single Node

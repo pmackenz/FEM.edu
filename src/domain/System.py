@@ -1,9 +1,7 @@
 import numpy as np
 
-from .Node import *
-from .elements import Element
-from .materials import Material
-from .Plotter import *
+from .Node     import *
+from plotter.Plotter import *
 
 
 class System():
@@ -196,6 +194,10 @@ class System():
 
 
 if __name__ == "__main__":
+
+    from elements  import Element
+    from materials import Material
+
     # testing the System class
     B = 6.0*12
     H = 8.0*12

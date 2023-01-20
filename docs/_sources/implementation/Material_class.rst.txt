@@ -1,7 +1,7 @@
 Material classes
 ==========================
 
-.. automodule:: src.materials.Material
+.. automodule:: materials.Material
   :members:
 
 
@@ -12,4 +12,5 @@ Derived Classes
     :maxdepth: 1
 
     FiberMaterial.rst
+    PlaneStress.rst
     PlaneStrain.rst

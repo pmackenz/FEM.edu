@@ -1,7 +1,7 @@
 Element classes
 ==========================
 
-.. automodule:: src.elements.Element
+.. automodule:: elements.Element
   :members:
 
 
