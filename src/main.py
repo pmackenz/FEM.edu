@@ -1,3 +1,4 @@
+
 import sys, os
 sys.path.insert(0, os.path.abspath("."))
 
@@ -9,6 +10,7 @@ from materials.FiberMaterial import *
 from materials.PlaneStress import *
 
 #from domain import *
+
 
 def problem1():
     # initialize a system model
@@ -49,7 +51,6 @@ def problem1():
 
     # create plots
     model.plot(factor=1.)
-
 
 def problem2():
     # initialize a system model
@@ -199,7 +200,9 @@ def problem4():
 
 
 if __name__ == "__main__":
+
     #problem1()
     problem2()
     #problem3()
     problem4()
+
