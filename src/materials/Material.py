@@ -41,7 +41,7 @@ class Material():
 
         :return: sigma
         """
-        return self.sig
+        return self.stress
 
     def getStiffness(self):
         """
@@ -58,15 +58,17 @@ class Material():
         :param eps:  strain or strain tensor
         """
         # update stress state
-        E  = self.parameters['E']
-        fy = self.parameters['fy']
+        self.strain = eps
+        self.updateState()
 
-        # default 1d elasticity
-        self.sig = E * eps
-        self.Et = E
+    def updateState(self):
+        raise NotImplementedError(self.__class__.__name__ + '.updateState() needs to be overloaded')
 
     def getStrain(self):
-        return self.sig / self.parameters['E']
+        return self.strain
+
+    def converged(self):
+        raise NotImplementedError(self.__class__.__name__ + '.converged() needs to be overloaded')
 
 
 if __name__ == "__main__":

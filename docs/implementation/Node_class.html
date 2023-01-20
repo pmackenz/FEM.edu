@@ -78,15 +78,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-src.Node">
-<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-src.Node" title="Permalink to this heading"></a></h1>
+  <section id="module-domain.Node">
+<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-domain.Node" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="src.Node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.fixDOF">
-<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.fixDOF">
+<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>idx</strong> – </p>
@@ -95,8 +95,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.getDeformedPos">
-<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.getDeformedPos">
+<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
 <dd><p>Return deformed position <span class="math notranslate nohighlight">\({\bf x} = {\bf X} + f \: {\bf u}\)</span></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -109,8 +109,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.getDisp">
-<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.getDisp">
+<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>nodal displacement vector</p>
@@ -119,8 +119,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.getPos">
-<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.getPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.getPos">
+<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getPos" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>initial position vector</p>
@@ -129,8 +129,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.isFixed">
-<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.isFixed">
+<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>idx</strong> – </p>
@@ -139,8 +139,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Node.Node.setDisp">
-<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="domain.Node.Node.setDisp">
+<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

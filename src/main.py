@@ -1,7 +1,16 @@
-from src.elements.Truss import *
-from src.elements.LinearTriangle import *
-from src.materials.FiberMaterial import *
-from src.System import *
+
+import sys, os
+sys.path.insert(0, os.path.abspath("."))
+
+from domain.System import *
+from domain.Node import *
+from elements.Truss import *
+from elements.LinearTriangle import *
+from materials.FiberMaterial import *
+from materials.PlaneStress import *
+
+#from domain import *
+
 
 def problem1():
     # initialize a system model
@@ -173,17 +182,17 @@ def problem4():
 
     params = {'E': 10., 'A': 1., 'nu': 0.0, 'fy': 1.e30}
 
-    nd0 = Node(0.0,0.0)
-    nd1 = Node(10.0,10.0)
-    nd2 = Node(0.0,20.0)
+    nd0 = Node(  0.0,  0.0)
+    nd1 = Node( 10.0, 10.0)
+    nd2 = Node(  0.0, 20.0)
 
-    mat = Material(params)
+    mat = PlaneStress(params)
 
     elem1 = LinearTriangle(nd0, nd1, nd2, mat)
 
-    nd0.setDisp(0.0,0.0)
-    nd1.setDisp(5.0,5.0)
-    nd2.setDisp(0.0, -5.0)
+    nd0.setDisp( 0.0, 0.0)
+    nd1.setDisp( 5.0, 5.0)
+    nd2.setDisp( 0.0,-5.0)
 
     elem1.updateState()
 

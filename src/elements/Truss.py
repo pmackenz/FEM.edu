@@ -1,5 +1,5 @@
 from .Element import *
-from ..Node import *
+from domain.Node import *
 
 class Truss(Element):
     """
@@ -67,10 +67,11 @@ class Truss(Element):
         Nvec = self.Nvec
 
         eps = Nvec @ (U1 - U0) / ell
-        self.material.setStrain(eps)
+        self.material.setStrain({'xx':eps})
         stress = self.material.getStress()
+        sig = stress['xx']
         area   = self.material.getArea()
-        self.force = stress * area
+        self.force = sig * area
 
         Pe = self.force * Nvec
         self.Forces = [-Pe, Pe]
