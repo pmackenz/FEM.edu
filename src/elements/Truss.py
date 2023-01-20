@@ -9,6 +9,13 @@ class Truss(Element):
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
 
+        if nodei.getPos().size == 3:
+            self.dof_list = ('ux','uy','uz')
+        elif nodei.getPos().size == 2:
+            self.dof_list = ('ux','uy')
+        else:
+            raise TypeError("dimension of nodes must be 2 or 3")
+
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) ]
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
