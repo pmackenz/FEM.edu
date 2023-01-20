@@ -2,7 +2,6 @@ class DoF():
     """
     class: representing a single Degree of Freedom
 
-    types of DoFs in Node class: 'ux', 'uy', 'uz', 'rx', 'ry', 'rz'
         self.type: type of DoF (str)
         self.disp: current displacement (float)
         self.nodeID:: node the DoF belongs to (int)
