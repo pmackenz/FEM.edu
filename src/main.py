@@ -12,9 +12,9 @@ def problem1():
     model = System()
 
     # create nodes
-    nd0 = Node(0.0, 0.0)
-    nd1 = Node(  B, 0.0)
-    nd2 = Node(0.5*B, H)
+    nd0 = Node([0.0, 0.0])
+    nd1 = Node([  B, 0.0])
+    nd2 = Node([0.5*B, H])
 
     model.addNode(nd0)
     model.addNode(nd1)
@@ -189,9 +189,49 @@ def problem4():
 
     print(elem1)
 
+def problem5():
+    # initialize a system model
+    B = 6.0 * 12
+    H = 3.0 * 12
+    params = {'E': 10., 'A': 1., 'nu': 0.0, 'fy': 1.e30}
+
+    model = System()
+
+    # create nodes
+    nd0 = Node([0.0, 0.0])
+    nd1 = Node([  B, 0.0])
+    nd2 = Node([0.5*B, H])
+
+    model.addNode(nd0)
+    model.addNode(nd1)
+    model.addNode(nd2)
+
+    # create elements
+    model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
+    model.addElement(Truss(nd0, nd2, FiberMaterial(params)))  # up right diag 1
+    model.addElement(Truss(nd1, nd2, FiberMaterial(params)))  # up left diag 1
+
+    # define support(s)
+    nd0.fixDOF(0)    # horizontal support left end
+    nd0.fixDOF(1)    # vertical support left end
+    nd1.fixDOF(1)    # vertical support right end
+
+    # add loads
+    # .. load only the upper nodes
+    nd2.setLoad(0.0, -1.0)
+
+    # analyze the model
+    model.solve()
+
+    # write out report
+    model.report()
+
+    # create plots
+    model.plot(factor=1.)
 
 if __name__ == "__main__":
     # problem1()
-    problem2()
+    # problem2()
     # problem3()
     # problem4()
+    problem5()

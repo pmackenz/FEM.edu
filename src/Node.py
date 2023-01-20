@@ -6,17 +6,19 @@ class Node():
     class: representing a single Node
     """
 
-    def __init__(self, x ,y, u=0, v=0):
+    def __init__(self, x0):
         """
 
-        :param x:
-        :param y:
-        :param u:
-        :param v:
+        :param x0: Initial position (List)
+
         """
-        self.pos      = np.array([x,y])
+
+        DoF_fullList =['ux', 'uy', 'uz', 'rx', 'ry', 'rz']
+
+        self.pos      = np.array(x0)
         self.index    = -1
-        self.disp     = np.array([u,v])
+        self.disp     = np.array([0,0])
+        self.DoF      = []
         self.fixity   = [False, False]
         self.force    = np.zeros(2)
         self._hasLoad = False
@@ -119,7 +121,7 @@ class Node():
 
 if __name__ == "__main__":
     # testing the Node class
-    node = Node(2.0, 3.5)
+    node = Node([2.0, 3.5])
     node.index = 42
     node.setLoad(1.2, 3.4)
     node.addLoad(5.6, 7.8)

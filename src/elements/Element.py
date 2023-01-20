@@ -18,8 +18,8 @@ class Element():
         self.material = material
 
         self.force    = 0.0
-        self.Forces   = [ np.zeros(2), np.zeros(2) ]
-        self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
+        self.Forces   = None
+        self.Kt       = None
 
     def __str__(self):
         s = \
@@ -39,12 +39,10 @@ class Element():
                                      repr(self.nodes[1]),
                                      repr(self.material))
 
-    def getAxialForce(self):
-        """
+    def initalizeDoFs(self):
+        for node in nodes:
+            pass
 
-        :return:
-        """
-        return None
 
     def getForce(self):
         """

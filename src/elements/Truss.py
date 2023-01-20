@@ -4,14 +4,32 @@ from ..Node import *
 class Truss(Element):
     """
     class: representing a single truss element
+
+        self.nodes    = nodes i and j (tuple)
+        self.material = material parameters (
+
+        self.force    = internal force (float)
+        self.Forces   = internal force vectors (list of np.arrays)
+        self.Kt       = tangent stiffness (list of np.arrays)
     """
 
-    def __init__(self, nodei, nodej, material):
+    def __init__(self, nodei, nodej, material, dim=3):
         super().__init__((nodei, nodej), material)
 
-        self.force    = 0.0
-        self.Forces   = [ np.zeros(2), np.zeros(2) ]
-        self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
+        if dim == 2:
+            DoF_list = ['ux', 'uy']
+        else:
+            DoF_list = ['ux', 'uy', 'uz']
+
+
+        # self.force    = 0.0
+        # self.Forces   = [ np.zeros(2), np.zeros(2) ]
+        # self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
+
+
+
+
+        self.setInitialLengthAndDirection()
 
     def __str__(self):
         s = \
@@ -33,15 +51,20 @@ class Truss(Element):
         self.updateState()
         return self.force
 
-    def updateState(self):
+    def setInitialLengthAndDirection(self):
         X0 = self.nodes[0].getPos()
-        U0 = self.nodes[0].getDisp()
         X1 = self.nodes[1].getPos()
-        U1 = self.nodes[1].getDisp()
 
         Lvec = X1 - X0
-        ell = np.linalg.norm(Lvec)
-        Nvec = Lvec / ell
+        self.ell = np.linalg.norm(Lvec)
+        self.Nvec = Lvec / self.ell
+
+    def updateState(self):
+        U0 = self.nodes[0].getDisp()
+        U1 = self.nodes[1].getDisp()
+
+        ell = self.ell
+        Nvec = self.Nvec
 
         eps = Nvec @ (U1 - U0) / ell
         self.material.setStrain(eps)
