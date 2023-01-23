@@ -111,6 +111,9 @@ class LinearTriangle(Element):
         tu = P @ Gu
 
         # initialize arrays
+
+        
+
         BI = []
         Kt = []
         for i in range(3):
