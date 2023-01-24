@@ -9,16 +9,20 @@ class Truss(Element):
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
 
-        if nodei.getPos().size == 3:
-            self.dof_list = ('ux','uy','uz')
-        elif nodei.getPos().size == 2:
-            self.dof_list = ('ux','uy')
+        dim = nodei.getPos().size
+
+        if dim == 3:
+            self.dof_list = ('ux', 'uy', 'uz')
+        elif dim == 2:
+            self.dof_list = ('ux', 'uy')
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
+        self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
-        self.Forces   = [ np.zeros(2), np.zeros(2) ]
-        self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
+        self.Forces   = [np.zeros(dim), np.zeros(dim)]
+        self.Kt       = [[np.zeros((dim, dim)), np.zeros((dim, dim))],
+                         [np.zeros((dim, dim)), np.zeros((dim, dim))]]
 
     def __str__(self):
         s = \
@@ -46,7 +50,7 @@ class Truss(Element):
         X1 = self.nodes[1].getPos()
         U1 = self.nodes[1].getDisp()
 
-        Lvec = X1 - X0
+        Lvec = (X1 + U1) - (X0 + U0)
         ell = np.linalg.norm(Lvec)
         Nvec = Lvec / ell
 
