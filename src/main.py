@@ -239,8 +239,9 @@ def problem5():
     model.plot(factor=1.)
 
 if __name__ == "__main__":
-    # problem1()
-    # problem2()
+    problem1()
+    problem2()
     # problem3()
     # problem4()
-    problem5()
+    # problem5()
+

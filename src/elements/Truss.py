@@ -16,23 +16,23 @@ class Truss(Element):
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
 
-        if nodei.getPos().size == 3:
+
+        dim = nodei.getPos().size
+
+        if dim == 3:
             self.dof_list = ('ux', 'uy', 'uz')
-        elif nodei.getPos().size == 2:
+        elif dim == 2:
             self.dof_list = ('ux', 'uy')
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
         dim = len(self.dof_list)
 
+        self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
-        self.Forces   = [ np.zeros(dim), np.zeros(dim) ]
-        self.Kt       = [ [np.zeros((dim, dim)), np.zeros((dim, dim))],
-                          [np.zeros((dim, dim)), np.zeros((dim, dim))] ]
-
-        self.L0vec = nodej.getPos() - nodei.getPos()
-        self.L0    = np.linalg.norm(self.L0vec)
-
+        self.Forces   = [np.zeros(dim), np.zeros(dim)]
+        self.Kt       = [[np.zeros((dim, dim)), np.zeros((dim, dim))],
+                         [np.zeros((dim, dim)), np.zeros((dim, dim))]]
 
     def __str__(self):
         s = \
@@ -54,21 +54,17 @@ class Truss(Element):
         self.updateState()
         return self.force
 
-    def setLengthAndDirection(self):
-        X0 = self.nodes[0].getPos()
-        X1 = self.nodes[1].getPos()
-
-        Lvec = X1 - X0
-        self.ell = np.linalg.norm(Lvec)
-        self.Nvec = Lvec / self.ell
 
     def updateState(self):
         U0 = self.nodes[0].getDisp()
+        X0 = self.nodes[0].getPos()
         U1 = self.nodes[1].getDisp()
+        X1 = self.nodes[1].getPos()
 
 
-        ell = self.ell
-        Nvec = self.Nvec
+        Lvec = (X1 + U1) - (X0 + U0)
+        ell = np.linalg.norm(Lvec)
+        Nvec = Lvec / ell
 
         eps = Nvec @ (U1 - U0) / ell
         self.material.setStrain({'xx':eps})
