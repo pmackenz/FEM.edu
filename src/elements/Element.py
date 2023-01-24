@@ -16,7 +16,7 @@ class Element():
         """
         self.nodes    = nodes
         self.material = material
-        self.dof_list = ('ux','uy')
+        self.dof_list = None
 
         self.force    = 0.0
         self.Forces   = None

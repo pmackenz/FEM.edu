@@ -13,22 +13,25 @@ class Truss(Element):
         self.Kt       = tangent stiffness (list of np.arrays)
     """
 
-    def __init__(self, nodei, nodej, material, dim=3):
+    def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
 
-        # self.force    = 0.0
-        # self.Forces   = [ np.zeros(2), np.zeros(2) ]
-        # self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
-
-
-        self.setInitialLengthAndDirection()
         if nodei.getPos().size == 3:
-            self.dof_list = ('ux','uy','uz')
+            self.dof_list = ('ux', 'uy', 'uz')
         elif nodei.getPos().size == 2:
-            self.dof_list = ('ux','uy')
+            self.dof_list = ('ux', 'uy')
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
+        dim = len(self.dof_list)
+
+        self.force    = 0.0
+        self.Forces   = [ np.zeros(dim), np.zeros(dim) ]
+        self.Kt       = [ [np.zeros((dim, dim)), np.zeros((dim, dim))],
+                          [np.zeros((dim, dim)), np.zeros((dim, dim))] ]
+
+        self.L0vec = nodej.getPos() - nodei.getPos()
+        self.L0    = np.linalg.norm(self.L0vec)
 
 
     def __str__(self):
@@ -51,7 +54,7 @@ class Truss(Element):
         self.updateState()
         return self.force
 
-    def setInitialLengthAndDirection(self):
+    def setLengthAndDirection(self):
         X0 = self.nodes[0].getPos()
         X1 = self.nodes[1].getPos()
 
@@ -62,6 +65,7 @@ class Truss(Element):
     def updateState(self):
         U0 = self.nodes[0].getDisp()
         U1 = self.nodes[1].getDisp()
+
 
         ell = self.ell
         Nvec = self.Nvec
