@@ -21,9 +21,9 @@ def problem1():
     model = System()
 
     # create nodes
-    nd0 = Node([0.0, 0.0])
-    nd1 = Node([  B, 0.0])
-    nd2 = Node([0.5*B, H])
+    nd0 = Node(0.0, 0.0)
+    nd1 = Node(  B, 0.0)
+    nd2 = Node(0.5*B, H)
 
     model.addNode(nd0)
     model.addNode(nd1)
@@ -207,13 +207,16 @@ def problem5():
     model = System()
 
     # create nodes
-    nd0 = Node([0.0, 0.0])
-    nd1 = Node([  B, 0.0])
-    nd2 = Node([0.5*B, H])
+    nd0 = Node(0.0, 0.0)
+    nd1 = Node(  B, 0.0)
+    nd2 = Node(0.5*B, H)
 
-    model.addNode(nd0)
-    model.addNode(nd1)
-    model.addNode(nd2)
+    nodeList = [nd0, nd1, nd2]
+    model.addNode(nodeList)
+
+    # model.addNode(nd0)
+    # model.addNode(nd1)
+    # model.addNode(nd2)
 
     # create elements
     model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
@@ -239,9 +242,9 @@ def problem5():
     model.plot(factor=1.)
 
 if __name__ == "__main__":
-    problem1()
-    problem2()
+    # problem1()      # Super simple 2D truss
+    # problem2()      # Simple 2D truss bridge
     # problem3()
     # problem4()
-    # problem5()
+    problem5()      # Simple 3D truss
 

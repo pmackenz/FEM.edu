@@ -30,13 +30,21 @@ class System():
     def __repr__(self):
         return "System()"
 
-    def addNode(self, newNode):
+    def addNode(self, *nodes):
         """
 
         :param newNode: a :ref:`Node` object
         """
-        newNode.index = len(self.nodes)
-        self.nodes.append(newNode)
+        if isinstance(nodes[0], list):
+            nodes = nodes[0]
+
+        for newNode in nodes:
+            if newNode.index == -1:
+                newNode.index = len(self.nodes)
+                self.nodes.append(newNode)
+            else:
+                print('addNode: node {} already exists in system and was not added again'.format(newNode.index))
+
 
     def __add__(self, other):
         if isinstance(other, Node):
