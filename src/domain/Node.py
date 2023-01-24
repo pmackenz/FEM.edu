@@ -13,27 +13,29 @@ class Node():
 
         """
 
-        if z0:
+        if isinstance(z0, (int, float)):
             self.pos = np.array([x0, y0, z0])
         else:
             self.pos = np.array([x0, y0])
 
+
         self.index    = -1
-        self.disp     = np.array([0, 0])
-        self.DoF      = []
-        self.fixity   = [False, False]
-        self.force    = np.array([0, 0])
+        self.disp     = np.array([])
+        self.dofs     = []
+        self.fixity   = []
+        self.force    = np.array([])
         self._hasLoad = False
 
     def __str__(self):
         s = \
         """Node {}: {}
-        x:{}, fix:{}, P:{}, u:{}""".format(self.index, self.DoF,
-                                           self.pos, self.fixity, self.force, self.disp)
+        x:{}, fix:{}, 
+        P:{}, u:{}""".format(self.index, self.dofs,
+                             self.pos, self.fixity, self.force, self.disp)
         return s
 
     def __repr__(self):
-        return "Node({}, x={}, u={})".format(self.DoF, self.pos, self.disp)
+        return "Node({}, x={}, u={})".format(self.dofs, self.pos, self.disp)
 
     def request(self, dof_list):
         """
@@ -60,13 +62,41 @@ class Node():
 
         :param: dof_list ... list of dof-codes required by calling element
         """
-        pass
 
-    def fixDOF(self, idx):
+        dof_added = False
+        for dof in dof_list:
+            if dof not in self.dofs:
+                # self.dofs[dof] = {'fixity': False, 'val': 0}
+                dof_added = True
+                self.dofs.append(dof)
+                self.fixity.append(False)
+
+        if dof_added:
+            dim = len(self.dofs)
+            self.force = np.zeros(dim)
+            self.disp  = np.zeros(dim)
+
+
+
+
+    def fixDOF(self, dofs):
         """
 
         :param idx:
         """
+        if isinstance(dofs, int):
+            idx = dofs
+        elif isinstance(dofs, str):
+            idx = self.dofs.index(dof)
+        else:
+            for dof in dofs:
+                if isinstance(dof, str):
+                    idx = self.dofs.index(dof)
+                elif isinstance(dof, int):
+                    idx = dof
+                else:
+                    raise TypeError("fix DOF using name or index")
+
         self.fixity[idx] = True
 
     def __floordiv__(self, other):

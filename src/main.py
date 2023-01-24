@@ -200,33 +200,36 @@ def problem4():
 
 def problem5():
     # initialize a system model
-    B = 6.0 * 12
-    H = 3.0 * 12
-    params = {'E': 10., 'A': 1., 'nu': 0.0, 'fy': 1.e30}
+    params = {'E': 2100., 'A': 1., 'nu': 0.0, 'fy': 1.e30}
 
     model = System()
 
     # create nodes
-    nd0 = Node(0.0, 0.0)
-    nd1 = Node(  B, 0.0)
-    nd2 = Node(0.5*B, H)
+    nd1 = Node(0.0, 5.0, 0.0)
+    nd2 = Node(9.5, 5.0, 0.0)
+    nd3 = Node(0.0, 0.0, 0.0)
+    nd4 = Node(9.5, 0.0, 0.0)
+    nd5 = Node(5.5, 3.75, 0.0)
+    nd6 = Node(5.5, 1.25, 0.0)
 
-    nodeList = [nd0, nd1, nd2]
+    nodeList = [nd1, nd2, nd3, nd4, nd5, nd6]
     model.addNode(nodeList)
 
-    # model.addNode(nd0)
-    # model.addNode(nd1)
-    # model.addNode(nd2)
 
     # create elements
-    model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
-    model.addElement(Truss(nd0, nd2, FiberMaterial(params)))  # up right diag 1
-    model.addElement(Truss(nd1, nd2, FiberMaterial(params)))  # up left diag 1
+    model.addElement(Truss(nd1, nd5, FiberMaterial(params)))  # bottom 1
+    model.addElement(Truss(nd1, nd6, FiberMaterial(params)))  # up right diag 1
+    model.addElement(Truss(nd2, nd5, FiberMaterial(params)))  # up left diag 1
+    model.addElement(Truss(nd3, nd6, FiberMaterial(params)))  # bottom 1
+    model.addElement(Truss(nd4, nd5, FiberMaterial(params)))  # up right diag 1
+    model.addElement(Truss(nd4, nd6, FiberMaterial(params)))  # up left diag 1
+    model.addElement(Truss(nd5, nd6, FiberMaterial(params)))  # bottom 1
+
 
     # define support(s)
-    nd0.fixDOF(0)    # horizontal support left end
-    nd0.fixDOF(1)    # vertical support left end
-    nd1.fixDOF(1)    # vertical support right end
+    translation_dofs = ['ux', 'uy', 'uz']
+    for node in [nd1, nd2, nd3, nd4]:
+        node.fixDOF(translation_dofs)
 
     # add loads
     # .. load only the upper nodes
@@ -239,12 +242,12 @@ def problem5():
     model.report()
 
     # create plots
-    model.plot(factor=1.)
+    # model.plot(factor=1.)
 
 if __name__ == "__main__":
-    # problem1()      # Super simple 2D truss
+    problem1()      # Super simple 2D truss
     # problem2()      # Simple 2D truss bridge
     # problem3()
     # problem4()
-    problem5()      # Simple 3D truss
+    # problem5()      # Simple 3D truss
 

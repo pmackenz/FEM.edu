@@ -22,6 +22,8 @@ class Element():
         self.Forces   = []
         self.Kt       = []
 
+
+
     def __str__(self):
         s = \
         """{}: nodes {}
@@ -66,6 +68,10 @@ class Element():
         """
         msg = "{}(Element): updateState() method has not been implemented".format(self.__class__.__name__)
         raise NotImplementedError(msg)
+
+    def requestDoF(self):
+        for node in self.nodes:
+            node.request(self.dof_list)
 
 
 if __name__ == "__main__":

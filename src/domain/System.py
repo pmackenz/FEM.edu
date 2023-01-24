@@ -60,6 +60,8 @@ class System():
 
         :param newElement: a :ref:`Element` object
         """
+        for node in newElement.nodes:
+            node.request(newElement.dof_list)
         self.elements.append(newElement)
 
     def solve(self):
