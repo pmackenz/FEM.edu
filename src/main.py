@@ -42,6 +42,7 @@ def problem1():
     # add loads
     # .. load only the upper nodes
     nd2.setLoad(0.0, -1.0)
+    testing = nd2.getLoad('uy')
 
     # analyze the model
     model.solve()

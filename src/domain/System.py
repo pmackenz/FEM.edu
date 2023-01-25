@@ -167,7 +167,7 @@ class System():
         print a text-based summary report
 
         """
-        s  = "\nTruss Analysis Report\n"
+        s  = "\nSystem Analysis Report\n"
         s += "=====================\n"
         s += "\nNodes:\n"
         s += "---------------------\n"

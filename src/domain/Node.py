@@ -12,16 +12,14 @@ class Node():
         :param x0: Initial position (List)
 
         """
-
         if isinstance(z0, (int, float)):
             self.pos = np.array([x0, y0, z0])
         else:
             self.pos = np.array([x0, y0])
 
-
         self.index    = -1
         self.disp     = np.array([])
-        self.dofs     = []
+        self.dofs     = {}
         self.fixity   = []
         self.force    = np.array([])
         self._hasLoad = False
@@ -35,7 +33,7 @@ class Node():
         return s
 
     def __repr__(self):
-        return "Node({}, x={}, u={})".format(self.dofs, self.pos, self.disp)
+        return "Node{}({}, x={}, u={})".format(self.index, self.dofs, self.pos, self.disp)
 
     def request(self, dof_list):
         """
@@ -68,7 +66,7 @@ class Node():
             if dof not in self.dofs:
                 # self.dofs[dof] = {'fixity': False, 'val': 0}
                 dof_added = True
-                self.dofs.append(dof)
+                self.dofs[dof] = len(self.dofs)
                 self.fixity.append(False)
 
         if dof_added:
@@ -85,19 +83,18 @@ class Node():
         :param idx:
         """
         if isinstance(dofs, int):
-            idx = dofs
+            self.fixity[dofs] = True
         elif isinstance(dofs, str):
-            idx = self.dofs.index(dof)
+            self.fixity[self.dofs[dofs]] = True
         else:
             for dof in dofs:
                 if isinstance(dof, str):
-                    idx = self.dofs.index(dof)
+                    self.fixity[self.dofs[dof]] = True
                 elif isinstance(dof, int):
-                    idx = dof
+                    self.fixity[dof] = True
                 else:
                     raise TypeError("fix DOF using name or index")
 
-        self.fixity[idx] = True
 
     def __floordiv__(self, other):
         """
@@ -121,7 +118,8 @@ class Node():
         :param u:
         :param v:
         """
-        self.disp = np.array([u,v])
+
+        self.disp = np.array([u, v])
 
     def getDisp(self, dof_list=None):
         """
@@ -135,6 +133,7 @@ class Node():
 
         :return: initial position vector
         """
+
         return self.pos
 
     def getDeformedPos(self, dof_list=None, factor=1.0):
@@ -154,17 +153,17 @@ class Node():
         self.force    = np.array([Px, Py])
         self._hasLoad = True
 
-    def getLoad(self):
+    def getLoad(self, dof_list=None):
         return self.force
 
     def hasLoad(self):
         return self._hasLoad
 
     def resetDisp(self):
-        self.disp = np.zeros( 2 )
+        self.disp = np.zeros(len(self.dofs))
 
     def resetLoad(self):
-        self.disp = np.zeros( 2 )
+        self.disp = np.zeros(len(self.dofs))
         self._hasLoad = False
 
     def resetAll(self):
@@ -174,7 +173,7 @@ class Node():
 
 if __name__ == "__main__":
     # testing the Node class
-    node = Node([2.0, 3.5])
+    node = Node(2.0, 3.5)
     node.index = 42
     node.setLoad(1.2, 3.4)
     node.addLoad(5.6, 7.8)
