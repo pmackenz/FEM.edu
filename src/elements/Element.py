@@ -17,6 +17,7 @@ class Element():
         self.nodes    = nodes
         self.material = material
         self.dof_list = None
+        self.node_dof_idx = []
 
         self.force    = 0.0
         self.Forces   = []

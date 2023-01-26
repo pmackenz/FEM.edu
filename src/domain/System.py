@@ -61,7 +61,8 @@ class System():
         :param newElement: a :ref:`Element` object
         """
         for node in newElement.nodes:
-            node.request(newElement.dof_list)
+            # node.request(newElement.dof_list)
+            newElement.node_dof_idx.append(node.request(newElement.dof_list))
         self.elements.append(newElement)
 
     def solve(self):
@@ -70,7 +71,9 @@ class System():
         """
 
         # compute size parameters
-        ndof = 2*len(self.nodes)
+        ndof = 0
+        for node in self.nodes:
+            ndof += len(node.dofs)
         Rsys = np.zeros(ndof)
         Ksys = np.zeros((ndof, ndof))
 

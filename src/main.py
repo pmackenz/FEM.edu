@@ -35,14 +35,13 @@ def problem1():
     model.addElement(Truss(nd1, nd2, FiberMaterial(params)))  # up left diag 1
 
     # define support(s)
-    nd0.fixDOF(0)    # horizontal support left end
-    nd0.fixDOF(1)    # vertical support left end
-    nd1.fixDOF(1)    # vertical support right end
+    nd0.fixDOF('ux')    # horizontal support left end
+    nd0.fixDOF('uy')    # vertical support left end
+    nd1.fixDOF('uy')    # vertical support right end
 
     # add loads
     # .. load only the upper nodes
-    nd2.setLoad(0.0, -1.0)
-    testing = nd2.getLoad('uy')
+    nd2.setLoad([0.0, -1.0], ('ux', 'uy'))
 
     # analyze the model
     model.solve()
@@ -228,13 +227,12 @@ def problem5():
 
 
     # define support(s)
-    translation_dofs = ['ux', 'uy', 'uz']
+    translation_dofs = ('ux', 'uy', 'uz')
     for node in [nd1, nd2, nd3, nd4]:
         node.fixDOF(translation_dofs)
 
     # add loads
-    # .. load only the upper nodes
-    nd2.setLoad(0.0, -1.0)
+    nd5.setLoad(-1.0, 'uz')
 
     # analyze the model
     model.solve()
@@ -250,5 +248,5 @@ if __name__ == "__main__":
     # problem2()      # Simple 2D truss bridge
     # problem3()
     # problem4()
-    # problem5()      # Simple 3D truss
+    problem5()      # Simple 3D truss
 
