@@ -36,6 +36,22 @@ class Node():
     def __repr__(self):
         return "Node{}({}, x={}, u={})".format(self.index, self.dofs, self.pos, self.disp)
 
+    def dof2idx(self, dof_list):
+        if isinstance(dof_list, str):
+            if dof_list in self.dofs:
+                idx = (self.dofs[dof_list], )
+            else:
+                raise KeyError('Dof {} does not exist in node {}'.format(dof_list, self.index))
+        else:
+            idx = []
+            for dof in dof_list:
+                if dof in self.dofs:
+                    idx.append(self.dofs[dof])
+                else:
+                    raise KeyError('Dof {} does not exist in node {}'.format(dof, self.index))
+            idx = tuple(idx)
+        return idx
+
     def request(self, dof_list):
         """
         send list or individual dof code. Common codes:
@@ -62,6 +78,8 @@ class Node():
         :param: dof_list ... list of dof-codes required by calling element
         """
         dof_idx = []
+        if isinstance(dof_list, str):
+            dof_list = (dof_list, )
         for dof in dof_list:
             if dof not in self.dofs:
                 self.dofs[dof] = len(self.dofs)
@@ -72,20 +90,17 @@ class Node():
 
         return tuple(dof_idx)
 
-
     def fixDOF(self, dofs):
         """
 
         :param idx:
         """
         if isinstance(dofs, str):
-            self.fixity[self.dofs[dofs]] = True
-        else:
-            for dof in dofs:
-                if isinstance(dof, str):
-                    self.fixity[self.dofs[dof]] = True
-                else:
-                    raise TypeError("fix DOF using name or index")
+            dofs = (dofs, )
+        for dof in dofs:
+            if dofs not in self.dofs:
+                self.request(dofs)
+            self.fixity[self.dofs[dof]] = True
 
 
     def __floordiv__(self, other):
@@ -97,12 +112,13 @@ class Node():
         self.fixDOF(other)
         return self
 
-    def isFixed(self, idx):
+    def isFixed(self, dofs):
         """
 
         :param idx:
         """
-        return self.fixity[idx]
+        indices = self.dof2idx(dofs)
+        return [self.fixity[idx] for idx in indices]
 
     def setDisp(self, u, v, dof_list=None):
         """
@@ -141,7 +157,7 @@ class Node():
         self.force   += np.array([Px, Py])
         self._hasLoad = True
 
-    def setLoad(self, load_list, dof_list=None):
+    def setLoad(self, load_list, dof_list):
         if isinstance(dof_list, str):
             idx = self.dofs[dof_list]
             self.force[idx] = load_list
@@ -167,6 +183,7 @@ class Node():
     def resetAll(self):
         self.resetDisp()
         self.resetLoad()
+
 
 
 if __name__ == "__main__":

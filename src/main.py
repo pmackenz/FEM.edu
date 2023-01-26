@@ -232,6 +232,7 @@ def problem5():
     for node in [nd1, nd2, nd3, nd4]:
         node.fixDOF(translation_dofs)
 
+    nd5.fixDOF('rx')
     # add loads
     nd5.setLoad(-1.0, 'uz')
     nd5.setLoad([-2.0, 2.0], ['uz', 'ux'])
