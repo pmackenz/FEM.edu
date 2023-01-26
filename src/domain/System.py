@@ -118,16 +118,12 @@ class System():
 
         # recompute residual force
         Rsys = np.zeros(ndof)
-        # for elem in self.elements:
-        #     # indexing
-        #     (nd0, nd1) = elem.nodes
-        #     K = np.array([2*nd0.index,2*nd0.index+1])
-        #     M = np.array([2*nd1.index,2*nd1.index+1])
-        #
-        #     # add element force
-        #     Fe = elem.getForce()
-        #     Rsys[K] -= Fe[0]
-        #     Rsys[M] -= Fe[1]
+        for element in self.elements:
+            Fe = element.getForce()  # Element State Update occurs here
+            for node_i in element.nodes:
+                ID_i = element.nodes.index(node_i)
+                idx_i = node_i.dof2idx(element.dof_list) + node_i.start
+                Rsys[idx_i] -= Fe[ID_i]
         #
         self.Rsys = Rsys
         self.disp = U

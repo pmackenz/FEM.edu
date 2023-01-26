@@ -208,12 +208,13 @@ def problem5():
     model = System()
 
     # create nodes
+    H = 5
     nd1 = Node(0.0, 5.0, 0.0)
     nd2 = Node(9.5, 5.0, 0.0)
     nd3 = Node(0.0, 0.0, 0.0)
     nd4 = Node(9.5, 0.0, 0.0)
-    nd5 = Node(5.5, 3.75, 0.5)
-    nd6 = Node(5.5, 1.25, 0.5)
+    nd5 = Node(5.5, 3.75, H)
+    nd6 = Node(5.5, 1.25, H)
 
     nodeList = [nd1, nd2, nd3, nd4, nd5, nd6]
     model.addNode(nodeList)
@@ -235,7 +236,7 @@ def problem5():
         node.fixDOF(translation_dofs)
 
     # add loads
-    nd5.setLoad(-1.0, 'uz')
+    nd5.setLoad(-100.0, 'uz')
 
     # analyze the model
     model.solve()
@@ -247,9 +248,9 @@ def problem5():
     model.plot(factor=1.)
 
 if __name__ == "__main__":
-    # problem1()      # Super simple 2D truss
+    problem1()      # Super simple 2D truss
     # problem2()      # Simple 2D truss bridge
     # problem3()
     # problem4()
-    problem5()      # Simple 3D truss
+    # problem5()      # Simple 3D truss
 
