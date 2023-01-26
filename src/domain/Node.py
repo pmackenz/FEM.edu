@@ -20,6 +20,7 @@ class Node():
         self.index    = -1
         self.disp     = np.array([])
         self.dofs     = {}
+        self.start = None
         self.elements = []
         self.fixity   = []
         self.force    = np.array([])
@@ -39,7 +40,8 @@ class Node():
     def dof2idx(self, dof_list):
         if isinstance(dof_list, str):
             if dof_list in self.dofs:
-                idx = (self.dofs[dof_list], )
+                # idx = (self.dofs[dof_list], )
+                idx = [self.dofs[dof_list]]
             else:
                 raise KeyError('Dof {} does not exist in node {}'.format(dof_list, self.index))
         else:
@@ -49,8 +51,8 @@ class Node():
                     idx.append(self.dofs[dof])
                 else:
                     raise KeyError('Dof {} does not exist in node {}'.format(dof, self.index))
-            idx = tuple(idx)
-        return idx
+            # idx = tuple(idx)
+        return np.array(idx)
 
     def request(self, dof_list):
         """
@@ -90,6 +92,10 @@ class Node():
 
         return tuple(dof_idx)
 
+    def addElement(self, element):
+        if element not in self.elements:
+            self.elements.append(element)
+
     def fixDOF(self, dofs):
         """
 
@@ -112,29 +118,39 @@ class Node():
         self.fixDOF(other)
         return self
 
-    def isFixed(self, dofs):
+    def isFixed(self, dof):
         """
 
         :param idx:
         """
+        idx = self.dofs[dof]
+        return self.fixity[idx]
+
+    def getFixity(self, dofs):
         indices = self.dof2idx(dofs)
         return [self.fixity[idx] for idx in indices]
 
-    def setDisp(self, u, v, dof_list=None):
+    def setStart(self, startInt):
+        self.start = startInt
+
+    def setDisp(self, u, dof_list=None):
         """
 
         :param u:
-        :param v:
         """
 
-        self.disp = np.array([u, v])
+        self.disp = np.array(u)
 
     def getDisp(self, dof_list=None):
         """
 
         :return: nodal displacement vector
         """
-        return self.disp
+        if dof_list:
+            idx = self.dof2idx(dof_list)
+            return self.disp[idx]
+        else:
+            return self.disp
 
     def getPos(self, dof_list=None):
         """

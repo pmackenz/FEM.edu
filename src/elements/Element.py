@@ -72,6 +72,7 @@ class Element():
     def requestDofs(self):
         for node in self.nodes:
             dof_idx = node.request(self.dof_list)
+            node.addElement(self)
             self.node_dof_idx.append(dof_idx)
 
     def getDofs(self):

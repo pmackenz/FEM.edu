@@ -1,4 +1,5 @@
 import numpy as np
+from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
@@ -62,6 +63,8 @@ class Plotter():
         :param file: filename (str)
         """
         fig, axs = plt.subplots()
+        # fig = plt.figure(figsize=(10, 10))
+        # axs = plt.axes(projection='3d')
 
         # plot the undeformed lines
         for line in self.lines:

@@ -75,7 +75,7 @@ class Truss(Element):
 
         Et = self.material.getStiffness()
         ke = (Et * area / ell) * np.outer(Nvec, Nvec)
-        self.Kt = [[ke,-ke],[-ke,ke]]
+        self.Kt = [[ke, -ke], [-ke, ke]]
 
 
 if __name__ == "__main__":
