@@ -20,6 +20,7 @@ class Node():
         self.index    = -1
         self.disp     = np.array([])
         self.dofs     = {}
+        self.elements = []
         self.fixity   = []
         self.force    = np.array([])
         self._hasLoad = False
@@ -37,7 +38,7 @@ class Node():
 
     def request(self, dof_list):
         """
-        send list of dof codes. Common codes:
+        send list or individual dof code. Common codes:
 
         .. list-table::
             :header-rows: 1
@@ -60,24 +61,16 @@ class Node():
 
         :param: dof_list ... list of dof-codes required by calling element
         """
-
-        dof_added = False
         dof_idx = []
         for dof in dof_list:
             if dof not in self.dofs:
-                # self.dofs[dof] = {'fixity': False, 'val': 0}
-                dof_added = True
                 self.dofs[dof] = len(self.dofs)
                 self.fixity.append(False)
+                self.force = np.append(self.force, 0)
+                self.disp = np.append(self.disp, 0)
             dof_idx.append(self.dofs[dof])
 
-        if dof_added:
-            dim = len(self.dofs)
-            self.force = np.zeros(dim)
-            self.disp  = np.zeros(dim)
-
         return tuple(dof_idx)
-
 
 
     def fixDOF(self, dofs):
@@ -85,16 +78,12 @@ class Node():
 
         :param idx:
         """
-        if isinstance(dofs, int):
-            self.fixity[dofs] = True
-        elif isinstance(dofs, str):
+        if isinstance(dofs, str):
             self.fixity[self.dofs[dofs]] = True
         else:
             for dof in dofs:
                 if isinstance(dof, str):
                     self.fixity[self.dofs[dof]] = True
-                elif isinstance(dof, int):
-                    self.fixity[dof] = True
                 else:
                     raise TypeError("fix DOF using name or index")
 
@@ -148,19 +137,23 @@ class Node():
         """
         return self.pos + factor * self.disp
 
-    def addLoad(self, Px, Py, dof_list=None):
+    def addLoad(self, P, dof_list=None):
         self.force   += np.array([Px, Py])
         self._hasLoad = True
 
-    def setLoad(self, P, dof_list=None):
+    def setLoad(self, load_list, dof_list=None):
         if isinstance(dof_list, str):
             idx = self.dofs[dof_list]
-            self.force[idx] = P
+            self.force[idx] = load_list
         else:
-            for load in zip(P, dof_list):
-                idx = self.dofs[load[1]]
-                self.force[idx] = load[0]
+            for (load, dof) in zip(load_list, dof_list):
+                idx = self.dofs[dof]
+                self.force[idx] = load
         self._hasLoad = True
+
+    def resetLoad(self):
+        self.disp = np.zeros(len(self.dofs))
+        self._hasLoad = False
 
     def getLoad(self, dof_list=None):
         return self.force
@@ -170,10 +163,6 @@ class Node():
 
     def resetDisp(self):
         self.disp = np.zeros(len(self.dofs))
-
-    def resetLoad(self):
-        self.disp = np.zeros(len(self.dofs))
-        self._hasLoad = False
 
     def resetAll(self):
         self.resetDisp()
