@@ -1,6 +1,7 @@
 import numpy as np
 
 from .Node     import *
+from elements.Element import *
 from plotter.Plotter import *
 
 
@@ -42,7 +43,6 @@ class System():
             else:
                 print('addNode: node {} already exists in system and was not added again'.format(newNode.index))
 
-
     def __add__(self, other):
         if isinstance(other, Node):
             self.addNode(other)
@@ -68,34 +68,34 @@ class System():
         ndof = 0
         for node in self.nodes:
             node.setStart(ndof)
-            ndof += len(node.dofs)
+            ndof += node.ndofs
         Rsys = np.zeros(ndof)
         Ksys = np.zeros((ndof, ndof))
 
+        # assemble loads
+        for node in self.nodes:
+            if node.hasLoad():
+                K = node.start + np.arange(node.ndofs)
+                Rsys[K] += node.getLoad()
 
         # Element Loop: assemble element forces and stiffness
         for element in self.elements:
             Fe = element.getForce()     # Element State Update occurs here
-            for node_i in element.nodes:
-                ID_i = element.nodes.index(node_i)
-                idx_i = node_i.dof2idx(element.dof_list) + node_i.start
-                Rsys[idx_i] -= Fe[ID_i]
-                for node_j in element.nodes:
-                    ID_j = element.nodes.index(node_j)
-                    idx_j = node_j.dof2idx(element.dof_list) + node_j.start
-                    Ksys[idx_i[:, np.newaxis], idx_j] += element.Kt[ID_i][ID_j]
+            for (i,ndI) in enumerate(element.nodes):
+                K = ndI.start + np.arange(ndI.ndofs)
+                Rsys[K] -= Fe[i]
+                for (j,ndJ) in enumerate(element.nodes):
+                    M = ndJ.start + np.arange(ndJ.ndofs)
+                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
 
-
-        # Node Loop: assemble loads and apply boundary conditions
+        # apply boundary conditions
         for node in self.nodes:
-            if node.hasLoad():
-                Rsys[node.start: node.start+len(node.dofs)] += node.getLoad()
             for dof in node.dofs:
                 if node.isFixed(dof):
                     idx = node.start + node.dofs[dof]
-                    Rsys[idx] = 0.0
-                    Ksys[:, idx] = np.zeros(ndof)
-                    Ksys[idx, :] = np.zeros(ndof)
+                    Rsys[idx]      = 0.0
+                    Ksys[:, idx]   = np.zeros(ndof)
+                    Ksys[idx, :]   = np.zeros(ndof)
                     Ksys[idx, idx] = 1.0
 
         # stability check for system matrix
@@ -110,16 +110,17 @@ class System():
 
         # update nodal displacements
         for node in self.nodes:
-            node.setDisp(U[node.start: node.start+len(node.dofs)])
+            K = node.start + np.arange(node.ndofs)
+            node._updateDisp(U[K])
 
         # recompute residual force
         Rsys = np.zeros(ndof)
         for element in self.elements:
-            Fe = element.getForce()  # Element State Update occurs here
-            for node_i in element.nodes:
-                ID_i = element.nodes.index(node_i)
-                idx_i = node_i.dof2idx(element.dof_list) + node_i.start
-                Rsys[idx_i] -= Fe[ID_i]
+            Fe = element.getForce()     # Element State Update occurs here
+            for (i,ndI) in enumerate(element.nodes):
+                K = ndI.start + np.arange(ndI.ndofs)
+                Rsys[K] -= Fe[i]
+
         #
         self.Rsys = Rsys
         self.disp = U

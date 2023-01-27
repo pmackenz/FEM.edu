@@ -16,8 +16,9 @@ class Element():
         """
         self.nodes    = nodes
         self.material = material
-        self.dof_list = None
-        self.node_dof_idx = []
+        self.dof_idx  = {}
+
+        self._requestDofs( tuple() )
 
         self.force    = 0.0
         self.Forces   = []
@@ -69,11 +70,20 @@ class Element():
         msg = "{}(Element): updateState() method has not been implemented".format(self.__class__.__name__)
         raise NotImplementedError(msg)
 
-    def requestDofs(self):
+    def _requestDofs(self, dof_requests):
+        """
+        Helper function (internal use) to inform **all** nodes of this element about the needed/used
+        degrees of freedom.
+
+        **Remark**: if nodes of different type are to be used by the element, **DO NOT** use this method but
+        implement your own overloaded initialization within the constructor of your element.
+
+        :param dof_requests: list of dofs for a typical node in this element
+        """
         for node in self.nodes:
-            dof_idx = node.request(self.dof_list)
-            node.addElement(self)
-            self.node_dof_idx.append(dof_idx)
+            dof_idx = node.request(dof_requests)
+            node.linkElement(self)
+            self.dof_idx[node] = dof_idx
 
     def getDofs(self):
         return self.dof_list

@@ -99,15 +99,15 @@ def problem2():
     model.addElement(Truss(nd4, nd8, FiberMaterial(params)))  # up left diag 4
 
     # define support(s)
-    nd0.fixDOF(('ux', 'uy'))    # horizontal support left end
+    nd0.fixDOF('ux', 'uy')    # horizontal support left end
     nd4.fixDOF('uy')            # vertical support right end
 
     # add loads
     # .. load only the upper nodes
-    nd5.setLoad(-1.0, 'uy')
-    nd6.setLoad(-1.0, 'uy')
-    nd7.setLoad(-1.0, 'uy')
-    nd8.setLoad(-1.0, 'uy')
+    nd5.setLoad((-1.0,), ('uy',))
+    nd6.setLoad((-1.0,), ('uy',))
+    nd7.setLoad((-1.0,), ('uy',))
+    nd8.setLoad((-1.0,), ('uy',))
 
     # analyze the model
     model.solve()
@@ -141,14 +141,14 @@ def problem3():
     model += Truss(nd1, nd2, FiberMaterial(params))  # up left diag 1
 
     # define support(s)
-    #nd0.fixDOF(0)    # horizontal support left end
-    nd0 //= 0
-    nd0.fixDOF(1)    # vertical support left end
-    nd1.fixDOF(1)    # vertical support right end
+    nd0.fixDOF('ux')    # horizontal support left end
+    #nd0 //= 0
+    nd0.fixDOF('uy')    # vertical support left end
+    nd1.fixDOF('uy')    # vertical support right end
 
     # add loads
     # .. load only the upper nodes
-    nd2.setLoad(0.0, -1.0)
+    nd2.setLoad((0.0, -1.0), ('ux','uy'))
 
     # analyze the model
     model.solve()
@@ -210,7 +210,7 @@ def problem5():
     nd6 = Node(5.5, 1.25, H)
 
     nodeList = [nd1, nd2, nd3, nd4, nd5, nd6]
-    model.addNode(nodeList)
+    model.addNode(*nodeList)
 
 
     # create elements
@@ -229,7 +229,7 @@ def problem5():
         node.fixDOF(*translation_dofs)
 
     # add loads
-    nd5.setLoad(-100.0, 'uz')
+    nd5.setLoad((-100.0,), ('uz',))
 
     # analyze the model
     model.solve()
@@ -241,9 +241,9 @@ def problem5():
     model.plot(factor=1.)
 
 if __name__ == "__main__":
-    problem1()      # Super simple 2D truss
-    # problem2()      # Simple 2D truss bridge
-    # problem3()
+    #problem1()      # Super simple 2D truss
+    #problem2()      # Simple 2D truss bridge
+    #problem3()
     # problem4()
-    # problem5()      # Simple 3D truss
+    problem5()      # Simple 3D truss
 

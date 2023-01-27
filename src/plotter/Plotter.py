@@ -91,7 +91,8 @@ class Plotter():
                 self.addForces(axs)
 
             self.set_axes_equal(axs)
-            axs.set_axis_off()
+            #axs.set_aspect('equal')
+            #axs.set_axis_off()
 
         else:
             fig, axs = plt.subplots()

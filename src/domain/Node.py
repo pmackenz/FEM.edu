@@ -18,14 +18,14 @@ class Node():
             self.pos = np.array([x0, y0])
 
         self.index    = -1
-        self.disp     = np.array([])
+        self.disp     = None
         self.dofs     = {}
         self.ndofs    = 0
         self.start    = None
         self.elements = []
         self.fixity   = []
         self.force    = None
-        self.load     = {}
+        self.loads    = {}
         self._hasLoad = False
 
     def __str__(self):
@@ -56,7 +56,7 @@ class Node():
             # idx = tuple(idx)
         return np.array(idx)
 
-    def request(self, *dof_list):
+    def request(self, dof_list):
         """
         send list or individual dof code. Common codes:
 
@@ -89,7 +89,12 @@ class Node():
             dof_idx.append(self.dofs[dof])
         return tuple(dof_idx)
 
-    def addElement(self, element):
+    def linkElement(self, element):
+        """
+        provide link to attached element(s)
+
+        :param element: element pointer
+        """
         if element not in self.elements:
             self.elements.append(element)
 
@@ -126,19 +131,33 @@ class Node():
     def setStart(self, startInt):
         self.start = startInt
 
-    def setDisp(self, u, dof_list=None):
+    def setDisp(self, U, dof_list):
         """
+        use for prescribed displacements
 
-        :param u:
+        **NEEDS TO BE IMPLEMENTED**
+
+        :param U:
+        :param dof_list:
         """
+        self.disp = U
 
-        self.disp = np.array(u)
+    def _updateDisp(self, dU):
+        """
+        For internal use by solvers only
+
+        :param dU: displacement correction from last iteration step.
+        """
+        self.disp += dU
 
     def getDisp(self, dof_list=None):
         """
 
         :return: nodal displacement vector
         """
+        if not isinstance(self.disp, np.ndarray):
+            self.disp = np.zeros(self.ndofs)
+
         if dof_list:
             idx = self.dof2idx(dof_list)
             return self.disp[idx]
@@ -160,6 +179,9 @@ class Node():
         :param factor: deformation magnification factor, :math:`f`.
         :return: deformed position vector, :math:`{\\bf x}`.
         """
+        if not isinstance(self.disp, np.ndarray):
+            self.disp = np.zeros(self.ndofs)
+
         return self.pos + factor * self.disp
 
     def addLoad(self, P, dofs):
@@ -174,8 +196,7 @@ class Node():
         """
         # Check tuple type and if the dof exists (warn and continue)
         for (load, dof) in zip(loads, dofs):
-            idx = self.dofs[dof]
-            self.loads[idx] = load
+            self.loads[dof] = load
         self._hasLoad = True
 
     def resetLoad(self):
