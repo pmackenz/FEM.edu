@@ -78,8 +78,22 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="dof-class">
-<h1>DoF class<a class="headerlink" href="#dof-class" title="Permalink to this heading"></a></h1>
+  <section id="module-domain.DoF">
+<span id="dof-class"></span><h1>DoF class<a class="headerlink" href="#module-domain.DoF" title="Permalink to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="domain.DoF.DoF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.DoF.</span></span><span class="sig-name descname"><span class="pre">DoF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.DoF.DoF" title="Permalink to this definition"></a></dt>
+<dd><p>class: representing a single Degree of Freedom</p>
+<blockquote>
+<div><p>self.type: type of DoF (str)
+self.disp: current displacement (float)
+self.nodeID:: node the DoF belongs to (int)
+self.isFixed: fixity status (bool)
+self.record: indicator whether to save displacement history (bool)
+self.history: displacement history (list of floats)</p>
+</div></blockquote>
+</dd></dl>
+
 </section>
 
 
