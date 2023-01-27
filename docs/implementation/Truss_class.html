@@ -43,6 +43,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Element_class.html">Element classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Element_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Truss class</a></li>
@@ -99,16 +100,13 @@
 <dt class="sig sig-object py" id="elements.Truss.Truss">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Truss.</span></span><span class="sig-name descname"><span class="pre">Truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodei</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodej</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Truss.Truss" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single truss element</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="elements.Truss.Truss.getAxialForce">
-<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Truss.Truss.getAxialForce" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
+<blockquote>
+<div><p>self.nodes    = nodes i and j (tuple)
+self.material = material parameters (</p>
+<p>self.force    = internal force (float)
+self.Forces   = internal force vectors (list of np.arrays)
+self.Kt       = tangent stiffness (list of np.arrays)</p>
+</div></blockquote>
 <dl class="py method">
 <dt class="sig sig-object py" id="elements.Truss.Truss.updateState">
 <span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Truss.Truss.updateState" title="Permalink to this definition"></a></dt>
