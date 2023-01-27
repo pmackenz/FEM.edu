@@ -25,10 +25,7 @@ def problem1():
     nd1 = Node(  B, 0.0)
     nd2 = Node(0.5*B, H)
 
-
-    model.addNode([nd0, nd1, nd2])
-    # model.addNode(nd1)
-    # model.addNode(nd2)
+    model.addNode(nd0, nd1, nd2)
 
     # create elements
     model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
@@ -36,15 +33,12 @@ def problem1():
     model.addElement(Truss(nd1, nd2, FiberMaterial(params)))  # up left diag 1
 
     # define support(s)
-    nd0.fixDOF(('ux', 'uy'))    # pin support left end
+    nd0.fixDOF('ux', 'uy')    # pin support left end
     nd1.fixDOF('uy')            # roller support right end
 
     # add loads
     # .. load only the upper nodes
     nd2.setLoad([0.0, -1.0], ('ux', 'uy'))
-    a = nd2.getDisp()
-    b = nd2.getDisp('ux')
-    c = nd2.getDisp(('ux', 'uy'))
 
     # analyze the model
     model.solve()
@@ -232,7 +226,7 @@ def problem5():
     # define support(s)
     translation_dofs = ('ux', 'uy', 'uz')
     for node in [nd1, nd2, nd3, nd4]:
-        node.fixDOF(translation_dofs)
+        node.fixDOF(*translation_dofs)
 
     # add loads
     nd5.setLoad(-100.0, 'uz')
@@ -247,9 +241,9 @@ def problem5():
     model.plot(factor=1.)
 
 if __name__ == "__main__":
-    # problem1()      # Super simple 2D truss
+    problem1()      # Super simple 2D truss
     # problem2()      # Simple 2D truss bridge
     # problem3()
     # problem4()
-    problem5()      # Simple 3D truss
+    # problem5()      # Simple 3D truss
 

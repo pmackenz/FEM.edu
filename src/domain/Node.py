@@ -20,10 +20,12 @@ class Node():
         self.index    = -1
         self.disp     = np.array([])
         self.dofs     = {}
-        self.start = None
+        self.ndofs    = 0
+        self.start    = None
         self.elements = []
         self.fixity   = []
-        self.force    = np.array([])
+        self.force    = None
+        self.load     = {}
         self._hasLoad = False
 
     def __str__(self):
@@ -54,7 +56,7 @@ class Node():
             # idx = tuple(idx)
         return np.array(idx)
 
-    def request(self, dof_list):
+    def request(self, *dof_list):
         """
         send list or individual dof code. Common codes:
 
@@ -80,33 +82,29 @@ class Node():
         :param: dof_list ... list of dof-codes required by calling element
         """
         dof_idx = []
-        if isinstance(dof_list, str):
-            dof_list = (dof_list, )
         for dof in dof_list:
             if dof not in self.dofs:
-                self.dofs[dof] = len(self.dofs)
-                self.fixity.append(False)
-                self.force = np.append(self.force, 0)
-                self.disp = np.append(self.disp, 0)
+                self.dofs[dof] = self.ndofs
+                self.ndofs += 1
             dof_idx.append(self.dofs[dof])
-
         return tuple(dof_idx)
 
     def addElement(self, element):
         if element not in self.elements:
             self.elements.append(element)
 
-    def fixDOF(self, dofs):
+    def fixDOF(self, *dofs):
+        """
+        provide a list of dof codes that shall be restrained
+
+        see also: :ref:`request`
+
+        :param dofs:
         """
 
-        :param idx:
-        """
-        if isinstance(dofs, str):
-            dofs = (dofs, )
         for dof in dofs:
-            if dofs not in self.dofs:
-                self.request(dofs)
-            self.fixity[self.dofs[dof]] = True
+            if dof not in self.fixity:
+                self.fixity.append(dof)
 
 
     def __floordiv__(self, other):
@@ -121,14 +119,9 @@ class Node():
     def isFixed(self, dof):
         """
 
-        :param idx:
+        :param dof: dof code as defined in :ref:`request`
         """
-        idx = self.dofs[dof]
-        return self.fixity[idx]
-
-    def getFixity(self, dofs):
-        indices = self.dof2idx(dofs)
-        return [self.fixity[idx] for idx in indices]
+        return (dof in self.fixity)
 
     def setStart(self, startInt):
         self.start = startInt
@@ -169,25 +162,30 @@ class Node():
         """
         return self.pos + factor * self.disp
 
-    def addLoad(self, P, dof_list=None):
+    def addLoad(self, P, dofs):
         self.force   += np.array([Px, Py])
         self._hasLoad = True
 
-    def setLoad(self, load_list, dof_list):
-        if isinstance(dof_list, str):
-            idx = self.dofs[dof_list]
-            self.force[idx] = load_list
-        else:
-            for (load, dof) in zip(load_list, dof_list):
-                idx = self.dofs[dof]
-                self.force[idx] = load
+    def setLoad(self, loads, dofs):
+        """
+
+        :param loads:
+        :param dofs:
+        """
+        # Check tuple type and if the dof exists (warn and continue)
+        for (load, dof) in zip(loads, dofs):
+            idx = self.dofs[dof]
+            self.loads[idx] = load
         self._hasLoad = True
 
     def resetLoad(self):
-        self.disp = np.zeros(len(self.dofs))
+        self.loads = {}
         self._hasLoad = False
 
     def getLoad(self, dof_list=None):
+        self.force = np.zeros(self.ndofs)
+        for dof in self.loads:
+            self.force[self.dofs[dof]] = self.loads[dof]
         return self.force
 
     def hasLoad(self):

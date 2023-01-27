@@ -35,11 +35,8 @@ class System():
 
         :param newNode: a :ref:`Node` object
         """
-        if isinstance(nodes[0], list):
-            nodes = nodes[0]
-
         for newNode in nodes:
-            if newNode.index == -1:
+            if newNode not in self.nodes:
                 newNode.index = len(self.nodes)
                 self.nodes.append(newNode)
             else:
@@ -60,7 +57,6 @@ class System():
 
         :param newElement: a :ref:`Element` object
         """
-        newElement.requestDofs()
         self.elements.append(newElement)
 
     def solve(self):
