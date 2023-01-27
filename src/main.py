@@ -25,9 +25,10 @@ def problem1():
     nd1 = Node(  B, 0.0)
     nd2 = Node(0.5*B, H)
 
-    model.addNode(nd0)
-    model.addNode(nd1)
-    model.addNode(nd2)
+
+    model.addNode([nd0, nd1, nd2])
+    # model.addNode(nd1)
+    # model.addNode(nd2)
 
     # create elements
     model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
@@ -35,13 +36,15 @@ def problem1():
     model.addElement(Truss(nd1, nd2, FiberMaterial(params)))  # up left diag 1
 
     # define support(s)
-    nd0.fixDOF(0)    # horizontal support left end
-    nd0.fixDOF(1)    # vertical support left end
-    nd1.fixDOF(1)    # vertical support right end
+    nd0.fixDOF(('ux', 'uy'))    # pin support left end
+    nd1.fixDOF('uy')            # roller support right end
 
     # add loads
     # .. load only the upper nodes
-    nd2.setLoad(0.0, -1.0)
+    nd2.setLoad([0.0, -1.0], ('ux', 'uy'))
+    a = nd2.getDisp()
+    b = nd2.getDisp('ux')
+    c = nd2.getDisp(('ux', 'uy'))
 
     # analyze the model
     model.solve()
@@ -102,16 +105,15 @@ def problem2():
     model.addElement(Truss(nd4, nd8, FiberMaterial(params)))  # up left diag 4
 
     # define support(s)
-    nd0.fixDOF(0)    # horizontal support left end
-    nd0.fixDOF(1)    # vertical support left end
-    nd4.fixDOF(1)    # vertical support right end
+    nd0.fixDOF(('ux', 'uy'))    # horizontal support left end
+    nd4.fixDOF('uy')            # vertical support right end
 
     # add loads
     # .. load only the upper nodes
-    nd5.setLoad(0.0, -1.0)
-    nd6.setLoad(0.0, -1.0)
-    nd7.setLoad(0.0, -1.0)
-    nd8.setLoad(0.0, -1.0)
+    nd5.setLoad(-1.0, 'uy')
+    nd6.setLoad(-1.0, 'uy')
+    nd7.setLoad(-1.0, 'uy')
+    nd8.setLoad(-1.0, 'uy')
 
     # analyze the model
     model.solve()
@@ -198,11 +200,56 @@ def problem4():
 
     print(elem1)
 
+def problem5():
+    # initialize a system model
+    params = {'E': 2100., 'A': 1., 'nu': 0.0, 'fy': 1.e30}
+
+    model = System()
+
+    # create nodes
+    H = 5
+    nd1 = Node(0.0, 5.0, 0.0)
+    nd2 = Node(9.5, 5.0, 0.0)
+    nd3 = Node(0.0, 0.0, 0.0)
+    nd4 = Node(9.5, 0.0, 0.0)
+    nd5 = Node(5.5, 3.75, H)
+    nd6 = Node(5.5, 1.25, H)
+
+    nodeList = [nd1, nd2, nd3, nd4, nd5, nd6]
+    model.addNode(nodeList)
+
+
+    # create elements
+    model.addElement(Truss(nd1, nd5, FiberMaterial(params)))  # bottom 1
+    model.addElement(Truss(nd1, nd6, FiberMaterial(params)))  # up right diag 1
+    model.addElement(Truss(nd2, nd5, FiberMaterial(params)))  # up left diag 1
+    model.addElement(Truss(nd3, nd6, FiberMaterial(params)))  # bottom 1
+    model.addElement(Truss(nd4, nd5, FiberMaterial(params)))  # up right diag 1
+    model.addElement(Truss(nd4, nd6, FiberMaterial(params)))  # up left diag 1
+    model.addElement(Truss(nd5, nd6, FiberMaterial(params)))  # bottom 1
+
+
+    # define support(s)
+    translation_dofs = ('ux', 'uy', 'uz')
+    for node in [nd1, nd2, nd3, nd4]:
+        node.fixDOF(translation_dofs)
+
+    # add loads
+    nd5.setLoad(-100.0, 'uz')
+
+    # analyze the model
+    model.solve()
+
+    # write out report
+    model.report()
+
+    # create plots
+    model.plot(factor=1.)
 
 if __name__ == "__main__":
-
-    #problem1()
-    problem2()
-    #problem3()
-    problem4()
+    # problem1()      # Super simple 2D truss
+    # problem2()      # Simple 2D truss bridge
+    # problem3()
+    # problem4()
+    problem5()      # Simple 3D truss
 

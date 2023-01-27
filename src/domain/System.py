@@ -30,13 +30,21 @@ class System():
     def __repr__(self):
         return "System()"
 
-    def addNode(self, newNode):
+    def addNode(self, *nodes):
         """
 
         :param newNode: a :ref:`Node` object
         """
-        newNode.index = len(self.nodes)
-        self.nodes.append(newNode)
+        if isinstance(nodes[0], list):
+            nodes = nodes[0]
+
+        for newNode in nodes:
+            if newNode.index == -1:
+                newNode.index = len(self.nodes)
+                self.nodes.append(newNode)
+            else:
+                print('addNode: node {} already exists in system and was not added again'.format(newNode.index))
+
 
     def __add__(self, other):
         if isinstance(other, Node):
@@ -52,6 +60,7 @@ class System():
 
         :param newElement: a :ref:`Element` object
         """
+        newElement.requestDofs()
         self.elements.append(newElement)
 
     def solve(self):
@@ -60,45 +69,38 @@ class System():
         """
 
         # compute size parameters
-        ndof = 2*len(self.nodes)
+        ndof = 0
+        for node in self.nodes:
+            node.setStart(ndof)
+            ndof += len(node.dofs)
         Rsys = np.zeros(ndof)
         Ksys = np.zeros((ndof, ndof))
 
-        # assemble loads
+
+        # Element Loop: assemble element forces and stiffness
+        for element in self.elements:
+            Fe = element.getForce()     # Element State Update occurs here
+            for node_i in element.nodes:
+                ID_i = element.nodes.index(node_i)
+                idx_i = node_i.dof2idx(element.dof_list) + node_i.start
+                Rsys[idx_i] -= Fe[ID_i]
+                for node_j in element.nodes:
+                    ID_j = element.nodes.index(node_j)
+                    idx_j = node_j.dof2idx(element.dof_list) + node_j.start
+                    Ksys[idx_i[:, np.newaxis], idx_j] += element.Kt[ID_i][ID_j]
+
+
+        # Node Loop: assemble loads and apply boundary conditions
         for node in self.nodes:
             if node.hasLoad():
-                gidx = np.array([2*node.index, 2*node.index+1])
-                Rsys[gidx] += node.getLoad()
-
-        # assemble element forces and stiffness
-        for elem in self.elements:
-            # indexing
-            (nd0, nd1) = elem.nodes
-            K = np.array([2*nd0.index,2*nd0.index+1], dtype=int)
-            M = np.array([2*nd1.index,2*nd1.index+1], dtype=int)
-
-            # add element force
-            Fe = elem.getForce()
-            Rsys[K] -= Fe[0]
-            Rsys[M] -= Fe[1]
-
-            # add element stiffness
-            Ke = elem.getStiffness()
-            Ksys[K[:,np.newaxis],K] += Ke[0][0]
-            Ksys[K[:,np.newaxis],M] += Ke[0][1]
-            Ksys[M[:,np.newaxis],K] += Ke[1][0]
-            Ksys[M[:,np.newaxis],M] += Ke[1][1]
-
-        # apply boundary conditions
-        for (i, node) in enumerate(self.nodes):
-            for idx in [0,1]:
-                if node.isFixed(idx):
-                    K = 2*node.index + idx
-                    Rsys[K] = 0.0
-                    # using the "more correct version" of applying BCs to Ksys
-                    Ksys[:,K] = np.zeros(ndof)
-                    Ksys[K,:] = np.zeros(ndof)
-                    Ksys[K,K] = 1.0
+                Rsys[node.start: node.start+len(node.dofs)] += node.getLoad()
+            for dof in node.dofs:
+                if node.isFixed(dof):
+                    idx = node.start + node.dofs[dof]
+                    Rsys[idx] = 0.0
+                    Ksys[:, idx] = np.zeros(ndof)
+                    Ksys[idx, :] = np.zeros(ndof)
+                    Ksys[idx, idx] = 1.0
 
         # stability check for system matrix
         (vals, vecs) = np.linalg.eig(Ksys)
@@ -106,27 +108,23 @@ class System():
             if np.abs(lam) < 1.0e-2:
                 print(f"lambda = {lam:16.12e}")
                 print(v)
+
         # solve for displacements
         U = np.linalg.solve(Ksys, Rsys)
 
         # update nodal displacements
-        for (i, node) in enumerate(self.nodes):
-            gidx = np.array([2*i, 2*i+1])
-            node.setDisp(*U[gidx])
+        for node in self.nodes:
+            node.setDisp(U[node.start: node.start+len(node.dofs)])
 
         # recompute residual force
         Rsys = np.zeros(ndof)
-        for elem in self.elements:
-            # indexing
-            (nd0, nd1) = elem.nodes
-            K = np.array([2*nd0.index,2*nd0.index+1])
-            M = np.array([2*nd1.index,2*nd1.index+1])
-
-            # add element force
-            Fe = elem.getForce()
-            Rsys[K] -= Fe[0]
-            Rsys[M] -= Fe[1]
-
+        for element in self.elements:
+            Fe = element.getForce()  # Element State Update occurs here
+            for node_i in element.nodes:
+                ID_i = element.nodes.index(node_i)
+                idx_i = node_i.dof2idx(element.dof_list) + node_i.start
+                Rsys[idx_i] -= Fe[ID_i]
+        #
         self.Rsys = Rsys
         self.disp = U
 
@@ -157,7 +155,7 @@ class System():
         print a text-based summary report
 
         """
-        s  = "\nTruss Analysis Report\n"
+        s  = "\nSystem Analysis Report\n"
         s += "=====================\n"
         s += "\nNodes:\n"
         s += "---------------------\n"
