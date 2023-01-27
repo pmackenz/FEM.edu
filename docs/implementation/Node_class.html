@@ -20,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Element classes" href="Element_class.html" />
+    <link rel="next" title="DoF class" href="DOF_class.html" />
     <link rel="prev" title="Implementation" href="../implementation.html" /> 
 </head>
 
@@ -44,6 +44,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
@@ -82,14 +83,16 @@
 <span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-domain.Node" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="domain.Node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">u</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.fixDOF">
-<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
+<dd><p>provide a list of dof codes that shall be restrained</p>
+<p>see also: <span class="xref std std-ref">request</span></p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>idx</strong> – </p>
+<dd class="field-odd"><p><strong>dofs</strong> – </p>
 </dd>
 </dl>
 </dd></dl>
@@ -130,10 +133,21 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.isFixed">
-<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>idx</strong> – </p>
+<dd class="field-odd"><p><strong>dof</strong> – dof code as defined in <span class="xref std std-ref">request</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.linkElement">
+<span class="sig-name descname"><span class="pre">linkElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.linkElement" title="Permalink to this definition"></a></dt>
+<dd><p>provide link to attached element(s)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>element</strong> – element pointer</p>
 </dd>
 </dl>
 </dd></dl>
@@ -141,7 +155,7 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.request">
 <span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
-<dd><p>send list of dof codes. Common codes:</p>
+<dd><p>send list or individual dof code. Common codes:</p>
 <table class="docutils align-default">
 <colgroup>
 <col style="width: 50%" />
@@ -182,12 +196,27 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.setDisp">
-<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">u</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">v</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
+<dd><p>use for prescribed displacements</p>
+<p><strong>NEEDS TO BE IMPLEMENTED</strong></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>U</strong> – </p></li>
+<li><p><strong>dof_list</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.setLoad">
+<span class="sig-name descname"><span class="pre">setLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setLoad" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>u</strong> – </p></li>
-<li><p><strong>v</strong> – </p></li>
+<li><p><strong>loads</strong> – </p></li>
+<li><p><strong>dofs</strong> – </p></li>
 </ul>
 </dd>
 </dl>
@@ -202,7 +231,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../implementation.html" class="btn btn-neutral float-left" title="Implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Element_class.html" class="btn btn-neutral float-right" title="Element classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="DOF_class.html" class="btn btn-neutral float-right" title="DoF class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
