@@ -6,6 +6,7 @@ Implementation
 	:maxdepth: 3
 
 	implementation/Node_class.rst
+	implementation/DOF_class.rst
 	implementation/Element_class.rst
 	implementation/Material_class.rst
 	implementation/System_class.rst

@@ -42,6 +42,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
@@ -76,15 +77,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-src.Plotter">
-<span id="plotter-class"></span><h1>Plotter class<a class="headerlink" href="#module-src.Plotter" title="Permalink to this heading"></a></h1>
+  <section id="module-plotter.Plotter">
+<span id="plotter-class"></span><h1>Plotter class<a class="headerlink" href="#module-plotter.Plotter" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="src.Plotter.Plotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">src.Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#src.Plotter.Plotter" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#plotter.Plotter.Plotter" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a Plotter object</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.addForces">
-<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.addForces" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.addForces">
+<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.addForces" title="Permalink to this definition"></a></dt>
 <dd><p>add nodal forces to the plot shown in <strong>axs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -94,8 +95,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.displacementPlot">
-<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.displacementPlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.displacementPlot">
+<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.displacementPlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a deformed system plot</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -107,8 +108,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.setDisplacements">
-<span class="sig-name descname"><span class="pre">setDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setDisplacements" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setDisplacements">
+<span class="sig-name descname"><span class="pre">setDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setDisplacements" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>disp</strong> – </p>
@@ -117,8 +118,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.setMesh">
-<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setMesh" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setMesh">
+<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setMesh" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -130,8 +131,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.setReactions">
-<span class="sig-name descname"><span class="pre">setReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setReactions" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setReactions">
+<span class="sig-name descname"><span class="pre">setReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setReactions" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>R</strong> – array of nodal force vectors</p>
@@ -140,8 +141,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.setValues">
-<span class="sig-name descname"><span class="pre">setValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.setValues" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setValues">
+<span class="sig-name descname"><span class="pre">setValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setValues" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>vals</strong> – </p>
@@ -150,8 +151,21 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="src.Plotter.Plotter.valuePlot">
-<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#src.Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.set_axes_equal">
+<span class="sig-name descname"><span class="pre">set_axes_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.set_axes_equal" title="Permalink to this definition"></a></dt>
+<dd><p>Make axes of 3D plot have equal scale so that spheres appear as spheres,
+cubes as cubes, etc..  This is one possible solution to Matplotlib’s
+ax.set_aspect(‘equal’) and ax.axis(‘equal’) not working for 3D.</p>
+<dl class="simple">
+<dt>Input</dt><dd><p>ax: a matplotlib axis, e.g., as output from plt.gca().</p>
+</dd>
+</dl>
+<p>Taken from: <a class="reference external" href="https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to">https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="plotter.Plotter.Plotter.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a plot using colors to identify magnitude of internal force.</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>

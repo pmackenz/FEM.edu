@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linear Solver class &mdash; FEM.edu 0.4 documentation</title>
+  <title>DoF class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,12 +16,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Plotter class" href="Plotter_class.html" />
-    <link rel="prev" title="Solver class" href="Solver_class.html" /> 
+    <link rel="next" title="Element classes" href="Element_class.html" />
+    <link rel="prev" title="Node class" href="Node_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -44,17 +43,11 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">DoF class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="Solver_class.html">Solver class</a><ul class="current">
-<li class="toctree-l3 current"><a class="reference internal" href="Solver_class.html#derived-classes">Derived Classes</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Linear Solver class</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
 </ul>
 </li>
@@ -75,10 +68,9 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-          <li><a href="Solver_class.html">Solver class</a> &raquo;</li>
-      <li>Linear Solver class</li>
+      <li>DoF class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/LinearSolver_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/DOF_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -86,32 +78,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="linear-solver-class">
-<h1>Linear Solver class<a class="headerlink" href="#linear-solver-class" title="Permalink to this heading"></a></h1>
-<section id="parent-class">
-<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="Solver_class.html"><span class="doc">Solver class</span></a></p></li>
-</ul>
-</section>
-<section id="module-solver.LinearSolver">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-solver.LinearSolver" title="Permalink to this heading"></a></h2>
+  <section id="module-domain.DoF">
+<span id="dof-class"></span><h1>DoF class<a class="headerlink" href="#module-domain.DoF" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="solver.LinearSolver.LinearSolver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">solver.LinearSolver.</span></span><span class="sig-name descname"><span class="pre">LinearSolver</span></span><a class="headerlink" href="#solver.LinearSolver.LinearSolver" title="Permalink to this definition"></a></dt>
-<dd><p>A linear system solver</p>
-<p>This solver implies <span class="math notranslate nohighlight">\(\{{\bf P}\} = [{\bf K}] \{{\bf u}\}\)</span></p>
+<dt class="sig sig-object py" id="domain.DoF.DoF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.DoF.</span></span><span class="sig-name descname"><span class="pre">DoF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">type</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.DoF.DoF" title="Permalink to this definition"></a></dt>
+<dd><p>class: representing a single Degree of Freedom</p>
+<blockquote>
+<div><p>self.type: type of DoF (str)
+self.disp: current displacement (float)
+self.nodeID:: node the DoF belongs to (int)
+self.isFixed: fixity status (bool)
+self.record: indicator whether to save displacement history (bool)
+self.history: displacement history (list of floats)</p>
+</div></blockquote>
 </dd></dl>
 
-</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Solver_class.html" class="btn btn-neutral float-left" title="Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Plotter_class.html" class="btn btn-neutral float-right" title="Plotter class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Node_class.html" class="btn btn-neutral float-left" title="Node class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Element_class.html" class="btn btn-neutral float-right" title="Element classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

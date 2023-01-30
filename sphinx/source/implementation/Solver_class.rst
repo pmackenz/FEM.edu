@@ -4,7 +4,7 @@ Solver class
 This is an abstract class for defining a general solver interface.
 
 
-.. automodule:: src.solver.Solver
+.. automodule:: solver.Solver
   :members:
 
 Derived Classes

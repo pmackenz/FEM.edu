@@ -1,6 +1,6 @@
 import numpy as np
 from .Element import *
-from ..Node import *
+from domain.Node import *
 
 class LinearTriangle(Element):
     """
@@ -9,6 +9,17 @@ class LinearTriangle(Element):
 
     def __init__(self, node0, node1, node2, material):
         super().__init__((node0, node1, node2), material)
+
+        if node0.getPos().size == 3:
+            self.dof_list = ('ux','uy','uz')
+        elif node0.getPos().size == 2:
+            self.dof_list = ('ux','uy')
+        else:
+            raise TypeError("dimension of nodes must be 2 or 3")
+
+        node0.request(self.dof_list)
+        node1.request(self.dof_list)
+        node2.request(self.dof_list)
 
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) , np.zeros(2) ]
@@ -58,8 +69,8 @@ class LinearTriangle(Element):
 
         # covariant base vectors (current system)
 
-        gs = node1.getDeformedPos() - node0.getDeformedPos()
-        gt = node2.getDeformedPos() - node0.getDeformedPos()
+        gs = node1.getDeformedPos(self.dof_list) - node0.getDeformedPos(self.dof_list)
+        gt = node2.getDeformedPos(self.dof_list) - node0.getDeformedPos(self.dof_list)
         gu = -gs - gt
 
         # metric (current system)
@@ -92,7 +103,7 @@ class LinearTriangle(Element):
         P = F @ S
 
         # store stress for reporting
-        self.stress = P
+        self.stress = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
 
         # tractions
         ts = P @ Gs
@@ -100,6 +111,9 @@ class LinearTriangle(Element):
         tu = P @ Gu
 
         # initialize arrays
+
+        
+
         BI = []
         Kt = []
         for i in range(3):
@@ -113,9 +127,9 @@ class LinearTriangle(Element):
 
         # internal force
         self.Forces = [
-            ts * self.area * self.thickness,
-            tt * self.area * self.thickness,
-            tu * self.area * self.thickness
+            ts * self.area * self.material.getThickness(),
+            tt * self.area * self.material.getThickness(),
+            tu * self.area * self.material.getThickness()
             ]
 
         # material tangent stiffness

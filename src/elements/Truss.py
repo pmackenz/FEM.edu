@@ -1,5 +1,5 @@
 from .Element import *
-from ..Node import *
+from domain.Node import *
 
 class Truss(Element):
     """
@@ -8,6 +8,13 @@ class Truss(Element):
 
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
+
+        if nodei.getPos().size == 3:
+            self.dof_list = ('ux','uy','uz')
+        elif nodei.getPos().size == 2:
+            self.dof_list = ('ux','uy')
+        else:
+            raise TypeError("dimension of nodes must be 2 or 3")
 
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) ]
@@ -44,10 +51,11 @@ class Truss(Element):
         Nvec = Lvec / ell
 
         eps = Nvec @ (U1 - U0) / ell
-        self.material.setStrain(eps)
+        self.material.setStrain({'xx':eps})
         stress = self.material.getStress()
+        sig = stress['xx']
         area   = self.material.getArea()
-        self.force = stress * area
+        self.force = sig * area
 
         Pe = self.force * Nvec
         self.Forces = [-Pe, Pe]

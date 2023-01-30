@@ -1,6 +1,5 @@
 import numpy as np
 
-
 class Node():
     """
     class: representing a single Node
@@ -37,6 +36,33 @@ class Node():
     def __repr__(self):
         return "Node({},{},u={},v={})".format(self.pos[0],self.pos[1],self.disp[0],self.disp[1])
 
+    def request(self, dof_list):
+        """
+        send list of dof codes. Common codes:
+
+        .. list-table::
+            :header-rows: 1
+
+            * - code
+              - description
+            * - **ux**
+              - displacement in x-direction
+            * - **uy**
+              - displacement in y-direction
+            * - **uz**
+              - displacement in z-direction
+            * - **rx**
+              - rotation about x-axis
+            * - **ry**
+              - rotation about y-axis
+            * - **rz**
+              - rotation about z-axis
+
+
+        :param: dof_list ... list of dof-codes required by calling element
+        """
+        pass
+
     def fixDOF(self, idx):
         """
 
@@ -60,7 +86,7 @@ class Node():
         """
         return self.fixity[idx]
 
-    def setDisp(self, u, v):
+    def setDisp(self, u, v, dof_list=None):
         """
 
         :param u:
@@ -68,21 +94,21 @@ class Node():
         """
         self.disp = np.array([u,v])
 
-    def getDisp(self):
+    def getDisp(self, dof_list=None):
         """
 
         :return: nodal displacement vector
         """
         return self.disp
 
-    def getPos(self):
+    def getPos(self, dof_list=None):
         """
 
         :return: initial position vector
         """
         return self.pos
 
-    def getDeformedPos(self, factor=1.0):
+    def getDeformedPos(self, dof_list=None, factor=1.0):
         """
         Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
 
@@ -91,11 +117,11 @@ class Node():
         """
         return self.pos + factor * self.disp
 
-    def addLoad(self, Px, Py):
+    def addLoad(self, Px, Py, dof_list=None):
         self.force   += np.array([Px, Py])
         self._hasLoad = True
 
-    def setLoad(self, Px, Py):
+    def setLoad(self, Px, Py, dof_list=None):
         self.force    = np.array([Px, Py])
         self._hasLoad = True
 

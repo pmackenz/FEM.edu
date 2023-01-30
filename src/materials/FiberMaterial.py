@@ -24,12 +24,12 @@ class FiberMaterial(Material):
 
         # initialize strain
         self.plastic_strain = 0.0
-        self.setStrain(0.0)
+        self.setStrain({'xx':0.0})
 
     def getArea(self):
         return self.parameters['A']
 
-    def setStrain(self, eps):
+    def updateState(self):
         """
         update state for a user provided axial strain value
 
@@ -39,6 +39,8 @@ class FiberMaterial(Material):
         # update stress state
         E  = self.parameters['E']
         fy = self.parameters['fy']
+
+        eps = self.strain['xx']
 
         # elastic predictor
         self.sig = E * (eps - self.plastic_strain)
@@ -57,6 +59,7 @@ class FiberMaterial(Material):
             print("material entering plastic state")
 
         #print(4*'{:12.8e}  '.format(eps, f, self.plastic_strain, self.sig ))
+        self.stress = {'xx':self.sig, 'yy':0.0, 'zz':0.0, 'xy':0.0, 'xy':0.0, 'xy':0.0}
 
     def getStrain(self):
         return self.sig / self.parameters['E'] + self.plastic_strain

@@ -16,6 +16,7 @@ class Element():
         """
         self.nodes    = nodes
         self.material = material
+        self.dof_list = ('ux','uy')
 
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) ]
