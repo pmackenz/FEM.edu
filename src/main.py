@@ -244,6 +244,10 @@ if __name__ == "__main__":
     #problem1()      # Super simple 2D truss
     #problem2()      # Simple 2D truss bridge
     #problem3()
+<<<<<<< Updated upstream
     # problem4()
     problem5()      # Simple 3D truss
+=======
+    #problem4()
+>>>>>>> Stashed changes
 
