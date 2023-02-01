@@ -11,15 +11,13 @@ class LinearTriangle(Element):
         super().__init__((node0, node1, node2), material)
 
         if node0.getPos().size == 3:
-            self.dof_list = ('ux','uy','uz')
+            dof_list = ('ux','uy','uz')
         elif node0.getPos().size == 2:
-            self.dof_list = ('ux','uy')
+            dof_list = ('ux','uy')
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
-        node0.request(self.dof_list)
-        node1.request(self.dof_list)
-        node2.request(self.dof_list)
+        self._requestDofs(dof_list)
 
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) , np.zeros(2) ]

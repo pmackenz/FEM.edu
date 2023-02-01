@@ -1,6 +1,7 @@
 import numpy as np
 
 from .Node     import *
+from elements.Element import *
 from plotter.Plotter import *
 
 
@@ -30,13 +31,17 @@ class System():
     def __repr__(self):
         return "System()"
 
-    def addNode(self, newNode):
+    def addNode(self, *nodes):
         """
 
         :param newNode: a :ref:`Node` object
         """
-        newNode.index = len(self.nodes)
-        self.nodes.append(newNode)
+        for newNode in nodes:
+            if newNode not in self.nodes:
+                newNode.index = len(self.nodes)
+                self.nodes.append(newNode)
+            else:
+                print('addNode: node {} already exists in system and was not added again'.format(newNode.index))
 
     def __add__(self, other):
         if isinstance(other, Node):
@@ -60,45 +65,38 @@ class System():
         """
 
         # compute size parameters
-        ndof = 2*len(self.nodes)
+        ndof = 0
+        for node in self.nodes:
+            node.setStart(ndof)
+            ndof += node.ndofs
         Rsys = np.zeros(ndof)
         Ksys = np.zeros((ndof, ndof))
 
         # assemble loads
         for node in self.nodes:
             if node.hasLoad():
-                gidx = np.array([2*node.index, 2*node.index+1])
-                Rsys[gidx] += node.getLoad()
+                K = node.start + np.arange(node.ndofs)
+                Rsys[K] += node.getLoad()
 
-        # assemble element forces and stiffness
-        for elem in self.elements:
-            # indexing
-            (nd0, nd1) = elem.nodes
-            K = np.array([2*nd0.index,2*nd0.index+1], dtype=int)
-            M = np.array([2*nd1.index,2*nd1.index+1], dtype=int)
-
-            # add element force
-            Fe = elem.getForce()
-            Rsys[K] -= Fe[0]
-            Rsys[M] -= Fe[1]
-
-            # add element stiffness
-            Ke = elem.getStiffness()
-            Ksys[K[:,np.newaxis],K] += Ke[0][0]
-            Ksys[K[:,np.newaxis],M] += Ke[0][1]
-            Ksys[M[:,np.newaxis],K] += Ke[1][0]
-            Ksys[M[:,np.newaxis],M] += Ke[1][1]
+        # Element Loop: assemble element forces and stiffness
+        for element in self.elements:
+            Fe = element.getForce()     # Element State Update occurs here
+            for (i,ndI) in enumerate(element.nodes):
+                K = ndI.start + np.arange(ndI.ndofs)
+                Rsys[K] -= Fe[i]
+                for (j,ndJ) in enumerate(element.nodes):
+                    M = ndJ.start + np.arange(ndJ.ndofs)
+                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
 
         # apply boundary conditions
-        for (i, node) in enumerate(self.nodes):
-            for idx in [0,1]:
-                if node.isFixed(idx):
-                    K = 2*node.index + idx
-                    Rsys[K] = 0.0
-                    # using the "more correct version" of applying BCs to Ksys
-                    Ksys[:,K] = np.zeros(ndof)
-                    Ksys[K,:] = np.zeros(ndof)
-                    Ksys[K,K] = 1.0
+        for node in self.nodes:
+            for dof in node.dofs:
+                if node.isFixed(dof):
+                    idx = node.start + node.dofs[dof]
+                    Rsys[idx]      = 0.0
+                    Ksys[:, idx]   = np.zeros(ndof)
+                    Ksys[idx, :]   = np.zeros(ndof)
+                    Ksys[idx, idx] = 1.0
 
         # stability check for system matrix
         (vals, vecs) = np.linalg.eig(Ksys)
@@ -106,27 +104,24 @@ class System():
             if np.abs(lam) < 1.0e-2:
                 print(f"lambda = {lam:16.12e}")
                 print(v)
+
         # solve for displacements
         U = np.linalg.solve(Ksys, Rsys)
 
         # update nodal displacements
-        for (i, node) in enumerate(self.nodes):
-            gidx = np.array([2*i, 2*i+1])
-            node.setDisp(*U[gidx])
+        for node in self.nodes:
+            K = node.start + np.arange(node.ndofs)
+            node._updateDisp(U[K])
 
         # recompute residual force
         Rsys = np.zeros(ndof)
-        for elem in self.elements:
-            # indexing
-            (nd0, nd1) = elem.nodes
-            K = np.array([2*nd0.index,2*nd0.index+1])
-            M = np.array([2*nd1.index,2*nd1.index+1])
+        for element in self.elements:
+            Fe = element.getForce()     # Element State Update occurs here
+            for (i,ndI) in enumerate(element.nodes):
+                K = ndI.start + np.arange(ndI.ndofs)
+                Rsys[K] -= Fe[i]
 
-            # add element force
-            Fe = elem.getForce()
-            Rsys[K] -= Fe[0]
-            Rsys[M] -= Fe[1]
-
+        #
         self.Rsys = Rsys
         self.disp = U
 
@@ -157,7 +152,7 @@ class System():
         print a text-based summary report
 
         """
-        s  = "\nTruss Analysis Report\n"
+        s  = "\nSystem Analysis Report\n"
         s += "=====================\n"
         s += "\nNodes:\n"
         s += "---------------------\n"

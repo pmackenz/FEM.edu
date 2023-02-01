@@ -4,21 +4,35 @@ from domain.Node import *
 class Truss(Element):
     """
     class: representing a single truss element
+
+        self.nodes    = nodes i and j (tuple)
+        self.material = material parameters (
+
+        self.force    = internal force (float)
+        self.Forces   = internal force vectors (list of np.arrays)
+        self.Kt       = tangent stiffness (list of np.arrays)
     """
 
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
 
-        if nodei.getPos().size == 3:
-            self.dof_list = ('ux','uy','uz')
-        elif nodei.getPos().size == 2:
-            self.dof_list = ('ux','uy')
-        else:
-            raise TypeError("dimension of nodes must be 2 or 3")
+        dim = nodei.getPos().size
 
+        if dim == 3:
+            dof_list = ('ux', 'uy', 'uz')
+        elif dim == 2:
+            dof_list = ('ux', 'uy')
+        else:
+            raise TypeError("spatial dimension of nodes must be 2 or 3")
+
+        self._requestDofs(dof_list)
+
+        self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
-        self.Forces   = [ np.zeros(2), np.zeros(2) ]
-        self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2))], [np.zeros((2,2)), np.zeros((2,2))] ]
+        self.Forces   = [np.zeros(dim), np.zeros(dim)]
+        self.Kt       = [[np.zeros((dim, dim)), np.zeros((dim, dim))],
+                         [np.zeros((dim, dim)), np.zeros((dim, dim))]]
+
 
     def __str__(self):
         s = \
@@ -40,13 +54,15 @@ class Truss(Element):
         self.updateState()
         return self.force
 
-    def updateState(self):
-        X0 = self.nodes[0].getPos()
-        U0 = self.nodes[0].getDisp()
-        X1 = self.nodes[1].getPos()
-        U1 = self.nodes[1].getDisp()
 
-        Lvec = X1 - X0
+    def updateState(self):
+        U0 = self.nodes[0].getDisp()
+        X0 = self.nodes[0].getPos()
+        U1 = self.nodes[1].getDisp()
+        X1 = self.nodes[1].getPos()
+
+
+        Lvec = (X1 + U1) - (X0 + U0)
         ell = np.linalg.norm(Lvec)
         Nvec = Lvec / ell
 
@@ -62,7 +78,7 @@ class Truss(Element):
 
         Et = self.material.getStiffness()
         ke = (Et * area / ell) * np.outer(Nvec, Nvec)
-        self.Kt = [[ke,-ke],[-ke,ke]]
+        self.Kt = [[ke, -ke], [-ke, ke]]
 
 
 if __name__ == "__main__":
