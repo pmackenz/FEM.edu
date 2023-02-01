@@ -1,3 +1,4 @@
 __all__ = (
-    'Plotter'
+    'Plotter',
+    'Plotter3d'
 )
