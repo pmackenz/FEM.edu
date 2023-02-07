@@ -12,6 +12,8 @@ class FiberMaterial(Material):
     def __init__(self, params={'E':1.0, 'A':1.0, 'nu':0.0, 'fy':1.0e30}):
         super().__init__(params = params)
 
+        self._type = self.FIBER
+
         # make sure all necessary parameters exist
         if 'E' not in self.parameters:
             self.parameters['E']  = 1.0

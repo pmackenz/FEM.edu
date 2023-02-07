@@ -1,4 +1,5 @@
 from .Element import *
+from materials.Material import *
 from domain.Node import *
 
 class Frame2D(Element):
@@ -20,6 +21,9 @@ class Frame2D(Element):
         :param material: a material for axial and flexural integrated behavior
         """
         super().__init__((nodei, nodej), material)
+
+        if not material.materialType() == Material.SECTION1D:
+            raise TypeError("received material type {} but require SECTION1D type".format(material.materialType()))
 
         dim = nodei.getPos().size
 

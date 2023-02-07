@@ -8,11 +8,34 @@ class Material():
 
     """
 
+    """
+    defining class parameters
+    
+    Add a new one for every general type of material.
+    This will be used by elements to test for compatible materials
+    """
+    UNKNOWN     = 0x000000
+    DEFAULT     = 0x000001
+    FIBER       = 0x000002
+    SECTION1D   = 0x000004  # integrated section (beams and frames)
+    SECTION2D   = 0x000008  # through the thickness integration (plates and shells)
+    PLANESTRESS = 0x000010
+    PLANESTRAIN = 0x000020
+    CONTINUUM   = 0x000040
+
+    ELASTIC     = 0x010000
+    PLASTIC     = 0x020000
+    CREEP       = 0x040000
+    HARDENING   = 0x080000
+
+
     def __init__(self, params={'E':1.0, 'A':1.0, 'nu':0.0, 'fy':1.0e30}):
         """
 
         :param params:
         """
+        self._type = self.UNKNOWN
+
         self.parameters = params
 
         # make sure all necessary parameters exist
@@ -34,6 +57,9 @@ class Material():
 
     def __repr__(self):
         return str(self)
+
+    def materialType(self):
+        return self._type
 
     def getStress(self):
         """
