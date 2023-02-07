@@ -19,13 +19,13 @@ class Truss(Element):
         dim = nodei.getPos().size
 
         if dim == 3:
-            dof_list = ('ux', 'uy', 'uz')
+            self.dof_list = ('ux', 'uy', 'uz')
         elif dim == 2:
-            dof_list = ('ux', 'uy')
+            self.dof_list = ('ux', 'uy')
         else:
             raise TypeError("spatial dimension of nodes must be 2 or 3")
 
-        self._requestDofs(dof_list)
+        self._requestDofs(self.dof_list)
 
         self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
@@ -56,9 +56,9 @@ class Truss(Element):
 
 
     def updateState(self):
-        U0 = self.nodes[0].getDisp()
+        U0 = self.nodes[0].getDisp(self.dof_list)
         X0 = self.nodes[0].getPos()
-        U1 = self.nodes[1].getDisp()
+        U1 = self.nodes[1].getDisp(self.dof_list)
         X1 = self.nodes[1].getPos()
 
 

@@ -16,6 +16,7 @@ class Element():
         """
         self.nodes    = nodes
         self.material = material
+        self.dof_list = None
         self.dof_idx  = {}
 
         self._requestDofs( tuple() )

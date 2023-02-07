@@ -82,21 +82,20 @@ class System():
         for element in self.elements:
             Fe = element.getForce()     # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
+                K = ndI.start + np.asarray(element.dof_idx[ndI])
                 Rsys[K] -= Fe[i]
                 for (j,ndJ) in enumerate(element.nodes):
-                    M = ndJ.start + np.arange(ndJ.ndofs)
+                    M = ndJ.start + np.asarray(element.dof_idx[ndJ])
                     Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
 
         # apply boundary conditions
         for node in self.nodes:
-            for dof in node.dofs:
-                if node.isFixed(dof):
-                    idx = node.start + node.dofs[dof]
-                    Rsys[idx]      = 0.0
-                    Ksys[:, idx]   = np.zeros(ndof)
-                    Ksys[idx, :]   = np.zeros(ndof)
-                    Ksys[idx, idx] = 1.0
+            for dof in node.fixity:
+                idx = node.start + node.dofs[dof]
+                Rsys[idx]      = 0.0
+                Ksys[:, idx]   = np.zeros(ndof)
+                Ksys[idx, :]   = np.zeros(ndof)
+                Ksys[idx, idx] = 1.0
 
         # stability check for system matrix
         (vals, vecs) = np.linalg.eig(Ksys)
