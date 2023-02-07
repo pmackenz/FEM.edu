@@ -1,4 +1,4 @@
-Material classes
+Material class
 ==========================
 
 .. automodule:: materials.Material
