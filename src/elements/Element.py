@@ -86,7 +86,25 @@ class Element():
             self.dof_idx[node] = dof_idx
 
     def getDofs(self):
+        """
+        returns the dof-codes for this element in a list
+        """
         return self.dof_list
+
+    def getCurve(self, factor=0.0):
+        """
+        Used for plotting this element.
+
+        If a factor other than 0.0 (default: 0.0) is given,
+        add factor*displacement to the reference position.
+
+        Represent the element by an arbitrary polygon.
+        Collect nodal coordinates of points in lists of X-, Y-, Z- coordinates.
+        The Z-coordinate is only needed for 3d plotting.
+
+        :return: plot information in a tuple (X,Y,...)
+        """
+        return None
 
 
 if __name__ == "__main__":

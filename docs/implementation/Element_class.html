@@ -47,6 +47,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Element classes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Frame2D_class.html">Frame2D class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
 </li>
@@ -92,6 +93,28 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a single generic element</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="elements.Element.Element.getCurve">
+<span class="sig-name descname"><span class="pre">getCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getCurve" title="Permalink to this definition"></a></dt>
+<dd><p>Used for plotting this element.</p>
+<p>If a factor other than 0.0 (default: 0.0) is given,
+add factor*displacement to the reference position.</p>
+<p>Represent the element by an arbitrary polygon.
+Collect nodal coordinates of points in lists of X-, Y-, Z- coordinates.
+The Z-coordinate is only needed for 3d plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot information in a tuple (X,Y,…)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.Element.Element.getDofs">
+<span class="sig-name descname"><span class="pre">getDofs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getDofs" title="Permalink to this definition"></a></dt>
+<dd><p>returns the dof-codes for this element in a list</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="elements.Element.Element.getForce">
 <span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getForce" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -123,6 +146,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Frame2D_class.html">Frame2D class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
 </div>

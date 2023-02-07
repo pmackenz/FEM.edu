@@ -13,4 +13,5 @@ Derived Classes
     :maxdepth: 1
 
     Truss_class.rst
+    Frame2D_class.rst
     LinearTriangle_class.rst
