@@ -7,6 +7,11 @@ All Section materials are derived from the following base class.
 That class may be used directly to represent a linear elastic section without coupling between
 axial and flexural deformation.
 
+Parent class
+---------------
+* :doc:`Material_class`
+
+
 .. automodule:: materials.SectionMaterial
   :members:
 
