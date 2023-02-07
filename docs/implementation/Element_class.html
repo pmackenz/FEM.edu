@@ -42,7 +42,6 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Element classes</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
@@ -53,10 +52,12 @@
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -132,6 +133,17 @@ The Z-coordinate is only needed for 3d plotting.</p>
 <dd class="field-odd"><p></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.Element.Element.setTransformation">
+<span class="sig-name descname"><span class="pre">setTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.setTransformation" title="Permalink to this definition"></a></dt>
+<dd><p>Attach a transformation to any node of the element.</p>
+<p>If no <strong>local_nodes</strong> list is given or an empty list is handed to the function,
+the transformation, <strong>T</strong>, will be applied to all nodes in the element.</p>
+<p>A non-empty <strong>local_nodes</strong> list will apply the transformation to those local nodes listed in that list.
+Local nodes start at 0 and go to N-1, where N is the number of elements in this element.</p>
+<p>A transformation can be removed from a node by assigning <code class="code docutils literal notranslate"><span class="pre">T=None</span></code> as the transformation.</p>
 </dd></dl>
 
 <dl class="py method">

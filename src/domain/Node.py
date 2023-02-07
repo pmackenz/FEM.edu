@@ -1,10 +1,9 @@
 import numpy as np
-
+from .Transformation import *
 class Node():
     """
     class: representing a single Node
     """
-
 
     def __init__(self, x0, y0, z0=None):
         """
@@ -17,16 +16,17 @@ class Node():
         else:
             self.pos = np.array([x0, y0])
 
-        self.index    = -1
-        self.disp     = None
-        self.dofs     = {}
-        self.ndofs    = 0
-        self.start    = None
-        self.elements = []
-        self.fixity   = []
-        self.force    = None
-        self.loads    = {}
-        self._hasLoad = False
+        self.index     = -1
+        self.disp      = None
+        self.dofs      = {}
+        self.ndofs     = 0
+        self.start     = None
+        self.elements  = []
+        self.fixity    = []
+        self.force     = None
+        self.loads     = {}
+        self._hasLoad  = False
+        self.transform = None    # nodal transformation object
 
     def __str__(self):
         s = \
@@ -183,6 +183,16 @@ class Node():
             self.disp = np.zeros(self.ndofs)
 
         return self.pos + factor * self.disp
+
+    def addTransformation(self, T):
+        """
+        Attach a transformation object to this node.
+        The transformation defines a local coordinate system.
+        If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
+        Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
+        """
+        if T and isinstance(T, Transformation):
+            self.transform = T
 
     def addLoad(self, P, dofs):
         self.force   += np.array([Px, Py])

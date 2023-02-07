@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DoF class" href="DOF_class.html" />
-    <link rel="prev" title="Implementation" href="../implementation.html" /> 
+    <link rel="next" title="Plotter class" href="Plotter_class.html" />
+    <link rel="prev" title="PlaneStrain material class" href="PlaneStrain.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,13 +43,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -85,6 +86,15 @@
 <dt class="sig sig-object py" id="domain.Node.Node">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.addTransformation">
+<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addTransformation" title="Permalink to this definition"></a></dt>
+<dd><p>Attach a transformation object to this node.
+The transformation defines a local coordinate system.
+If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
+Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.fixDOF">
 <span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
@@ -230,8 +240,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../implementation.html" class="btn btn-neutral float-left" title="Implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="DOF_class.html" class="btn btn-neutral float-right" title="DoF class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="PlaneStrain.html" class="btn btn-neutral float-left" title="PlaneStrain material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Plotter_class.html" class="btn btn-neutral float-right" title="Plotter class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

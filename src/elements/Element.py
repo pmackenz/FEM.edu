@@ -15,6 +15,7 @@ class Element():
         :param material:
         """
         self.nodes    = nodes
+        self.transforms = [ None for nd in self.nodes ]
         self.material = material
         self.dof_idx  = {}
 
@@ -42,6 +43,25 @@ class Element():
                                      repr(self.nodes[1]),
                                      repr(self.material))
 
+
+    def setTransformation(self, T, local_nodes=[]):
+        """
+        Attach a transformation to any node of the element.
+
+        If no **local_nodes** list is given or an empty list is handed to the function,
+        the transformation, **T**, will be applied to all nodes in the element.
+
+        A non-empty **local_nodes** list will apply the transformation to those local nodes listed in that list.
+        Local nodes start at 0 and go to N-1, where N is the number of elements in this element.
+
+        A transformation can be removed from a node by assigning :code:`T=None` as the transformation.
+        """
+        if local_nodes:
+            for local_id in local_nodes:
+                if local_id >= 0 and local_id < len(self.transforms):
+                    self.transforms[local_id] = T
+        else:
+            self.transforms = [ T for nd in self.nodes ]
 
     def getForce(self):
         """
