@@ -44,7 +44,7 @@ class Element():
                                      repr(self.material))
 
 
-    def setTransformation(self, T, local_nodes=[]):
+    def addTransformation(self, T, local_nodes=[]):
         """
         Attach a transformation to any node of the element.
 

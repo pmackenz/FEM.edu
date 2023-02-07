@@ -94,6 +94,17 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a single generic element</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="elements.Element.Element.addTransformation">
+<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.addTransformation" title="Permalink to this definition"></a></dt>
+<dd><p>Attach a transformation to any node of the element.</p>
+<p>If no <strong>local_nodes</strong> list is given or an empty list is handed to the function,
+the transformation, <strong>T</strong>, will be applied to all nodes in the element.</p>
+<p>A non-empty <strong>local_nodes</strong> list will apply the transformation to those local nodes listed in that list.
+Local nodes start at 0 and go to N-1, where N is the number of elements in this element.</p>
+<p>A transformation can be removed from a node by assigning <code class="code docutils literal notranslate"><span class="pre">T=None</span></code> as the transformation.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="elements.Element.Element.getCurve">
 <span class="sig-name descname"><span class="pre">getCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getCurve" title="Permalink to this definition"></a></dt>
 <dd><p>Used for plotting this element.</p>
@@ -133,17 +144,6 @@ The Z-coordinate is only needed for 3d plotting.</p>
 <dd class="field-odd"><p></p>
 </dd>
 </dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.setTransformation">
-<span class="sig-name descname"><span class="pre">setTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.setTransformation" title="Permalink to this definition"></a></dt>
-<dd><p>Attach a transformation to any node of the element.</p>
-<p>If no <strong>local_nodes</strong> list is given or an empty list is handed to the function,
-the transformation, <strong>T</strong>, will be applied to all nodes in the element.</p>
-<p>A non-empty <strong>local_nodes</strong> list will apply the transformation to those local nodes listed in that list.
-Local nodes start at 0 and go to N-1, where N is the number of elements in this element.</p>
-<p>A transformation can be removed from a node by assigning <code class="code docutils literal notranslate"><span class="pre">T=None</span></code> as the transformation.</p>
 </dd></dl>
 
 <dl class="py method">
