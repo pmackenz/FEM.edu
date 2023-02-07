@@ -9,7 +9,7 @@ class PlaneStrain(Material):
     def __init__(self, params={'E':1.0, 't':1.0, 'nu':0.0, 'fy':1.0e30}):
         super().__init__(params = params)
 
-        self._type = self.PLANESTRAIN & self.PLASTIC
+        self._type = self.PLANESTRAIN | self.PLASTIC
 
         if 't' not in self.parameters:
             self.parameters['t']  = 1.0

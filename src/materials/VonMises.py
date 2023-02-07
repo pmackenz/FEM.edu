@@ -13,7 +13,7 @@ class VonMises(Material):
     def __init__(self, params={'E':1.0, 'nu':0.0, 'fy':1.0e30}):
         super().__init__(params = params)
 
-        self._type = self.PLANESTRESS & self.PLASTIC & self.HARDENING
+        self._type = self.PLANESTRESS | self.PLASTIC | self.HARDENING
 
         # isotropic hardening parameter
         if 'H' not in self.parameters:
