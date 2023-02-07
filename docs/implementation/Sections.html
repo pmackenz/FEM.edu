@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PlaneStrain material class &mdash; FEM.edu 0.4 documentation</title>
+  <title>Section Material classes &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="System class" href="System_class.html" />
-    <link rel="prev" title="PlaneStress material class" href="PlaneStress.html" /> 
+    <link rel="next" title="PlaneStress material class" href="PlaneStress.html" />
+    <link rel="prev" title="FiberMaterial material class" href="FiberMaterial.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,9 +48,9 @@
 <li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Material_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Sections.html">Section Material classes</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Section Material classes</a></li>
 <li class="toctree-l4"><a class="reference internal" href="PlaneStress.html">PlaneStress material class</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">PlaneStrain material class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
 </ul>
 </li>
 </ul>
@@ -78,9 +78,9 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
           <li><a href="Material_class.html">Material classes</a> &raquo;</li>
-      <li>PlaneStrain material class</li>
+      <li>Section Material classes</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/PlaneStrain.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/Sections.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -88,36 +88,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="planestrain-material-class">
-<h1>PlaneStrain material class<a class="headerlink" href="#planestrain-material-class" title="Permalink to this heading"></a></h1>
-<section id="parent-class">
-<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="Material_class.html"><span class="doc">Material classes</span></a></p></li>
-</ul>
-</section>
-<section id="module-materials.PlaneStrain">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-materials.PlaneStrain" title="Permalink to this heading"></a></h2>
-<dl class="py class">
-<dt class="sig sig-object py" id="materials.PlaneStrain.PlaneStrain">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials.PlaneStrain.</span></span><span class="sig-name descname"><span class="pre">PlaneStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0,</span> <span class="pre">'t':</span> <span class="pre">1.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.PlaneStrain.PlaneStrain" title="Permalink to this definition"></a></dt>
-<dd><p>class: representing a 2d Plane Stress Material</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="materials.PlaneStrain.PlaneStrain.setStrain">
-<span class="sig-name descname"><span class="pre">setStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.PlaneStrain.PlaneStrain.setStrain" title="Permalink to this definition"></a></dt>
-<dd><p>update state for a user provided axial strain value</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>eps</strong> – strain or strain tensor</p>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p>n/a</p>
-</dd>
-</dl>
+  <section id="section-material-classes">
+<h1>Section Material classes<a class="headerlink" href="#section-material-classes" title="Permalink to this heading"></a></h1>
+<p><strong>Section</strong> materials represent either an entire cross-section of a beam or frame element,
+or the material column perpendicular to the middle plane of a plate or shell.
+All Section materials are derived from the following base class.
+That class may be used directly to represent a linear elastic section without coupling between
+axial and flexural deformation.</p>
+<span class="target" id="module-materials.SectionMaterial"></span><dl class="py class">
+<dt class="sig sig-object py" id="materials.SectionMaterial.SectionMaterial">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials.SectionMaterial.</span></span><span class="sig-name descname"><span class="pre">SectionMaterial</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'A':</span> <span class="pre">1.0,</span> <span class="pre">'E':</span> <span class="pre">1.0,</span> <span class="pre">'I':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.SectionMaterial.SectionMaterial" title="Permalink to this definition"></a></dt>
+<dd><p>class: representing an integrated Section Material</p>
 </dd></dl>
 
-</dd></dl>
-
+<section id="derived-classes">
+<h2>Derived Classes<a class="headerlink" href="#derived-classes" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+</div>
 </section>
 </section>
 
@@ -125,8 +112,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="PlaneStress.html" class="btn btn-neutral float-left" title="PlaneStress material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="System_class.html" class="btn btn-neutral float-right" title="System class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="FiberMaterial.html" class="btn btn-neutral float-left" title="FiberMaterial material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PlaneStress.html" class="btn btn-neutral float-right" title="PlaneStress material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

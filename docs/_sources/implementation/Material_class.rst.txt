@@ -12,5 +12,6 @@ Derived Classes
     :maxdepth: 1
 
     FiberMaterial.rst
+    Sections.rst
     PlaneStress.rst
     PlaneStrain.rst
