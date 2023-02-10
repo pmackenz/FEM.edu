@@ -3,14 +3,13 @@ from domain.Node import *
 
 class Truss(Element):
     """
-    class: representing a single truss element
+    class: representing a single 2D or 3D truss element
 
-        self.nodes    = nodes i and j (tuple)
-        self.material = material parameters (
-
-        self.force    = internal force (float)
-        self.Forces   = internal force vectors (list of np.arrays)
-        self.Kt       = tangent stiffness (list of np.arrays)
+        self.nodes    = nodes i and j (tuple) \n
+        self.material = material parameters  \n
+        self.force    = internal force (float) \n
+        self.Forces   = internal force vectors (list of np.arrays) \n
+        self.Kt       = tangent stiffness (list of np.arrays) \n
     """
 
     def __init__(self, nodei, nodej, material):
@@ -19,13 +18,13 @@ class Truss(Element):
         dim = nodei.getPos().size
 
         if dim == 3:
-            self.dof_list = ('ux', 'uy', 'uz')
+            dof_list = ('ux', 'uy', 'uz')
         elif dim == 2:
-            self.dof_list = ('ux', 'uy')
+            dof_list = ('ux', 'uy')
         else:
             raise TypeError("spatial dimension of nodes must be 2 or 3")
 
-        self._requestDofs(self.dof_list)
+        self._requestDofs(dof_list)
 
         self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
@@ -51,14 +50,31 @@ class Truss(Element):
                                          repr(self.material))
 
     def getAxialForce(self):
+        """
+
+        :return: truss axial force (float)
+        """
         self.updateState()
         return self.force
 
+    def getDisp(self,node):
+        """
+        get displacement vector of a desired node of the element
+
+        **NEEDS TO BE IMPLEMENTED, ONCE TRANSFORMATION CLASS IS COMPLETE**
+
+        :param node: pointer to node
+        """
+
 
     def updateState(self):
-        U0 = self.nodes[0].getDisp(self.dof_list)
+        """
+        Update truss axial force, end forces and tangent stiffness
+
+        """
+        U0 = self.nodes[0].getDisp()
         X0 = self.nodes[0].getPos()
-        U1 = self.nodes[1].getDisp(self.dof_list)
+        U1 = self.nodes[1].getDisp()
         X1 = self.nodes[1].getPos()
 
 

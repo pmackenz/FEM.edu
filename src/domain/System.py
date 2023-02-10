@@ -90,7 +90,7 @@ class System():
 
         # apply boundary conditions
         for node in self.nodes:
-            for dof in node.fixity:
+            for dof in node.areFixed():
                 idx = node.start + node.dofs[dof]
                 Rsys[idx]      = 0.0
                 Ksys[:, idx]   = np.zeros(ndof)

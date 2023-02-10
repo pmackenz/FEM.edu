@@ -128,6 +128,13 @@ class Node():
         """
         return (dof in self.fixity)
 
+    def areFixed(self):
+        """
+
+        :return: list of dof codes for the node's fixed dofs
+        """
+        return self.fixity
+
     def setStart(self, startInt):
         self.start = startInt
 
