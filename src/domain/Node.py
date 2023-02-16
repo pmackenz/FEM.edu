@@ -98,6 +98,35 @@ class Node():
         if element not in self.elements:
             self.elements.append(element)
 
+    def unlinkElement(self, element):
+        """
+
+        :param element: element pointer
+        """
+        self.elements.remove(element)
+
+    def reRegistry(self):
+        """
+        reperform element registry for the node (e.g., upon element annihilation)
+
+        :return:
+        """
+        self.ndofs = 0
+        self.dofs = {}
+        for element in self.elements:
+            dof_list = element.getDofs()
+            for dof in dof_list:
+                if dof not in self.dofs:
+                    self.dofs[dof] = self.ndofs
+                    self.ndofs += 1
+
+    def getElements(self):
+        """
+
+        :return: list of elements connected to the node
+        """
+        return self.elements
+
     def fixDOF(self, *dofs):
         """
         provide a list of dof codes that shall be restrained

@@ -44,6 +44,13 @@ class Element():
                                      repr(self.material))
 
 
+    def getNodes(self):
+        """
+
+        :return: tuple of pointers to the element nodes
+        """
+        return tuple(self.nodes)
+
     def getForce(self):
         """
 
@@ -86,7 +93,22 @@ class Element():
             node.linkElement(self)
             self.dof_idx[node] = dof_idx
 
+    def updateDofIdx(self, dof_requests):
+        """
+
+        :return:
+        """
+        self.dof_idx = {}
+        for node in self.nodes:
+            dof_idx = node.request(dof_requests)
+            self.dof_idx[node] = dof_idx
+
+
     def getDofs(self):
+        """
+
+        :return: tuple of element's dof codes
+        """
         return self.dof_list
 
 

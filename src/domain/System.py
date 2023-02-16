@@ -59,6 +59,31 @@ class System():
         """
         self.elements.append(newElement)
 
+    def removeElement(self, oldElement):
+        """
+
+        :param oldElement: pointer to the `Element` object to be removed
+        """
+        #self.elements.remove(oldElement)       # save this for later, once info has been grabbed from the element
+
+        eledofs = oldElement.getDofs()
+        connectedNodes = oldElement.getNodes()
+
+        for nd in connectedNodes:
+            # remove element from nodes' element registries
+            nd.unlinkElement(oldElement)
+
+            # check if the removed element had dofs that were unique to the node?
+
+            # reset the element registry for affected nodes
+            nd.reRegistry()
+
+            # update dofcode indices for affected elements
+            adjacentElements = nd.getElements()
+            for element in adjacentElements:
+                dofs = element.getDofs()
+                element.updateDofIdx(dofs)
+
     def solve(self):
         """
 
