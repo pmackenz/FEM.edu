@@ -6,7 +6,7 @@ class Transformation():
 
     A transformation may be attached to Nodes or to Elements.
 
-    - When attached to a _Node_, the transformation applies to
+    - When attached to a Node, the transformation applies to
       all fixities and all loads defined at that node.
     - When attached to an element, the user may specify a node for which that transformation
       shall be used.  If no dode is specified, the transformation will be applied at all

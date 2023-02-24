@@ -42,7 +42,6 @@ class Node():
     def dof2idx(self, dof_list):
         if isinstance(dof_list, str):
             if dof_list in self.dofs:
-                # idx = (self.dofs[dof_list], )
                 idx = [self.dofs[dof_list]]
             else:
                 raise KeyError('Dof {} does not exist in node {}'.format(dof_list, self.index))
@@ -53,8 +52,8 @@ class Node():
                     idx.append(self.dofs[dof])
                 else:
                     raise KeyError('Dof {} does not exist in node {}'.format(dof, self.index))
-            # idx = tuple(idx)
-        return np.array(idx)
+
+        return np.array(idx, dtype=int)
 
     def request(self, dof_list):
         """
@@ -106,7 +105,6 @@ class Node():
 
         :param dofs:
         """
-
         for dof in dofs:
             if dof not in self.fixity:
                 self.fixity.append(dof)
@@ -127,6 +125,18 @@ class Node():
         :param dof: dof code as defined in :ref:`request`
         """
         return (dof in self.fixity)
+
+    def areFixed(self):
+        """
+        To be used by the assembly routines.
+
+        return a list of indices pointing to fixed dofs in this node.
+        Indices are local to this node: :code:`0..num_dofs`
+        """
+        idx = []
+        for i,dof in enumerate(self.fixity):
+            idx.append(i)
+        return np.array(idx, dtype=int)
 
     def setStart(self, startInt):
         self.start = startInt
