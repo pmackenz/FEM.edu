@@ -2,7 +2,8 @@ import numpy as np
 
 from .Node     import *
 from elements.Element import *
-from plotter.Plotter import *
+#from plotter.Plotter import *
+from plotter.ElementPlotter import ElementPlotter as Plotter
 
 
 class System():
@@ -131,20 +132,14 @@ class System():
         :param factor: deformation magnification factor
         """
 
-        vertices = [ node.getPos() for node in self.nodes ]
-        lines    = [ [ elem.nodes[k].index for k in [0,1] ] for elem in self.elements ]
-        self.plotter.setMesh(vertices, lines)
+        self.plotter.setMesh(self.nodes, self.elements)
 
         ndof = len(self.Rsys)
         R = self.Rsys.copy().reshape((ndof//2, 2))
         self.plotter.setReactions(R)
 
-        disp = [ factor * node.getDisp() for node in self.nodes ]
-        self.plotter.setDisplacements(disp)
         self.plotter.displacementPlot()
 
-        values = [ elem.getAxialForce() for elem in self.elements ]
-        self.plotter.setValues(values)
         self.plotter.valuePlot()
 
     def report(self):
@@ -153,7 +148,7 @@ class System():
 
         """
         s  = "\nSystem Analysis Report\n"
-        s += "=====================\n"
+        s += "=======================\n"
         s += "\nNodes:\n"
         s += "---------------------\n"
         for node in self.nodes:

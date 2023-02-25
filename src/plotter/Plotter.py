@@ -1,26 +1,15 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.collections import LineCollection
-from matplotlib.colors import ListedColormap, BoundaryNorm
+from .AbstractPlotter import *
 
 
-class Plotter():
+class Plotter(AbstractPlotter):
     """
     class: representing a Plotter object
     """
 
     def __init__(self):
+        super(Plotter, self).__init__()
         self.vertices  = []
         self.lines     = []
-        self.disp      = []
-        self.values    = []
-        self.reactions = []
-
-    def __str__(self):
-        return "Plotter() object"
-
-    def __repr__(self):
-        return str(self)
 
     def setMesh(self, vert, lines):
         """

@@ -1,11 +1,12 @@
 import numpy as np
-from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
+import sys
 
+from .AbstractPlotter import *
 
-class ElementPlotter():
+class ElementPlotter(AbstractPlotter):
     """
     A plotter class that takes a list of nodes and elements from a finite element model
     and plots a deformed mesh, potentially shaded based on a value of a user-specified state
@@ -17,43 +18,7 @@ class ElementPlotter():
     """
 
     def __init__(self):
-        self.plot3D = False
-
-        self.vertices  = []
-        self.lines     = []
-        self.disp      = []
-        self.values    = []
-        self.reactions = []
-
-    def __str__(self):
-        return "Plotter() object"
-
-    def __repr__(self):
-        return str(self)
-
-    def setMesh(self, nodes, elems):
-        """
-        Link the nodes and elements so the ElementPlotter can get information from them.
-
-        :param nodes:    list of node pointers
-        :param elements: list of element pointer
-        """
-        self.nodes    = nodes
-        self.elements = elems
-
-    def setDisplacements(self, disp):
-        """
-
-        :param disp:
-        """
-        self.disp = np.array(disp)
-
-    def setValues(self, vals):
-        """
-
-        :param vals:
-        """
-        self.values = np.array(vals)
+        super(ElementPlotter, self).__init__()
 
     def setReactions(self, R):
         """
@@ -71,37 +36,37 @@ class ElementPlotter():
 
         :param file: filename (str)
         """
-        if len(self.vertices[0]) == 3:
+        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
+        return
+
+        if self.plot3D:
             fig = plt.figure(figsize=(10, 10))
             axs = fig.gca(projection='3d')
 
-            # plot the undeformed lines
-            for line in self.lines:
-                vert0 = self.vertices[line[0]]
-                vert1 = self.vertices[line[1]]
-                x = [vert0[0], vert1[0]]
-                y = [vert0[1], vert1[1]]
-                z = [vert0[2], vert1[2]]
-                axs.plot(x, y, z, '-k', lw=2)
+            # plot the undeformed elements
+            for elem in self.elements:
+                # vert0 = self.vertices[line[0]]
+                # vert1 = self.vertices[line[1]]
+                # x = [vert0[0], vert1[0]]
+                # y = [vert0[1], vert1[1]]
+                # z = [vert0[2], vert1[2]]
+                # axs.plot(x, y, z, '-k', lw=2)
+                pass
 
-            # plot the deformed lines
-            if len(self.disp) == len(self.vertices):
-                for line in self.lines:
-                    vert0 = self.vertices[line[0]].copy()
-                    vert1 = self.vertices[line[1]].copy()
-                    vert0 += self.disp[line[0]]
-                    vert1 += self.disp[line[1]]
-                    x = [vert0[0], vert1[0]]
-                    y = [vert0[1], vert1[1]]
-                    z = [vert0[2], vert1[2]]
-                    axs.plot(x, y, z, '-r', lw=3)
+            # plot the deformed elements
+            for elem in self.elements:
+                # vert0 = self.vertices[line[0]]
+                # vert1 = self.vertices[line[1]]
+                # x = [vert0[0], vert1[0]]
+                # y = [vert0[1], vert1[1]]
+                # z = [vert0[2], vert1[2]]
+                # axs.plot(x, y, z, '-r', lw=3)
+                pass
 
-            if self.reactions != []:
+            if self.reactions:
                 self.addForces(axs)
 
             self.set_axes_equal(axs)
-            #axs.set_aspect('equal')
-            #axs.set_axis_off()
 
         else:
             fig, axs = plt.subplots()
@@ -133,7 +98,7 @@ class ElementPlotter():
 
         plt.show()
 
-    def valuePlot(self, deformed=False, file=None):
+    def valuePlot(self, variable_name='', deformed=False, file=None):
         """
         Create a plot using colors to identify magnitude of internal force.
 
@@ -143,6 +108,9 @@ class ElementPlotter():
         :param deformed: True | **False**
         :param file: filename (str)
         """
+        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
+        return
+
         fig, axs = plt.subplots()
 
         # plot the lines
@@ -184,6 +152,10 @@ class ElementPlotter():
 
         :param axs: axis on which to plot
         """
+        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
+        return
+
+
         if len(self.reactions) == len(self.vertices):
             Fx = []
             Fy = []

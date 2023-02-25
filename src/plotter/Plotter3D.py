@@ -1,5 +1,4 @@
 from .Plotter import *
-from mpl_toolkits import mplot3d
 
 class Plotter3d(Plotter):
     """
@@ -7,10 +6,7 @@ class Plotter3d(Plotter):
     """
 
     def __init__(self):
-        super().__init__()
-
-    def __str__(self):
-        return "Plotter3d() object"
+        super(Plotter3d, self).__init__()
 
     def displacementPlot(self, file=None):
         """
