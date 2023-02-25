@@ -64,7 +64,7 @@ class ExampleBeam01(Example):
 
         # add point loads
         # .. load only the center node
-        ndP.setLoad([0.0, -1.0], ('ux', 'uy'))
+        ndP.setLoad([0.0, -10.0], ('ux', 'uy'))
 
         # analyze the model
         model.solve()
@@ -73,5 +73,5 @@ class ExampleBeam01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=1.)
+        model.plot(factor=100.)
 

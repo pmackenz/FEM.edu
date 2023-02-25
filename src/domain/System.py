@@ -138,7 +138,7 @@ class System():
         R = self.Rsys.copy().reshape((ndof//2, 2))
         self.plotter.setReactions(R)
 
-        self.plotter.displacementPlot()
+        self.plotter.displacementPlot(factor)
 
         self.plotter.valuePlot()
 

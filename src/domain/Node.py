@@ -38,22 +38,6 @@ class Node():
     def __repr__(self):
         return "Node{}({}, x={}, u={})".format(self.index, self.dofs, self.pos, self.disp)
 
-    def dof2idx(self, dof_list):
-        if isinstance(dof_list, str):
-            if dof_list in self.dofs:
-                idx = [self.dofs[dof_list]]
-            else:
-                raise KeyError('Dof {} does not exist in node {}'.format(dof_list, self.index))
-        else:
-            idx = []
-            for dof in dof_list:
-                if dof in self.dofs:
-                    idx.append(self.dofs[dof])
-                else:
-                    raise KeyError('Dof {} does not exist in node {}'.format(dof, self.index))
-
-        return np.array(idx, dtype=int)
-
     def request(self, dof_list, caller):
         """
         send list or individual dof code. Common codes:
@@ -155,21 +139,42 @@ class Node():
         """
         self.disp += dU
 
-    def getDisp(self, dof_list=None):
+    def getDisp(self, caller=None, dofs=None):
         """
+        return a vector (nd.array) of (generalized) displacements.
 
+        If a :code:`caller` is given, the element-specific d.o.f.s will be returned as a sequence
+        in the same order as given by the element's :code:`request()` call.
+
+        If a :code:`dof_list` is given, d.o.f.s will be returned as the sequence given by that list.
+        A zero value will be returned for all d.o.f.s that do not exist at this node.
+
+        .. note::
+
+            A single d.o.f., e.g., "ux", can be requested using :code:`getDisp(dofs=('ux',))`.
+            Do not forget the :code:`,` to indicate the definition of a single-element tuple.
+
+
+
+        :param caller: pointer to element
+        :param dofs: tuple or list of d.o.f. keys
         :return: nodal displacement vector
         """
         if not isinstance(self.disp, np.ndarray):
             self.disp = np.zeros(self.ndofs)
 
-        if dof_list:
-            idx = self.dof2idx(dof_list)
-            return self.disp[idx]
+        if dofs:
+            ans = []
+            for dof in dofs:
+                if dof in self.dofs:
+                    ans.append(self.disp[self.dofs[dof]])
+                else:
+                    ans.append(0.0)
+            return np.array(ans)
         else:
             return self.disp
 
-    def getPos(self, dof_list=None):
+    def getPos(self):
         """
 
         :return: initial position vector
@@ -177,10 +182,14 @@ class Node():
 
         return self.pos
 
-    def getDeformedPos(self, dof_list=None, factor=1.0):
+    def getDeformedPos(self, caller=None, factor=1.0):
         """
         Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
 
+        If a caller is specified, the node will adjust the output to the d.o.f.s specified by the
+        element's request() call. (called during initialization.)
+
+        :param caller: pointer to the calling element.
         :param factor: deformation magnification factor, :math:`f`.
         :return: deformed position vector, :math:`{\\bf x}`.
         """

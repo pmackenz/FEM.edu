@@ -56,13 +56,14 @@ class AbstractPlotter():
         print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
         raise NotImplementedError
 
-    def displacementPlot(self, file=None):
+    def displacementPlot(self, factor=1.0, file=None):
         """
         Create a deformed system plot
 
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
+        :param factor: displacement magnification factor
         :param file: filename (str)
         """
         print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))

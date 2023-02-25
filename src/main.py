@@ -11,12 +11,12 @@ from examples.beams.beam01 import *
 
 if __name__ == "__main__":
 
-    ex = ExampleTruss01()
+    #ex = ExampleTruss01()
     #ex = ExampleTruss02()
     #ex = ExampleTruss03()
     #ex = ExampleTruss04()
 
-    #ex = ExampleBeam01()
+    ex = ExampleBeam01()
 
     # print the doc-string for the current example
     print(ex)

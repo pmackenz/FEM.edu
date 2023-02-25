@@ -21,6 +21,7 @@ class Beam2D(Element):
         :param material: a material for axial and flexural integrated behavior
         """
         super().__init__((nodei, nodej), material)
+        self.element_type = DrawElement.CURVE
 
         if not material.materialType() == Material.SECTION1D:
             raise TypeError("received material type {} but require SECTION1D type".format(material.materialType()))
@@ -144,37 +145,6 @@ class Beam2D(Element):
         self.Forces = (self.Fi, self.Fj)
 
         self.Kt = np.array( [[KtII, KtIJ],[KtJI, KtJJ]] )
-
-
-    def getCurve(self, factor=0.0):
-
-        # local displacements
-        vi = self.Ui[0]
-        thetai = self.thetaI * self.L
-        vj = self.Uj[0]
-        thetaj = self.thetaJ * self.L
-
-        qv = np.array([vi, thetai, vj, thetaj]) * factor
-
-        # shape functions
-        xl = np.linspace(0, 1, 11)
-        phiU = [1. - xl, xl]
-        phiV = [
-            [1., 0.972, 0.896, 0.784, 0.648, 0.5, 0.352, 0.216, 0.104, 0.028, 0.],
-            [0., 0.081, 0.128, 0.147, 0.144, 0.125, 0.096, 0.063, 0.032, 0.009, 0.],
-            [0., 0.028, 0.104, 0.216, 0.352, 0.5, 0.648, 0.784, 0.896, 0.972, 1.],
-            [0., -0.009, -0.032, -0.063, -0.096, -0.125, -0.144, -0.147, -0.128, -0.081, 0.]
-        ]
-
-        # deformed shape local
-        xl = np.linspace(0, self.L, 11)
-        xl += qu @ phiU
-        yl = qv @ phiV
-
-        # deformed shape global
-        xvecs = self.Xi + np.outer(xl, self.n) + np.outer(yl, self.s)
-
-        return (xvecs[:, 0], xvecs[:, 1])
 
 
 if __name__ == "__main__":

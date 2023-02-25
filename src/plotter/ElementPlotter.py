@@ -27,17 +27,16 @@ class ElementPlotter(AbstractPlotter):
         """
         self.reactions = np.array(R)
 
-    def displacementPlot(self, file=None):
+    def displacementPlot(self, factor=1.0, file=None):
         """
         Create a deformed system plot
 
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
+        :param factor: displacement scaling factor
         :param file: filename (str)
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        return
 
         if self.plot3D:
             fig = plt.figure(figsize=(10, 10))
@@ -45,23 +44,24 @@ class ElementPlotter(AbstractPlotter):
 
             # plot the undeformed elements
             for elem in self.elements:
-                # vert0 = self.vertices[line[0]]
-                # vert1 = self.vertices[line[1]]
-                # x = [vert0[0], vert1[0]]
-                # y = [vert0[1], vert1[1]]
-                # z = [vert0[2], vert1[2]]
-                # axs.plot(x, y, z, '-k', lw=2)
-                pass
+                ans = elem.draw(factor=0.0)
+                if len(ans)>=3:
+                    x = ans[0]
+                    y = ans[1]
+                    z = ans[2]
+                    if x.size == y.size and x.size == z.size:
+                        axs.plot(x, y, z, '-k', lw=2)
 
             # plot the deformed elements
-            for elem in self.elements:
-                # vert0 = self.vertices[line[0]]
-                # vert1 = self.vertices[line[1]]
-                # x = [vert0[0], vert1[0]]
-                # y = [vert0[1], vert1[1]]
-                # z = [vert0[2], vert1[2]]
-                # axs.plot(x, y, z, '-r', lw=3)
-                pass
+            if factor:
+                for elem in self.elements:
+                    ans = elem.draw(factor=factor)
+                    if len(ans)>=3:
+                        x = ans[0]
+                        y = ans[1]
+                        z = ans[2]
+                        if x.size == y.size and x.size == z.size:
+                            axs.plot(x, y, z, '-r', lw=3)
 
             if self.reactions:
                 self.addForces(axs)
@@ -71,32 +71,33 @@ class ElementPlotter(AbstractPlotter):
         else:
             fig, axs = plt.subplots()
 
-            # plot the undeformed lines
-            for line in self.lines:
-                vert0 = self.vertices[line[0]]
-                vert1 = self.vertices[line[1]]
-                x = [vert0[0], vert1[0]]
-                y = [vert0[1], vert1[1]]
-                axs.plot(x, y, '-k', lw=2)
+            # plot the undeformed elements
+            for elem in self.elements:
+                ans = elem.draw(factor=0.0)
+                if len(ans)>=2:
+                    x = ans[0]
+                    y = ans[1]
+                    if x.size == y.size:
+                        axs.plot(x, y, '-k', lw=2)
 
-            # plot the deformed lines
-            if len(self.disp) == len(self.vertices):
-                for line in self.lines:
-                    vert0 = self.vertices[line[0]].copy()
-                    vert1 = self.vertices[line[1]].copy()
-                    vert0 += self.disp[line[0]]
-                    vert1 += self.disp[line[1]]
-                    x = [vert0[0], vert1[0]]
-                    y = [vert0[1], vert1[1]]
-                    axs.plot(x, y, '-r', lw=3)
+            # plot the deformed elements
+            if factor:
+                for elem in self.elements:
+                    ans = elem.draw(factor=factor)
+                    if len(ans)>=2:
+                        x = ans[0]
+                        y = ans[1]
+                        if x.size == y.size:
+                            axs.plot(x, y, '-r', lw=3)
 
-            if self.reactions != []:
-                self.addForces(axs)
+            # if self.reactions != []:
+            #     self.addForces(axs)
 
             axs.set_aspect('equal')
             axs.set_axis_off()
 
         plt.show()
+        pass
 
     def valuePlot(self, variable_name='', deformed=False, file=None):
         """
@@ -145,6 +146,7 @@ class ElementPlotter(AbstractPlotter):
         plt.autoscale(enable=True, axis='x', tight=False)
         plt.autoscale(enable=True, axis='y', tight=False)
         plt.show()
+        pass
 
     def addForces(self, axs):
         """

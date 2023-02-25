@@ -15,6 +15,7 @@ class Truss(Element):
 
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
+        self.element_type = DrawElement.LINE
 
         dim = nodei.getPos().size
 

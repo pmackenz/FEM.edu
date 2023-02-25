@@ -18,6 +18,9 @@ class Example():
         return s
 
     def run(self):
+        self.problem()
+        return
+
         try:
             self.problem()
         except:

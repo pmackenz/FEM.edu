@@ -1,9 +1,10 @@
 import numpy as np
 import os
 import sys
+from .DrawElement import *
 
 
-class Element():
+class Element(DrawElement):
     """
     abstract class: representing a single generic element
     """
@@ -14,6 +15,8 @@ class Element():
         :param nodes:
         :param material:
         """
+        super(Element, self).__init__()
+        
         self.nodes    = nodes
         self.transforms = [ None for nd in self.nodes ]
         self.material = material
