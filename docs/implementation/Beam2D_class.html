@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transformation class &mdash; FEM.edu 0.4 documentation</title>
+  <title>Beam2D class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -18,8 +18,7 @@
         <script src="../_static/doctools.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
-    <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="System class" href="System_class.html" /> 
+    <link rel="search" title="Search" href="../search.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -38,19 +37,9 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Transformation class</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../implementation.html">Implementation</a></li>
 </ul>
 
         </div>
@@ -67,10 +56,9 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-          <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-      <li>Transformation class</li>
+      <li>Beam2D class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/Transformation_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/Beam2D_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -78,36 +66,57 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="transformation-class">
-<h1>Transformation class<a class="headerlink" href="#transformation-class" title="Permalink to this heading"></a></h1>
-<p><strong>Used with:</strong></p>
+  <section id="beam2d-class">
+<h1>Beam2D class<a class="headerlink" href="#beam2d-class" title="Permalink to this heading"></a></h1>
+<section id="parent-class">
+<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="Node_class.html"><span class="doc">Node class</span></a></p></li>
 <li><p><a class="reference internal" href="Element_class.html"><span class="doc">Element classes</span></a></p></li>
 </ul>
-<p><strong>Class doc</strong></p>
-<span class="target" id="module-domain.Transformation"></span><dl class="py class">
-<dt class="sig sig-object py" id="domain.Transformation.Transformation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Transformation.</span></span><span class="sig-name descname"><span class="pre">Transformation</span></span><a class="headerlink" href="#domain.Transformation.Transformation" title="Permalink to this definition"></a></dt>
-<dd><p>Nodal transformation class</p>
-<p>A transformation may be attached to Nodes or to Elements.</p>
-<ul class="simple">
-<li><p>When attached to a Node, the transformation applies to
-all fixities and all loads defined at that node.</p></li>
-<li><p>When attached to an element, the user may specify a node for which that transformation
-shall be used.  If no dode is specified, the transformation will be applied at all
-attached nodes.</p></li>
-</ul>
+</section>
+<section id="module-elements.Beam2D">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-elements.Beam2D" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="elements.Beam2D.Beam2D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Beam2D.</span></span><span class="sig-name descname"><span class="pre">Beam2D</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodei</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodej</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Beam2D.Beam2D" title="Permalink to this definition"></a></dt>
+<dd><p>class: representing a 2D beam element</p>
+<blockquote>
+<div><p>self.nodes    = nodes i and j (tuple)
+self.material = material parameters (</p>
+<p>self.force    = internal force (float)
+self.Forces   = internal force vectors (list of np.arrays)
+self.Kt       = tangent stiffness (list of np.arrays)</p>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.Beam2D.Beam2D.getCurve">
+<span class="sig-name descname"><span class="pre">getCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Beam2D.Beam2D.getCurve" title="Permalink to this definition"></a></dt>
+<dd><p>Used for plotting this element.</p>
+<p>If a factor other than 0.0 (default: 0.0) is given,
+add factor*displacement to the reference position.</p>
+<p>Represent the element by an arbitrary polygon.
+Collect nodal coordinates of points in lists of X-, Y-, Z- coordinates.
+The Z-coordinate is only needed for 3d plotting.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>plot information in a tuple (X,Y,…)</p>
+</dd>
+</dl>
 </dd></dl>
 
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.Beam2D.Beam2D.updateState">
+<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Beam2D.Beam2D.updateState" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 </section>
 
 
            </div>
           </div>
-          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="System_class.html" class="btn btn-neutral float-left" title="System class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-    </div>
+          <footer>
 
   <hr/>
 

@@ -20,7 +20,7 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Plotter class" href="Plotter_class.html" />
+    <link rel="next" title="Plotter classes" href="Plotter_class.html" />
     <link rel="prev" title="PlaneStrain material class" href="PlaneStrain.html" /> 
 </head>
 
@@ -47,7 +47,7 @@
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
@@ -87,12 +87,33 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.addLoad">
+<span class="sig-name descname"><span class="pre">addLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addLoad" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loads</strong> – </p></li>
+<li><p><strong>dofs</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.addTransformation">
 <span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addTransformation" title="Permalink to this definition"></a></dt>
 <dd><p>Attach a transformation object to this node.
 The transformation defines a local coordinate system.
 If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
 Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.areFixed">
+<span class="sig-name descname"><span class="pre">areFixed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.areFixed" title="Permalink to this definition"></a></dt>
+<dd><p>To be used by the assembly routines.</p>
+<p>return a list of indices pointing to fixed dofs in this node.
+Indices are local to this node: <code class="code docutils literal notranslate"><span class="pre">0..num_dofs</span></code></p>
 </dd></dl>
 
 <dl class="py method">
@@ -152,19 +173,8 @@ Furthermore, all nodal displacements, velocity, or acceleration will be reported
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.linkElement">
-<span class="sig-name descname"><span class="pre">linkElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.linkElement" title="Permalink to this definition"></a></dt>
-<dd><p>provide link to attached element(s)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>element</strong> – element pointer</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
 <dd><p>send list or individual dof code. Common codes:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -198,8 +208,11 @@ Furthermore, all nodal displacements, velocity, or acceleration will be reported
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Param</dt>
-<dd class="field-odd"><p>dof_list … list of dof-codes required by calling element</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dof_list</strong> – list of dof-codes required by calling element</p></li>
+<li><p><strong>caller</strong> – pointer to calling element (usually sent as self)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -241,7 +254,7 @@ Furthermore, all nodal displacements, velocity, or acceleration will be reported
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="PlaneStrain.html" class="btn btn-neutral float-left" title="PlaneStrain material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Plotter_class.html" class="btn btn-neutral float-right" title="Plotter class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Plotter_class.html" class="btn btn-neutral float-right" title="Plotter classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

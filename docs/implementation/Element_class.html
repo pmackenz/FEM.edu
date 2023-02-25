@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Element classes &mdash; FEM.edu 0.4 documentation</title>
+  <title>Element class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -43,9 +43,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Element classes</a><ul>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Element class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Beam2D_class.html">Beam2D class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Frame2D_class.html">Frame2D class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
@@ -54,7 +55,7 @@
 </li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
@@ -77,7 +78,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-      <li>Element classes</li>
+      <li>Element class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/implementation/Element_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -88,7 +89,7 @@
            <div itemprop="articleBody">
              
   <section id="module-elements.Element">
-<span id="element-classes"></span><h1>Element classes<a class="headerlink" href="#module-elements.Element" title="Permalink to this heading"></a></h1>
+<span id="element-class"></span><h1>Element class<a class="headerlink" href="#module-elements.Element" title="Permalink to this heading"></a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="elements.Element.Element">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element" title="Permalink to this definition"></a></dt>
@@ -158,6 +159,7 @@ The Z-coordinate is only needed for 3d plotting.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Beam2D_class.html">Beam2D class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="Frame2D_class.html">Frame2D class</a></li>
 <li class="toctree-l1"><a class="reference internal" href="LinearTriangle_class.html">LinearTriangle class</a></li>
 </ul>
