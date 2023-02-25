@@ -1,15 +1,24 @@
 import numpy as np
+from mpl_toolkits import mplot3d
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
 
 
-class Plotter():
+class ElementPlotter():
     """
-    class: representing a Plotter object
+    A plotter class that takes a list of nodes and elements from a finite element model
+    and plots a deformed mesh, potentially shaded based on a value of a user-specified state
+    variable.
+
+    The information needed for plotting is obtained through standardized element functions.
+    Default versions of those functions are implemented through the Element-class, but respective
+    methods may be overloaded by user-implemented elements.
     """
 
     def __init__(self):
+        self.plot3D = False
+
         self.vertices  = []
         self.lines     = []
         self.disp      = []
@@ -22,14 +31,15 @@ class Plotter():
     def __repr__(self):
         return str(self)
 
-    def setMesh(self, vert, lines):
+    def setMesh(self, nodes, elems):
         """
+        Link the nodes and elements so the ElementPlotter can get information from them.
 
-        :param vert:
-        :param lines:
+        :param nodes:    list of node pointers
+        :param elements: list of element pointer
         """
-        self.vertices = np.array(vert)
-        self.lines    = np.array(lines)
+        self.nodes    = nodes
+        self.elements = elems
 
     def setDisplacements(self, disp):
         """
@@ -217,9 +227,3 @@ class Plotter():
         ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
         ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
         ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
-
-
-
-if __name__ == "__main__":
-    # testing the plotter
-    plotter = Plotter()
