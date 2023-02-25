@@ -23,7 +23,6 @@ class Node():
         self.start     = None
         self.elements  = []
         self.fixity    = []
-        self.force     = None
         self.loads     = {}
         self._hasLoad  = False
         self.transform = None    # nodal transformation object
@@ -33,7 +32,7 @@ class Node():
         """Node {}: {}
         x:{}, fix:{}, 
         P:{}, u:{}""".format(self.index, self.dofs,
-                             self.pos, self.fixity, self.force, self.disp)
+                             self.pos, self.fixity, self.getLoad(), self.disp)
         return s
 
     def __repr__(self):
@@ -55,7 +54,7 @@ class Node():
 
         return np.array(idx, dtype=int)
 
-    def request(self, dof_list):
+    def request(self, dof_list, caller):
         """
         send list or individual dof code. Common codes:
 
@@ -78,7 +77,8 @@ class Node():
               - rotation about z-axis
 
 
-        :param: dof_list ... list of dof-codes required by calling element
+        :param dof_list:  list of dof-codes required by calling element
+        :param caller:  pointer to calling element (usually sent as self)
         """
         dof_idx = []
         for dof in dof_list:
@@ -86,16 +86,11 @@ class Node():
                 self.dofs[dof] = self.ndofs
                 self.ndofs += 1
             dof_idx.append(self.dofs[dof])
+
+        if caller not in self.elements:
+            self.elements.append(caller)
+
         return tuple(dof_idx)
-
-    def linkElement(self, element):
-        """
-        provide link to attached element(s)
-
-        :param element: element pointer
-        """
-        if element not in self.elements:
-            self.elements.append(element)
 
     def fixDOF(self, *dofs):
         """
@@ -204,8 +199,18 @@ class Node():
         if T and isinstance(T, Transformation):
             self.transform = T
 
-    def addLoad(self, P, dofs):
-        self.force   += np.array([Px, Py])
+    def addLoad(self, loads, dofs):
+        """
+
+        :param loads:
+        :param dofs:
+        """
+        # Check tuple type and if the dof exists (warn and continue)
+        for (load, dof) in zip(loads, dofs):
+            if dof in self.loads:
+                self.loads[dof] += load
+            else:
+                self.loads[dof] = load
         self._hasLoad = True
 
     def setLoad(self, loads, dofs):
@@ -224,10 +229,11 @@ class Node():
         self._hasLoad = False
 
     def getLoad(self, dof_list=None):
-        self.force = np.zeros(self.ndofs)
+        force = np.zeros(self.ndofs)
         for dof in self.loads:
-            self.force[self.dofs[dof]] = self.loads[dof]
-        return self.force
+            if dof in self.dofs:
+                force[self.dofs[dof]] = self.loads[dof]
+        return force
 
     def hasLoad(self):
         return self._hasLoad

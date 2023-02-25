@@ -34,7 +34,7 @@ class Frame2D(Element):
 
         self._requestDofs(dof_list)
 
-        ndof = len(self.dof_list)
+        ndof = len(dof_list)
 
         self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0

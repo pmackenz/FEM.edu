@@ -1,4 +1,4 @@
-Element classes
+Element class
 ==========================
 
 .. automodule:: elements.Element
@@ -13,5 +13,6 @@ Derived Classes
     :maxdepth: 1
 
     Truss_class.rst
+    Beam2D_class.rst
     Frame2D_class.rst
     LinearTriangle_class.rst

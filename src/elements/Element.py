@@ -101,8 +101,7 @@ class Element():
         :param dof_requests: list of dofs for a typical node in this element
         """
         for node in self.nodes:
-            dof_idx = node.request(dof_requests)
-            node.linkElement(self)
+            dof_idx = node.request(dof_requests, self)
             self.dof_idx[node] = dof_idx
 
     def getDofs(self):
