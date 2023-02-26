@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: elements.Truss
+.. automodule:: femedu.elements.Truss
   :members:
 

@@ -40,6 +40,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
@@ -97,15 +98,15 @@
 <li><p><cite>Plot Support Classes</cite></p></li>
 </ul>
 </section>
-<section id="module-plotter.Plotter3D">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-plotter.Plotter3D" title="Permalink to this heading"></a></h2>
+<section id="module-femedu.plotter.Plotter3D">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-femedu.plotter.Plotter3D" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.Plotter3D.</span></span><span class="sig-name descname"><span class="pre">Plotter3d</span></span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.plotter.Plotter3D.Plotter3d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.plotter.Plotter3D.</span></span><span class="sig-name descname"><span class="pre">Plotter3d</span></span><a class="headerlink" href="#femedu.plotter.Plotter3D.Plotter3d" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a Plotter object</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.addForces">
-<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.addForces" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.plotter.Plotter3D.Plotter3d.addForces">
+<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.plotter.Plotter3D.Plotter3d.addForces" title="Permalink to this definition"></a></dt>
 <dd><p>add nodal forces to the plot shown in <strong>axs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -115,8 +116,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.displacementPlot">
-<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.displacementPlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.plotter.Plotter3D.Plotter3d.displacementPlot">
+<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.plotter.Plotter3D.Plotter3d.displacementPlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a deformed 3d system plot</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -128,8 +129,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.valuePlot">
-<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.valuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.plotter.Plotter3D.Plotter3d.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.plotter.Plotter3D.Plotter3d.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a plot using colors to identify magnitude of internal force.</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>

@@ -40,6 +40,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
@@ -88,15 +89,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-materials.Material">
-<span id="material-class"></span><h1>Material class<a class="headerlink" href="#module-materials.Material" title="Permalink to this heading"></a></h1>
+  <section id="module-femedu.materials.Material">
+<span id="material-class"></span><h1>Material class<a class="headerlink" href="#module-femedu.materials.Material" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="materials.Material.Material">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials.Material.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'A':</span> <span class="pre">1.0,</span> <span class="pre">'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.Material.Material" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.materials.Material.Material">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.materials.Material.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'A':</span> <span class="pre">1.0,</span> <span class="pre">'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.materials.Material.Material" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a generic material</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="materials.Material.Material.getStiffness">
-<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.Material.Material.getStiffness" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.materials.Material.Material.getStiffness">
+<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.materials.Material.Material.getStiffness" title="Permalink to this definition"></a></dt>
 <dd><p>request axial stiffness</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -106,8 +107,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="materials.Material.Material.getStress">
-<span class="sig-name descname"><span class="pre">getStress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.Material.Material.getStress" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.materials.Material.Material.getStress">
+<span class="sig-name descname"><span class="pre">getStress</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.materials.Material.Material.getStress" title="Permalink to this definition"></a></dt>
 <dd><p>request axial stress</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
@@ -117,8 +118,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="materials.Material.Material.setStrain">
-<span class="sig-name descname"><span class="pre">setStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.Material.Material.setStrain" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.materials.Material.Material.setStrain">
+<span class="sig-name descname"><span class="pre">setStrain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">eps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.materials.Material.Material.setStrain" title="Permalink to this definition"></a></dt>
 <dd><p>update state for a user provided axial strain value</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>

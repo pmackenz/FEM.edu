@@ -40,11 +40,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Element classes</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#module-elements.DrawElement">Inherited methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-femedu.elements.DrawElement">Inherited methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Beam2D_class.html">Beam2D class</a></li>
@@ -105,13 +106,13 @@ for the default plotting mechanism to work.  The default constructor defines <co
 which means that this element <strong>will not be plotted</strong>.</p>
 <p>See <a class="reference internal" href="#inherited-methods">Inherited methods</a> below for more detail on the <code class="code docutils literal notranslate"><span class="pre">DrawElement</span></code> class.</p>
 </div>
-<span class="target" id="module-elements.Element"></span><dl class="py class">
-<dt class="sig sig-object py" id="elements.Element.Element">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element" title="Permalink to this definition"></a></dt>
+<span class="target" id="module-femedu.elements.Element"></span><dl class="py class">
+<dt class="sig sig-object py" id="femedu.elements.Element.Element">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a single generic element</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.addTransformation">
-<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.addTransformation" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.Element.Element.addTransformation">
+<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">local_nodes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element.addTransformation" title="Permalink to this definition"></a></dt>
 <dd><p>Attach a transformation to any node of the element.</p>
 <p>If no <strong>local_nodes</strong> list is given or an empty list is handed to the function,
 the transformation, <strong>T</strong>, will be applied to all nodes in the element.</p>
@@ -121,14 +122,14 @@ Local nodes start at 0 and go to N-1, where N is the number of elements in this 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.getDofs">
-<span class="sig-name descname"><span class="pre">getDofs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getDofs" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.Element.Element.getDofs">
+<span class="sig-name descname"><span class="pre">getDofs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element.getDofs" title="Permalink to this definition"></a></dt>
 <dd><p>returns the dof-codes for this element in a list</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.getForce">
-<span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getForce" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.Element.Element.getForce">
+<span class="sig-name descname"><span class="pre">getForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element.getForce" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -137,8 +138,8 @@ Local nodes start at 0 and go to N-1, where N is the number of elements in this 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.getStiffness">
-<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getStiffness" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.Element.Element.getStiffness">
+<span class="sig-name descname"><span class="pre">getStiffness</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element.getStiffness" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -147,17 +148,17 @@ Local nodes start at 0 and go to N-1, where N is the number of elements in this 
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.updateState">
-<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.updateState" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.Element.Element.updateState">
+<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Element.Element.updateState" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
-<section id="module-elements.DrawElement">
-<span id="inherited-methods"></span><h2>Inherited methods<a class="headerlink" href="#module-elements.DrawElement" title="Permalink to this heading"></a></h2>
+<section id="module-femedu.elements.DrawElement">
+<span id="inherited-methods"></span><h2>Inherited methods<a class="headerlink" href="#module-femedu.elements.DrawElement" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.DrawElement.</span></span><span class="sig-name descname"><span class="pre">DrawElement</span></span><a class="headerlink" href="#elements.DrawElement.DrawElement" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.elements.DrawElement.</span></span><span class="sig-name descname"><span class="pre">DrawElement</span></span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement" title="Permalink to this definition"></a></dt>
 <dd><p>class for drawing any element</p>
 <p>element types are:</p>
 <table class="docutils align-default">
@@ -190,8 +191,8 @@ Local nodes start at 0 and go to N-1, where N is the number of elements in this 
 </tbody>
 </table>
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.draw">
-<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.draw" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.draw" title="Permalink to this definition"></a></dt>
 <dd><p>Returns a series of coordinate vectors representing the _x_, _y_, and _z_ values
 of points for plotting the deformed shape the current element (<code class="code docutils literal notranslate"><span class="pre">self</span></code>).
 For the undeformed element, set <code class="code docutils literal notranslate"><span class="pre">factor=0.0</span></code>.</p>
@@ -206,38 +207,38 @@ For the undeformed element, set <code class="code docutils literal notranslate">
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawBrick">
-<span class="sig-name descname"><span class="pre">drawBrick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawBrick" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawBrick">
+<span class="sig-name descname"><span class="pre">drawBrick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawBrick" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">BRICK</span></code> type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawCurve">
-<span class="sig-name descname"><span class="pre">drawCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawCurve" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawCurve">
+<span class="sig-name descname"><span class="pre">drawCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawCurve" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">CURVE</span></code> type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawLine">
-<span class="sig-name descname"><span class="pre">drawLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawLine" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawLine">
+<span class="sig-name descname"><span class="pre">drawLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawLine" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">LINE</span></code> type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawQuad">
-<span class="sig-name descname"><span class="pre">drawQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawQuad" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawQuad">
+<span class="sig-name descname"><span class="pre">drawQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawQuad" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">QUAD</span></code> type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawTetrahedron">
-<span class="sig-name descname"><span class="pre">drawTetrahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawTetrahedron" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawTetrahedron">
+<span class="sig-name descname"><span class="pre">drawTetrahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawTetrahedron" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">TETRAHEDRON</span></code> type</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawTriangle">
-<span class="sig-name descname"><span class="pre">drawTriangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawTriangle" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.elements.DrawElement.DrawElement.drawTriangle">
+<span class="sig-name descname"><span class="pre">drawTriangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.DrawElement.DrawElement.drawTriangle" title="Permalink to this definition"></a></dt>
 <dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">TRIANGLE</span></code> type</p>
 </dd></dl>
 

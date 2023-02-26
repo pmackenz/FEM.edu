@@ -32,6 +32,6 @@ Parent class
 * :doc:`Sections`
 
 
-.. automodule:: materials.ElasticSection
+.. automodule:: femedu.materials.ElasticSection
   :members:
 

@@ -40,6 +40,7 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
@@ -79,15 +80,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-domain.System">
-<span id="system-class"></span><h1>System class<a class="headerlink" href="#module-domain.System" title="Permalink to this heading"></a></h1>
+  <section id="module-femedu.domain.System">
+<span id="system-class"></span><h1>System class<a class="headerlink" href="#module-femedu.domain.System" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="domain.System.System">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.System.</span></span><span class="sig-name descname"><span class="pre">System</span></span><a class="headerlink" href="#domain.System.System" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.domain.System.</span></span><span class="sig-name descname"><span class="pre">System</span></span><a class="headerlink" href="#femedu.domain.System.System" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a System model</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.addElement">
-<span class="sig-name descname"><span class="pre">addElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newElement</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.addElement" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.addElement">
+<span class="sig-name descname"><span class="pre">addElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newElement</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.addElement" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>newElement</strong> – an <code class="code docutils literal notranslate"><span class="pre">Element</span></code> object</p>
@@ -96,8 +97,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.addNode">
-<span class="sig-name descname"><span class="pre">addNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.addNode" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.addNode">
+<span class="sig-name descname"><span class="pre">addNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.addNode" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>newNode</strong> – a <code class="code docutils literal notranslate"><span class="pre">Node</span></code> object</p>
@@ -106,8 +107,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.beamValuePlot">
-<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.beamValuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.beamValuePlot">
+<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.beamValuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a traditional beam value plot, i.e., moment and shear diagrams.</p>
 <p>If <strong>filename</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -123,8 +124,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.plot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Create mesh plot showing the undeformed and the deformed system</p>
 <p>If <strong>filename</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -139,37 +140,37 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.report">
-<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.report" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.report">
+<span class="sig-name descname"><span class="pre">report</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.report" title="Permalink to this definition"></a></dt>
 <dd><p>print a text-based summary report</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.resetAll">
-<span class="sig-name descname"><span class="pre">resetAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.resetAll" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.resetAll">
+<span class="sig-name descname"><span class="pre">resetAll</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.resetAll" title="Permalink to this definition"></a></dt>
 <dd><p>Resets load and displacement vectors.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.resetDisp">
-<span class="sig-name descname"><span class="pre">resetDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.resetDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.resetDisp">
+<span class="sig-name descname"><span class="pre">resetDisp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.resetDisp" title="Permalink to this definition"></a></dt>
 <dd><p>Resets the displacement vector.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.resetLoad">
-<span class="sig-name descname"><span class="pre">resetLoad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.resetLoad" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.resetLoad">
+<span class="sig-name descname"><span class="pre">resetLoad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.resetLoad" title="Permalink to this definition"></a></dt>
 <dd><p>Resets the load vector.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.solve" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.solve" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.valuePlot">
-<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.valuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.System.System.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a false color contour plot for the selected variable.
 A value of zero (0.0) will be assigned for any variable not
 provided by an element or a node.</p>

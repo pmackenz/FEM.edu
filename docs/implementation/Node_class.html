@@ -41,10 +41,11 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
@@ -80,15 +81,15 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-domain.Node">
-<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-domain.Node" title="Permalink to this heading"></a></h1>
+  <section id="module-femedu.domain.Node">
+<span id="node-class"></span><h1>Node class<a class="headerlink" href="#module-femedu.domain.Node" title="Permalink to this heading"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="domain.Node.Node">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.addLoad">
-<span class="sig-name descname"><span class="pre">addLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addLoad" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.addLoad">
+<span class="sig-name descname"><span class="pre">addLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.addLoad" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -100,8 +101,8 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.addTransformation">
-<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addTransformation" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.addTransformation">
+<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.addTransformation" title="Permalink to this definition"></a></dt>
 <dd><p>Attach a transformation object to this node.
 The transformation defines a local coordinate system.
 If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
@@ -109,16 +110,16 @@ Furthermore, all nodal displacements, velocity, or acceleration will be reported
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.areFixed">
-<span class="sig-name descname"><span class="pre">areFixed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.areFixed" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.areFixed">
+<span class="sig-name descname"><span class="pre">areFixed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.areFixed" title="Permalink to this definition"></a></dt>
 <dd><p>To be used by the assembly routines.</p>
 <p>return a list of indices pointing to fixed dofs in this node.
 Indices are local to this node: <code class="code docutils literal notranslate"><span class="pre">0..num_dofs</span></code></p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.fixDOF">
-<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.fixDOF">
+<span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
 <dd><p>provide a list of dof codes that shall be restrained</p>
 <p>see also: <code class="code docutils literal notranslate"><span class="pre">request()</span></code></p>
 <dl class="field-list simple">
@@ -129,8 +130,8 @@ Indices are local to this node: <code class="code docutils literal notranslate">
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.getDeformedPos">
-<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.getDeformedPos">
+<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
 <dd><p>Return deformed position <span class="math notranslate nohighlight">\({\bf x} = {\bf X} + f \: {\bf u}\)</span></p>
 <p>If a caller is specified, the node will adjust the output to the d.o.f.s specified by the
 element’s request() call. (called during initialization.)</p>
@@ -148,8 +149,8 @@ element’s request() call. (called during initialization.)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.getDisp">
-<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.getDisp">
+<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
 <dd><p>return a vector (nd.array) of (generalized) displacements.</p>
 <p>If a <code class="code docutils literal notranslate"><span class="pre">caller</span></code> is given, the element-specific d.o.f.s will be returned as a sequence
 in the same order as given by the element’s <code class="code docutils literal notranslate"><span class="pre">request()</span></code> call.</p>
@@ -174,8 +175,8 @@ Do not forget the <code class="code docutils literal notranslate"><span class="p
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.getPos">
-<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getPos" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.getPos">
+<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.getPos" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>initial position vector</p>
@@ -184,8 +185,8 @@ Do not forget the <code class="code docutils literal notranslate"><span class="p
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.isFixed">
-<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.isFixed">
+<span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dof</strong> – dof code as defined in <code class="code docutils literal notranslate"><span class="pre">request()</span></code></p>
@@ -194,8 +195,8 @@ Do not forget the <code class="code docutils literal notranslate"><span class="p
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.request">
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.request" title="Permalink to this definition"></a></dt>
 <dd><p>send list or individual dof code. Common codes:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -239,8 +240,8 @@ Do not forget the <code class="code docutils literal notranslate"><span class="p
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.setDisp">
-<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.setDisp">
+<span class="sig-name descname"><span class="pre">setDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">U</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.setDisp" title="Permalink to this definition"></a></dt>
 <dd><p>use for prescribed displacements</p>
 <p><strong>NEEDS TO BE IMPLEMENTED</strong></p>
 <dl class="field-list simple">
@@ -254,8 +255,8 @@ Do not forget the <code class="code docutils literal notranslate"><span class="p
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.setLoad">
-<span class="sig-name descname"><span class="pre">setLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.setLoad" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.domain.Node.Node.setLoad">
+<span class="sig-name descname"><span class="pre">setLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.Node.Node.setLoad" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

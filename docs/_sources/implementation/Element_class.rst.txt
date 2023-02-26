@@ -19,13 +19,13 @@ for common element types.
     See `Inherited methods`_ below for more detail on the :code:`DrawElement` class.
 
 
-.. automodule:: elements.Element
+.. automodule:: femedu.elements.Element
   :members:
 
 Inherited methods
 ---------------------
 
-.. automodule:: elements.DrawElement
+.. automodule:: femedu.elements.DrawElement
   :members:
 
 

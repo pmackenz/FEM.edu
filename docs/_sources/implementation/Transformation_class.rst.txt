@@ -8,5 +8,5 @@ Transformation class
 
 **Class doc**
 
-.. automodule:: domain.Transformation
+.. automodule:: femedu.domain.Transformation
   :members:

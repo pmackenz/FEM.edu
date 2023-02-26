@@ -1,7 +1,7 @@
 DoF class
 ================
 
-.. automodule:: domain.DoF
+.. automodule:: femedu.domain.DoF
   :members:
 
 

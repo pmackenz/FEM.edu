@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: plotter.ElementPlotter
+.. automodule:: femedu.plotter.ElementPlotter
   :members:

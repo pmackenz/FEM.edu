@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlateSection &mdash; FEM.edu 0.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PlaneStress material class" href="PlaneStress.html" />
+    <link rel="prev" title="FiberSection" href="FiberSection.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> FEM.edu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material class</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Material_class.html#derived-classes">Derived Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="Sections.html">Section Material classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PlaneStress.html">PlaneStress material class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FEM.edu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../implementation.html">Implementation</a> &raquo;</li>
+          <li><a href="Material_class.html">Material class</a> &raquo;</li>
+          <li><a href="Sections.html">Section Material classes</a> &raquo;</li>
+      <li>PlateSection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/implementation/PlateSection.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="platesection">
+<h1>PlateSection<a class="headerlink" href="#platesection" title="Permalink to this heading"></a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This material is not yet available</p>
+</div>
+<p>The plate section model implements a complex cross section
+built from multiple <a class="reference internal" href="PlaneStress.html"><span class="doc">PlaneStress material class</span></a> instances</p>
+<div class="math notranslate nohighlight">
+\[\varepsilon_{kl}(z) = \varepsilon^0_{kl} - z \,\phi_{kl}\]</div>
+<div class="math notranslate nohighlight">
+\[n^{ij} = \int_{-h/2}^{h/2} \sigma^{ij}(z)\, dz
+\qquad    \qquad
+m^{ij} = -\int_{-h/2}^{h/2} z\sigma^{ij}(z)\, dz\]</div>
+<p>Stress <span class="math notranslate nohighlight">\(\sigma^{ij}(z)\)</span> is obtained from a <a class="reference internal" href="PlaneStress.html"><span class="doc">PlaneStress material class</span></a> material layer at distance <em>z</em>.
+Through-the-thickness integration is performed numerically as a sum over layers.</p>
+<p>The <strong>PlateSection</strong> material will further compute the tangent stiffness tensors defined as:</p>
+<div class="math notranslate nohighlight">
+\[dn^{ij}
+  =: \mathbb{D}^{ijkl} \, d\varepsilon^{0}_{kl}
+    +\mathbb{C}^{ijkl} d\phi_{kl}\]</div>
+<div class="math notranslate nohighlight">
+\[dm^{ij}
+  =: \mathbb{C}^{ijkl} \, d\varepsilon^{0}_{kl}
+    + \mathbb{B}^{ijkl} \, d\phi_{kl}\]</div>
+<p>where</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\varepsilon^0_{ij}\)</span></p></td>
+<td><p>membrane strain (input)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi_{ij}\)</span></p></td>
+<td><p>curvature change (input)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(n^{ij}\)</span></p></td>
+<td><p>component of resulting membrane force (output)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(m^{ij}\)</span></p></td>
+<td><p>component of resulting moment (output)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathcal{C}^{ijkl}(z)\)</span></p></td>
+<td><p>material tangent stiffness of a plane-stress material layer at distance <em>z</em></p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbb{D}^{ijkl}\)</span></p></td>
+<td><p>axial stiffness</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\mathbb{B}^{ijkl}\)</span></p></td>
+<td><p>flexural stiffness</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\mathbb{C}^{ijkl}\)</span></p></td>
+<td><p>coupling stiffness</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="FiberSection.html" class="btn btn-neutral float-left" title="FiberSection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PlaneStress.html" class="btn btn-neutral float-right" title="PlaneStress material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Peter Mackenzie-Helnwein.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

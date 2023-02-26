@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: materials.FiberMaterial
+.. automodule:: femedu.materials.FiberMaterial
   :members:

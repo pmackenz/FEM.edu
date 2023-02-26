@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: elements.Beam2D
+.. automodule:: femedu.elements.Beam2D
   :members:

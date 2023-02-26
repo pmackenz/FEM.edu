@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: plotter.Plotter3D
+.. automodule:: femedu.plotter.Plotter3D
   :members:

@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -40,11 +41,12 @@
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../examples.html">Example Problems</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Element_class.html">Element classes</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="Element_class.html#module-elements.DrawElement">Inherited methods</a></li>
+<li class="toctree-l3"><a class="reference internal" href="Element_class.html#module-femedu.elements.DrawElement">Inherited methods</a></li>
 <li class="toctree-l3 current"><a class="reference internal" href="Element_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Truss class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Beam2D_class.html">Beam2D class</a></li>
@@ -98,23 +100,56 @@
 <li><p><a class="reference internal" href="Element_class.html"><span class="doc">Element classes</span></a></p></li>
 </ul>
 </section>
-<section id="module-elements.Truss">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-elements.Truss" title="Permalink to this heading"></a></h2>
+<section id="module-femedu.elements.Truss">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-femedu.elements.Truss" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="elements.Truss.Truss">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Truss.</span></span><span class="sig-name descname"><span class="pre">Truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodei</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodej</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Truss.Truss" title="Permalink to this definition"></a></dt>
-<dd><p>class: representing a single truss element</p>
-<blockquote>
-<div><p>self.nodes    = nodes i and j (tuple)
-self.material = material parameters (</p>
-<p>self.force    = internal force (float)
-self.Forces   = internal force vectors (list of np.arrays)
-self.Kt       = tangent stiffness (list of np.arrays)</p>
-</div></blockquote>
+<dt class="sig sig-object py" id="femedu.elements.Truss.Truss">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.elements.Truss.</span></span><span class="sig-name descname"><span class="pre">Truss</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodei</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodej</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Truss.Truss" title="Permalink to this definition"></a></dt>
+<dd><p>Representing a single truss element between 2 nodes.</p>
+<p>The element is using the following dofs:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(u\)</span> (<code class="code docutils literal notranslate"><span class="pre">ux</span></code>) and <span class="math notranslate nohighlight">\(v\)</span> (<code class="code docutils literal notranslate"><span class="pre">uy</span></code>) in a 2D model.</p></li>
+<li><p><span class="math notranslate nohighlight">\(u\)</span> (<code class="code docutils literal notranslate"><span class="pre">ux</span></code>), <span class="math notranslate nohighlight">\(v\)</span> (<code class="code docutils literal notranslate"><span class="pre">uy</span></code>) and <span class="math notranslate nohighlight">\(w\)</span> (<code class="code docutils literal notranslate"><span class="pre">uz</span></code>) in a 3D model.</p></li>
+</ul>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text">Internal variables</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>self.nodes</p></td>
+<td><p>nodes i and j (tuple)</p></td>
+</tr>
+<tr class="row-even"><td><p>self.material</p></td>
+<td><p>pointer to Material object</p></td>
+</tr>
+<tr class="row-odd"><td><p>self.force</p></td>
+<td><p>internal force (float)</p></td>
+</tr>
+<tr class="row-even"><td><p>self.Forces</p></td>
+<td><p>nodal force vectors (list of np.arrays)</p></td>
+</tr>
+<tr class="row-odd"><td><p>self.Kt</p></td>
+<td><p>tangent stiffness (list of np.arrays)</p></td>
+</tr>
+</tbody>
+</table>
 <dl class="py method">
-<dt class="sig sig-object py" id="elements.Truss.Truss.updateState">
-<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#elements.Truss.Truss.updateState" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="femedu.elements.Truss.Truss.getAxialForce">
+<span class="sig-name descname"><span class="pre">getAxialForce</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Truss.Truss.getAxialForce" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>axial force in the truss. Positive value = tension.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.elements.Truss.Truss.updateState">
+<span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Truss.Truss.updateState" title="Permalink to this definition"></a></dt>
+<dd><p>Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.</p>
+</dd></dl>
 
 </dd></dl>
 

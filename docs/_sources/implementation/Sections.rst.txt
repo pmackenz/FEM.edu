@@ -12,7 +12,7 @@ Parent class
 * :doc:`Material_class`
 
 
-.. automodule:: materials.SectionMaterial
+.. automodule:: femedu.materials.SectionMaterial
   :members:
 
 

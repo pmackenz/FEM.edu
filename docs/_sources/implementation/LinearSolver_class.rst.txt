@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: solver.LinearSolver
+.. automodule:: femedu.solver.LinearSolver
   :members:
 
