@@ -43,10 +43,10 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">System class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
@@ -106,11 +106,34 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="domain.System.System.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.plot" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dt class="sig sig-object py" id="domain.System.System.beamValuePlot">
+<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.beamValuePlot" title="Permalink to this definition"></a></dt>
+<dd><p>Create a traditional beam value plot, i.e., moment and shear diagrams.</p>
+<p>If <strong>filename</strong> is given, store the plot to that file.
+Use proper file extensions to indicate the desired format (.png, .pdf)</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>factor</strong> – deformation magnification factor</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> – string code for variable</p></li>
+<li><p><strong>deformed</strong> – True | <strong>False</strong></p></li>
+<li><p><strong>file</strong> – filename (str)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.System.System.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.plot" title="Permalink to this definition"></a></dt>
+<dd><p>Create mesh plot showing the undeformed and the deformed system</p>
+<p>If <strong>filename</strong> is given, store the plot to that file.
+Use proper file extensions to indicate the desired format (.png, .pdf)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>factor</strong> – deformation magnification factor</p></li>
+<li><p><strong>filename</strong> – filename (str)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -143,6 +166,25 @@
 <dt class="sig sig-object py" id="domain.System.System.solve">
 <span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.solve" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.System.System.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.System.System.valuePlot" title="Permalink to this definition"></a></dt>
+<dd><p>Create a false color contour plot for the selected variable.
+A value of zero (0.0) will be assigned for any variable not
+provided by an element or a node.</p>
+<p>If <strong>filename</strong> is given, store the plot to that file.
+Use proper file extensions to indicate the desired format (.png, .pdf)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>variable</strong> – string code for variable to show</p></li>
+<li><p><strong>factor</strong> – deformation magnification factor (default is undeformed)</p></li>
+<li><p><strong>filename</strong> – filename (str)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Plotter class &mdash; FEM.edu 0.4 documentation</title>
+  <title>Plotter3D class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,8 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Plotter3D class" href="Plotter3D_class.html" />
-    <link rel="prev" title="Plot Support classes" href="Plot_Support_Classes.html" /> 
+    <link rel="next" title="ElementPlotter class" href="ElementPlotter_class.html" />
+    <link rel="prev" title="Plotter class" href="Plotter_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -48,8 +48,8 @@
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Plot_Support_Classes.html#derived-classes">Derived Classes</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Plotter class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="Plotter3D_class.html">Plotter3D class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Plotter3D class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ElementPlotter_class.html">ElementPlotter class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="ElementPlotter3D_class.html">ElementPlotter3D class</a></li>
 </ul>
@@ -79,9 +79,9 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
           <li><a href="Plot_Support_Classes.html">Plot Support classes</a> &raquo;</li>
-      <li>Plotter class</li>
+      <li>Plotter3D class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/Plotter_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/Plotter3D_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -89,23 +89,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="plotter-class">
-<h1>Plotter class<a class="headerlink" href="#plotter-class" title="Permalink to this heading"></a></h1>
+  <section id="plotter3d-class">
+<h1>Plotter3D class<a class="headerlink" href="#plotter3d-class" title="Permalink to this heading"></a></h1>
 <section id="parent-class">
 <h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><cite>Plot Support Classes</cite></p></li>
 </ul>
 </section>
-<section id="module-plotter.Plotter">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-plotter.Plotter" title="Permalink to this heading"></a></h2>
+<section id="module-plotter.Plotter3D">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-plotter.Plotter3D" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#plotter.Plotter.Plotter" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.Plotter3D.</span></span><span class="sig-name descname"><span class="pre">Plotter3d</span></span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a Plotter object</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.addForces">
-<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.addForces" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.addForces">
+<span class="sig-name descname"><span class="pre">addForces</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.addForces" title="Permalink to this definition"></a></dt>
 <dd><p>add nodal forces to the plot shown in <strong>axs</strong></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -115,9 +115,9 @@
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.displacementPlot">
-<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.displacementPlot" title="Permalink to this definition"></a></dt>
-<dd><p>Create a deformed system plot</p>
+<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.displacementPlot">
+<span class="sig-name descname"><span class="pre">displacementPlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.displacementPlot" title="Permalink to this definition"></a></dt>
+<dd><p>Create a deformed 3d system plot</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 <dl class="field-list simple">
@@ -128,51 +128,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setDisplacements">
-<span class="sig-name descname"><span class="pre">setDisplacements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">disp</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setDisplacements" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>disp</strong> – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setMesh">
-<span class="sig-name descname"><span class="pre">setMesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vert</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lines</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setMesh" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>vert</strong> – </p></li>
-<li><p><strong>lines</strong> – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setReactions">
-<span class="sig-name descname"><span class="pre">setReactions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">R</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setReactions" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>R</strong> – array of nodal force vectors</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.setValues">
-<span class="sig-name descname"><span class="pre">setValues</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">vals</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.setValues" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>vals</strong> – </p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.valuePlot">
-<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="plotter.Plotter3D.Plotter3d.valuePlot">
+<span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter3D.Plotter3d.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a plot using colors to identify magnitude of internal force.</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -195,8 +152,8 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Plot_Support_Classes.html" class="btn btn-neutral float-left" title="Plot Support classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="Plotter3D_class.html" class="btn btn-neutral float-right" title="Plotter3D class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="Plotter_class.html" class="btn btn-neutral float-left" title="Plotter class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ElementPlotter_class.html" class="btn btn-neutral float-right" title="ElementPlotter class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

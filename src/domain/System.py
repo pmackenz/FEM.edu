@@ -126,10 +126,15 @@ class System():
         self.Rsys = Rsys
         self.disp = U
 
-    def plot(self, factor=1.0):
+    def plot(self, factor=1.0, filename=None):
         """
+        Create mesh plot showing the undeformed and the deformed system
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
 
         :param factor: deformation magnification factor
+        :param filename:  filename (str)
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
@@ -138,9 +143,40 @@ class System():
         R = self.Rsys.copy().reshape((ndof//2, 2))
         self.plotter.setReactions(R)
 
-        self.plotter.displacementPlot(factor)
+        self.plotter.displacementPlot(factor=factor, file=filename)
 
-        self.plotter.valuePlot()
+    def valuePlot(self, variable, factor=0.0, filename=None):
+        """
+        Create a false color contour plot for the selected variable.
+        A value of zero (0.0) will be assigned for any variable not
+        provided by an element or a node.
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param variable: string code for variable to show
+        :param factor: deformation magnification factor (default is undeformed)
+        :param filename: filename (str)
+        """
+
+        self.plotter.setMesh(self.nodes, self.elements)
+        self.plotter.valuePlot(variable_name=variable, factor=factor, file=filename)
+
+    def beamValuePlot(self, variable, factor=0.0, filename=None):
+        """
+        Create a traditional beam value plot, i.e., moment and shear diagrams.
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param variable: string code for variable
+        :param deformed: True | **False**
+        :param file: filename (str)
+        """
+
+        self.plotter.setMesh(self.nodes, self.elements)
+        self.plotter.beamValuePlot(variable_name=variable, factor=factor, file=filename)
+
 
     def report(self):
         """

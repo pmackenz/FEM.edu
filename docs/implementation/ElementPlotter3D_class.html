@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Transformation class &mdash; FEM.edu 0.4 documentation</title>
+  <title>ElementPlotter3D class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -19,7 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="System class" href="System_class.html" /> 
+    <link rel="next" title="Solver class" href="Solver_class.html" />
+    <link rel="prev" title="ElementPlotter class" href="ElementPlotter_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -42,13 +43,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Plot_Support_Classes.html#derived-classes">Derived Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Plotter3D_class.html">Plotter3D class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ElementPlotter_class.html">ElementPlotter class</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">ElementPlotter3D class</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Transformation class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -68,9 +78,10 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-      <li>Transformation class</li>
+          <li><a href="Plot_Support_Classes.html">Plot Support classes</a> &raquo;</li>
+      <li>ElementPlotter3D class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/Transformation_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/ElementPlotter3D_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -78,35 +89,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="transformation-class">
-<h1>Transformation class<a class="headerlink" href="#transformation-class" title="Permalink to this heading"></a></h1>
-<p><strong>Used with:</strong></p>
+  <section id="elementplotter3d-class">
+<h1>ElementPlotter3D class<a class="headerlink" href="#elementplotter3d-class" title="Permalink to this heading"></a></h1>
+<section id="parent-class">
+<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="Node_class.html"><span class="doc">Node class</span></a></p></li>
-<li><p><a class="reference internal" href="Element_class.html"><span class="doc">Element classes</span></a></p></li>
+<li><p><cite>Plot Support Classes</cite></p></li>
 </ul>
-<p><strong>Class doc</strong></p>
-<span class="target" id="module-domain.Transformation"></span><dl class="py class">
-<dt class="sig sig-object py" id="domain.Transformation.Transformation">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Transformation.</span></span><span class="sig-name descname"><span class="pre">Transformation</span></span><a class="headerlink" href="#domain.Transformation.Transformation" title="Permalink to this definition"></a></dt>
-<dd><p>Nodal transformation class</p>
-<p>A transformation may be attached to Nodes or to Elements.</p>
-<ul class="simple">
-<li><p>When attached to a Node, the transformation applies to
-all fixities and all loads defined at that node.</p></li>
-<li><p>When attached to an element, the user may specify a node for which that transformation
-shall be used.  If no dode is specified, the transformation will be applied at all
-attached nodes.</p></li>
-</ul>
-</dd></dl>
+</section>
+<section id="module-plotter.ElementPlotter3D">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-plotter.ElementPlotter3D" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="plotter.ElementPlotter3D.ElementPlotter3D">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.ElementPlotter3D.</span></span><span class="sig-name descname"><span class="pre">ElementPlotter3D</span></span><a class="headerlink" href="#plotter.ElementPlotter3D.ElementPlotter3D" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
+</section>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="System_class.html" class="btn btn-neutral float-left" title="System class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ElementPlotter_class.html" class="btn btn-neutral float-left" title="ElementPlotter class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Solver_class.html" class="btn btn-neutral float-right" title="Solver class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

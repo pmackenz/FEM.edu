@@ -1,4 +1,4 @@
-Plotter class
+Plotter3D class
 ==========================
 
 Parent class
@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: plotter.Plotter
+.. automodule:: plotter.Plotter3D
   :members:

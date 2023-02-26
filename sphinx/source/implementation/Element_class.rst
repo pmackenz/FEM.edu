@@ -1,4 +1,4 @@
-Element class
+Element classes
 ==========================
 
 This class represents no particular element but rather defines common functionality for all elements.

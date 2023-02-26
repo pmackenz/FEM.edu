@@ -101,14 +101,14 @@ class ElementPlotter(AbstractPlotter):
         plt.show()
         pass
 
-    def valuePlot(self, variable_name='', deformed=False, file=None):
+    def valuePlot(self, variable_name='', factor=0.0, file=None):
         """
         Create a plot using colors to identify magnitude of internal force.
 
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
-        :param deformed: True | **False**
+        :param factor: True | **False**
         :param file: filename (str)
         """
         print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
@@ -150,6 +150,80 @@ class ElementPlotter(AbstractPlotter):
         plt.show()
         pass
 
+    def beamValuePlot(self, factor=1.0, file=None):
+        """
+        Create a deformed system plot
+
+        If **file** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param factor: displacement scaling factor
+        :param file: filename (str)
+        """
+
+        if self.plot3D:
+            fig = plt.figure(figsize=(10, 10))
+            axs = fig.gca(projection='3d')
+
+            # plot the undeformed elements
+            for elem in self.elements:
+                ans = elem.draw(factor=0.0)
+                if len(ans)>=3:
+                    x = ans[0]
+                    y = ans[1]
+                    z = ans[2]
+                    if x.size == y.size and x.size == z.size:
+                        axs.plot(x, y, z, '-k', lw=2)
+
+            # plot the deformed elements
+            if factor:
+                for elem in self.elements:
+                    ans = elem.draw(factor=factor)
+                    if len(ans)>=3:
+                        x = ans[0]
+                        y = ans[1]
+                        z = ans[2]
+                        if x.size == y.size and x.size == z.size:
+                            axs.plot(x, y, z, '-r', lw=3)
+
+            if self.reactions:
+                self.addForces(axs)
+
+            self.set_axes_equal(axs)
+
+        else:
+            fig, axs = plt.subplots()
+
+            # plot the undeformed elements
+            for elem in self.elements:
+                ans = elem.draw(factor=0.0)
+                if len(ans)>=2:
+                    x = ans[0]
+                    y = ans[1]
+                    if x.size == y.size:
+                        axs.plot(x, y, '-k', lw=2)
+
+            # plot the deformed elements
+            if factor:
+                for elem in self.elements:
+                    ans = elem.draw(factor=factor)
+                    if len(ans)>=2:
+                        x = ans[0]
+                        y = ans[1]
+                        if x.size == y.size:
+                            axs.plot(x, y, '-r', lw=3)
+
+            # if self.reactions != []:
+            #     self.addForces(axs)
+
+            axs.set_aspect('equal')
+            axs.set_xmargin(0.10)
+            axs.set_ymargin(0.10)
+            axs.set_axis_off()
+
+        plt.show()
+        pass
+
     def addForces(self, axs):
         """
         add nodal forces to the plot shown in **axs**
@@ -174,32 +248,4 @@ class ElementPlotter(AbstractPlotter):
 
             axs.quiver(X,Y, Fx, Fy, color='green')
 
-    def set_axes_equal(self, ax):
-        '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
-        cubes as cubes, etc..  This is one possible solution to Matplotlib's
-        ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
 
-        Input
-          ax: a matplotlib axis, e.g., as output from plt.gca().
-
-        Taken from: https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to
-        '''
-
-        x_limits = ax.get_xlim3d()
-        y_limits = ax.get_ylim3d()
-        z_limits = ax.get_zlim3d()
-
-        x_range = abs(x_limits[1] - x_limits[0])
-        x_middle = np.mean(x_limits)
-        y_range = abs(y_limits[1] - y_limits[0])
-        y_middle = np.mean(y_limits)
-        z_range = abs(z_limits[1] - z_limits[0])
-        z_middle = np.mean(z_limits)
-
-        # The plot bounding box is a sphere in the sense of the infinity
-        # norm, hence I call half the max range the plot radius.
-        plot_radius = 0.5 * max([x_range, y_range, z_range])
-
-        ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
-        ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
-        ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
