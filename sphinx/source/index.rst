@@ -11,6 +11,7 @@ Welcome to the FEM.edu documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   examples.rst
    design.rst
    implementation.rst
 

@@ -1,6 +1,6 @@
 System class
 ==========================
 
-.. automodule:: domain.System
+.. automodule:: femedu.domain.System
   :members:
 

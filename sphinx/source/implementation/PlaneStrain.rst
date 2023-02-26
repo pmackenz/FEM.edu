@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: materials.PlaneStrain
+.. automodule:: femedu.materials.PlaneStrain
   :members:

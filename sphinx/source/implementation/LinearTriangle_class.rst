@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: elements.LinearTriangle
+.. automodule:: femedu.elements.LinearTriangle
   :members:

@@ -1,7 +1,7 @@
 Material class
 ==========================
 
-.. automodule:: materials.Material
+.. automodule:: femedu.materials.Material
   :members:
 
 

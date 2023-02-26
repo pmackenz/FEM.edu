@@ -40,5 +40,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: materials.PlaneStress
+.. automodule:: femedu.materials.PlaneStress
   :members:

@@ -7,7 +7,7 @@ of those features.
 In addition, all :doc:`Element_class` inherit plot support methods from :code:`DrawElement`.
 
 
-.. automodule:: plotter.AbstractPlotter
+.. automodule:: femedu.plotter.AbstractPlotter
    :members:
 
 Derived Classes

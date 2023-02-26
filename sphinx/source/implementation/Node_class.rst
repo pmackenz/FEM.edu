@@ -1,7 +1,7 @@
 Node class
 ================
 
-.. automodule:: domain.Node
+.. automodule:: femedu.domain.Node
   :members:
 
 
