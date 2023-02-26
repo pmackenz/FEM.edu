@@ -1,13 +1,13 @@
 Plate Examples
 =====================
 
-All Plate examples are packaged in :code:`examples.plate`.
+All Plate examples are packaged in :code:`examples.plates`.
 To run a specific example use, e.g.:
 
 .. code:: python
 
     from femedu import *
-    from femedu.examples.plate.plate01 import *
+    from femedu.examples.plates.plate01 import *
 
     # load the example
     ex = ExamplePlate01()
