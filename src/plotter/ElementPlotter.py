@@ -94,6 +94,8 @@ class ElementPlotter(AbstractPlotter):
             #     self.addForces(axs)
 
             axs.set_aspect('equal')
+            axs.set_xmargin(0.10)
+            axs.set_ymargin(0.10)
             axs.set_axis_off()
 
         plt.show()
