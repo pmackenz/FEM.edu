@@ -7,13 +7,22 @@ class DrawElement():
 
     element types are:
 
-    UNKNOWN     = 0x000000
-    LINE        = 0x000001  # truss, simple frame
-    CURVE       = 0x000002  # beam, nice frame
-    TRIANGLE    = 0x000004  # plates, shells
-    TETRAHEDRON = 0x000008  # plates, shells
-    QUAD        = 0x000010  # plates, shells
-    BRICK       = 0x000020  # continuum
+    .. list-table::
+
+       * - UNKNOWN
+         -
+       * - LINE
+         - truss, simple frame
+       * - CURVE
+         - beam, nice frame
+       * - TRIANGLE
+         - plates, shells
+       * - TETRAHEDRON
+         - plates, shells
+       * - QUAD
+         - plates, shells
+       * - BRICK
+         - continuum
 
     """
 
@@ -35,7 +44,12 @@ class DrawElement():
 
     def draw(self, factor=0.0):
         """
+        Returns a series of coordinate vectors representing the _x_, _y_, and _z_ values
+        of points for plotting the deformed shape the current element (:code:`self`).
+        For the undeformed element, set :code:`factor=0.0`.
+
         :param factor:  magnification factor for deformation
+        :returns:  a tuple (list) of coordinate vectors
         """
         if self.element_type == self.LINE:
             return self.drawLine(factor)
@@ -53,6 +67,10 @@ class DrawElement():
             raise NotImplementedError
 
     def drawLine(self, factor):
+        """
+        implementation of a generic :code:`LINE` type
+        """
+
         x = []
         y = []
         z = []
@@ -66,6 +84,9 @@ class DrawElement():
         return (x, y, z)
 
     def drawCurve(self, factor):
+        """
+        implementation of a generic :code:`CURVE` type
+        """
 
         Xi = self.nodes[0].getPos()
         Xj = self.nodes[1].getPos()
@@ -89,7 +110,6 @@ class DrawElement():
             s = np.linalg.cross(kk, n)
         else:
             return tuple()
-
 
         # local displacements
         # 0 ... ux
@@ -131,24 +151,36 @@ class DrawElement():
 
 
     def drawTriangle(self, factor):
+        """
+        implementation of a generic :code:`TRIANGLE` type
+        """
         x = []
         y = []
         z = []
         return (x, y, z)
 
     def drawTetrahedron(self, factor):
+        """
+        implementation of a generic :code:`TETRAHEDRON` type
+        """
         x = []
         y = []
         z = []
         return (x, y, z)
 
     def drawQuad(self, factor):
+        """
+        implementation of a generic :code:`QUAD` type
+        """
         x = []
         y = []
         z = []
         return (x, y, z)
 
     def drawBrick(self, factor):
+        """
+        implementation of a generic :code:`BRICK` type
+        """
         x = []
         y = []
         z = []

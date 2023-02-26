@@ -80,7 +80,7 @@ class Node():
         """
         provide a list of dof codes that shall be restrained
 
-        see also: :ref:`request`
+        see also: :code:`request()`
 
         :param dofs:
         """
@@ -101,7 +101,7 @@ class Node():
     def isFixed(self, dof):
         """
 
-        :param dof: dof code as defined in :ref:`request`
+        :param dof: dof code as defined in :code:`request()`
         """
         return (dof in self.fixity)
 

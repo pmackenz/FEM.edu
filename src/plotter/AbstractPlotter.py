@@ -76,6 +76,21 @@ class AbstractPlotter():
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
+        :param variable_name: string code for variable
+        :param deformed: True | **False**
+        :param file: filename (str)
+        """
+        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
+        raise NotImplementedError
+
+    def beamValuePlot(self, variable_name='', deformed=False, file=None):
+        """
+        Create a traditional beam value plot, i.e., moment and shear diagrams.
+
+        If **file** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param variable_name: string code for variable
         :param deformed: True | **False**
         :param file: filename (str)
         """

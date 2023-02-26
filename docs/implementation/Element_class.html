@@ -44,6 +44,7 @@
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Element class</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-elements.DrawElement">Inherited methods</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="Truss_class.html">Truss class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="Beam2D_class.html">Beam2D class</a></li>
@@ -88,9 +89,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-elements.Element">
-<span id="element-class"></span><h1>Element class<a class="headerlink" href="#module-elements.Element" title="Permalink to this heading"></a></h1>
-<dl class="py class">
+  <section id="element-class">
+<h1>Element class<a class="headerlink" href="#element-class" title="Permalink to this heading"></a></h1>
+<p>This class represents no particular element but rather defines common functionality for all elements.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every element in <strong>FEM.edu</strong> is derived from this class.</p>
+</div>
+<p>The <code class="code docutils literal notranslate"><span class="pre">Element</span></code> class inherits methods from <code class="code docutils literal notranslate"><span class="pre">DrawElement</span></code>, which provides default plotting functionality
+for common element types.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Every element needs to declare its generic type through <code class="code docutils literal notranslate"><span class="pre">self.element_type</span></code> in its constructor
+for the default plotting mechanism to work.  The default constructor defines <code class="code docutils literal notranslate"><span class="pre">self.element_type</span> <span class="pre">=</span> <span class="pre">self.UNKNOWN</span></code>,
+which means that this element <strong>will not be plotted</strong>.</p>
+<p>See <a class="reference internal" href="#inherited-methods">Inherited methods</a> below for more detail on the <code class="code docutils literal notranslate"><span class="pre">DrawElement</span></code> class.</p>
+</div>
+<span class="target" id="module-elements.Element"></span><dl class="py class">
 <dt class="sig sig-object py" id="elements.Element.Element">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.Element.</span></span><span class="sig-name descname"><span class="pre">Element</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">material</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element" title="Permalink to this definition"></a></dt>
 <dd><p>abstract class: representing a single generic element</p>
@@ -103,22 +118,6 @@ the transformation, <strong>T</strong>, will be applied to all nodes in the elem
 <p>A non-empty <strong>local_nodes</strong> list will apply the transformation to those local nodes listed in that list.
 Local nodes start at 0 and go to N-1, where N is the number of elements in this element.</p>
 <p>A transformation can be removed from a node by assigning <code class="code docutils literal notranslate"><span class="pre">T=None</span></code> as the transformation.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="elements.Element.Element.getCurve">
-<span class="sig-name descname"><span class="pre">getCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.Element.Element.getCurve" title="Permalink to this definition"></a></dt>
-<dd><p>Used for plotting this element.</p>
-<p>If a factor other than 0.0 (default: 0.0) is given,
-add factor*displacement to the reference position.</p>
-<p>Represent the element by an arbitrary polygon.
-Collect nodal coordinates of points in lists of X-, Y-, Z- coordinates.
-The Z-coordinate is only needed for 3d plotting.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>plot information in a tuple (X,Y,…)</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -154,6 +153,97 @@ The Z-coordinate is only needed for 3d plotting.</p>
 
 </dd></dl>
 
+<section id="module-elements.DrawElement">
+<span id="inherited-methods"></span><h2>Inherited methods<a class="headerlink" href="#module-elements.DrawElement" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">elements.DrawElement.</span></span><span class="sig-name descname"><span class="pre">DrawElement</span></span><a class="headerlink" href="#elements.DrawElement.DrawElement" title="Permalink to this definition"></a></dt>
+<dd><p>class for drawing any element</p>
+<p>element types are:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p>UNKNOWN</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>LINE</p></td>
+<td><p>truss, simple frame</p></td>
+</tr>
+<tr class="row-odd"><td><p>CURVE</p></td>
+<td><p>beam, nice frame</p></td>
+</tr>
+<tr class="row-even"><td><p>TRIANGLE</p></td>
+<td><p>plates, shells</p></td>
+</tr>
+<tr class="row-odd"><td><p>TETRAHEDRON</p></td>
+<td><p>plates, shells</p></td>
+</tr>
+<tr class="row-even"><td><p>QUAD</p></td>
+<td><p>plates, shells</p></td>
+</tr>
+<tr class="row-odd"><td><p>BRICK</p></td>
+<td><p>continuum</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.draw">
+<span class="sig-name descname"><span class="pre">draw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.draw" title="Permalink to this definition"></a></dt>
+<dd><p>Returns a series of coordinate vectors representing the _x_, _y_, and _z_ values
+of points for plotting the deformed shape the current element (<code class="code docutils literal notranslate"><span class="pre">self</span></code>).
+For the undeformed element, set <code class="code docutils literal notranslate"><span class="pre">factor=0.0</span></code>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>factor</strong> – magnification factor for deformation</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>a tuple (list) of coordinate vectors</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawBrick">
+<span class="sig-name descname"><span class="pre">drawBrick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawBrick" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">BRICK</span></code> type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawCurve">
+<span class="sig-name descname"><span class="pre">drawCurve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawCurve" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">CURVE</span></code> type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawLine">
+<span class="sig-name descname"><span class="pre">drawLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawLine" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">LINE</span></code> type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawQuad">
+<span class="sig-name descname"><span class="pre">drawQuad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawQuad" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">QUAD</span></code> type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawTetrahedron">
+<span class="sig-name descname"><span class="pre">drawTetrahedron</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawTetrahedron" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">TETRAHEDRON</span></code> type</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="elements.DrawElement.DrawElement.drawTriangle">
+<span class="sig-name descname"><span class="pre">drawTriangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#elements.DrawElement.DrawElement.drawTriangle" title="Permalink to this definition"></a></dt>
+<dd><p>implementation of a generic <code class="code docutils literal notranslate"><span class="pre">TRIANGLE</span></code> type</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="derived-classes">
 <h2>Derived Classes<a class="headerlink" href="#derived-classes" title="Permalink to this heading"></a></h2>
 <div class="toctree-wrapper compound">

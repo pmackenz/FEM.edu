@@ -35,7 +35,7 @@ class System():
     def addNode(self, *nodes):
         """
 
-        :param newNode: a :ref:`Node` object
+        :param newNode: a :code:`Node` object
         """
         for newNode in nodes:
             if newNode not in self.nodes:
@@ -56,7 +56,7 @@ class System():
     def addElement(self, newElement):
         """
 
-        :param newElement: a :ref:`Element` object
+        :param newElement: an :code:`Element` object
         """
         self.elements.append(newElement)
 
