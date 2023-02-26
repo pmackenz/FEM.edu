@@ -20,8 +20,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="DoF class" href="DOF_class.html" />
-    <link rel="prev" title="Implementation" href="../implementation.html" /> 
+    <link rel="next" title="Plot Support classes" href="Plot_Support_Classes.html" />
+    <link rel="prev" title="PlaneStrain material class" href="PlaneStrain.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,13 +43,14 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -86,10 +87,40 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">domain.Node.</span></span><span class="sig-name descname"><span class="pre">Node</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a single Node</p>
 <dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.addLoad">
+<span class="sig-name descname"><span class="pre">addLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loads</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addLoad" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loads</strong> – </p></li>
+<li><p><strong>dofs</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.addTransformation">
+<span class="sig-name descname"><span class="pre">addTransformation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.addTransformation" title="Permalink to this definition"></a></dt>
+<dd><p>Attach a transformation object to this node.
+The transformation defines a local coordinate system.
+If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
+Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="domain.Node.Node.areFixed">
+<span class="sig-name descname"><span class="pre">areFixed</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.areFixed" title="Permalink to this definition"></a></dt>
+<dd><p>To be used by the assembly routines.</p>
+<p>return a list of indices pointing to fixed dofs in this node.
+Indices are local to this node: <code class="code docutils literal notranslate"><span class="pre">0..num_dofs</span></code></p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.fixDOF">
 <span class="sig-name descname"><span class="pre">fixDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">dofs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.fixDOF" title="Permalink to this definition"></a></dt>
 <dd><p>provide a list of dof codes that shall be restrained</p>
-<p>see also: <span class="xref std std-ref">request</span></p>
+<p>see also: <code class="code docutils literal notranslate"><span class="pre">request()</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>dofs</strong> – </p>
@@ -99,11 +130,16 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.getDeformedPos">
-<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getDeformedPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDeformedPos" title="Permalink to this definition"></a></dt>
 <dd><p>Return deformed position <span class="math notranslate nohighlight">\({\bf x} = {\bf X} + f \: {\bf u}\)</span></p>
+<p>If a caller is specified, the node will adjust the output to the d.o.f.s specified by the
+element’s request() call. (called during initialization.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>factor</strong> – deformation magnification factor, <span class="math notranslate nohighlight">\(f\)</span>.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caller</strong> – pointer to the calling element.</p></li>
+<li><p><strong>factor</strong> – deformation magnification factor, <span class="math notranslate nohighlight">\(f\)</span>.</p></li>
+</ul>
 </dd>
 <dt class="field-even">Returns</dt>
 <dd class="field-even"><p>deformed position vector, <span class="math notranslate nohighlight">\({\bf x}\)</span>.</p>
@@ -113,17 +149,33 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.getDisp">
-<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>nodal displacement vector</p>
+<span class="sig-name descname"><span class="pre">getDisp</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">caller</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getDisp" title="Permalink to this definition"></a></dt>
+<dd><p>return a vector (nd.array) of (generalized) displacements.</p>
+<p>If a <code class="code docutils literal notranslate"><span class="pre">caller</span></code> is given, the element-specific d.o.f.s will be returned as a sequence
+in the same order as given by the element’s <code class="code docutils literal notranslate"><span class="pre">request()</span></code> call.</p>
+<p>If a <code class="code docutils literal notranslate"><span class="pre">dof_list</span></code> is given, d.o.f.s will be returned as the sequence given by that list.
+A zero value will be returned for all d.o.f.s that do not exist at this node.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A single d.o.f., e.g., “ux”, can be requested using <code class="code docutils literal notranslate"><span class="pre">getDisp(dofs=('ux',))</span></code>.
+Do not forget the <code class="code docutils literal notranslate"><span class="pre">,</span></code> to indicate the definition of a single-element tuple.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>caller</strong> – pointer to element</p></li>
+<li><p><strong>dofs</strong> – tuple or list of d.o.f. keys</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>nodal displacement vector</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.getPos">
-<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getPos" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">getPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.getPos" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p>initial position vector</p>
@@ -136,25 +188,14 @@
 <span class="sig-name descname"><span class="pre">isFixed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.isFixed" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>dof</strong> – dof code as defined in <span class="xref std std-ref">request</span></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="domain.Node.Node.linkElement">
-<span class="sig-name descname"><span class="pre">linkElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">element</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.linkElement" title="Permalink to this definition"></a></dt>
-<dd><p>provide link to attached element(s)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>element</strong> – element pointer</p>
+<dd class="field-odd"><p><strong>dof</strong> – dof code as defined in <code class="code docutils literal notranslate"><span class="pre">request()</span></code></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="domain.Node.Node.request">
-<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">request</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dof_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caller</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#domain.Node.Node.request" title="Permalink to this definition"></a></dt>
 <dd><p>send list or individual dof code. Common codes:</p>
 <table class="docutils align-default">
 <colgroup>
@@ -188,8 +229,11 @@
 </tbody>
 </table>
 <dl class="field-list simple">
-<dt class="field-odd">Param</dt>
-<dd class="field-odd"><p>dof_list … list of dof-codes required by calling element</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dof_list</strong> – list of dof-codes required by calling element</p></li>
+<li><p><strong>caller</strong> – pointer to calling element (usually sent as self)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -230,8 +274,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../implementation.html" class="btn btn-neutral float-left" title="Implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="DOF_class.html" class="btn btn-neutral float-right" title="DoF class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="PlaneStrain.html" class="btn btn-neutral float-left" title="PlaneStrain material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Plot_Support_Classes.html" class="btn btn-neutral float-right" title="Plot Support classes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

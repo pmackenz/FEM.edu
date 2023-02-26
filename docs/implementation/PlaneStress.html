@@ -21,7 +21,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="PlaneStrain material class" href="PlaneStrain.html" />
-    <link rel="prev" title="FiberMaterial material class" href="FiberMaterial.html" /> 
+    <link rel="prev" title="ElasticSection" href="ElasticSection.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -43,21 +43,23 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material classes</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material class</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Material_class.html#derived-classes">Derived Classes</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Sections.html">Section Material classes</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">PlaneStress material class</a></li>
 <li class="toctree-l4"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Plotter_class.html">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -77,7 +79,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
-          <li><a href="Material_class.html">Material classes</a> &raquo;</li>
+          <li><a href="Material_class.html">Material class</a> &raquo;</li>
       <li>PlaneStress material class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/implementation/PlaneStress.rst.txt" rel="nofollow"> View page source</a>
@@ -101,13 +103,34 @@
     \nu  &amp;   1  &amp;   0        \\
       0  &amp;   0  &amp; \frac{1-\nu}{2}
 \end{array} \right]
+\left(
 \left\{ \begin{array}{c}
     E_{XX} \\ E_{YY} \\ 2E_{XY}
-\end{array} \right\}\end{split}\]</div>
+\end{array} \right\}
+-
+\left\{ \begin{array}{c}
+    E_{XX}^p \\ E_{YY}^p \\ 2E_{XY}^p
+\end{array} \right\}
+\right)\end{split}\]</div>
+<p>where</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(E_{IJ}\)</span></p></td>
+<td><p>Component IJ of total strain</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(E_{IJ}^p\)</span></p></td>
+<td><p>Component IJ of plastic strain</p></td>
+</tr>
+</tbody>
+</table>
 <section id="parent-class">
 <h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
-<li><p><a class="reference internal" href="Material_class.html"><span class="doc">Material classes</span></a></p></li>
+<li><p><a class="reference internal" href="Material_class.html"><span class="doc">Material class</span></a></p></li>
 </ul>
 </section>
 <section id="module-materials.PlaneStress">
@@ -116,15 +139,6 @@
 <dt class="sig sig-object py" id="materials.PlaneStress.PlaneStress">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials.PlaneStress.</span></span><span class="sig-name descname"><span class="pre">PlaneStress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'E':</span> <span class="pre">1.0,</span> <span class="pre">'fy':</span> <span class="pre">1e+30,</span> <span class="pre">'nu':</span> <span class="pre">0.0,</span> <span class="pre">'t':</span> <span class="pre">1.0}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.PlaneStress.PlaneStress" title="Permalink to this definition"></a></dt>
 <dd><p>class: representing a 2d Plane Stress Material</p>
-<div class="math notranslate nohighlight">
-\[\begin{split}\left\{ \begin{array}{c} S_{XX} \\ S_{YY} \\ S_{XY} \end{array} \right\}
-=
-\frac{E t}{1-\nu^2} \left[ \begin{array}{ccc}
-1 &amp; \nu &amp; 0 \\
-\nu &amp; 1 &amp; 0 \\
-0 &amp; 0 &amp; \frac{1-\nu}{2} \
-\end{array} \right]
-\left\{ \begin{array}{c} E_{XX} \\ E_{YY} \\ 2E_{XY} \end{array} \right\}\end{split}\]</div>
 <dl class="py method">
 <dt class="sig sig-object py" id="materials.PlaneStress.PlaneStress.updateState">
 <span class="sig-name descname"><span class="pre">updateState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#materials.PlaneStress.PlaneStress.updateState" title="Permalink to this definition"></a></dt>
@@ -148,7 +162,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="FiberMaterial.html" class="btn btn-neutral float-left" title="FiberMaterial material class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ElasticSection.html" class="btn btn-neutral float-left" title="ElasticSection" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="PlaneStrain.html" class="btn btn-neutral float-right" title="PlaneStrain material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

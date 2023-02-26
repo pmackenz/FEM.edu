@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ElasticSection &mdash; FEM.edu 0.4 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="PlaneStress material class" href="PlaneStress.html" />
+    <link rel="prev" title="Section Material classes" href="Sections.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> FEM.edu
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element class</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Material_class.html">Material class</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Material_class.html#derived-classes">Derived Classes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="FiberMaterial.html">FiberMaterial material class</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="Sections.html">Section Material classes</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PlaneStress.html">PlaneStress material class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="PlaneStrain.html">PlaneStrain material class</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">FEM.edu</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../implementation.html">Implementation</a> &raquo;</li>
+          <li><a href="Material_class.html">Material class</a> &raquo;</li>
+          <li><a href="Sections.html">Section Material classes</a> &raquo;</li>
+      <li>ElasticSection</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/implementation/ElasticSection.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="elasticsection">
+<h1>ElasticSection<a class="headerlink" href="#elasticsection" title="Permalink to this heading"></a></h1>
+<p>The elastic section implements the simple linear elastic relations</p>
+<div class="math notranslate nohighlight">
+\[f = EA \, \varepsilon
+\qquad    \qquad
+M = EI \, \phi\]</div>
+<p>where</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(f\)</span></p></td>
+<td><p>resulting axial force (output)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(M\)</span></p></td>
+<td><p>resulting moment (output)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(\varepsilon\)</span></p></td>
+<td><p>axial strain (input)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(\phi\)</span></p></td>
+<td><p>curvature change (input)</p></td>
+</tr>
+<tr class="row-odd"><td><p><span class="math notranslate nohighlight">\(EA\)</span></p></td>
+<td><p>axial stiffness; constant (input parameters E and A)</p></td>
+</tr>
+<tr class="row-even"><td><p><span class="math notranslate nohighlight">\(EI\)</span></p></td>
+<td><p>flexural stiffness; constant (input parameters E and I)</p></td>
+</tr>
+</tbody>
+</table>
+<section id="parent-class">
+<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="Sections.html"><span class="doc">Section Material classes</span></a></p></li>
+</ul>
+<span class="target" id="module-materials.ElasticSection"></span><dl class="py class">
+<dt class="sig sig-object py" id="materials.ElasticSection.ElasticSection">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">materials.ElasticSection.</span></span><span class="sig-name descname"><span class="pre">ElasticSection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#materials.ElasticSection.ElasticSection" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Sections.html" class="btn btn-neutral float-left" title="Section Material classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="PlaneStress.html" class="btn btn-neutral float-right" title="PlaneStress material class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, Peter Mackenzie-Helnwein.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

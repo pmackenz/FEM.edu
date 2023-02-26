@@ -9,6 +9,7 @@ class LinearTriangle(Element):
 
     def __init__(self, node0, node1, node2, material):
         super().__init__((node0, node1, node2), material)
+        self.element_type = DrawElement.TRIANGLE
 
         if node0.getPos().size == 3:
             dof_list = ('ux','uy','uz')
@@ -109,38 +110,39 @@ class LinearTriangle(Element):
         tu = P @ Gu
 
         # initialize arrays
-
-        
-
-        BI = []
-        Kt = []
-        for i in range(3):
-            BI.append( np.zeros((nstrain, ndim)) )
-            Krow = []
-            for j in range(3):
-                Krow.append( np.zeros((ndim,ndim)) )
-            Kt.append( Krow )
+        gx = Gs[0] * gs + Gt[0] * gt
+        gy = Gs[1] * gs + Gt[1] * gt
 
         # compute the kinematic matrices
+        GI = (Gu, Gs, Gt)
+
+        Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
+        Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
+        Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+
+        BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
 
         # internal force
         self.Forces = [
+            tu * self.area * self.material.getThickness(),
             ts * self.area * self.material.getThickness(),
-            tt * self.area * self.material.getThickness(),
-            tu * self.area * self.material.getThickness()
+            tt * self.area * self.material.getThickness()
             ]
 
-        # material tangent stiffness
-        Cep = self.material.getStiffness()
+        # tangent stiffness
+        Ct = self.material.getStiffness()
 
-        # geometric tangent stiffness
+        Kt = []
+        One = np.eye(2, dtype=np.float64)
+        for Gi, Bi in zip(GI, BI):
+            Krow = []
+            Ti = Gi @ S
+            for Gj, Bj in  zip(GI, BI):
+                GIJ = Ti @ Gj
+                Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
+            Kt.append( Krow )
 
-        Pe = self.force * self.area
-        self.Forces = [-Pe, Pe]
-
-
-        ke = (Et * area / ell) * np.outer(Nvec, Nvec)
-        self.Kt = [[ke,-ke],[-ke,ke]]
+        self.Kt = Kt
 
     def getStress(self):
         return self.Stress

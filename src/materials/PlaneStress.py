@@ -4,21 +4,12 @@ class PlaneStress(Material):
     """
     class: representing a 2d Plane Stress Material
 
-    .. math::
-        \left\{ \\begin{array}{c} S_{XX} \\\\ S_{YY} \\\\ S_{XY} \end{array} \\right\}
-        =
-        \\frac{E t}{1-\\nu^2} \\left[ \\begin{array}{ccc}
-        1 & \\nu & 0 \\\\
-        \\nu & 1 & 0 \\\\
-        0 & 0 & \\frac{1-\\nu}{2} \\
-        \end{array} \\right]
-        \left\{ \\begin{array}{c} E_{XX} \\\\ E_{YY} \\\\ 2E_{XY} \end{array} \\right\}
-
-
     """
 
     def __init__(self, params={'E':1.0, 't':1.0, 'nu':0.0, 'fy':1.0e30}):
         super().__init__(params = params)
+
+        self._type = self.PLANESTRESS | self.PLASTIC
 
         if 't' not in self.parameters:
             self.parameters['t'] = 1.0

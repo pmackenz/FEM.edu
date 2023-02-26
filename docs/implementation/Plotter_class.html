@@ -19,7 +19,8 @@
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="prev" title="Linear Solver class" href="LinearSolver_class.html" /> 
+    <link rel="next" title="Plotter3D class" href="Plotter3D_class.html" />
+    <link rel="prev" title="Plot Support classes" href="Plot_Support_Classes.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -41,13 +42,23 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../design.html">Program Design</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../implementation.html">Implementation</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="DOF_class.html">DoF class</a></li>
 <li class="toctree-l2"><a class="reference internal" href="Element_class.html">Element classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material classes</a></li>
-<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Material_class.html">Material class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Node_class.html">Node class</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="Plot_Support_Classes.html#derived-classes">Derived Classes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Plotter class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Plotter3D_class.html">Plotter3D class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ElementPlotter_class.html">ElementPlotter class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="ElementPlotter3D_class.html">ElementPlotter3D class</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="Solver_class.html">Solver class</a></li>
-<li class="toctree-l2 current"><a class="current reference internal" href="#">Plotter class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="System_class.html">System class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Transformation_class.html">Transformation class</a></li>
 </ul>
 </li>
 </ul>
@@ -67,6 +78,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
+          <li><a href="Plot_Support_Classes.html">Plot Support classes</a> &raquo;</li>
       <li>Plotter class</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/implementation/Plotter_class.rst.txt" rel="nofollow"> View page source</a>
@@ -77,8 +89,16 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-plotter.Plotter">
-<span id="plotter-class"></span><h1>Plotter class<a class="headerlink" href="#module-plotter.Plotter" title="Permalink to this heading"></a></h1>
+  <section id="plotter-class">
+<h1>Plotter class<a class="headerlink" href="#plotter-class" title="Permalink to this heading"></a></h1>
+<section id="parent-class">
+<h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p><cite>Plot Support Classes</cite></p></li>
+</ul>
+</section>
+<section id="module-plotter.Plotter">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-plotter.Plotter" title="Permalink to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="plotter.Plotter.Plotter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">plotter.Plotter.</span></span><span class="sig-name descname"><span class="pre">Plotter</span></span><a class="headerlink" href="#plotter.Plotter.Plotter" title="Permalink to this definition"></a></dt>
@@ -151,19 +171,6 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="plotter.Plotter.Plotter.set_axes_equal">
-<span class="sig-name descname"><span class="pre">set_axes_equal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.set_axes_equal" title="Permalink to this definition"></a></dt>
-<dd><p>Make axes of 3D plot have equal scale so that spheres appear as spheres,
-cubes as cubes, etc..  This is one possible solution to Matplotlib’s
-ax.set_aspect(‘equal’) and ax.axis(‘equal’) not working for 3D.</p>
-<dl class="simple">
-<dt>Input</dt><dd><p>ax: a matplotlib axis, e.g., as output from plt.gca().</p>
-</dd>
-</dl>
-<p>Taken from: <a class="reference external" href="https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to">https://stackoverflow.com/questions/13685386/matplotlib-equal-unit-length-with-equal-aspect-ratio-z-axis-is-not-equal-to</a></p>
-</dd></dl>
-
-<dl class="py method">
 <dt class="sig sig-object py" id="plotter.Plotter.Plotter.valuePlot">
 <span class="sig-name descname"><span class="pre">valuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#plotter.Plotter.Plotter.valuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a plot using colors to identify magnitude of internal force.</p>
@@ -182,12 +189,14 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 </section>
+</section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="LinearSolver_class.html" class="btn btn-neutral float-left" title="Linear Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Plot_Support_Classes.html" class="btn btn-neutral float-left" title="Plot Support classes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Plotter3D_class.html" class="btn btn-neutral float-right" title="Plotter3D class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

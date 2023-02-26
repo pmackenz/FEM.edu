@@ -1,10 +1,9 @@
 import numpy as np
-
+from .Transformation import *
 class Node():
     """
     class: representing a single Node
     """
-
 
     def __init__(self, x0, y0, z0=None):
         """
@@ -17,46 +16,29 @@ class Node():
         else:
             self.pos = np.array([x0, y0])
 
-        self.index    = -1
-        self.disp     = None
-        self.dofs     = {}
-        self.ndofs    = 0
-        self.start    = None
-        self.elements = []
-        self.fixity   = []
-        self.force    = None
-        self.loads    = {}
-        self._hasLoad = False
+        self.index     = -1
+        self.disp      = None
+        self.dofs      = {}
+        self.ndofs     = 0
+        self.start     = None
+        self.elements  = []
+        self.fixity    = []
+        self.loads     = {}
+        self._hasLoad  = False
+        self.transform = None    # nodal transformation object
 
     def __str__(self):
         s = \
         """Node {}: {}
         x:{}, fix:{}, 
         P:{}, u:{}""".format(self.index, self.dofs,
-                             self.pos, self.fixity, self.force, self.disp)
+                             self.pos, self.fixity, self.getLoad(), self.disp)
         return s
 
     def __repr__(self):
         return "Node{}({}, x={}, u={})".format(self.index, self.dofs, self.pos, self.disp)
 
-    def dof2idx(self, dof_list):
-        if isinstance(dof_list, str):
-            if dof_list in self.dofs:
-                # idx = (self.dofs[dof_list], )
-                idx = [self.dofs[dof_list]]
-            else:
-                raise KeyError('Dof {} does not exist in node {}'.format(dof_list, self.index))
-        else:
-            idx = []
-            for dof in dof_list:
-                if dof in self.dofs:
-                    idx.append(self.dofs[dof])
-                else:
-                    raise KeyError('Dof {} does not exist in node {}'.format(dof, self.index))
-            # idx = tuple(idx)
-        return np.array(idx)
-
-    def request(self, dof_list):
+    def request(self, dof_list, caller):
         """
         send list or individual dof code. Common codes:
 
@@ -79,7 +61,8 @@ class Node():
               - rotation about z-axis
 
 
-        :param: dof_list ... list of dof-codes required by calling element
+        :param dof_list:  list of dof-codes required by calling element
+        :param caller:  pointer to calling element (usually sent as self)
         """
         dof_idx = []
         for dof in dof_list:
@@ -87,16 +70,11 @@ class Node():
                 self.dofs[dof] = self.ndofs
                 self.ndofs += 1
             dof_idx.append(self.dofs[dof])
+
+        if caller not in self.elements:
+            self.elements.append(caller)
+
         return tuple(dof_idx)
-
-    def linkElement(self, element):
-        """
-        provide link to attached element(s)
-
-        :param element: element pointer
-        """
-        if element not in self.elements:
-            self.elements.append(element)
 
     def unlinkElement(self, element):
         """
@@ -131,11 +109,10 @@ class Node():
         """
         provide a list of dof codes that shall be restrained
 
-        see also: :ref:`request`
+        see also: :code:`request()`
 
         :param dofs:
         """
-
         for dof in dofs:
             if dof not in self.fixity:
                 self.fixity.append(dof)
@@ -153,16 +130,21 @@ class Node():
     def isFixed(self, dof):
         """
 
-        :param dof: dof code as defined in :ref:`request`
+        :param dof: dof code as defined in :code:`request()`
         """
         return (dof in self.fixity)
 
     def areFixed(self):
         """
+        To be used by the assembly routines.
 
-        :return: list of dof codes for the node's fixed dofs
+        :return:  a list of indices pointing to fixed dofs in this node.
+        Indices are local to this node: :code:`0..num_dofs`
         """
-        return self.fixity
+        idx = []
+        for i,dof in enumerate(self.fixity):
+            idx.append(i)
+        return np.array(idx, dtype=int)
 
     def setStart(self, startInt):
         self.start = startInt
@@ -186,21 +168,42 @@ class Node():
         """
         self.disp += dU
 
-    def getDisp(self, dof_list=None):
+    def getDisp(self, caller=None, dofs=None):
         """
+        return a vector (nd.array) of (generalized) displacements.
 
+        If a :code:`caller` is given, the element-specific d.o.f.s will be returned as a sequence
+        in the same order as given by the element's :code:`request()` call.
+
+        If a :code:`dof_list` is given, d.o.f.s will be returned as the sequence given by that list.
+        A zero value will be returned for all d.o.f.s that do not exist at this node.
+
+        .. note::
+
+            A single d.o.f., e.g., "ux", can be requested using :code:`getDisp(dofs=('ux',))`.
+            Do not forget the :code:`,` to indicate the definition of a single-element tuple.
+
+
+
+        :param caller: pointer to element
+        :param dofs: tuple or list of d.o.f. keys
         :return: nodal displacement vector
         """
         if not isinstance(self.disp, np.ndarray):
             self.disp = np.zeros(self.ndofs)
 
-        if dof_list:
-            idx = self.dof2idx(dof_list)
-            return self.disp[idx]
+        if dofs:
+            ans = []
+            for dof in dofs:
+                if dof in self.dofs:
+                    ans.append(self.disp[self.dofs[dof]])
+                else:
+                    ans.append(0.0)
+            return np.array(ans)
         else:
             return self.disp
 
-    def getPos(self, dof_list=None):
+    def getPos(self):
         """
 
         :return: initial position vector
@@ -208,10 +211,14 @@ class Node():
 
         return self.pos
 
-    def getDeformedPos(self, dof_list=None, factor=1.0):
+    def getDeformedPos(self, caller=None, factor=1.0):
         """
         Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
 
+        If a caller is specified, the node will adjust the output to the d.o.f.s specified by the
+        element's request() call. (called during initialization.)
+
+        :param caller: pointer to the calling element.
         :param factor: deformation magnification factor, :math:`f`.
         :return: deformed position vector, :math:`{\\bf x}`.
         """
@@ -220,8 +227,28 @@ class Node():
 
         return self.pos + factor * self.disp
 
-    def addLoad(self, P, dofs):
-        self.force   += np.array([Px, Py])
+    def addTransformation(self, T):
+        """
+        Attach a transformation object to this node.
+        The transformation defines a local coordinate system.
+        If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
+        Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
+        """
+        if T and isinstance(T, Transformation):
+            self.transform = T
+
+    def addLoad(self, loads, dofs):
+        """
+
+        :param loads:
+        :param dofs:
+        """
+        # Check tuple type and if the dof exists (warn and continue)
+        for (load, dof) in zip(loads, dofs):
+            if dof in self.loads:
+                self.loads[dof] += load
+            else:
+                self.loads[dof] = load
         self._hasLoad = True
 
     def setLoad(self, loads, dofs):
@@ -240,10 +267,11 @@ class Node():
         self._hasLoad = False
 
     def getLoad(self, dof_list=None):
-        self.force = np.zeros(self.ndofs)
+        force = np.zeros(self.ndofs)
         for dof in self.loads:
-            self.force[self.dofs[dof]] = self.loads[dof]
-        return self.force
+            if dof in self.dofs:
+                force[self.dofs[dof]] = self.loads[dof]
+        return force
 
     def hasLoad(self):
         return self._hasLoad

@@ -3,6 +3,8 @@ __all__ = (
     'FiberMaterial',
     'PlaneStrain',
     'PlaneStress',
+    'SectionMaterial',
+    'ElasticSection',
 )
 
 # from .Material import *

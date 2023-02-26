@@ -2,7 +2,8 @@ import numpy as np
 
 from .Node     import *
 from elements.Element import *
-from plotter.Plotter import *
+#from plotter.Plotter import *
+from plotter.ElementPlotter import ElementPlotter as Plotter
 
 
 class System():
@@ -34,7 +35,7 @@ class System():
     def addNode(self, *nodes):
         """
 
-        :param newNode: a :ref:`Node` object
+        :param newNode: a :code:`Node` object
         """
         for newNode in nodes:
             if newNode not in self.nodes:
@@ -55,7 +56,7 @@ class System():
     def addElement(self, newElement):
         """
 
-        :param newElement: a :ref:`Element` object
+        :param newElement: an :code:`Element` object
         """
         self.elements.append(newElement)
 
@@ -149,27 +150,57 @@ class System():
         self.Rsys = Rsys
         self.disp = U
 
-    def plot(self, factor=1.0):
+    def plot(self, factor=1.0, filename=None):
         """
+        Create mesh plot showing the undeformed and the deformed system
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
 
         :param factor: deformation magnification factor
+        :param filename:  filename (str)
         """
 
-        vertices = [ node.getPos() for node in self.nodes ]
-        lines    = [ [ elem.nodes[k].index for k in [0,1] ] for elem in self.elements ]
-        self.plotter.setMesh(vertices, lines)
+        self.plotter.setMesh(self.nodes, self.elements)
 
         ndof = len(self.Rsys)
         R = self.Rsys.copy().reshape((ndof//2, 2))
         self.plotter.setReactions(R)
 
-        disp = [ factor * node.getDisp() for node in self.nodes ]
-        self.plotter.setDisplacements(disp)
-        self.plotter.displacementPlot()
+        self.plotter.displacementPlot(factor=factor, file=filename)
 
-        values = [ elem.getAxialForce() for elem in self.elements ]
-        self.plotter.setValues(values)
-        self.plotter.valuePlot()
+    def valuePlot(self, variable, factor=0.0, filename=None):
+        """
+        Create a false color contour plot for the selected variable.
+        A value of zero (0.0) will be assigned for any variable not
+        provided by an element or a node.
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param variable: string code for variable to show
+        :param factor: deformation magnification factor (default is undeformed)
+        :param filename: filename (str)
+        """
+
+        self.plotter.setMesh(self.nodes, self.elements)
+        self.plotter.valuePlot(variable_name=variable, factor=factor, file=filename)
+
+    def beamValuePlot(self, variable, factor=0.0, filename=None):
+        """
+        Create a traditional beam value plot, i.e., moment and shear diagrams.
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param variable: string code for variable
+        :param deformed: True | **False**
+        :param file: filename (str)
+        """
+
+        self.plotter.setMesh(self.nodes, self.elements)
+        self.plotter.beamValuePlot(variable_name=variable, factor=factor, file=filename)
+
 
     def report(self):
         """
@@ -177,7 +208,7 @@ class System():
 
         """
         s  = "\nSystem Analysis Report\n"
-        s += "=====================\n"
+        s += "=======================\n"
         s += "\nNodes:\n"
         s += "---------------------\n"
         for node in self.nodes:
