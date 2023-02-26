@@ -81,7 +81,7 @@ class DrawElement():
                 y.append(Xt[1])
             if len(Xt)>2:
                 z.append(Xt[2])
-        return (x, y, z)
+        return (np.array(x), np.array(y), np.array(z))
 
     def drawCurve(self, factor):
         """
