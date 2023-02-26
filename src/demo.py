@@ -1,4 +1,4 @@
-from femedu import *
+#from femedu import *
 from femedu.examples.trusses.truss01 import *
 
 # load the example
