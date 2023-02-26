@@ -1,9 +1,8 @@
 import numpy as np
 
 from .Node     import *
-from elements.Element import *
-#from plotter.Plotter import *
-from plotter.ElementPlotter import ElementPlotter as Plotter
+from ..elements.Element import *
+from ..plotter.ElementPlotter import ElementPlotter as Plotter
 
 
 class System():

@@ -1,17 +1,33 @@
 from .Element import *
-from materials.Material import *
-from domain.Node import *
+from ..materials.Material import *
+from ..domain.Node import *
 
 class Beam2D(Element):
     """
-    class: representing a 2D beam element
+    Representing a 2D beam element.
 
-        self.nodes    = nodes i and j (tuple)
-        self.material = material parameters (
+    **Assumptions**
 
-        self.force    = internal force (float)
-        self.Forces   = internal force vectors (list of np.arrays)
-        self.Kt       = tangent stiffness (list of np.arrays)
+    * The beam is defined along the X-axis.  (Y-axis values are ignored)
+    * Small displacements and small rotations
+    * Navier's and Bernoulli-Euler assumptions (plane sections and shear rigidity)
+    * Linear elastic material (may change future releases)
+
+    The element is using dofs :math:`v` (:code:`uy`) and :math:`\\theta=v'` (:code:`rz`)
+
+    .. list-table:: Internal variables
+
+        * - self.nodes
+          - nodes i and j (tuple)
+        * - self.material
+          - pointer to Material object
+        * - self.force
+          - internal force (list of arrays for shear, _V_, and moment, _M_)
+        * - self.Forces
+          - nodal force vectors (list of np.arrays)
+        * - self.Kt
+          - tangent stiffness (list of np.arrays)
+
     """
 
     def __init__(self, nodei, nodej, material):
@@ -62,6 +78,9 @@ class Beam2D(Element):
         return 0.0
 
     def updateState(self):
+        """
+        Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
+        """
 
         Xi = self.nodes[0].getPos()
         Xj = self.nodes[1].getPos()

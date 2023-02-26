@@ -1,12 +1,12 @@
 """
 Example
 """
-from examples.Example import *
+from ...examples.Example import *
 
-from domain.System import *
-from domain.Node import *
-from elements.Beam2D import *
-from materials.ElasticSection import *
+from ...domain.System import *
+from ...domain.Node import *
+from ...elements.Beam2D import *
+from ...materials.ElasticSection import *
 
 
 class ExampleBeam01(Example):

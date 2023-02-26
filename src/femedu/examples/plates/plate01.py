@@ -1,12 +1,12 @@
 """
 Example
 """
-from examples.Example import *
+from ...examples.Example import *
 
-from domain.System import *
-from domain.Node import *
-from elements.LinearTriangle import *
-from materials.PlaneStress import *
+from ...domain.System import *
+from ...domain.Node import *
+from ...elements.LinearTriangle import *
+from ...materials.PlaneStress import *
 
 
 class ExamplePlate01(Example):

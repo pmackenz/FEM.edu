@@ -1,16 +1,28 @@
 from .Element import *
-from domain.Node import *
+from ..domain.Node import *
 
 class Truss(Element):
     """
-    class: representing a single truss element
+    Representing a single truss element between 2 nodes.
 
-        self.nodes    = nodes i and j (tuple)
-        self.material = material parameters (
+    The element is using the following dofs:
 
-        self.force    = internal force (float)
-        self.Forces   = internal force vectors (list of np.arrays)
-        self.Kt       = tangent stiffness (list of np.arrays)
+    * :math:`u` (:code:`ux`) and :math:`v` (:code:`uy`) in a 2D model.
+    * :math:`u` (:code:`ux`), :math:`v` (:code:`uy`) and :math:`w` (:code:`uz`) in a 3D model.
+
+    .. list-table:: Internal variables
+
+        * - self.nodes
+          - nodes i and j (tuple)
+        * - self.material
+          - pointer to Material object
+        * - self.force
+          - internal force (float)
+        * - self.Forces
+          - nodal force vectors (list of np.arrays)
+        * - self.Kt
+          - tangent stiffness (list of np.arrays)
+
     """
 
     def __init__(self, nodei, nodej, material):
@@ -52,11 +64,17 @@ class Truss(Element):
                                          repr(self.material))
 
     def getAxialForce(self):
+        """
+        :returns: axial force in the truss. Positive value = tension.
+        """
         self.updateState()
         return self.force
 
 
     def updateState(self):
+        """
+        Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
+        """
         U0 = self.nodes[0].getDisp()
         X0 = self.nodes[0].getPos()
         U1 = self.nodes[1].getDisp()

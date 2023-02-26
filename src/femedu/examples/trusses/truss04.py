@@ -1,12 +1,12 @@
 """
 Example
 """
-from examples.Example import *
+from ...examples.Example import *
 
-from domain.System import *
-from domain.Node import *
-from elements.Truss import *
-from materials.FiberMaterial import *
+from ...domain.System import *
+from ...domain.Node import *
+from ...elements.Truss import *
+from ...materials.FiberMaterial import *
 
 
 class ExampleTruss04(Example):

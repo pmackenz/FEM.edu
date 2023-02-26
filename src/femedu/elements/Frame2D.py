@@ -1,17 +1,33 @@
 from .Element import *
-from materials.Material import *
-from domain.Node import *
+from ..materials.Material import *
+from ..domain.Node import *
 
 class Frame2D(Element):
     """
     class: representing a 2D frame element
 
-        self.nodes    = nodes i and j (tuple)
-        self.material = material parameters (
+    **Assumptions**
 
-        self.force    = internal force (float)
-        self.Forces   = internal force vectors (list of np.arrays)
-        self.Kt       = tangent stiffness (list of np.arrays)
+    * The frame is in the X-Y-plane.
+    * Small displacements and moderate rotations (:math:`P-\Delta` model)
+    * Navier's and Bernoulli-Euler assumptions (plane sections and shear rigidity)
+    * Linear elastic material (may change future releases)
+
+    The element is using dofs :math:`u` (:code:`ux`), :math:`v` (:code:`uy`) and :math:`\\theta` (:code:`rz`)
+
+    .. list-table:: Internal variables
+
+        * - self.nodes
+          - nodes i and j (tuple)
+        * - self.material
+          - pointer to Material object
+        * - self.force
+          - internal force (list of arrays for axial force, _f_, shear, _V_, and moment, _M_)
+        * - self.Forces
+          - nodal force vectors (list of np.arrays)
+        * - self.Kt
+          - tangent stiffness (list of np.arrays)
+
     """
 
     def __init__(self, nodei, nodej, material):
