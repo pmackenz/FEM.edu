@@ -12,8 +12,8 @@ from femedu.examples.beams.beam02 import *
 
 if __name__ == "__main__":
 
-    ex = ExampleTruss01()
-    #ex = ExampleTruss02()
+    #ex = ExampleTruss01()
+    ex = ExampleTruss02()
     #ex = ExampleTruss03()
     #ex = ExampleTruss04()
 

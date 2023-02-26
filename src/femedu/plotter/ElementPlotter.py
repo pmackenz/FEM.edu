@@ -5,6 +5,7 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 import sys
 
 from .AbstractPlotter import *
+from ..elements.Element import Element
 
 class ElementPlotter(AbstractPlotter):
     """
@@ -99,7 +100,6 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         plt.show()
-        pass
 
     def valuePlot(self, variable_name='', factor=0.0, file=None):
         """
@@ -148,73 +148,121 @@ class ElementPlotter(AbstractPlotter):
         plt.autoscale(enable=True, axis='x', tight=False)
         plt.autoscale(enable=True, axis='y', tight=False)
         plt.show()
-        pass
 
-    def beamValuePlot(self, factor=1.0, file=None):
+    def beamValuePlot(self, variable_name='', factor=0.0, file=None):
         """
         Create a deformed system plot
 
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
+        :param variable_name: string code for variable
         :param factor: displacement scaling factor
         :param file: filename (str)
         """
+        if not variable_name:
+            print("No plotable variable defined")
+            return
 
         if self.plot3D:
+            raise NotImplementedError
+
             fig = plt.figure(figsize=(10, 10))
             axs = fig.gca(projection='3d')
-
-            # plot the undeformed elements
-            for elem in self.elements:
-                ans = elem.draw(factor=0.0)
-                if len(ans)>=3:
-                    x = ans[0]
-                    y = ans[1]
-                    z = ans[2]
-                    if x.size == y.size and x.size == z.size:
-                        axs.plot(x, y, z, '-k', lw=2)
-
-            # plot the deformed elements
-            if factor:
-                for elem in self.elements:
-                    ans = elem.draw(factor=factor)
-                    if len(ans)>=3:
-                        x = ans[0]
-                        y = ans[1]
-                        z = ans[2]
-                        if x.size == y.size and x.size == z.size:
-                            axs.plot(x, y, z, '-r', lw=3)
-
-            if self.reactions:
-                self.addForces(axs)
-
             self.set_axes_equal(axs)
 
         else:
             fig, axs = plt.subplots()
 
-            # plot the undeformed elements
+            minX =  1.e20
+            maxX = -1.e20
+            minY =  1.e20
+            maxY = -1.e20
+            minV =  0.000
+            maxV =  0.000
+
+            # Find dimensions for scaling
             for elem in self.elements:
                 ans = elem.draw(factor=0.0)
                 if len(ans)>=2:
                     x = ans[0]
                     y = ans[1]
                     if x.size == y.size:
-                        axs.plot(x, y, '-k', lw=2)
+                        minX = np.min([minX, np.min(x)])
+                        maxX = np.max([maxX, np.max(x)])
+                        minY = np.min([minY, np.min(y)])
+                        maxY = np.max([maxY, np.max(y)])
+                (xsi, vals) = elem.getInternalForce(variable_name)
+                if xsi.size != 0 and vals.size != 0:
+                    minV = np.min([minV, np.min(vals)])
+                    maxV = np.max([maxV, np.max(vals)])
 
-            # plot the deformed elements
-            if factor:
-                for elem in self.elements:
-                    ans = elem.draw(factor=factor)
-                    if len(ans)>=2:
-                        x = ans[0]
-                        y = ans[1]
-                        if x.size == y.size:
-                            axs.plot(x, y, '-r', lw=3)
+            # scaling factors
+            if np.isclose(minX,maxX):
+                maxX += 0.5
+                minX -= 0.5
+            if np.isclose(minY,maxY):
+                maxY += 0.5
+                minY -= 0.5
+            if np.isclose(minV,maxV):
+                maxV += 0.5
+                minV -= 0.5
+
+            Lx = maxX - minX
+            Ly = maxY - minY
+            Lv = maxV - minV
+
+            scale = 0.100 * np.max([Lx,Ly]) / Lv
+
+            # plot the elements
+            for elem in self.elements:
+                ans = elem.draw(factor=0.0)
+                if len(ans)>=2:
+                    x = ans[0]
+                    y = ans[1]
+
+                    if x.size == y.size and x.size>1:
+                        xi = np.array([x[0],y[0]])
+                        xj = np.array([x[-1],y[-1]])
+                        lvec = xj - xi
+                        ell  = np.linalg.norm(lvec)
+                        nvec = lvec / ell
+                        svec = np.array( [ -nvec[1], nvec[0] ] )
+
+                        # variable plot
+                        if elem.isType(Element.LINE) or elem.isType(Element.CURVE):
+                            (xsi, vals) = elem.getInternalForce(variable_name)
+                            if xsi.size > 0 and vals.size > 0:
+                                vals *= scale
+
+                                xv = xi + np.outer(xsi, lvec)
+                                vv = xv + np.outer(vals, svec)
+
+                                axs.plot(vv[:,0], vv[:,1], '-g', lw=1)
+                                self._arrow(axs, xv[0,0], xv[0,1], vv[0,0]- xv[0,0], vv[0,1]- xv[0,1], vals[0])
+                                self._arrow(axs,xv[-1,0],xv[-1,1],vv[-1,0]-xv[-1,0],vv[-1,1]-xv[-1,1],vals[-1])
+
+                        # plot system on top (!)
+                        axs.plot(x, y, '-k', lw=2)
 
             # if self.reactions != []:
             #     self.addForces(axs)
+
+            if variable_name.lower() == 'm' or variable_name.lower() == 'mz':
+                # bending moment (in plane)
+                axs.set_title('Bending Moment')
+            elif variable_name.lower() == 't' or variable_name.lower() == 'mx':
+                # bending moment (in plane)
+                axs.set_title('Torque')
+            elif variable_name.lower() == 'f' or variable_name.lower() == 'fx':
+                # axial force
+                axs.set_title('Axial Forces')
+            elif variable_name.lower() == 'v' or variable_name.lower() == 'vy':
+                # transverse shear (in-plane)
+                axs.set_title('Shear Forces')
+            else:
+                # unknown force
+                axs.set_title(f'{variable_name} Forces')
 
             axs.set_aspect('equal')
             axs.set_xmargin(0.10)
@@ -222,7 +270,20 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         plt.show()
-        pass
+
+    def _arrow(self,axs,x,y,dx,dy,val):
+        headWidth  = np.abs(val) * 0.20
+        headLength = np.abs(val) * 0.50
+        if val >= 0.0:
+            fc = 'r'
+            axs.arrow(x,y,dx,dy, fc=fc, ec=fc, lw=1,
+                      length_includes_head=True,
+                      head_width=headWidth, head_length=headLength)
+        else:
+            fc = 'b'
+            axs.arrow(x+dx,y+dy,-dx,-dy, fc=fc, ec=fc, lw=1,
+                      length_includes_head=True,
+                      head_width=headWidth, head_length=headLength)
 
     def addForces(self, axs):
         """

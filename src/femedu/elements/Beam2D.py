@@ -1,3 +1,5 @@
+import numpy as np
+
 from .Element import *
 from ..materials.Material import *
 from ..domain.Node import *
@@ -71,11 +73,30 @@ class Beam2D(Element):
 
     def __repr__(self):
         return "Beam2D({},{},{})".format( repr(self.nodes[0]),
-                                         repr(self.nodes[1]),
-                                         repr(self.material))
+                                          repr(self.nodes[1]),
+                                          repr(self.material))
 
-    def getAxialForce(self):
-        return 0.0
+    def getInternalForce(self, variable=''):
+        self.updateState()
+
+        s   = np.array([0.,1.])
+
+        if variable.lower() == 'm' or variable.lower() == 'mz':
+            # bending moment (in plane)
+            Ml = -self.Forces[0][1]
+            Mr =  self.Forces[1][1]
+            val = np.array([Ml, Mr])
+
+        elif variable.lower() == 'v' or variable.lower() == 'vy':
+            # transverse shear (in-plane)
+            Vl =  self.Forces[0][0]
+            Vr = -self.Forces[1][0]
+            val = np.array([Vl, Vr])
+
+        else:
+            val = np.zeros_like(s)
+
+        return (s,val)
 
     def updateState(self):
         """
@@ -164,6 +185,11 @@ class Beam2D(Element):
         self.Forces = (self.Fi, self.Fj)
 
         self.Kt = np.array( [[KtII, KtIJ],[KtJI, KtJJ]] )
+
+    # prepare for removal
+    def getAxialForce(self):
+        raise DeprecationWarning
+
 
 
 if __name__ == "__main__":

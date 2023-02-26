@@ -64,6 +64,9 @@ class DrawElement():
     def __init__(self):
         self.element_type = self.UNKNOWN
 
+    def isType(self, test_type):
+        return (test_type & self.element_type)
+
     def draw(self, factor=0.0):
         """
         Returns a series of coordinate vectors representing the _x_, _y_, and _z_ values

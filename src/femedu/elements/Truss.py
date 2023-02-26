@@ -1,3 +1,5 @@
+import numpy as np
+
 from .Element import *
 from ..domain.Node import *
 
@@ -70,6 +72,24 @@ class Truss(Element):
         self.updateState()
         return self.force
 
+    def getInternalForce(self, variable=''):
+        self.updateState()
+
+        if variable.lower() == 'f' or variable.lower() == 'fx':
+            # axial force
+            s   = np.array([0.,1.])
+            val = np.array([self.force, self.force])
+            return (s,val)
+
+        elif variable.lower() == 'eps' or variable.lower() == 'strain':
+            # axial force
+            s   = np.array([0.,1.])
+            strain = self.material.getStrain()
+            val = np.array([strain,strain])
+            return (s,val)
+
+        else:
+            return (np.empty([0]),np.empty([0]))
 
     def updateState(self):
         """

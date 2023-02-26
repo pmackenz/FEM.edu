@@ -74,6 +74,10 @@ class Element(DrawElement):
         self.updateState()
         return self.Forces
 
+    def getInternalForce(self, variable=''):
+        msg = "{}(Element): getInternalForce() method has not been implemented".format(self.__class__.__name__)
+        raise NotImplementedError(msg)
+
     def getStress(self):
         self.updateState()
         return None

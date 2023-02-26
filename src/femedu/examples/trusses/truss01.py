@@ -59,3 +59,5 @@ class ExampleTruss01(Example):
         # create plots
         model.plot(factor=1.)
 
+        model.beamValuePlot('f')
+

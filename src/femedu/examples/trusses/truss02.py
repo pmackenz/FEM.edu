@@ -91,3 +91,5 @@ class ExampleTruss02(Example):
         # create plots
         model.plot(factor=250.)
 
+        model.beamValuePlot('f')
+

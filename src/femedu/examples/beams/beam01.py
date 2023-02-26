@@ -75,3 +75,6 @@ class ExampleBeam01(Example):
         # create plots
         model.plot(factor=100.)
 
+        model.beamValuePlot('V')
+        model.beamValuePlot('M')
+
