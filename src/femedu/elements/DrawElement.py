@@ -1,6 +1,28 @@
 
 import numpy as np
 
+class PlotCurve():
+    def __init__(self):
+        self.x = []
+        self.y = []
+        self.z = []
+
+    def __add__(self, Xt):
+        if not isinstance(Xt, np.ndarray):
+            raise TypeError
+
+        if len(Xt)>=2:
+            self.x.append(Xt[0])
+            self.y.append(Xt[1])
+        if len(Xt)>2:
+            self.z.append(Xt[2])
+
+        return self
+
+    def asTuple(self):
+        return (np.array(self.x), np.array(self.y), np.array(self.z))
+
+
 class DrawElement():
     """
     class for drawing any element
@@ -66,28 +88,21 @@ class DrawElement():
         else:
             raise NotImplementedError
 
+
     def drawLine(self, factor):
         """
         implementation of a generic :code:`LINE` type
         """
-
-        x = []
-        y = []
-        z = []
-        for node in self.nodes:
-            Xt = node.getDeformedPos(self, factor)
-            if len(Xt)>=2:
-                x.append(Xt[0])
-                y.append(Xt[1])
-            if len(Xt)>2:
-                z.append(Xt[2])
-        return (np.array(x), np.array(y), np.array(z))
+        c = PlotCurve()
+        if len(self.nodes) >= 2:
+            for node in self.nodes[:2]:
+                c += node.getDeformedPos(self, factor)
+        return c.asTuple()
 
     def drawCurve(self, factor):
         """
         implementation of a generic :code:`CURVE` type
         """
-
         Xi = self.nodes[0].getPos()
         Xj = self.nodes[1].getPos()
 
@@ -154,37 +169,45 @@ class DrawElement():
         """
         implementation of a generic :code:`TRIANGLE` type
         """
-        x = []
-        y = []
-        z = []
-        return (x, y, z)
+        c = PlotCurve()
+        if len(self.nodes) >= 3:
+            for node in self.nodes[:3]:
+                c += node.getDeformedPos(self, factor)
+            c+= self.nodes[0].getDeformedPos(self, factor)
+        return c.asTuple()
 
     def drawTetrahedron(self, factor):
         """
         implementation of a generic :code:`TETRAHEDRON` type
         """
-        x = []
-        y = []
-        z = []
-        return (x, y, z)
+        c = PlotCurve()
+        if len(self.nodes) >= 4:
+            for node in self.nodes:
+                c += node.getDeformedPos(self, factor)
+            c+= self.nodes[0].getDeformedPos(self, factor)
+        return c.asTuple()
 
     def drawQuad(self, factor):
         """
         implementation of a generic :code:`QUAD` type
         """
-        x = []
-        y = []
-        z = []
-        return (x, y, z)
+        c = PlotCurve()
+        if len(self.nodes) >= 4:
+            for node in self.nodes[:4]:
+                c += node.getDeformedPos(self, factor)
+            c+= self.nodes[0].getDeformedPos(self, factor)
+        return c.asTuple()
 
     def drawBrick(self, factor):
         """
         implementation of a generic :code:`BRICK` type
         """
-        x = []
-        y = []
-        z = []
-        return (x, y, z)
+        c = PlotCurve()
+        if len(self.nodes) >= 8:
+            for node in self.nodes[:4]:
+                c += node.getDeformedPos(self, factor)
+            c+= self.nodes[0].getDeformedPos(self, factor)
+        return c.asTuple()
 
 
 
