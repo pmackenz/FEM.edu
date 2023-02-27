@@ -76,12 +76,13 @@ class System():
             raise TypeError
         return self
 
-    def addElement(self, newElement):
+    def addElement(self, *newElements):
         """
 
         :param newElement: an :code:`Element` object
         """
-        self.elements.append(newElement)
+        for elem in newElements:
+            self.elements.append(elem)
 
     def setLoadFactor(self, lam):
         self.solver.setLoadFactor(lam)
