@@ -78,6 +78,11 @@ class NewtonRaphsonSolver(Solver):
         # update the system displacements
         self.sysU += dU
 
+    def assemble(self):
+        """
+        inherited from :code:`Solver` class.
+        """
+        super(NewtonRaphsonSolver, self).assemble()
 
     def setLoadFactor(self, lam):
         """

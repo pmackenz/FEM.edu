@@ -75,6 +75,7 @@
  | <a href="#E"><strong>E</strong></a>
  | <a href="#F"><strong>F</strong></a>
  | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
  | <a href="#I"><strong>I</strong></a>
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
@@ -105,10 +106,10 @@
         <li><a href="implementation/Plotter3D_class.html#femedu.plotter.Plotter3D.Plotter3d.addForces">(femedu.plotter.Plotter3D.Plotter3d method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.addLoad">addLoad() (femedu.domain.Node.Node method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.addNode">addNode() (femedu.domain.System.System method)</a>
 </li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.addTransformation">addTransformation() (femedu.domain.Node.Node method)</a>
@@ -119,6 +120,14 @@
       </ul></li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.areFixed">areFixed() (femedu.domain.Node.Node method)</a>
 </li>
+      <li><a href="implementation/LinearSolver_class.html#femedu.solver.LinearSolver.LinearSolver.assemble">assemble() (femedu.solver.LinearSolver.LinearSolver method)</a>
+
+      <ul>
+        <li><a href="implementation/NewtonRaphsonSolver_class.html#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.assemble">(femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver method)</a>
+</li>
+        <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.assemble">(femedu.solver.Solver.Solver method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -391,6 +400,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.getLoad">getLoad() (femedu.domain.Node.Node method)</a>
+</li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.getPos">getPos() (femedu.domain.Node.Node method)</a>
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.getSolver">getSolver() (femedu.domain.System.System method)</a>
@@ -402,6 +413,14 @@
 </li>
       </ul></li>
       <li><a href="implementation/Material_class.html#femedu.materials.Material.Material.getStress">getStress() (femedu.materials.Material.Material method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.hasLoad">hasLoad() (femedu.domain.Node.Node method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -542,18 +561,30 @@
 </li>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.reset">reset() (femedu.solver.Solver.Solver method)</a>
 </li>
-      <li><a href="implementation/System_class.html#femedu.domain.System.System.resetAll">resetAll() (femedu.domain.System.System method)</a>
+      <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.resetAll">resetAll() (femedu.domain.Node.Node method)</a>
+
+      <ul>
+        <li><a href="implementation/System_class.html#femedu.domain.System.System.resetAll">(femedu.domain.System.System method)</a>
 </li>
-      <li><a href="implementation/System_class.html#femedu.domain.System.System.resetDisp">resetDisp() (femedu.domain.System.System method)</a>
+      </ul></li>
+      <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.resetDisp">resetDisp() (femedu.domain.Node.Node method)</a>
+
+      <ul>
+        <li><a href="implementation/System_class.html#femedu.domain.System.System.resetDisp">(femedu.domain.System.System method)</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.resetDisplacements">resetDisplacements() (femedu.solver.Solver.Solver method)</a>
 </li>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.resetForces">resetForces() (femedu.solver.Solver.Solver method)</a>
 </li>
-      <li><a href="implementation/System_class.html#femedu.domain.System.System.resetLoad">resetLoad() (femedu.domain.System.System method)</a>
+      <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.resetLoad">resetLoad() (femedu.domain.Node.Node method)</a>
+
+      <ul>
+        <li><a href="implementation/System_class.html#femedu.domain.System.System.resetLoad">(femedu.domain.System.System method)</a>
 </li>
+      </ul></li>
       <li><a href="implementation/Beam2D_class.html#femedu.elements.Beam2D.Beam2D.resetLoads">resetLoads() (femedu.elements.Beam2D.Beam2D method)</a>
 
       <ul>

@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -95,6 +96,15 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.solver.Solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><a class="headerlink" href="#femedu.solver.Solver.Solver" title="Permalink to this definition"></a></dt>
 <dd><p>Abstract class for any solver implementation.</p>
 <p>This class describes the functions needed by any solver</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
+<dd><p>A general assembler for mixed element types.</p>
+<p>This method will build the out-of-balance force vector (residuum <span class="math notranslate nohighlight">\({\bf R}\)</span>)
+and the tangent stiffness matrix (<span class="math notranslate nohighlight">\({\bf K}_t\)</span>) used by most solvers.</p>
+<p>Specialized solvers may overload this method.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetch">
 <span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetch" title="Permalink to this definition"></a></dt>

@@ -11,6 +11,17 @@ class LinearSolver(Solver):
         super().__init__()
 
     def solve(self):
+        """
+        Solves the system assuming the given load is the total load
+        and the obtained displacement is the **total** displacement.
+
+        .. note::
+
+           This method will not verify whether or not the linear assumption is correct.
+           The resulting forces may be out of equilibrium if the system experiences
+           nonlinear behavior under the given load.
+
+        """
         self.resetDisplacements()
         self.assemble()
         errorNorm = self.solveSingleStep()
@@ -48,13 +59,24 @@ class LinearSolver(Solver):
             # solve for displacement update: a single Newton step
             dU = np.linalg.solve(self.Kt, self.R)
 
-        # update the system displacements
-        self.sysU += dU
+        # update nodal displacements
+        for node in self.nodes:
+            K = node.start + np.arange(node.ndofs)
+            node._updateDisp(dU[K])
 
+    def assemble(self):
+        """
+        inherited from :code:`Solver` class.
+        """
+        super(LinearSolver, self).assemble()
 
     def originalSolve(self):
         """
-        Solve system of equations and find state of deformation for the given load.
+        original Solve system of equations and find state of deformation for the given load.
+
+        .. warning::
+
+            This method is marked **depricated**.
         """
 
         # compute size parameters

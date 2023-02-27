@@ -105,19 +105,32 @@
 <dd><p>A linear system solver</p>
 <p>This solver implies <span class="math notranslate nohighlight">\(\{{\bf P}\} = [{\bf K}] \{{\bf u}\}\)</span></p>
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.assemble" title="Permalink to this definition"></a></dt>
+<dd><p>inherited from <code class="code docutils literal notranslate"><span class="pre">Solver</span></code> class.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.originalSolve">
 <span class="sig-name descname"><span class="pre">originalSolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.originalSolve" title="Permalink to this definition"></a></dt>
-<dd><p>Solve system of equations and find state of deformation for the given load.</p>
+<dd><p>original Solve system of equations and find state of deformation for the given load.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method is marked <strong>depricated</strong>.</p>
+</div>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.solve">
 <span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.solve" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
+<dd><p>Solves the system assuming the given load is the total load
+and the obtained displacement is the <strong>total</strong> displacement.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This method will not verify whether or not the linear assumption is correct.
+The resulting forces may be out of equilibrium if the system experiences
+nonlinear behavior under the given load.</p>
+</div>
 </dd></dl>
 
 </dd></dl>

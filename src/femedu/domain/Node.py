@@ -234,10 +234,16 @@ class Node():
         self._hasLoad = True
 
     def resetLoad(self):
+        """
+
+        """
         self.loads = {}
         self._hasLoad = False
 
     def getLoad(self, dof_list=None):
+        """
+        :returns: nodal load vector (ndarray)
+        """
         force = np.zeros(self.ndofs)
         for dof in self.loads:
             if dof in self.dofs:
@@ -245,12 +251,21 @@ class Node():
         return force
 
     def hasLoad(self):
+        """
+        :returns: **True** if this node has **any** loads (bool)
+        """
         return self._hasLoad
 
     def resetDisp(self):
+        """
+
+        """
         self.disp = np.zeros(len(self.dofs))
 
     def resetAll(self):
+        """
+
+        """
         self.resetDisp()
         self.resetLoad()
 

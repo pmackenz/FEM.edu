@@ -16,6 +16,7 @@ class Solver():
         self.loadfactor = 1.0
         self.elements = []
         self.nodes = []
+        self.sdof = 0
 
         # numeric iteration tolerance
         self.TOL = 1.0e-6
@@ -24,7 +25,7 @@ class Solver():
         self.targetU       = 0.0
 
         self.useArcLength = False
-        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':1.}
+        self.lastConverged = {}
 
     def connect(self, nodes, elems):
         self.nodes = nodes
@@ -82,51 +83,53 @@ class Solver():
         raise NotImplementedError(msg)
 
     def assemble(self):
-        # initialize new residuum and tangent stiffness matrix
-        Kt = np.zeros((self.sdof,self.sdof))
-        R  = self.loadfactor * self.P.copy()  # initialize R to applied load vector
+        """
+        A general assembler for mixed element types.
 
-        # copy and reshape system displacement vector to a list of nodal displacement vectors
-        U = self.sysU.copy()
-        U.shape = (self.nNodes,self.ndof)
+        This method will build the out-of-balance force vector (residuum :math:`{\\bf R}`)
+        and the tangent stiffness matrix (:math:`{\\bf K}_t`) used by most solvers.
 
-        # loop through elements
-        for thisElem in self.elements:
+        Specialized solvers may overload this method.
+        """
 
-            elem = thisElem['element']   # this is a pointer to the current member
-            idxI = thisElem['i']   # this is the node index, not the system dof index
-            idxJ = thisElem['j']   # this is the node index, not the system dof index
+        # compute size parameters
+        ndof = 0
+        for node in self.nodes:
+            node.setStart(ndof)
+            ndof += node.ndofs
+        Rsys = np.zeros(ndof)
+        Ksys = np.zeros((ndof, ndof))
 
-            #sidxI = np.arange(idxI * self.ndof, (idxI + 1) * self.ndof)  # system dofs for node I
-            #sidxJ = np.arange(idxJ * self.ndof, (idxJ + 1) * self.ndof)  # system dofs for node J
+        self.sdof = ndof  # number of system d.o.f.s
 
-            sidxI = elem.dofMap + idxI * self.ndof  # system dofs for node I
-            sidxJ = elem.dofMap + idxJ * self.ndof  # system dofs for node J
+        # assemble loads
+        for node in self.nodes:
+            if node.hasLoad():
+                K = node.start + np.arange(node.ndofs)
+                Rsys[K] += node.getLoad()
 
-            # update element displacements
-            elem.setDisp(U[idxI],U[idxJ])
-
-            # add element force to system forces
-            (fi, fj) = elem.getForce()
-            R[sidxI] -= fi         # subtract the resisting (internal) force added by member elem
-            R[sidxJ] -= fj         # subtract the resisting (internal) force added by member elem
-
-            # add element stiffness to system stiffness
-            KTe = elem.getKt()  # this is the nodal stiffness, not the entire element stiffness matrix
-            Kt[sidxI[:,np.newaxis],sidxI] += KTe[0][0]
-            Kt[sidxI[:,np.newaxis],sidxJ] += KTe[0][1]
-            Kt[sidxJ[:,np.newaxis],sidxI] += KTe[1][0]
-            Kt[sidxJ[:,np.newaxis],sidxJ] += KTe[1][1]
+        # Element Loop: assemble element forces and stiffness
+        for element in self.elements:
+            Fe = element.getForce()     # Element State Update occurs here
+            for (i,ndI) in enumerate(element.nodes):
+                K = ndI.start + np.arange(ndI.ndofs)
+                Rsys[K] -= Fe[i]
+                for (j,ndJ) in enumerate(element.nodes):
+                    M = ndJ.start + np.arange(ndJ.ndofs)
+                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
 
         # apply boundary conditions
-        for idx in self.fixities:
-            Kt[:,idx]   = 0.0
-            Kt[idx,:]   = 0.0
-            Kt[idx,idx] = 1.0e+1
-            R[idx]      = 0.0
+        for node in self.nodes:
+            for dof in node.dofs:
+                if node.isFixed(dof):
+                    idx = node.start + node.dofs[dof]
+                    Rsys[idx]      = 0.0
+                    Ksys[:, idx]   = np.zeros(ndof)
+                    Ksys[idx, :]   = np.zeros(ndof)
+                    Ksys[idx, idx] = 1.0
 
-        self.Kt = Kt
-        self.R  = R
+        self.Kt = Ksys
+        self.R  = Rsys
 
 
     def solve(self):
