@@ -198,6 +198,8 @@ class ElementPlotter(AbstractPlotter):
                     minV = np.min([minV, np.min(vals)])
                     maxV = np.max([maxV, np.max(vals)])
 
+            data_limits = (minV, maxV)
+
             # scaling factors
             if np.isclose(minX,maxX):
                 maxX += 0.5
@@ -264,6 +266,10 @@ class ElementPlotter(AbstractPlotter):
             else:
                 # unknown force
                 axs.set_title(f'{variable_name} Forces')
+
+            y_limits = axs.get_ylim()
+            msg = "data limits:  {:.2f} .. {:.2f}".format(*data_limits)
+            axs.text(0.5*(minX+maxX), y_limits[0]-0.05*np.max([Ly,Lx]), msg, ha='center', va='top')
 
             axs.set_aspect('equal')
             axs.set_xmargin(0.10)
