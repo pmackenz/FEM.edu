@@ -1,20 +1,35 @@
-from .Solver import *
+import numpy as np
+import scipy as sp
 
-class LinearSolver(Solver):
-    """
-    A linear system solver
+from ..solver.Solver import Solver
 
-    This solver implies :math:`\{{\\bf P}\} = [{\\bf K}] \{{\\bf u}\}`
-    """
+class NewtonRaphsonSolver(Solver):
 
     def __init__(self):
-        super().__init__()
+        super(NewtonRaphsonSolver, self).__init__()
 
-    def solve(self):
-        self.resetDisplacements()
-        self.assemble()
-        errorNorm = self.solveSingleStep()
-        return errorNorm
+    def solve(self, max_steps=10, verbose=False):
+
+        for k in range(max_steps):
+
+        # compute force vector and tangent stiffness
+            self.assemble()
+
+            normR = self.checkResiduum(verbose)
+
+            if normR<self.TOL:
+                break
+
+            # Solve for equilibrium
+            self.solveSingleStep()
+
+        if self.record:
+            self.recordThisStep()
+
+        print('+')
+
+        return normR
+
 
     def solveSingleStep(self):
 
@@ -51,3 +66,27 @@ class LinearSolver(Solver):
         # update the system displacements
         self.sysU += dU
 
+
+    def setLoadFactor(self, lam):
+        self.loadfactor = lam
+
+    def resetForces(self):
+        self.P = np.zeros(self.sdof)
+
+    def resetDisplacements(self):
+        self.sysU = np.zeros(self.sdof)
+
+    def getDisplacements(self):
+        U = self.sysU.copy()
+        U.shape = (self.nNodes, self.ndof)
+        return U
+
+    def getForces(self):
+        P = self.P.copy() * self.loadfactor
+        P.shape = (self.nNodes, self.ndof)
+        return P
+
+    def getResiduum(self):
+        R = self.R.copy()
+        R.shape = (self.nNodes, self.ndof)
+        return R

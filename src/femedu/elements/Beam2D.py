@@ -55,6 +55,9 @@ class Beam2D(Element):
 
         ndof = len(dof_list)
 
+        # initialize element load to zero
+        self.distributed_load = 0.0
+
         self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
         self.Forces   = [np.zeros(ndof), np.zeros(ndof)]
@@ -68,13 +71,20 @@ class Beam2D(Element):
                                                                            self.material.parameters,
                                                                            self.material.getStrain(),
                                                                            self.material.getStress())
-        s += "   nodal forces: Vi:{} Mi:{} Vj:{} Mi:{}".format(*self.Forces[0], *self.Forces[1])
+        s += "   nodal forces: Vi:{} Mi:{} Vj:{} Mj:{}".format(*self.Forces[0], *self.Forces[1])
         return s
 
     def __repr__(self):
         return "Beam2D({},{},{})".format( repr(self.nodes[0]),
                                           repr(self.nodes[1]),
                                           repr(self.material))
+
+    def setDistLoad(self, w):
+        self.distributed_load = w
+
+    def resetLoads(self):
+        self.setDistLoad(0.0)
+        super(Beam2D, self).resetLoads()
 
     def getInternalForce(self, variable=''):
         self.updateState()
@@ -178,6 +188,15 @@ class Beam2D(Element):
 
         Mi = kmu * (vi - vj) + kmt * thetai + kmth * thetaj
         Mj = kmu * (vi - vj) + kmth * thetai + kmt * thetaj
+
+        if self.distributed_load:
+            Pw = self.distributed_load * L / 2.
+            Mw = Pw * L / 6.
+
+            Vi -= Pw
+            Vj -= Pw
+            Mi -= -Mw
+            Mj -=  Mw
 
         # build element load vector and element tangent stiffness
         self.Fi = np.array([Vi, Mi])

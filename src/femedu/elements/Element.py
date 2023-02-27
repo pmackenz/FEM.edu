@@ -45,7 +45,11 @@ class Element(DrawElement):
                                      repr(self.nodes[0]),
                                      repr(self.nodes[1]),
                                      repr(self.material))
-
+    def resetLoads(self):
+        """
+        default implementation for resetting element loads.
+        """
+        pass
 
     def addTransformation(self, T, local_nodes=[]):
         """

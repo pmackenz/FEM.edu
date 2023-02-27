@@ -2,6 +2,7 @@ import numpy as np
 
 from .Node     import *
 from ..elements.Element import *
+from ..solver.LinearSolver import LinearSolver
 from ..plotter.ElementPlotter import ElementPlotter as Plotter
 
 
@@ -11,14 +12,20 @@ class System():
     """
 
     def __init__(self):
-        """
-
-        """
         self.nodes    = []
         self.elements = []
         self.plotter  = Plotter()
         self.disp     = np.array([])
         self.loads    = np.zeros_like(self.disp)
+
+        # global analysis settings
+        self.loadfactor = 1.0
+
+        self.initRecorder()
+        self.trackStability(False)
+
+        self.solver = LinearSolver()
+        self.solver.connect(self.nodes, self.elements)
 
     def __str__(self):
         s = "System object"
@@ -31,8 +38,25 @@ class System():
     def __repr__(self):
         return "System()"
 
+    def setSolver(self, solver):
+        """
+        This method will change the current solver to the provided solver.
+
+        Upon successful update of the solver, the old solver state will be
+        pushed to the new solver.
+
+        :param solver: a pointer to a solver object.
+        """
+        state = {}
+        if self.solver:
+            state = self.solver.fetchState()
+        if solver:
+            self.solver = solver
+            self.solver.pushState(state)
+
     def addNode(self, *nodes):
         """
+        Add one or more nodes to the model.
 
         :param newNode: a :code:`Node` object
         """
@@ -59,9 +83,190 @@ class System():
         """
         self.elements.append(newElement)
 
+    def setLoadFactor(self, lam):
+        self.solver.setLoadFactor(lam)
+
+    def resetDisplacements(self):
+        self.solver.resetDisplacements()
+
+    def setConstraint(self, nodeIdx, nvec, Ubar):
+
+        self.en = np.zeros(self.sdof)
+        idx = np.arange(nodeIdx*self.ndof, (nodeIdx+1)*self.ndof)
+        self.en[idx] = nvec
+        self.targetU = Ubar
+
+        self.hasConstraint = True
+        self.useArcLength = False
+
+    def getSolver(self):
+        """
+        Provides a pointer to the current solver instance.
+
+        This function is used to get access to the solver and give instructions directly to that solver.
+        """
+        return self.solver
+
+    def initArcLength(self, load=1., alpha=0.0, tolerance=1.0e-12):
+        # store analysis parameter(s)
+        self.alpha = alpha
+        self.TOL = tolerance
+
+        # make sure we start at an equilibrium point
+        self.NewtonSolver()
+
+        # store current configuration as last converged
+        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':0}
+
+        # use load control to solve for the new equilibrium state
+        self.hasConstraint = False   # this forces load control
+        self.loadfactor += load      # add reference load level
+        self.NewtonSolver()          # find equilibrium configuration for given load level
+
+        # compute the arc-length for that step and store as target arc length
+        delU  = self.sysU - self.lastConverged['U']
+        dload = self.loadfactor - self.lastConverged['lambda']
+        self.arclength2 = delU@delU + self.alpha * dload*dload * self.P@self.P
+
+        # store the current point as last converged point
+        self.previousConverged = self.lastConverged
+        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
+
+        # set solver parameters
+        self.hasConstraint = True
+        self.useArcLength = True
+
+    def stepArcLength(self, verbose=False):
+
+        if not self.hasConstraint:
+            # this method makes no sense for load control
+            return
+
+        # set solver parameters
+        self.useArcLength = True
+
+        # store current state as local variable
+        Un = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
+
+        # set suitable trial state
+        self.sysU *= 2.0
+        self.sysU -= self.previousConverged['U']
+        self.loadfactor *= 2.0
+        self.loadfactor -= self.previousConverged['lambda']
+
+        # store current state as "last converged solution"
+        self.previousConverged = self.lastConverged
+        self.lastConverged = Un
+
+        if verbose:
+            print(self.lastConverged)
+
+        # solve for next point on the equilibrium path
+        self.NewtonSolver(verbose)
+
+    def assemble(self):
+        # initialize new residuum and tangent stiffness matrix
+        Kt = np.zeros((self.sdof,self.sdof))
+        R  = self.loadfactor * self.P.copy()  # initialize R to applied load vector
+
+        # copy and reshape system displacement vector to a list of nodal displacement vectors
+        U = self.sysU.copy()
+        U.shape = (self.nNodes,self.ndof)
+
+        # loop through elements
+        for thisElem in self.elements:
+
+            elem = thisElem['element']   # this is a pointer to the current member
+            idxI = thisElem['i']   # this is the node index, not the system dof index
+            idxJ = thisElem['j']   # this is the node index, not the system dof index
+
+            #sidxI = np.arange(idxI * self.ndof, (idxI + 1) * self.ndof)  # system dofs for node I
+            #sidxJ = np.arange(idxJ * self.ndof, (idxJ + 1) * self.ndof)  # system dofs for node J
+
+            sidxI = elem.dofMap + idxI * self.ndof  # system dofs for node I
+            sidxJ = elem.dofMap + idxJ * self.ndof  # system dofs for node J
+
+            # update element displacements
+            elem.setDisp(U[idxI],U[idxJ])
+
+            # add element force to system forces
+            (fi, fj) = elem.getForce()
+            R[sidxI] -= fi         # subtract the resisting (internal) force added by member elem
+            R[sidxJ] -= fj         # subtract the resisting (internal) force added by member elem
+
+            # add element stiffness to system stiffness
+            KTe = elem.getKt()  # this is the nodal stiffness, not the entire element stiffness matrix
+            Kt[sidxI[:,np.newaxis],sidxI] += KTe[0][0]
+            Kt[sidxI[:,np.newaxis],sidxJ] += KTe[0][1]
+            Kt[sidxJ[:,np.newaxis],sidxI] += KTe[1][0]
+            Kt[sidxJ[:,np.newaxis],sidxJ] += KTe[1][1]
+
+        # apply boundary conditions
+        for idx in self.fixities:
+            Kt[:,idx]   = 0.0
+            Kt[idx,:]   = 0.0
+            Kt[idx,idx] = 1.0e+1
+            R[idx]      = 0.0
+
+        self.Kt = Kt
+        self.R  = R
+
+    def trackStability(self, on=True):
+        if on:
+            self.track_stability = True
+            if not self.recorder['stability']:
+                self.recorder['stability'] = [ 0.0 for x in self.recorder['lambda'] ]
+        else:
+            self.track_stability = False
+
+    def initRecorder(self):
+        self.record = False
+        self.recorder = {'U':[], 'lambda':[], 'stability':None}
+
+    def startRecorder(self):
+        """
+        starts the recorder
+        """
+        self.record = True
+
+    def stopRecorder(self):
+        """
+        stops the recorder
+        """
+        self.record = False
+
+    def recordThisStep(self):
+        """
+        record current state of the system
+        """
+        self.recorder['U'].append(self.sysU.copy())
+        self.recorder['lambda'].append(self.loadfactor)
+        if self.track_stability:
+            self.recorder['stability'].append(self.checkStability())
+
+    def fetchRecord(self):
+        """
+        :return: a tuple of ndarrays: (loadfactors, list of system deformations, stability index)
+        """
+        return (np.array(self.recorder['lambda']), np.array(self.recorder['U']), np.array(self.recorder['stability']))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def solve(self):
         """
-
+        Solve system of equations and find state of deformation for the given load.
         """
 
         # compute size parameters
@@ -220,8 +425,8 @@ class System():
 
 if __name__ == "__main__":
 
-    from elements  import Element
-    from materials import Material
+    from ..elements  import Element
+    from ..materials import Material
 
     # testing the System class
     B = 6.0*12
