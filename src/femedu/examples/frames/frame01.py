@@ -39,9 +39,8 @@ modeled using a 2D frame element
 """
 from ...examples.Example import *
 
-from ...domain.System import *
+from ...domain import *
 from ...solver.NewtonRaphsonSolver import *
-from ...domain.Node import *
 from ...elements.Frame2D import *
 from ...materials.ElasticSection import *
 

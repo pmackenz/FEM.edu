@@ -161,9 +161,12 @@ class Frame2D(Element):
         and, thus, receiving the initial flexural tangent stiffness.
         The moment needs to be computed by alternative means.
         """
-        vi     = dispi[1]    # the transformation was performed when we received Ui
+        #vi     = dispi[1]    # the transformation was performed when we received Ui
+        #vj     = dispj[1]    # the transformation was performed when we received Uj
+
+        vi = Ui @ Svec  # transformation not yet implemented
+        vj = Uj @ Svec  # transformation not yet implemented
         thetai = dispi[2]
-        vj     = dispj[1]    # the transformation was performed when we received Uj
         thetaj = dispj[2]
 
         curvature = 0.0
