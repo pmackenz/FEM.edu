@@ -105,11 +105,88 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetch">
+<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetch" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch the current <code class="code docutils literal notranslate"><span class="pre">state</span></code> of the solver.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>state of the solver</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.initialize">
 <span class="sig-name descname"><span class="pre">initialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.initialize" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.push">
+<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.push" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
+The solver will use that data to update it’s internal state.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – state of the solver</p>
 </dd>
 </dl>
 </dd></dl>

@@ -278,8 +278,6 @@
         <li><a href="implementation/FiberMaterial.html#module-femedu.materials.FiberMaterial">module</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     femedu.materials.Material
 
@@ -287,6 +285,8 @@
         <li><a href="implementation/Material_class.html#module-femedu.materials.Material">module</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li>
     femedu.materials.PlaneStrain
 
@@ -357,6 +357,10 @@
         <li><a href="implementation/Solver_class.html#module-femedu.solver.Solver">module</a>
 </li>
       </ul></li>
+      <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.fetch">fetch() (femedu.solver.Solver.Solver method)</a>
+</li>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.fetchRecord">fetchRecord() (femedu.domain.System.System method)</a>
+</li>
       <li><a href="implementation/FiberMaterial.html#femedu.materials.FiberMaterial.FiberMaterial">FiberMaterial (class in femedu.materials.FiberMaterial)</a>
 </li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.fixDOF">fixDOF() (femedu.domain.Node.Node method)</a>
@@ -377,11 +381,13 @@
 </li>
       <li><a href="implementation/Element_class.html#femedu.elements.Element.Element.getDofs">getDofs() (femedu.elements.Element.Element method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Element_class.html#femedu.elements.Element.Element.getForce">getForce() (femedu.elements.Element.Element method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.getPos">getPos() (femedu.domain.Node.Node method)</a>
+</li>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.getSolver">getSolver() (femedu.domain.System.System method)</a>
 </li>
       <li><a href="implementation/Element_class.html#femedu.elements.Element.Element.getStiffness">getStiffness() (femedu.elements.Element.Element method)</a>
 
@@ -492,13 +498,15 @@
 </li>
       <li><a href="implementation/PlaneStress.html#femedu.materials.PlaneStress.PlaneStress">PlaneStress (class in femedu.materials.PlaneStress)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.plot">plot() (femedu.domain.System.System method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Plotter_class.html#femedu.plotter.Plotter.Plotter">Plotter (class in femedu.plotter.Plotter)</a>
 </li>
       <li><a href="implementation/Plotter3D_class.html#femedu.plotter.Plotter3D.Plotter3d">Plotter3d (class in femedu.plotter.Plotter3D)</a>
+</li>
+      <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.push">push() (femedu.solver.Solver.Solver method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -506,20 +514,30 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.recordThisStep">recordThisStep() (femedu.domain.System.System method)</a>
+</li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.report">report() (femedu.domain.System.System method)</a>
 </li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.request">request() (femedu.domain.Node.Node method)</a>
 </li>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.reset">reset() (femedu.solver.Solver.Solver method)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.resetAll">resetAll() (femedu.domain.System.System method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.resetDisp">resetDisp() (femedu.domain.System.System method)</a>
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.resetLoad">resetLoad() (femedu.domain.System.System method)</a>
 </li>
+      <li><a href="implementation/Beam2D_class.html#femedu.elements.Beam2D.Beam2D.resetLoads">resetLoads() (femedu.elements.Beam2D.Beam2D method)</a>
+
+      <ul>
+        <li><a href="implementation/Element_class.html#femedu.elements.Element.Element.resetLoads">(femedu.elements.Element.Element method)</a>
+</li>
+        <li><a href="implementation/Frame2D_class.html#femedu.elements.Frame2D.Frame2D.resetLoads">(femedu.elements.Frame2D.Frame2D method)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -556,6 +574,8 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.setSolver">setSolver() (femedu.domain.System.System method)</a>
+</li>
       <li><a href="implementation/Material_class.html#femedu.materials.Material.Material.setStrain">setStrain() (femedu.materials.Material.Material method)</a>
 
       <ul>
@@ -571,10 +591,16 @@
       <li><a href="implementation/System_class.html#femedu.domain.System.System.solve">solve() (femedu.domain.System.System method)</a>
 
       <ul>
+        <li><a href="implementation/LinearSolver_class.html#femedu.solver.LinearSolver.LinearSolver.solve">(femedu.solver.LinearSolver.LinearSolver method)</a>
+</li>
         <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.solve">(femedu.solver.Solver.Solver method)</a>
 </li>
       </ul></li>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver">Solver (class in femedu.solver.Solver)</a>
+</li>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.startRecorder">startRecorder() (femedu.domain.System.System method)</a>
+</li>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.stopRecorder">stopRecorder() (femedu.domain.System.System method)</a>
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System">System (class in femedu.domain.System)</a>
 </li>

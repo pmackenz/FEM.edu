@@ -113,7 +113,7 @@ Implementation is required through derived classes.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.plotter.AbstractPlotter.AbstractPlotter.beamValuePlot">
-<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deformed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.plotter.AbstractPlotter.AbstractPlotter.beamValuePlot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.plotter.AbstractPlotter.AbstractPlotter.beamValuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a traditional beam value plot, i.e., moment and shear diagrams.</p>
 <p>If <strong>file</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -121,7 +121,7 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>variable_name</strong> – string code for variable</p></li>
-<li><p><strong>deformed</strong> – True | <strong>False</strong></p></li>
+<li><p><strong>factor</strong> – displacement scaling factor</p></li>
 <li><p><strong>file</strong> – filename (str)</p></li>
 </ul>
 </dd>
