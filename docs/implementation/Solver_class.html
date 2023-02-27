@@ -98,16 +98,21 @@
 <p>This class describes the functions needed by any solver</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
 <dd><p>A general assembler for mixed element types.</p>
 <p>This method will build the out-of-balance force vector (residuum <span class="math notranslate nohighlight">\({\bf R}\)</span>)
 and the tangent stiffness matrix (<span class="math notranslate nohighlight">\({\bf K}_t\)</span>) used by most solvers.</p>
 <p>Specialized solvers may overload this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force_only</strong> – set to <strong>True</strong> if only the residual force needs to be assembled</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetch">
-<span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetch" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetchState">
+<span class="sig-name descname"><span class="pre">fetchState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetchState" title="Permalink to this definition"></a></dt>
 <dd><p>Fetch the current <code class="code docutils literal notranslate"><span class="pre">state</span></code> of the solver.</p>
 <table class="docutils align-default" id="id1">
 <caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
@@ -154,8 +159,8 @@ and the tangent stiffness matrix (<span class="math notranslate nohighlight">\({
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.push">
-<span class="sig-name descname"><span class="pre">push</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.push" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.pushState">
+<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.pushState" title="Permalink to this definition"></a></dt>
 <dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
 The solver will use that data to update it’s internal state.</p>
 <table class="docutils align-default" id="id2">
@@ -216,7 +221,7 @@ The solver will use that data to update it’s internal state.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>

@@ -139,9 +139,31 @@
 </tbody>
 </table>
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.elements.Beam2D.Beam2D.getInternalForce">
+<span class="sig-name descname"><span class="pre">getInternalForce</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Beam2D.Beam2D.getInternalForce" title="Permalink to this definition"></a></dt>
+<dd><p>computes vectors of normalized locations (<strong>s</strong>: ndarray) for which
+values (<strong>val</strong>: ndarray) are provided.
+Values of <strong>s</strong> are normalized to the interval <span class="math notranslate nohighlight">\([0,1]\)</span>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>tuple (s, val)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.elements.Beam2D.Beam2D.resetLoads">
 <span class="sig-name descname"><span class="pre">resetLoads</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Beam2D.Beam2D.resetLoads" title="Permalink to this definition"></a></dt>
-<dd><p>default implementation for resetting element loads.</p>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.elements.Beam2D.Beam2D.setDistLoad">
+<span class="sig-name descname"><span class="pre">setDistLoad</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">w</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.elements.Beam2D.Beam2D.setDistLoad" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>w</strong> – uniform load. positive if pointing in the local y-direction.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">

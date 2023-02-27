@@ -62,7 +62,6 @@ class Frame2D(Element):
         self.Kt       = [[np.zeros((ndof, ndof)), np.zeros((ndof, ndof))],
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
 
-
     def __str__(self):
         s = \
 """Frame2D: node {} to node {}:
@@ -90,6 +89,40 @@ class Frame2D(Element):
         self.updateState()
         return self.force
 
+    def getInternalForce(self, variable=''):
+        """
+        computes vectors of normalized locations (**s**: ndarray) for which
+        values (**val**: ndarray) are provided.
+        Values of **s** are normalized to the interval :math:`[0,1]`.
+
+        :returns: tuple (s, val)
+        """
+        self.updateState()
+
+        s   = np.array([0.,1.])
+
+        if variable.lower() == 'm' or variable.lower() == 'mz':
+            # bending moment (in plane)
+            Ml = -self.Forces[0][2]
+            Mr =  self.Forces[1][2]
+            val = np.array([Ml, Mr])
+
+        elif variable.lower() == 'v' or variable.lower() == 'vy':
+            # transverse shear (in-plane)
+            Vl =  self.Forces[0][1]
+            Vr = -self.Forces[1][1]
+            val = np.array([Vl, Vr])
+
+        elif variable.lower() == 'f' or variable.lower() == 'fx':
+            # transverse shear (in-plane)
+            Vl =  self.Forces[0][0]
+            Vr = -self.Forces[1][0]
+            val = np.array([Vl, Vr])
+
+        else:
+            val = np.zeros_like(s)
+
+        return (s,val)
 
     def updateState(self):
 

@@ -11,7 +11,7 @@ class NewtonRaphsonSolver(Solver):
     def __init__(self):
         super(NewtonRaphsonSolver, self).__init__()
 
-    def solve(self, max_steps=10, verbose=False):
+    def solve(self, max_steps=10, verbose=False, **kwargs):
         """
         :param max_step: maximum number of iterations (int)
         :param verbose: set to :code:`True` for additional information
@@ -104,3 +104,28 @@ class NewtonRaphsonSolver(Solver):
         R = self.R.copy()
         R.shape = (self.nNodes, self.ndof)
         return R
+
+    def pushState(self, state):
+        """
+        Pushes :code:`state` to the solver.
+        The solver will use that data to update it's internal state.
+
+        .. list-table:: **state** is defined as a dictionary with the following contents:
+
+            * - **P0**
+              - system vector of initial forces
+            * - **Pref**
+              - system vector of reference forces
+            * - **u1**
+              - system vector of current (converged) displacements
+            * - **un**
+              - system vector of previous (converged) displacements
+            * - **lam1**
+              - load level of current (converged) displacements
+            * - **lamn**
+              - load level of previous (converged) displacements
+
+        :param state: state of the solver
+        """
+        if 'lam1' in state:
+            self.loadfactor = state['lam1']

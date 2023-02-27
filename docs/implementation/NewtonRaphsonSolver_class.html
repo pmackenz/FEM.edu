@@ -110,6 +110,45 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.pushState">
+<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.pushState" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
+The solver will use that data to update it’s internal state.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – state of the solver</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.setLoadFactor">
 <span class="sig-name descname"><span class="pre">setLoadFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.setLoadFactor" title="Permalink to this definition"></a></dt>
 <dd><p>Set the target load factor to <strong>lam</strong></p>
@@ -117,7 +156,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">

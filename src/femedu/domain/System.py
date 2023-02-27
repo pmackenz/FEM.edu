@@ -208,7 +208,7 @@ class System():
 
 # ------- solver methods ----------
 
-    def solve(self):
+    def solve(self, **kwargs):
         """
         Solve system of equations and find state of deformation for the given load level.
         """
@@ -233,9 +233,9 @@ class System():
 
         self.plotter.setMesh(self.nodes, self.elements)
 
-        ndof = len(self.Rsys)
-        R = self.Rsys.copy().reshape((ndof//2, 2))
-        self.plotter.setReactions(R)
+        # ndof = len(self.Rsys)
+        # R = self.Rsys.copy().reshape((ndof//2, 2))
+        # self.plotter.setReactions(R)
 
         self.plotter.displacementPlot(factor=factor, file=filename)
 

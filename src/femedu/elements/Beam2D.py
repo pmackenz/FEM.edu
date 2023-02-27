@@ -64,7 +64,6 @@ class Beam2D(Element):
         self.Kt       = [[np.zeros((ndof, ndof)), np.zeros((ndof, ndof))],
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
 
-
     def __str__(self):
         s  = "Beam2D: node {} to node {}:\n".format( self.nodes[0].index, self.nodes[1].index)
         s += "   material {} properties: {}  strain:{}   stress:{}\n".format(self.material.__class__.__name__,
@@ -80,13 +79,26 @@ class Beam2D(Element):
                                           repr(self.material))
 
     def setDistLoad(self, w):
+        """
+        :param w: uniform load. positive if pointing in the local y-direction.
+        """
         self.distributed_load = w
 
     def resetLoads(self):
+        """
+
+        """
         self.setDistLoad(0.0)
         super(Beam2D, self).resetLoads()
 
     def getInternalForce(self, variable=''):
+        """
+        computes vectors of normalized locations (**s**: ndarray) for which
+        values (**val**: ndarray) are provided.
+        Values of **s** are normalized to the interval :math:`[0,1]`.
+
+        :returns: tuple (s, val)
+        """
         self.updateState()
 
         s   = np.array([0.,1.])

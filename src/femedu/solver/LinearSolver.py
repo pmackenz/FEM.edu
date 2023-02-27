@@ -10,7 +10,7 @@ class LinearSolver(Solver):
     def __init__(self):
         super().__init__()
 
-    def solve(self):
+    def solve(self, **kwargs):
         """
         Solves the system assuming the given load is the total load
         and the obtained displacement is the **total** displacement.
@@ -25,6 +25,8 @@ class LinearSolver(Solver):
         self.resetDisplacements()
         self.assemble()
         errorNorm = self.solveSingleStep()
+        # recover residual force vector
+        self.assemble(force_only=True)
         return errorNorm
 
     def solveSingleStep(self):
@@ -64,79 +66,34 @@ class LinearSolver(Solver):
             K = node.start + np.arange(node.ndofs)
             node._updateDisp(dU[K])
 
-    def assemble(self):
+
+    def assemble(self, force_only=False):
         """
         inherited from :code:`Solver` class.
         """
-        super(LinearSolver, self).assemble()
+        super(LinearSolver, self).assemble(force_only=force_only)
 
-    def originalSolve(self):
+    def pushState(self, state):
         """
-        original Solve system of equations and find state of deformation for the given load.
+        Pushes :code:`state` to the solver.
+        The solver will use that data to update it's internal state.
 
-        .. warning::
+        .. list-table:: **state** is defined as a dictionary with the following contents:
 
-            This method is marked **depricated**.
+            * - **P0**
+              - system vector of initial forces
+            * - **Pref**
+              - system vector of reference forces
+            * - **u1**
+              - system vector of current (converged) displacements
+            * - **un**
+              - system vector of previous (converged) displacements
+            * - **lam1**
+              - load level of current (converged) displacements
+            * - **lamn**
+              - load level of previous (converged) displacements
+
+        :param state: state of the solver
         """
-
-        # compute size parameters
-        ndof = 0
-        for node in self.nodes:
-            node.setStart(ndof)
-            ndof += node.ndofs
-        Rsys = np.zeros(ndof)
-        Ksys = np.zeros((ndof, ndof))
-
-        # assemble loads
-        for node in self.nodes:
-            if node.hasLoad():
-                K = node.start + np.arange(node.ndofs)
-                Rsys[K] += node.getLoad()
-
-        # Element Loop: assemble element forces and stiffness
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-                for (j,ndJ) in enumerate(element.nodes):
-                    M = ndJ.start + np.arange(ndJ.ndofs)
-                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
-
-        # apply boundary conditions
-        for node in self.nodes:
-            for dof in node.dofs:
-                if node.isFixed(dof):
-                    idx = node.start + node.dofs[dof]
-                    Rsys[idx]      = 0.0
-                    Ksys[:, idx]   = np.zeros(ndof)
-                    Ksys[idx, :]   = np.zeros(ndof)
-                    Ksys[idx, idx] = 1.0
-
-        # stability check for system matrix
-        (vals, vecs) = np.linalg.eig(Ksys)
-        for (lam, v) in zip(vals, vecs.T):
-            if np.abs(lam) < 1.0e-2:
-                print(f"lambda = {lam:16.12e}")
-                print(v)
-
-        # solve for displacements
-        U = np.linalg.solve(Ksys, Rsys)
-
-        # update nodal displacements
-        for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(U[K])
-
-        # recompute residual force
-        Rsys = np.zeros(ndof)
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-
-        #
-        self.Rsys = Rsys
-        self.disp = U
-
+        if 'lam1' in state:
+            self.loadfactor = state['lam1']

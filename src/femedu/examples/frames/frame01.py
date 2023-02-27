@@ -40,6 +40,7 @@ modeled using a 2D frame element
 from ...examples.Example import *
 
 from ...domain.System import *
+from ...solver.NewtonRaphsonSolver import *
 from ...domain.Node import *
 from ...elements.Frame2D import *
 from ...materials.ElasticSection import *
@@ -82,16 +83,17 @@ class ExampleFrame01(Example):
     def problem(self):
         # initialize a system model
 
-        N  = 2     # number of elements
+        N  = 4     # number of elements
         L  = 100.0
         E  = 20000.
         EA = 2000000.0
         EI = 210000.0
-        w  = 0.1
+        w  = -0.1
 
         params = {'E': E, 'A': EA/E, 'I': EI/E}
 
         model = System()
+        model.setSolver(NewtonRaphsonSolver())
 
         # create nodes
         model = System()
@@ -124,9 +126,15 @@ class ExampleFrame01(Example):
         # show model information
         print(model)
 
-        model.solve()
+        model.solve(verbose=True)
 
         model.report()
+
+        model.plot(factor=100.0)
+
+        model.beamValuePlot("F")
+        model.beamValuePlot("M")
+        model.beamValuePlot("V")
 
         return
 

@@ -106,23 +106,52 @@
 <p>This solver implies <span class="math notranslate nohighlight">\(\{{\bf P}\} = [{\bf K}] \{{\bf u}\}\)</span></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.assemble" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.assemble" title="Permalink to this definition"></a></dt>
 <dd><p>inherited from <code class="code docutils literal notranslate"><span class="pre">Solver</span></code> class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.originalSolve">
-<span class="sig-name descname"><span class="pre">originalSolve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.originalSolve" title="Permalink to this definition"></a></dt>
-<dd><p>original Solve system of equations and find state of deformation for the given load.</p>
-<div class="admonition warning">
-<p class="admonition-title">Warning</p>
-<p>This method is marked <strong>depricated</strong>.</p>
-</div>
+<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.pushState">
+<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.pushState" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
+The solver will use that data to update it’s internal state.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – state of the solver</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.solve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.solve" title="Permalink to this definition"></a></dt>
 <dd><p>Solves the system assuming the given load is the total load
 and the obtained displacement is the <strong>total</strong> displacement.</p>
 <div class="admonition note">

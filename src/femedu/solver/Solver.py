@@ -31,7 +31,7 @@ class Solver():
         self.nodes = nodes
         self.elements = elems
 
-    def fetch(self):
+    def fetchState(self):
         """
         Fetch the current :code:`state` of the solver.
 
@@ -57,7 +57,7 @@ class Solver():
 
         return state
 
-    def push(self, state):
+    def pushState(self, state):
         """
         Pushes :code:`state` to the solver.
         The solver will use that data to update it's internal state.
@@ -82,7 +82,7 @@ class Solver():
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
-    def assemble(self):
+    def assemble(self, force_only=False):
         """
         A general assembler for mixed element types.
 
@@ -90,6 +90,8 @@ class Solver():
         and the tangent stiffness matrix (:math:`{\\bf K}_t`) used by most solvers.
 
         Specialized solvers may overload this method.
+
+        :param force_only: set to **True** if only the residual force needs to be assembled
         """
 
         # compute size parameters
@@ -105,34 +107,37 @@ class Solver():
         # assemble loads
         for node in self.nodes:
             if node.hasLoad():
-                K = node.start + np.arange(node.ndofs)
-                Rsys[K] += node.getLoad()
+                idx = node.start + np.arange(node.ndofs)
+                Rsys[idx] += node.getLoad()
 
         # Element Loop: assemble element forces and stiffness
         for element in self.elements:
             Fe = element.getForce()     # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-                for (j,ndJ) in enumerate(element.nodes):
-                    M = ndJ.start + np.arange(ndJ.ndofs)
-                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
+                idxK = ndI.start + np.arange(ndI.ndofs)
+                Rsys[idxK] -= Fe[i]
+                if not force_only:
+                    for (j,ndJ) in enumerate(element.nodes):
+                        idxM = ndJ.start + np.arange(ndJ.ndofs)
+                        Ksys[idxK[:, np.newaxis], idxM] += element.Kt[i][j]
 
         # apply boundary conditions
-        for node in self.nodes:
-            for dof in node.dofs:
-                if node.isFixed(dof):
-                    idx = node.start + node.dofs[dof]
-                    Rsys[idx]      = 0.0
-                    Ksys[:, idx]   = np.zeros(ndof)
-                    Ksys[idx, :]   = np.zeros(ndof)
-                    Ksys[idx, idx] = 1.0
+        if not force_only:
+            for node in self.nodes:
+                for dof in node.dofs:
+                    if node.isFixed(dof):
+                        idx = node.start + node.dofs[dof]
+                        Rsys[idx]      = 0.0
+                        Ksys[:, idx]   = np.zeros(ndof)
+                        Ksys[idx, :]   = np.zeros(ndof)
+                        Ksys[idx, idx] = 1.0
 
-        self.Kt = Ksys
+            self.Kt = Ksys
+
         self.R  = Rsys
 
 
-    def solve(self):
+    def solve(self, **kwargs):
         """
 
         :return:
