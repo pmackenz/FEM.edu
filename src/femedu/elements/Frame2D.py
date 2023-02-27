@@ -53,12 +53,14 @@ class Frame2D(Element):
 
         ndof = len(dof_list)
 
+        # initialize element load to zero
+        self.distributed_load = 0.0
+
         self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
         self.Forces   = [np.zeros(ndof), np.zeros(ndof)]
         self.Kt       = [[np.zeros((ndof, ndof)), np.zeros((ndof, ndof))],
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
-
 
     def __str__(self):
         s = \
@@ -76,10 +78,51 @@ class Frame2D(Element):
                                          repr(self.nodes[1]),
                                          repr(self.material))
 
+    def setDistLoad(self, w):
+        self.distributed_load = w
+
+    def resetLoads(self):
+        self.setDistLoad(0.0)
+        super(Frame2D, self).resetLoads()
+
     def getAxialForce(self):
         self.updateState()
         return self.force
 
+    def getInternalForce(self, variable=''):
+        """
+        computes vectors of normalized locations (**s**: ndarray) for which
+        values (**val**: ndarray) are provided.
+        Values of **s** are normalized to the interval :math:`[0,1]`.
+
+        :returns: tuple (s, val)
+        """
+        self.updateState()
+
+        s   = np.array([0.,1.])
+
+        if variable.lower() == 'm' or variable.lower() == 'mz':
+            # bending moment (in plane)
+            Ml = -self.Forces[0][2]
+            Mr =  self.Forces[1][2]
+            val = np.array([Ml, Mr])
+
+        elif variable.lower() == 'v' or variable.lower() == 'vy':
+            # transverse shear (in-plane)
+            Vl =  self.Forces[0][1]
+            Vr = -self.Forces[1][1]
+            val = np.array([Vl, Vr])
+
+        elif variable.lower() == 'f' or variable.lower() == 'fx':
+            # transverse shear (in-plane)
+            Vl =  self.Forces[0][0]
+            Vr = -self.Forces[1][0]
+            val = np.array([Vl, Vr])
+
+        else:
+            val = np.zeros_like(s)
+
+        return (s,val)
 
     def updateState(self):
 
@@ -98,6 +141,7 @@ class Frame2D(Element):
         Nvec = Xj - Xi
         L = np.linalg.norm(Nvec)
         Nvec /= L
+        Svec = np.array([[0,-1],[1,0]]) @ Nvec
 
         nvec = (Xj + Uj) - (Xi + Ui)
         ell = np.linalg.norm(nvec)
@@ -105,7 +149,9 @@ class Frame2D(Element):
         svec = np.array([[0,-1],[1,0]]) @ nvec
 
         # - compute axial strain
-        strain = 0.5 * ((ell/L)**2 - 1.)
+        #strain = 0.5 * ((ell/L)**2 - 1.)
+        psi = Svec @ (Uj - Ui) / L
+        strain = Nvec @ (Uj - Ui) / L + 0.5 * (psi * psi)
 
         # - compute curvature
         """
@@ -151,7 +197,8 @@ class Frame2D(Element):
         # ** axial portion
 
         # - compute nodal tangent stiffness for axial
-        n_tensor_n = np.outer(nvec, nvec)
+        #n_tensor_n = np.outer(nvec, nvec)
+        n_tensor_n = np.outer(Nvec, Nvec)
         ke  = (EA / L) * n_tensor_n
         ke += self.force / L * (np.identity(len(nvec)) - n_tensor_n)
 
@@ -207,7 +254,10 @@ class Frame2D(Element):
             kmt =  4 * EI / L
             kmth = kmt / 2
 
-        s_tensor_s = np.outer(svec, svec)
+        #s_tensor_s = np.outer(svec, svec)
+
+        n_tensor_n = np.outer(Nvec, Nvec)
+        s_tensor_s = np.outer(Svec, Svec)
         KtII = np.block( [[ kfu * s_tensor_s,  kft * svec[:,np.newaxis]], [ kmu * svec, kmt ]] )
         KtIJ = np.block( [[-kfu * s_tensor_s,  kft * svec[:,np.newaxis]], [-kmu * svec, kmth]] )
         KtJI = np.block( [[-kfu * s_tensor_s, -kft * svec[:,np.newaxis]], [ kmu * svec, kmth]] )
@@ -219,8 +269,19 @@ class Frame2D(Element):
         Mi = kmu * (vi - vj) + kmt * thetai + kmth * thetaj
         Mj = kmu * (vi - vj) + kmth * thetai + kmt * thetaj
 
-        Fi = Vi * svec - self.force * nvec
-        Fj = Vj * svec + self.force * nvec
+        if self.distributed_load:
+            Pw = self.distributed_load * L / 2.
+            Mw = Pw * L / 6.
+
+            Vi -= Pw
+            Vj -= Pw
+            Mi -= -Mw
+            Mj -=  Mw
+
+        #Fi = Vi * svec - self.force * nvec
+        #Fj = Vj * svec + self.force * nvec
+        Fi = Vi * Svec - self.force * Nvec
+        Fj = Vj * Svec + self.force * Nvec
 
         # ** combine the effects
 
@@ -233,6 +294,7 @@ class Frame2D(Element):
         # ** build element load vector and element tangent stiffness
         self.Fi = np.r_[Fi, Mi]
         self.Fj = np.r_[Fj, Mj]
+        self.Forces = [self.Fi, self.Fj]
 
         self.Kt = [[KtII, KtIJ],[KtJI, KtJJ]]
 

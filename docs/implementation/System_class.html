@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Transformation class" href="Transformation_class.html" />
-    <link rel="prev" title="Linear Solver class" href="LinearSolver_class.html" /> 
+    <link rel="prev" title="Newton-Raphson Solver class" href="NewtonRaphsonSolver_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -99,7 +99,8 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.addNode">
 <span class="sig-name descname"><span class="pre">addNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">nodes</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.addNode" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<dd><p>Add one or more nodes to the model.</p>
+<dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>newNode</strong> – a <code class="code docutils literal notranslate"><span class="pre">Node</span></code> object</p>
 </dd>
@@ -124,6 +125,23 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.fetchRecord">
+<span class="sig-name descname"><span class="pre">fetchRecord</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.fetchRecord" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>a tuple of ndarrays: (loadfactors, list of system deformations, stability index)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.getSolver">
+<span class="sig-name descname"><span class="pre">getSolver</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.getSolver" title="Permalink to this definition"></a></dt>
+<dd><p>Provides a pointer to the current solver instance.</p>
+<p>This function is used to get access to the solver and give instructions directly to that solver.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.plot">
 <span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Create mesh plot showing the undeformed and the deformed system</p>
@@ -137,6 +155,12 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.recordThisStep">
+<span class="sig-name descname"><span class="pre">recordThisStep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.recordThisStep" title="Permalink to this definition"></a></dt>
+<dd><p>record current state of the system</p>
 </dd></dl>
 
 <dl class="py method">
@@ -164,9 +188,35 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.setSolver">
+<span class="sig-name descname"><span class="pre">setSolver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">solver</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.setSolver" title="Permalink to this definition"></a></dt>
+<dd><p>This method will change the current solver to the provided solver.</p>
+<p>Upon successful update of the solver, the old solver state will be
+pushed to the new solver.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>solver</strong> – a pointer to a solver object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.solve" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.solve" title="Permalink to this definition"></a></dt>
+<dd><p>Solve system of equations and find state of deformation for the given load level.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.startRecorder">
+<span class="sig-name descname"><span class="pre">startRecorder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.startRecorder" title="Permalink to this definition"></a></dt>
+<dd><p>starts the recorder</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.stopRecorder">
+<span class="sig-name descname"><span class="pre">stopRecorder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.stopRecorder" title="Permalink to this definition"></a></dt>
+<dd><p>stops the recorder</p>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.valuePlot">
@@ -195,7 +245,7 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="LinearSolver_class.html" class="btn btn-neutral float-left" title="Linear Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="NewtonRaphsonSolver_class.html" class="btn btn-neutral float-left" title="Newton-Raphson Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="Transformation_class.html" class="btn btn-neutral float-right" title="Transformation class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 

@@ -14,3 +14,4 @@ Derived Classes
     :maxdepth: 1
 
     LinearSolver_class.rst
+    NewtonRaphsonSolver_class.rst

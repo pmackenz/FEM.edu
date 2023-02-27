@@ -1,35 +1,49 @@
-from .Solver import *
+import numpy as np
+import scipy as sp
 
-class LinearSolver(Solver):
+from ..solver.Solver import Solver
+
+class NewtonRaphsonSolver(Solver):
     """
-    A linear system solver
-
-    This solver implies :math:`\{{\\bf P}\} = [{\\bf K}] \{{\\bf u}\}`
+    An iterative solver for load-controlled nonlinear analysis.
     """
 
     def __init__(self):
-        super().__init__()
+        super(NewtonRaphsonSolver, self).__init__()
 
-    def solve(self, **kwargs):
+    def solve(self, max_steps=10, verbose=False, **kwargs):
         """
-        Solves the system assuming the given load is the total load
-        and the obtained displacement is the **total** displacement.
-
-        .. note::
-
-           This method will not verify whether or not the linear assumption is correct.
-           The resulting forces may be out of equilibrium if the system experiences
-           nonlinear behavior under the given load.
-
+        :param max_step: maximum number of iterations (int)
+        :param verbose: set to :code:`True` for additional information
         """
-        self.resetDisplacements()
-        self.assemble()
-        errorNorm = self.solveSingleStep()
-        # recover residual force vector
-        self.assemble(force_only=True)
-        return errorNorm
+
+        for k in range(max_steps):
+
+        # compute force vector and tangent stiffness
+            self.assemble()
+
+            normR = self.checkResiduum(verbose)
+
+            if normR<self.TOL:
+                break
+
+            # Solve for equilibrium
+            self.solveSingleStep()
+
+        if self.record:
+            self.recordThisStep()
+
+        print('+')
+
+        return normR
+
 
     def solveSingleStep(self):
+        """
+        Helper function performing a single solution of the linearized system
+
+        Called by **solve()**. (internal use only)
+        """
 
         # are we doing displacement control?
         if self.hasConstraint:
@@ -61,17 +75,35 @@ class LinearSolver(Solver):
             # solve for displacement update: a single Newton step
             dU = np.linalg.solve(self.Kt, self.R)
 
-        # update nodal displacements
-        for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(dU[K])
+        # update the system displacements
+        self.sysU += dU
 
-
-    def assemble(self, force_only=False):
+    def assemble(self):
         """
         inherited from :code:`Solver` class.
         """
-        super(LinearSolver, self).assemble(force_only=force_only)
+        super(NewtonRaphsonSolver, self).assemble()
+
+    def setLoadFactor(self, lam):
+        """
+        Set the target load factor to **lam**
+        """
+        self.loadfactor = lam
+
+    def getDisplacements(self):
+        U = self.sysU.copy()
+        U.shape = (self.nNodes, self.ndof)
+        return U
+
+    def getForces(self):
+        P = self.P.copy() * self.loadfactor
+        P.shape = (self.nNodes, self.ndof)
+        return P
+
+    def getResiduum(self):
+        R = self.R.copy()
+        R.shape = (self.nNodes, self.ndof)
+        return R
 
     def pushState(self, state):
         """

@@ -2,6 +2,7 @@ import numpy as np
 
 from .Node     import *
 from ..elements.Element import *
+from ..solver.LinearSolver import LinearSolver
 from ..plotter.ElementPlotter import ElementPlotter as Plotter
 
 
@@ -11,14 +12,20 @@ class System():
     """
 
     def __init__(self):
-        """
-
-        """
         self.nodes    = []
         self.elements = []
         self.plotter  = Plotter()
         self.disp     = np.array([])
         self.loads    = np.zeros_like(self.disp)
+
+        # global analysis settings
+        self.loadfactor = 1.0
+
+        self.initRecorder()
+        self.trackStability(False)
+
+        self.solver = LinearSolver()
+        self.solver.connect(self.nodes, self.elements)
 
     def __str__(self):
         s = "System object"
@@ -31,8 +38,25 @@ class System():
     def __repr__(self):
         return "System()"
 
+    def setSolver(self, solver):
+        """
+        This method will change the current solver to the provided solver.
+
+        Upon successful update of the solver, the old solver state will be
+        pushed to the new solver.
+
+        :param solver: a pointer to a solver object.
+        """
+        state = {}
+        if self.solver:
+            state = self.solver.fetchState()
+        if solver:
+            self.solver = solver
+            self.solver.pushState(state)
+
     def addNode(self, *nodes):
         """
+        Add one or more nodes to the model.
 
         :param newNode: a :code:`Node` object
         """
@@ -59,71 +83,142 @@ class System():
         """
         self.elements.append(newElement)
 
-    def solve(self):
+    def setLoadFactor(self, lam):
+        self.solver.setLoadFactor(lam)
+
+    def resetDisplacements(self):
+        self.solver.resetDisplacements()
+
+    def setConstraint(self, nodeIdx, nvec, Ubar):
+
+        self.en = np.zeros(self.sdof)
+        idx = np.arange(nodeIdx*self.ndof, (nodeIdx+1)*self.ndof)
+        self.en[idx] = nvec
+        self.targetU = Ubar
+
+        self.hasConstraint = True
+        self.useArcLength = False
+
+    def getSolver(self):
         """
+        Provides a pointer to the current solver instance.
 
+        This function is used to get access to the solver and give instructions directly to that solver.
         """
+        return self.solver
 
-        # compute size parameters
-        ndof = 0
-        for node in self.nodes:
-            node.setStart(ndof)
-            ndof += node.ndofs
-        Rsys = np.zeros(ndof)
-        Ksys = np.zeros((ndof, ndof))
+    def initArcLength(self, load=1., alpha=0.0, tolerance=1.0e-12):
+        # store analysis parameter(s)
+        self.alpha = alpha
+        self.TOL = tolerance
 
-        # assemble loads
-        for node in self.nodes:
-            if node.hasLoad():
-                K = node.start + np.arange(node.ndofs)
-                Rsys[K] += node.getLoad()
+        # make sure we start at an equilibrium point
+        self.NewtonSolver()
 
-        # Element Loop: assemble element forces and stiffness
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-                for (j,ndJ) in enumerate(element.nodes):
-                    M = ndJ.start + np.arange(ndJ.ndofs)
-                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
+        # store current configuration as last converged
+        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':0}
 
-        # apply boundary conditions
-        for node in self.nodes:
-            for dof in node.dofs:
-                if node.isFixed(dof):
-                    idx = node.start + node.dofs[dof]
-                    Rsys[idx]      = 0.0
-                    Ksys[:, idx]   = np.zeros(ndof)
-                    Ksys[idx, :]   = np.zeros(ndof)
-                    Ksys[idx, idx] = 1.0
+        # use load control to solve for the new equilibrium state
+        self.hasConstraint = False   # this forces load control
+        self.loadfactor += load      # add reference load level
+        self.NewtonSolver()          # find equilibrium configuration for given load level
 
-        # stability check for system matrix
-        (vals, vecs) = np.linalg.eig(Ksys)
-        for (lam, v) in zip(vals, vecs.T):
-            if np.abs(lam) < 1.0e-2:
-                print(f"lambda = {lam:16.12e}")
-                print(v)
+        # compute the arc-length for that step and store as target arc length
+        delU  = self.sysU - self.lastConverged['U']
+        dload = self.loadfactor - self.lastConverged['lambda']
+        self.arclength2 = delU@delU + self.alpha * dload*dload * self.P@self.P
 
-        # solve for displacements
-        U = np.linalg.solve(Ksys, Rsys)
+        # store the current point as last converged point
+        self.previousConverged = self.lastConverged
+        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
 
-        # update nodal displacements
-        for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(U[K])
+        # set solver parameters
+        self.hasConstraint = True
+        self.useArcLength = True
 
-        # recompute residual force
-        Rsys = np.zeros(ndof)
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
+    def stepArcLength(self, verbose=False):
 
-        #
-        self.Rsys = Rsys
-        self.disp = U
+        if not self.hasConstraint:
+            # this method makes no sense for load control
+            return
+
+        # set solver parameters
+        self.useArcLength = True
+
+        # store current state as local variable
+        Un = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
+
+        # set suitable trial state
+        self.sysU *= 2.0
+        self.sysU -= self.previousConverged['U']
+        self.loadfactor *= 2.0
+        self.loadfactor -= self.previousConverged['lambda']
+
+        # store current state as "last converged solution"
+        self.previousConverged = self.lastConverged
+        self.lastConverged = Un
+
+        if verbose:
+            print(self.lastConverged)
+
+        # solve for next point on the equilibrium path
+        self.NewtonSolver(verbose)
+
+
+
+# -------- recorder methods -------------
+
+    def initRecorder(self):
+        self.record = False
+        self.recorder = {'U':[], 'lambda':[], 'stability':None}
+
+    def startRecorder(self):
+        """
+        starts the recorder
+        """
+        self.record = True
+
+    def stopRecorder(self):
+        """
+        stops the recorder
+        """
+        self.record = False
+
+    def recordThisStep(self):
+        """
+        record current state of the system
+        """
+        self.recorder['U'].append(self.sysU.copy())
+        self.recorder['lambda'].append(self.loadfactor)
+        if self.track_stability:
+            self.recorder['stability'].append(self.checkStability())
+    def trackStability(self, on=True):
+        if on:
+            self.track_stability = True
+            if not self.recorder['stability']:
+                self.recorder['stability'] = [ 0.0 for x in self.recorder['lambda'] ]
+        else:
+            self.track_stability = False
+
+    def fetchRecord(self):
+        """
+        :return: a tuple of ndarrays: (loadfactors, list of system deformations, stability index)
+        """
+        return (np.array(self.recorder['lambda']), np.array(self.recorder['U']), np.array(self.recorder['stability']))
+
+# ------- solver methods ----------
+
+    def solve(self, **kwargs):
+        """
+        Solve system of equations and find state of deformation for the given load level.
+        """
+        if self.solve:
+            self.solver.solve()
+        else:
+            msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+            raise NotImplementedError(msg)
+
+# ------------ plot methods -----------------
 
     def plot(self, factor=1.0, filename=None):
         """
@@ -138,9 +233,9 @@ class System():
 
         self.plotter.setMesh(self.nodes, self.elements)
 
-        ndof = len(self.Rsys)
-        R = self.Rsys.copy().reshape((ndof//2, 2))
-        self.plotter.setReactions(R)
+        # ndof = len(self.Rsys)
+        # R = self.Rsys.copy().reshape((ndof//2, 2))
+        # self.plotter.setReactions(R)
 
         self.plotter.displacementPlot(factor=factor, file=filename)
 
@@ -196,6 +291,8 @@ class System():
                 s += "  " + ln + "\n"
         print(s)
 
+# ------------ operational support methods --------------
+
     def resetDisp(self):
         """
         Resets the displacement vector.
@@ -218,10 +315,11 @@ class System():
         self.resetLoad()
 
 
+
 if __name__ == "__main__":
 
-    from elements  import Element
-    from materials import Material
+    from ..elements  import Element
+    from ..materials import Material
 
     # testing the System class
     B = 6.0*12

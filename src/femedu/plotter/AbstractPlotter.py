@@ -42,24 +42,24 @@ class AbstractPlotter():
 
         :param disp:
         """
-        print("** WARNING ** {}.{} deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise DeprecationWarning
+        msg = "** WARNING ** {}.{} not deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise DeprecationWarning(msg)
 
     def setValues(self, vals):
         """
 
         :param vals:
         """
-        print("** WARNING ** {}.{} deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise DeprecationWarning
+        msg = "** WARNING ** {}.{} not deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise DeprecationWarning(msg)
 
     def setReactions(self, R):
         """
 
         :param R: array of nodal force vectors
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise NotImplementedError
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def displacementPlot(self, factor=1.0, file=None):
         """
@@ -71,8 +71,8 @@ class AbstractPlotter():
         :param factor: displacement magnification factor
         :param file: filename (str)
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise NotImplementedError
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def valuePlot(self, variable_name='', deformed=False, file=None):
         """
@@ -85,8 +85,8 @@ class AbstractPlotter():
         :param deformed: True | **False**
         :param file: filename (str)
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise NotImplementedError
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def beamValuePlot(self, variable_name='', factor=0.0, file=None):
         """
@@ -99,8 +99,8 @@ class AbstractPlotter():
         :param factor: displacement scaling factor
         :param file: filename (str)
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise NotImplementedError
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def addForces(self, axs):
         """
@@ -108,8 +108,8 @@ class AbstractPlotter():
 
         :param axs: axis on which to plot
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        raise NotImplementedError
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def set_axes_equal(self, ax):
         '''Make axes of 3D plot have equal scale so that spheres appear as spheres,

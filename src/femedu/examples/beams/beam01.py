@@ -25,7 +25,10 @@ class ExampleBeam01(Example):
     def problem(self):
         # initialize a system model
         SpanLength = 10.0 * 12
-        Nelems = 8    # number of elements
+        w =  -0.2   # distributed load (positive if acting in local y-direction
+        P = -10.0   # center point load (uses global system)
+
+        Nelems = 4    # number of elements
         params = {'E': 29000., 'A': 4.7, 'I':103}
 
         # meshing parameters
@@ -53,7 +56,11 @@ class ExampleBeam01(Example):
                 ndP = ndj
 
             # create elements
-            model += Beam2D(ndi, ndj, ElasticSection(params))
+            elem = Beam2D(ndi, ndj, ElasticSection(params))
+            model += elem
+
+            # load the element
+            elem.setDistLoad(w)
 
             # shift one node to the right
             ndi = ndj
@@ -64,7 +71,7 @@ class ExampleBeam01(Example):
 
         # add point loads
         # .. load only the center node
-        ndP.setLoad([0.0, -10.0], ('ux', 'uy'))
+        ndP.setLoad([0.0, P], ('ux', 'uy'))
 
         # analyze the model
         model.solve()

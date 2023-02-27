@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -51,6 +52,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solver class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="LinearSolver_class.html">Linear Solver class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NewtonRaphsonSolver_class.html">Newton-Raphson Solver class</a></li>
 </ul>
 </li>
 </ul>
@@ -96,10 +98,52 @@
 <p>This class describes the functions needed by any solver</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
+<dd><p>A general assembler for mixed element types.</p>
+<p>This method will build the out-of-balance force vector (residuum <span class="math notranslate nohighlight">\({\bf R}\)</span>)
+and the tangent stiffness matrix (<span class="math notranslate nohighlight">\({\bf K}_t\)</span>) used by most solvers.</p>
+<p>Specialized solvers may overload this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>force_only</strong> – set to <strong>True</strong> if only the residual force needs to be assembled</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetchState">
+<span class="sig-name descname"><span class="pre">fetchState</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetchState" title="Permalink to this definition"></a></dt>
+<dd><p>Fetch the current <code class="code docutils literal notranslate"><span class="pre">state</span></code> of the solver.</p>
+<table class="docutils align-default" id="id1">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
+<dd class="field-odd"><p>state of the solver</p>
 </dd>
 </dl>
 </dd></dl>
@@ -115,6 +159,45 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.pushState">
+<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.pushState" title="Permalink to this definition"></a></dt>
+<dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
+The solver will use that data to update it’s internal state.</p>
+<table class="docutils align-default" id="id2">
+<caption><span class="caption-text"><strong>state</strong> is defined as a dictionary with the following contents:</span><a class="headerlink" href="#id2" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><strong>P0</strong></p></td>
+<td><p>system vector of initial forces</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Pref</strong></p></td>
+<td><p>system vector of reference forces</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>u1</strong></p></td>
+<td><p>system vector of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>un</strong></p></td>
+<td><p>system vector of previous (converged) displacements</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>lam1</strong></p></td>
+<td><p>load level of current (converged) displacements</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>lamn</strong></p></td>
+<td><p>load level of previous (converged) displacements</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – state of the solver</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.reset">
 <span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.reset" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -125,8 +208,20 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.resetDisplacements">
+<span class="sig-name descname"><span class="pre">resetDisplacements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.resetDisplacements" title="Permalink to this definition"></a></dt>
+<dd><p>Reset displacement vector to <strong>all zeros</strong>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.resetForces">
+<span class="sig-name descname"><span class="pre">resetForces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.resetForces" title="Permalink to this definition"></a></dt>
+<dd><p>Reset force vector to <strong>all zeros</strong>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Returns</dt>
 <dd class="field-odd"><p></p>
@@ -141,6 +236,7 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LinearSolver_class.html">Linear Solver class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NewtonRaphsonSolver_class.html">Newton-Raphson Solver class</a></li>
 </ul>
 </div>
 </section>

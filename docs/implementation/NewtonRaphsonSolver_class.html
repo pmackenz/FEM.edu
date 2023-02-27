@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Linear Solver class &mdash; FEM.edu 0.4 documentation</title>
+  <title>Newton-Raphson Solver class &mdash; FEM.edu 0.4 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -16,12 +16,11 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
-        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Newton-Raphson Solver class" href="NewtonRaphsonSolver_class.html" />
-    <link rel="prev" title="Solver class" href="Solver_class.html" /> 
+    <link rel="next" title="System class" href="System_class.html" />
+    <link rel="prev" title="Linear Solver class" href="LinearSolver_class.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -51,8 +50,8 @@
 <li class="toctree-l2"><a class="reference internal" href="Plot_Support_Classes.html">Plot Support classes</a></li>
 <li class="toctree-l2 current"><a class="reference internal" href="Solver_class.html">Solver class</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="Solver_class.html#derived-classes">Derived Classes</a><ul class="current">
-<li class="toctree-l4 current"><a class="current reference internal" href="#">Linear Solver class</a></li>
-<li class="toctree-l4"><a class="reference internal" href="NewtonRaphsonSolver_class.html">Newton-Raphson Solver class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="LinearSolver_class.html">Linear Solver class</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Newton-Raphson Solver class</a></li>
 </ul>
 </li>
 </ul>
@@ -79,9 +78,9 @@
       <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
           <li><a href="../implementation.html">Implementation</a> &raquo;</li>
           <li><a href="Solver_class.html">Solver class</a> &raquo;</li>
-      <li>Linear Solver class</li>
+      <li>Newton-Raphson Solver class</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../_sources/implementation/LinearSolver_class.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/implementation/NewtonRaphsonSolver_class.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -89,30 +88,30 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="linear-solver-class">
-<h1>Linear Solver class<a class="headerlink" href="#linear-solver-class" title="Permalink to this heading"></a></h1>
+  <section id="newton-raphson-solver-class">
+<h1>Newton-Raphson Solver class<a class="headerlink" href="#newton-raphson-solver-class" title="Permalink to this heading"></a></h1>
+<p>A load-control solver using the full Newton-Raphson iterative solver.</p>
 <section id="parent-class">
 <h2>Parent class<a class="headerlink" href="#parent-class" title="Permalink to this heading"></a></h2>
 <ul class="simple">
 <li><p><a class="reference internal" href="Solver_class.html"><span class="doc">Solver class</span></a></p></li>
 </ul>
 </section>
-<section id="module-femedu.solver.LinearSolver">
-<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-femedu.solver.LinearSolver" title="Permalink to this heading"></a></h2>
+<section id="module-femedu.solver.NewtonRaphsonSolver">
+<span id="class-doc"></span><h2>Class doc<a class="headerlink" href="#module-femedu.solver.NewtonRaphsonSolver" title="Permalink to this heading"></a></h2>
 <dl class="py class">
-<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.solver.LinearSolver.</span></span><span class="sig-name descname"><span class="pre">LinearSolver</span></span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver" title="Permalink to this definition"></a></dt>
-<dd><p>A linear system solver</p>
-<p>This solver implies <span class="math notranslate nohighlight">\(\{{\bf P}\} = [{\bf K}] \{{\bf u}\}\)</span></p>
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.solver.NewtonRaphsonSolver.</span></span><span class="sig-name descname"><span class="pre">NewtonRaphsonSolver</span></span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver" title="Permalink to this definition"></a></dt>
+<dd><p>An iterative solver for load-controlled nonlinear analysis.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">force_only</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.assemble" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.assemble">
+<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.assemble" title="Permalink to this definition"></a></dt>
 <dd><p>inherited from <code class="code docutils literal notranslate"><span class="pre">Solver</span></code> class.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.pushState">
-<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.pushState" title="Permalink to this definition"></a></dt>
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.pushState">
+<span class="sig-name descname"><span class="pre">pushState</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.pushState" title="Permalink to this definition"></a></dt>
 <dd><p>Pushes <code class="code docutils literal notranslate"><span class="pre">state</span></code> to the solver.
 The solver will use that data to update it’s internal state.</p>
 <table class="docutils align-default" id="id1">
@@ -150,16 +149,29 @@ The solver will use that data to update it’s internal state.</p>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.LinearSolver.LinearSolver.solve">
-<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.LinearSolver.LinearSolver.solve" title="Permalink to this definition"></a></dt>
-<dd><p>Solves the system assuming the given load is the total load
-and the obtained displacement is the <strong>total</strong> displacement.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This method will not verify whether or not the linear assumption is correct.
-The resulting forces may be out of equilibrium if the system experiences
-nonlinear behavior under the given load.</p>
-</div>
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.setLoadFactor">
+<span class="sig-name descname"><span class="pre">setLoadFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.setLoadFactor" title="Permalink to this definition"></a></dt>
+<dd><p>Set the target load factor to <strong>lam</strong></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>max_step</strong> – maximum number of iterations (int)</p></li>
+<li><p><strong>verbose</strong> – set to <code class="code docutils literal notranslate"><span class="pre">True</span></code> for additional information</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solveSingleStep">
+<span class="sig-name descname"><span class="pre">solveSingleStep</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solveSingleStep" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function performing a single solution of the linearized system</p>
+<p>Called by <strong>solve()</strong>. (internal use only)</p>
 </dd></dl>
 
 </dd></dl>
@@ -171,8 +183,8 @@ nonlinear behavior under the given load.</p>
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="Solver_class.html" class="btn btn-neutral float-left" title="Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="NewtonRaphsonSolver_class.html" class="btn btn-neutral float-right" title="Newton-Raphson Solver class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="LinearSolver_class.html" class="btn btn-neutral float-left" title="Linear Solver class" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="System_class.html" class="btn btn-neutral float-right" title="System class" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
