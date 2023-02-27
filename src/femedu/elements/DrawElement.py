@@ -136,12 +136,16 @@ class DrawElement():
         dispi = self.nodes[0].getDisp(dofs=('ux','uy','rz'))
         dispj = self.nodes[1].getDisp(dofs=('ux','uy','rz'))
 
-        ui     = dispi[0]
-        vi     = dispi[1]    # the transformation was performed when we received dispi
+        # ui     = dispi[0]    # the transformation was performed when we received dispi
+        # vi     = dispi[1]    # the transformation was performed when we received dispi
+        ui     = dispi[0:2] @ n
+        vi     = dispi[0:2] @ s
         thetai = dispi[2] * L
 
-        uj     = dispj[0]
-        vj     = dispj[1]    # the transformation was performed when we received dispj
+        # uj     = dispj[0]    # the transformation was performed when we received dispi
+        # vj     = dispj[1]    # the transformation was performed when we received dispj
+        uj     = dispj[0:2] @ n
+        vj     = dispj[0:2] @ s
         thetaj = dispj[2] * L
 
         qu = np.array([ui, uj]) * factor

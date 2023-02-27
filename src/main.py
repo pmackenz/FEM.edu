@@ -9,6 +9,7 @@ from femedu.examples.trusses.truss04 import *
 from femedu.examples.beams.beam01 import *
 from femedu.examples.beams.beam02 import *
 from femedu.examples.frames.frame01 import *
+from femedu.examples.frames.frame02 import *
 
 
 if __name__ == "__main__":
@@ -22,6 +23,8 @@ if __name__ == "__main__":
     #ex = ExampleBeam02()
 
     ex = ExampleFrame01()
+    #ex = ExampleFrame02()
+    #ex = ExampleFrame03()
 
     # print the doc-string for the current example
     print(ex)

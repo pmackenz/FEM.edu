@@ -61,6 +61,7 @@ class Frame2D(Element):
         self.Forces   = [np.zeros(ndof), np.zeros(ndof)]
         self.Kt       = [[np.zeros((ndof, ndof)), np.zeros((ndof, ndof))],
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
+        self.internal_forces = {'fi':0.0, 'Vi':0.0, 'Mi':0.0, 'fj':0.0, 'Vj':0.0, 'Mj':0.0}
 
     def __str__(self):
         s = \
@@ -103,21 +104,21 @@ class Frame2D(Element):
 
         if variable.lower() == 'm' or variable.lower() == 'mz':
             # bending moment (in plane)
-            Ml = -self.Forces[0][2]
-            Mr =  self.Forces[1][2]
+            Ml = self.internal_forces['Mi']
+            Mr = self.internal_forces['Mj']
             val = np.array([Ml, Mr])
 
         elif variable.lower() == 'v' or variable.lower() == 'vy':
             # transverse shear (in-plane)
-            Vl =  self.Forces[0][1]
-            Vr = -self.Forces[1][1]
+            Vl = self.internal_forces['Vi']
+            Vr = self.internal_forces['Vj']
             val = np.array([Vl, Vr])
 
         elif variable.lower() == 'f' or variable.lower() == 'fx':
             # transverse shear (in-plane)
-            Vl =  self.Forces[0][0]
-            Vr = -self.Forces[1][0]
-            val = np.array([Vl, Vr])
+            Fl = self.internal_forces['fi']
+            Fr = self.internal_forces['fj']
+            val = np.array([Fl, Fr])
 
         else:
             val = np.zeros_like(s)
@@ -283,6 +284,10 @@ class Frame2D(Element):
             Vj -= Pw
             Mi -= -Mw
             Mj -=  Mw
+
+
+        self.internal_forces = {'fi':self.force, 'Vi':Vi, 'Mi':-Mi,
+                                'fj':self.force, 'Vj':-Vj, 'Mj':Mj}
 
         #Fi = Vi * svec - self.force * nvec                   # finite deformation
         #Fj = Vj * svec + self.force * nvec                   # finite deformation
