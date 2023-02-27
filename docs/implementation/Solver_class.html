@@ -51,6 +51,7 @@
 <li class="toctree-l2 current"><a class="current reference internal" href="#">Solver class</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#derived-classes">Derived Classes</a><ul>
 <li class="toctree-l4"><a class="reference internal" href="LinearSolver_class.html">Linear Solver class</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NewtonRaphsonSolver_class.html">Newton-Raphson Solver class</a></li>
 </ul>
 </li>
 </ul>
@@ -94,16 +95,6 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">femedu.solver.Solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><a class="headerlink" href="#femedu.solver.Solver.Solver" title="Permalink to this definition"></a></dt>
 <dd><p>Abstract class for any solver implementation.</p>
 <p>This class describes the functions needed by any solver</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.assemble">
-<span class="sig-name descname"><span class="pre">assemble</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.assemble" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.fetch">
 <span class="sig-name descname"><span class="pre">fetch</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.fetch" title="Permalink to this definition"></a></dt>
@@ -202,6 +193,18 @@ The solver will use that data to update it’s internal state.</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.resetDisplacements">
+<span class="sig-name descname"><span class="pre">resetDisplacements</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.resetDisplacements" title="Permalink to this definition"></a></dt>
+<dd><p>Reset displacement vector to <strong>all zeros</strong>.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.solver.Solver.Solver.resetForces">
+<span class="sig-name descname"><span class="pre">resetForces</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.resetForces" title="Permalink to this definition"></a></dt>
+<dd><p>Reset force vector to <strong>all zeros</strong>.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.solver.Solver.Solver.solve">
 <span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.solver.Solver.Solver.solve" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
@@ -218,6 +221,7 @@ The solver will use that data to update it’s internal state.</p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="LinearSolver_class.html">Linear Solver class</a></li>
+<li class="toctree-l1"><a class="reference internal" href="NewtonRaphsonSolver_class.html">Newton-Raphson Solver class</a></li>
 </ul>
 </div>
 </section>

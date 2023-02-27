@@ -50,7 +50,6 @@ class Solver():
               - load level of previous (converged) displacements
 
 
-
         :return: state of the solver
         """
         state = {}
@@ -83,32 +82,76 @@ class Solver():
         raise NotImplementedError(msg)
 
     def assemble(self):
-        """
+        # initialize new residuum and tangent stiffness matrix
+        Kt = np.zeros((self.sdof,self.sdof))
+        R  = self.loadfactor * self.P.copy()  # initialize R to applied load vector
 
-        :return:
-        """
-        pass
+        # copy and reshape system displacement vector to a list of nodal displacement vectors
+        U = self.sysU.copy()
+        U.shape = (self.nNodes,self.ndof)
+
+        # loop through elements
+        for thisElem in self.elements:
+
+            elem = thisElem['element']   # this is a pointer to the current member
+            idxI = thisElem['i']   # this is the node index, not the system dof index
+            idxJ = thisElem['j']   # this is the node index, not the system dof index
+
+            #sidxI = np.arange(idxI * self.ndof, (idxI + 1) * self.ndof)  # system dofs for node I
+            #sidxJ = np.arange(idxJ * self.ndof, (idxJ + 1) * self.ndof)  # system dofs for node J
+
+            sidxI = elem.dofMap + idxI * self.ndof  # system dofs for node I
+            sidxJ = elem.dofMap + idxJ * self.ndof  # system dofs for node J
+
+            # update element displacements
+            elem.setDisp(U[idxI],U[idxJ])
+
+            # add element force to system forces
+            (fi, fj) = elem.getForce()
+            R[sidxI] -= fi         # subtract the resisting (internal) force added by member elem
+            R[sidxJ] -= fj         # subtract the resisting (internal) force added by member elem
+
+            # add element stiffness to system stiffness
+            KTe = elem.getKt()  # this is the nodal stiffness, not the entire element stiffness matrix
+            Kt[sidxI[:,np.newaxis],sidxI] += KTe[0][0]
+            Kt[sidxI[:,np.newaxis],sidxJ] += KTe[0][1]
+            Kt[sidxJ[:,np.newaxis],sidxI] += KTe[1][0]
+            Kt[sidxJ[:,np.newaxis],sidxJ] += KTe[1][1]
+
+        # apply boundary conditions
+        for idx in self.fixities:
+            Kt[:,idx]   = 0.0
+            Kt[idx,:]   = 0.0
+            Kt[idx,idx] = 1.0e+1
+            R[idx]      = 0.0
+
+        self.Kt = Kt
+        self.R  = R
+
 
     def solve(self):
         """
 
         :return:
         """
-        pass
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def initialize(self):
         """
 
         :return:
         """
-        pass
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def reset(self):
         """
 
         :return:
         """
-        pass
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
     def checkStability(self):
         if self.sdof < 10:
@@ -165,4 +208,16 @@ class Solver():
 
         # convergence check
         return normR
+
+    def resetForces(self):
+        """
+        Reset force vector to **all zeros**.
+        """
+        self.P = np.zeros(self.sdof)
+
+    def resetDisplacements(self):
+        """
+        Reset displacement vector to **all zeros**.
+        """
+        self.sysU = np.zeros(self.sdof)
 

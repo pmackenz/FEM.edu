@@ -4,11 +4,18 @@ import scipy as sp
 from ..solver.Solver import Solver
 
 class NewtonRaphsonSolver(Solver):
+    """
+    An iterative solver for load-controlled nonlinear analysis.
+    """
 
     def __init__(self):
         super(NewtonRaphsonSolver, self).__init__()
 
     def solve(self, max_steps=10, verbose=False):
+        """
+        :param max_step: maximum number of iterations (int)
+        :param verbose: set to :code:`True` for additional information
+        """
 
         for k in range(max_steps):
 
@@ -32,6 +39,11 @@ class NewtonRaphsonSolver(Solver):
 
 
     def solveSingleStep(self):
+        """
+        Helper function performing a single solution of the linearized system
+
+        Called by **solve()**. (internal use only)
+        """
 
         # are we doing displacement control?
         if self.hasConstraint:
@@ -68,13 +80,10 @@ class NewtonRaphsonSolver(Solver):
 
 
     def setLoadFactor(self, lam):
+        """
+        Set the target load factor to **lam**
+        """
         self.loadfactor = lam
-
-    def resetForces(self):
-        self.P = np.zeros(self.sdof)
-
-    def resetDisplacements(self):
-        self.sysU = np.zeros(self.sdof)
 
     def getDisplacements(self):
         U = self.sysU.copy()

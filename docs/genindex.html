@@ -79,6 +79,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -117,8 +118,6 @@
 </li>
       </ul></li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.areFixed">areFixed() (femedu.domain.Node.Node method)</a>
-</li>
-      <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.assemble">assemble() (femedu.solver.Solver.Solver method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -351,6 +350,13 @@
 </li>
       </ul></li>
       <li>
+    femedu.solver.NewtonRaphsonSolver
+
+      <ul>
+        <li><a href="implementation/NewtonRaphsonSolver_class.html#module-femedu.solver.NewtonRaphsonSolver">module</a>
+</li>
+      </ul></li>
+      <li>
     femedu.solver.Solver
 
       <ul>
@@ -477,6 +483,8 @@
 </li>
         <li><a href="implementation/LinearSolver_class.html#module-femedu.solver.LinearSolver">femedu.solver.LinearSolver</a>
 </li>
+        <li><a href="implementation/NewtonRaphsonSolver_class.html#module-femedu.solver.NewtonRaphsonSolver">femedu.solver.NewtonRaphsonSolver</a>
+</li>
         <li><a href="implementation/Solver_class.html#module-femedu.solver.Solver">femedu.solver.Solver</a>
 </li>
       </ul></li>
@@ -486,7 +494,19 @@
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/NewtonRaphsonSolver_class.html#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver">NewtonRaphsonSolver (class in femedu.solver.NewtonRaphsonSolver)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node">Node (class in femedu.domain.Node)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="implementation/LinearSolver_class.html#femedu.solver.LinearSolver.LinearSolver.originalSolve">originalSolve() (femedu.solver.LinearSolver.LinearSolver method)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -524,9 +544,13 @@
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.resetAll">resetAll() (femedu.domain.System.System method)</a>
 </li>
+      <li><a href="implementation/System_class.html#femedu.domain.System.System.resetDisp">resetDisp() (femedu.domain.System.System method)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="implementation/System_class.html#femedu.domain.System.System.resetDisp">resetDisp() (femedu.domain.System.System method)</a>
+      <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.resetDisplacements">resetDisplacements() (femedu.solver.Solver.Solver method)</a>
+</li>
+      <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.resetForces">resetForces() (femedu.solver.Solver.Solver method)</a>
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.resetLoad">resetLoad() (femedu.domain.System.System method)</a>
 </li>
@@ -558,6 +582,8 @@
       </ul></li>
       <li><a href="implementation/Node_class.html#femedu.domain.Node.Node.setLoad">setLoad() (femedu.domain.Node.Node method)</a>
 </li>
+      <li><a href="implementation/NewtonRaphsonSolver_class.html#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.setLoadFactor">setLoadFactor() (femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver method)</a>
+</li>
       <li><a href="implementation/Plot_Support_Classes.html#femedu.plotter.AbstractPlotter.AbstractPlotter.setMesh">setMesh() (femedu.plotter.AbstractPlotter.AbstractPlotter method)</a>
 
       <ul>
@@ -572,10 +598,10 @@
         <li><a href="implementation/Plotter_class.html#femedu.plotter.Plotter.Plotter.setReactions">(femedu.plotter.Plotter.Plotter method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.setSolver">setSolver() (femedu.domain.System.System method)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="implementation/Material_class.html#femedu.materials.Material.Material.setStrain">setStrain() (femedu.materials.Material.Material method)</a>
 
       <ul>
@@ -593,10 +619,14 @@
       <ul>
         <li><a href="implementation/LinearSolver_class.html#femedu.solver.LinearSolver.LinearSolver.solve">(femedu.solver.LinearSolver.LinearSolver method)</a>
 </li>
+        <li><a href="implementation/NewtonRaphsonSolver_class.html#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solve">(femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver method)</a>
+</li>
         <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver.solve">(femedu.solver.Solver.Solver method)</a>
 </li>
       </ul></li>
       <li><a href="implementation/Solver_class.html#femedu.solver.Solver.Solver">Solver (class in femedu.solver.Solver)</a>
+</li>
+      <li><a href="implementation/NewtonRaphsonSolver_class.html#femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver.solveSingleStep">solveSingleStep() (femedu.solver.NewtonRaphsonSolver.NewtonRaphsonSolver method)</a>
 </li>
       <li><a href="implementation/System_class.html#femedu.domain.System.System.startRecorder">startRecorder() (femedu.domain.System.System method)</a>
 </li>

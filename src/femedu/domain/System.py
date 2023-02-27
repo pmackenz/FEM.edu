@@ -164,60 +164,9 @@ class System():
         # solve for next point on the equilibrium path
         self.NewtonSolver(verbose)
 
-    def assemble(self):
-        # initialize new residuum and tangent stiffness matrix
-        Kt = np.zeros((self.sdof,self.sdof))
-        R  = self.loadfactor * self.P.copy()  # initialize R to applied load vector
 
-        # copy and reshape system displacement vector to a list of nodal displacement vectors
-        U = self.sysU.copy()
-        U.shape = (self.nNodes,self.ndof)
 
-        # loop through elements
-        for thisElem in self.elements:
-
-            elem = thisElem['element']   # this is a pointer to the current member
-            idxI = thisElem['i']   # this is the node index, not the system dof index
-            idxJ = thisElem['j']   # this is the node index, not the system dof index
-
-            #sidxI = np.arange(idxI * self.ndof, (idxI + 1) * self.ndof)  # system dofs for node I
-            #sidxJ = np.arange(idxJ * self.ndof, (idxJ + 1) * self.ndof)  # system dofs for node J
-
-            sidxI = elem.dofMap + idxI * self.ndof  # system dofs for node I
-            sidxJ = elem.dofMap + idxJ * self.ndof  # system dofs for node J
-
-            # update element displacements
-            elem.setDisp(U[idxI],U[idxJ])
-
-            # add element force to system forces
-            (fi, fj) = elem.getForce()
-            R[sidxI] -= fi         # subtract the resisting (internal) force added by member elem
-            R[sidxJ] -= fj         # subtract the resisting (internal) force added by member elem
-
-            # add element stiffness to system stiffness
-            KTe = elem.getKt()  # this is the nodal stiffness, not the entire element stiffness matrix
-            Kt[sidxI[:,np.newaxis],sidxI] += KTe[0][0]
-            Kt[sidxI[:,np.newaxis],sidxJ] += KTe[0][1]
-            Kt[sidxJ[:,np.newaxis],sidxI] += KTe[1][0]
-            Kt[sidxJ[:,np.newaxis],sidxJ] += KTe[1][1]
-
-        # apply boundary conditions
-        for idx in self.fixities:
-            Kt[:,idx]   = 0.0
-            Kt[idx,:]   = 0.0
-            Kt[idx,idx] = 1.0e+1
-            R[idx]      = 0.0
-
-        self.Kt = Kt
-        self.R  = R
-
-    def trackStability(self, on=True):
-        if on:
-            self.track_stability = True
-            if not self.recorder['stability']:
-                self.recorder['stability'] = [ 0.0 for x in self.recorder['lambda'] ]
-        else:
-            self.track_stability = False
+# -------- recorder methods -------------
 
     def initRecorder(self):
         self.record = False
@@ -243,6 +192,13 @@ class System():
         self.recorder['lambda'].append(self.loadfactor)
         if self.track_stability:
             self.recorder['stability'].append(self.checkStability())
+    def trackStability(self, on=True):
+        if on:
+            self.track_stability = True
+            if not self.recorder['stability']:
+                self.recorder['stability'] = [ 0.0 for x in self.recorder['lambda'] ]
+        else:
+            self.track_stability = False
 
     def fetchRecord(self):
         """
@@ -250,85 +206,19 @@ class System():
         """
         return (np.array(self.recorder['lambda']), np.array(self.recorder['U']), np.array(self.recorder['stability']))
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+# ------- solver methods ----------
 
     def solve(self):
         """
-        Solve system of equations and find state of deformation for the given load.
+        Solve system of equations and find state of deformation for the given load level.
         """
+        if self.solve:
+            self.solver.solve()
+        else:
+            msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+            raise NotImplementedError(msg)
 
-        # compute size parameters
-        ndof = 0
-        for node in self.nodes:
-            node.setStart(ndof)
-            ndof += node.ndofs
-        Rsys = np.zeros(ndof)
-        Ksys = np.zeros((ndof, ndof))
-
-        # assemble loads
-        for node in self.nodes:
-            if node.hasLoad():
-                K = node.start + np.arange(node.ndofs)
-                Rsys[K] += node.getLoad()
-
-        # Element Loop: assemble element forces and stiffness
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-                for (j,ndJ) in enumerate(element.nodes):
-                    M = ndJ.start + np.arange(ndJ.ndofs)
-                    Ksys[K[:, np.newaxis], M] += element.Kt[i][j]
-
-        # apply boundary conditions
-        for node in self.nodes:
-            for dof in node.dofs:
-                if node.isFixed(dof):
-                    idx = node.start + node.dofs[dof]
-                    Rsys[idx]      = 0.0
-                    Ksys[:, idx]   = np.zeros(ndof)
-                    Ksys[idx, :]   = np.zeros(ndof)
-                    Ksys[idx, idx] = 1.0
-
-        # stability check for system matrix
-        (vals, vecs) = np.linalg.eig(Ksys)
-        for (lam, v) in zip(vals, vecs.T):
-            if np.abs(lam) < 1.0e-2:
-                print(f"lambda = {lam:16.12e}")
-                print(v)
-
-        # solve for displacements
-        U = np.linalg.solve(Ksys, Rsys)
-
-        # update nodal displacements
-        for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(U[K])
-
-        # recompute residual force
-        Rsys = np.zeros(ndof)
-        for element in self.elements:
-            Fe = element.getForce()     # Element State Update occurs here
-            for (i,ndI) in enumerate(element.nodes):
-                K = ndI.start + np.arange(ndI.ndofs)
-                Rsys[K] -= Fe[i]
-
-        #
-        self.Rsys = Rsys
-        self.disp = U
+# ------------ plot methods -----------------
 
     def plot(self, factor=1.0, filename=None):
         """
@@ -401,6 +291,8 @@ class System():
                 s += "  " + ln + "\n"
         print(s)
 
+# ------------ operational support methods --------------
+
     def resetDisp(self):
         """
         Resets the displacement vector.
@@ -421,6 +313,7 @@ class System():
         """
         self.resetDisp()
         self.resetLoad()
+
 
 
 if __name__ == "__main__":
