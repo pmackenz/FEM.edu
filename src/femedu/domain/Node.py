@@ -85,8 +85,14 @@ class Node():
         :param dofs:
         """
         for dof in dofs:
-            if dof not in self.fixity:
-                self.fixity.append(dof)
+            if isinstance(dof, str):
+                if dof not in self.fixity:
+                    self.fixity.append(dof)
+            elif isinstance(dof,list) or isinstance(dof,tuple):
+                for item in dof:
+                    self.fixDOF(item)
+            else:
+                raise TypeError
 
 
     def __floordiv__(self, other):
@@ -278,7 +284,7 @@ if __name__ == "__main__":
     node.setLoad(1.2, 3.4)
     node.addLoad(5.6, 7.8)
     node.setDisp(0.1234, -4.321)
-    node.fixDOF(1)   # fixes y-direction
+    node.fixDOF('uy')   # fixes y-direction
 
     print(repr(node))
     print(node)
