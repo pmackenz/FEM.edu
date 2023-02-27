@@ -26,6 +26,10 @@ To run a specific example use, e.g.:
     * - Example
       - Description
     * - **frame01**
-      - WIP
+      - Axially loaded beam with lateral load
+    * - **frame02**
+      - Axially loaded column with lateral load. Rotated **frame01** to test invariance.
+    * - **frame03**
+      - Building frame
 
 
