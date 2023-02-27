@@ -213,7 +213,7 @@ class System():
         Solve system of equations and find state of deformation for the given load level.
         """
         if self.solve:
-            self.solver.solve()
+            self.solver.solve(**kwargs)
         else:
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)

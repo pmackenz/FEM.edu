@@ -149,9 +149,10 @@ class Frame2D(Element):
         svec = np.array([[0,-1],[1,0]]) @ nvec
 
         # - compute axial strain
-        #strain = 0.5 * ((ell/L)**2 - 1.)
-        psi = Svec @ (Uj - Ui) / L
-        strain = Nvec @ (Uj - Ui) / L + 0.5 * (psi * psi)
+        #strain = 0.5 * ((ell/L)**2 - 1.)                    # finite deformation
+        #psi = Svec @ (Uj - Ui) / L                          # von Karman
+        #strain = Nvec @ (Uj - Ui) / L + 0.5 * (psi * psi)   # von Karman
+        strain = Nvec @ (Uj - Ui) / L                        # P-delta
 
         # - compute curvature
         """
@@ -197,12 +198,14 @@ class Frame2D(Element):
         # ** axial portion
 
         # - compute nodal tangent stiffness for axial
-        #n_tensor_n = np.outer(nvec, nvec)
-        n_tensor_n = np.outer(Nvec, Nvec)
-        ke  = (EA / L) * n_tensor_n
-        ke += self.force / L * (np.identity(len(nvec)) - n_tensor_n)
+        n_tensor_n = np.outer(Nvec, Nvec)                                     # P-delta
+        #n_tensor_n = np.outer((Nvec + psi/L * Svec), (Nvec + psi/L * Svec))  # von Karman
+        #n_tensor_n = np.outer(nvec, nvec)                                    # finite deformation
+        ke  = (EA / L) * n_tensor_n                                           # P-delta && von Karman
+        #ke += self.force / L * (np.identity(len(nvec)) - n_tensor_n)         # von Karman
+        #ke += self.force / L * (np.identity(len(nvec)) - n_tensor_n)         # finite deformation
 
-        # ** bending portion
+        # ** bending portion (P-delta)
 
         if self.force < -EI / L**2 / 1000:
             """
@@ -258,10 +261,10 @@ class Frame2D(Element):
 
         n_tensor_n = np.outer(Nvec, Nvec)
         s_tensor_s = np.outer(Svec, Svec)
-        KtII = np.block( [[ kfu * s_tensor_s,  kft * svec[:,np.newaxis]], [ kmu * svec, kmt ]] )
-        KtIJ = np.block( [[-kfu * s_tensor_s,  kft * svec[:,np.newaxis]], [-kmu * svec, kmth]] )
-        KtJI = np.block( [[-kfu * s_tensor_s, -kft * svec[:,np.newaxis]], [ kmu * svec, kmth]] )
-        KtJJ = np.block( [[ kfu * s_tensor_s, -kft * svec[:,np.newaxis]], [-kmu * svec, kmt ]] )
+        KtII = np.block( [[ kfu * s_tensor_s,  kft * Svec[:,np.newaxis]], [ kmu * Svec, kmt ]] )
+        KtIJ = np.block( [[-kfu * s_tensor_s,  kft * Svec[:,np.newaxis]], [-kmu * Svec, kmth]] )
+        KtJI = np.block( [[-kfu * s_tensor_s, -kft * Svec[:,np.newaxis]], [ kmu * Svec, kmth]] )
+        KtJJ = np.block( [[ kfu * s_tensor_s, -kft * Svec[:,np.newaxis]], [-kmu * Svec, kmt ]] )
 
         Vi =  kfu * (vi - vj) + kft * (thetaj + thetai)
         Vj = -kfu * (vi - vj) - kft * (thetaj + thetai)
@@ -278,10 +281,12 @@ class Frame2D(Element):
             Mi -= -Mw
             Mj -=  Mw
 
-        #Fi = Vi * svec - self.force * nvec
-        #Fj = Vj * svec + self.force * nvec
-        Fi = Vi * Svec - self.force * Nvec
-        Fj = Vj * Svec + self.force * Nvec
+        #Fi = Vi * svec - self.force * nvec                   # finite deformation
+        #Fj = Vj * svec + self.force * nvec                   # finite deformation
+        #Fi = Vi * Svec - self.force * (Nvec + psi/L * Svec)  # von Karman
+        #Fj = Vj * Svec + self.force * (Nvec + psi/L * Svec)  # von Karman
+        Fi = Vi * Svec - self.force * (Nvec)                  # P-delta
+        Fj = Vj * Svec + self.force * (Nvec)                  # P-delta
 
         # ** combine the effects
 
@@ -300,13 +305,13 @@ class Frame2D(Element):
 
 
 if __name__ == "__main__":
-    # testing the Element class
+    # testing the Frame2D class
     nd0 = Node(0.0, 0.0)
     nd0.index = 0
     nd1 = Node(3.0, 2.0)
     nd1.index = 1
-    params = {'E':100, 'A':1.5, 'fy':1.0e20}
-    elem = Truss(nd0, nd1, Material(params))
+    params = {'E':100, 'A':1.5, 'I':4.5, 'fy':1.0e20}
+    elem = Frame2D(nd0, nd1, Material(params))
 
     print(nd0)
     print(nd1)

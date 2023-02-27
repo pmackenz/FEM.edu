@@ -94,6 +94,7 @@ class ElementPlotter(AbstractPlotter):
             # if self.reactions != []:
             #     self.addForces(axs)
 
+            axs.set_title(f"Deformed System (magnification={factor:.2f})")
             axs.set_aspect('equal')
             axs.set_xmargin(0.10)
             axs.set_ymargin(0.10)

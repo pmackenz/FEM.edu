@@ -27,6 +27,9 @@ class Solver():
         self.useArcLength = False
         self.lastConverged = {}
 
+        # shall result be recorded?
+        self.record = False
+
     def connect(self, nodes, elems):
         self.nodes = nodes
         self.elements = elems
@@ -37,6 +40,10 @@ class Solver():
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **nodes**
+              - list of node pointers (required)
+            * - **elements**
+              - list of element pointers (required)
             * - **P0**
               - system vector of initial forces
             * - **Pref**
@@ -54,6 +61,8 @@ class Solver():
         :return: state of the solver
         """
         state = {}
+        state['nodes']    = self.nodes
+        state['elements'] = self.elements
 
         return state
 
@@ -64,6 +73,10 @@ class Solver():
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **nodes**
+              - list of node pointers (required)
+            * - **elements**
+              - list of element pointers (required)
             * - **P0**
               - system vector of initial forces
             * - **Pref**
@@ -79,8 +92,16 @@ class Solver():
 
         :param state: state of the solver
         """
-        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
-        raise NotImplementedError(msg)
+        if 'nodes' in state:
+            self.nodes = state['nodes']
+        else:
+            raise TypeError("'nodes' missing from state")
+
+        if 'elements' in state:
+            self.elements = state['elements']
+        else:
+            raise TypeError("'elements' missing from state")
+
 
     def assemble(self, force_only=False):
         """
@@ -204,13 +225,13 @@ class Solver():
         normR = np.sqrt(normR)
 
         if report:
-            print('-')
+            #print('-')
             if self.hasConstraint:
                 print(f"Constraint violation: {self.g:12.4e}")
 
-            R = self.getResiduum()
-            for i in range(len(R)):
-                print("R({}): {:12.4e} {:12.4e}".format(i,*R[i]))
+            # R = self.getResiduum()
+            # for i in range(len(R)):
+            #     print("R({}): {:12.4e} {:12.4e}".format(i,*R[i]))
 
         print(f"norm of the out-of-balance force: {normR:12.4e}")
 

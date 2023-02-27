@@ -75,8 +75,10 @@ class NewtonRaphsonSolver(Solver):
             # solve for displacement update: a single Newton step
             dU = np.linalg.solve(self.Kt, self.R)
 
-        # update the system displacements
-        self.sysU += dU
+        # update nodal displacements
+        for node in self.nodes:
+            K = node.start + np.arange(node.ndofs)
+            node._updateDisp(dU[K])
 
     def assemble(self):
         """
@@ -101,9 +103,15 @@ class NewtonRaphsonSolver(Solver):
         return P
 
     def getResiduum(self):
-        R = self.R.copy()
-        R.shape = (self.nNodes, self.ndof)
-        return R
+        """
+        **NEEDS REDESIGN TO WORK WITH SMART NODES**
+        """
+
+        # R = self.R.copy()
+        # R.shape = (self.nNodes, self.ndof)
+        # return R
+
+        return self.R.copy()
 
     def pushState(self, state):
         """
@@ -112,6 +120,10 @@ class NewtonRaphsonSolver(Solver):
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **nodes**
+              - list of node pointers (required)
+            * - **elements**
+              - list of element pointers (required)
             * - **P0**
               - system vector of initial forces
             * - **Pref**
@@ -127,5 +139,7 @@ class NewtonRaphsonSolver(Solver):
 
         :param state: state of the solver
         """
+        super(NewtonRaphsonSolver, self).pushState( state)
+
         if 'lam1' in state:
             self.loadfactor = state['lam1']

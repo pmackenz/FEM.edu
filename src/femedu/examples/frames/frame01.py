@@ -83,7 +83,7 @@ class ExampleFrame01(Example):
     def problem(self):
         # initialize a system model
 
-        N  = 4     # number of elements
+        N  = 16     # number of elements
         L  = 100.0
         E  = 20000.
         EA = 2000000.0
@@ -96,7 +96,6 @@ class ExampleFrame01(Example):
         model.setSolver(NewtonRaphsonSolver())
 
         # create nodes
-        model = System()
 
         nd0 = Node(0.0, 0.0)
         model += nd0
@@ -121,7 +120,7 @@ class ExampleFrame01(Example):
         # add loads
         # .. load only the upper nodes
         Pcr = np.pi**2 * EI / L**2
-        #ndi.setLoad((-0.5*Pcr,), ('ux',))
+        ndi.setLoad((-0.5*Pcr,), ('ux',))
 
         # show model information
         print(model)
@@ -130,7 +129,7 @@ class ExampleFrame01(Example):
 
         model.report()
 
-        model.plot(factor=100.0)
+        model.plot(factor=10.0)
 
         model.beamValuePlot("F")
         model.beamValuePlot("M")

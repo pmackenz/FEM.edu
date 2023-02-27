@@ -80,6 +80,10 @@ class LinearSolver(Solver):
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **nodes**
+              - list of node pointers (required)
+            * - **elements**
+              - list of element pointers (required)
             * - **P0**
               - system vector of initial forces
             * - **Pref**
@@ -95,5 +99,7 @@ class LinearSolver(Solver):
 
         :param state: state of the solver
         """
+        super(LinearSolver, self).pushState(state)
+
         if 'lam1' in state:
             self.loadfactor = state['lam1']

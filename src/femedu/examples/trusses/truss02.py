@@ -4,6 +4,7 @@ Example
 from ...examples.Example import *
 
 from ...domain.System import *
+from ...solver.NewtonRaphsonSolver import NewtonRaphsonSolver
 from ...domain.Node import *
 from ...elements.Truss import *
 from ...materials.FiberMaterial import *
@@ -24,11 +25,14 @@ class ExampleTruss02(Example):
 
     def problem(self):
         # initialize a system model
-        B = 6.0 * 12
-        H = 8.0 * 12
+        P = -10.0      # reference load on top nodes
+        B = 6.0 * 12   # with of one bay in inches
+        H = 8.0 * 12   # height of one bay in inches
+        # material model parameters
         params = {'E': 10000., 'A': 3., 'nu': 0.0, 'fy': 1.e30}
 
         model = System()
+        model.setSolver(NewtonRaphsonSolver())
 
         # create nodes
         nd0 = Node(0.0, 0.0)
@@ -77,10 +81,10 @@ class ExampleTruss02(Example):
 
         # add loads
         # .. load only the upper nodes
-        nd5.setLoad((-1.0,), ('uy',))
-        nd6.setLoad((-1.0,), ('uy',))
-        nd7.setLoad((-1.0,), ('uy',))
-        nd8.setLoad((-1.0,), ('uy',))
+        nd5.setLoad((P,), ('uy',))
+        nd6.setLoad((P,), ('uy',))
+        nd7.setLoad((P,), ('uy',))
+        nd8.setLoad((P,), ('uy',))
 
         # analyze the model
         model.solve()
@@ -89,7 +93,7 @@ class ExampleTruss02(Example):
         model.report()
 
         # create plots
-        model.plot(factor=250.)
+        model.plot(factor=20.)
 
         model.beamValuePlot('f')
 
