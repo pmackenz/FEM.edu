@@ -16,6 +16,7 @@
         <script src="../_static/underscore.js"></script>
         <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../_static/doctools.js"></script>
+        <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
@@ -88,7 +89,7 @@
 <dd><p>class: representing a System model</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.addElement">
-<span class="sig-name descname"><span class="pre">addElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newElement</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.addElement" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">addElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">newElements</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.addElement" title="Permalink to this definition"></a></dt>
 <dd><dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>newElement</strong> – an <code class="code docutils literal notranslate"><span class="pre">Element</span></code> object</p>
@@ -109,7 +110,7 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.beamValuePlot">
-<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.beamValuePlot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">beamValuePlot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">variable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.beamValuePlot" title="Permalink to this definition"></a></dt>
 <dd><p>Create a traditional beam value plot, i.e., moment and shear diagrams.</p>
 <p>If <strong>filename</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -142,8 +143,14 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.initRecorder">
+<span class="sig-name descname"><span class="pre">initRecorder</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.initRecorder" title="Permalink to this definition"></a></dt>
+<dd><p>initializes data arrays for gathering of load history data</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="femedu.domain.System.System.plot">
-<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plot" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plot" title="Permalink to this definition"></a></dt>
 <dd><p>Create mesh plot showing the undeformed and the deformed system</p>
 <p>If <strong>filename</strong> is given, store the plot to that file.
 Use proper file extensions to indicate the desired format (.png, .pdf)</p>
@@ -155,6 +162,48 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 </ul>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.plotBucklingMode">
+<span class="sig-name descname"><span class="pre">plotBucklingMode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plotBucklingMode" title="Permalink to this definition"></a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method has been marked <strong>DEPRECATED</strong> !</p>
+<p>Use the <code class="code docutils literal notranslate"><span class="pre">System.plot()</span></code> method with appropriate <code class="code docutils literal notranslate"><span class="pre">**kwargs</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.plotDOF">
+<span class="sig-name descname"><span class="pre">plotDOF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dofs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plotDOF" title="Permalink to this definition"></a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method has been marked <strong>DEPRECATED</strong> !</p>
+<p>Use the <code class="code docutils literal notranslate"><span class="pre">System.plot()</span></code> method with appropriate <code class="code docutils literal notranslate"><span class="pre">**kwargs</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.plotSystem">
+<span class="sig-name descname"><span class="pre">plotSystem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">factor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1.0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.plotSystem" title="Permalink to this definition"></a></dt>
+<dd><div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This method has been marked <strong>DEPRECATED</strong> !</p>
+<p>Use the <code class="code docutils literal notranslate"><span class="pre">System.plot()</span></code> method with appropriate <code class="code docutils literal notranslate"><span class="pre">**kwargs</span></code> instead.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.popU">
+<span class="sig-name descname"><span class="pre">popU</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.popU" title="Permalink to this definition"></a></dt>
+<dd><p>Restore a previously pushed displacement vector (using <code class="code docutils literal notranslate"><span class="pre">pushU()</span></code>).</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.pushU">
+<span class="sig-name descname"><span class="pre">pushU</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.pushU" title="Permalink to this definition"></a></dt>
+<dd><p>Store the current displacement vector for later restore using <code class="code docutils literal notranslate"><span class="pre">popU()</span></code>.</p>
 </dd></dl>
 
 <dl class="py method">
@@ -185,6 +234,16 @@ Use proper file extensions to indicate the desired format (.png, .pdf)</p>
 <dt class="sig sig-object py" id="femedu.domain.System.System.resetLoad">
 <span class="sig-name descname"><span class="pre">resetLoad</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.resetLoad" title="Permalink to this definition"></a></dt>
 <dd><p>Resets the load vector.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="femedu.domain.System.System.setLoadFactor">
+<span class="sig-name descname"><span class="pre">setLoadFactor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lam</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#femedu.domain.System.System.setLoadFactor" title="Permalink to this definition"></a></dt>
+<dd><p>Set the target load factor to <strong>lam</strong></p>
+<p>The entered load pattern is considered a reference load,
+to be multiplied by a scalar load factor, <span class="math notranslate nohighlight">\(\lambda\)</span>.</p>
+<p>If no load factor is set explicitly, a factor of 1.0 is assumed, i.e., the
+entire entered load is applied in full.</p>
 </dd></dl>
 
 <dl class="py method">

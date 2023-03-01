@@ -1,5 +1,5 @@
 Mixed Structures Examples
-=====================
+==========================
 
 All mixed structures examples are packaged in :code:`examples.mixed`.
 To run a specific example use, e.g.:
