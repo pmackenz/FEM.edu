@@ -69,11 +69,11 @@ class Frame2D(Element):
         s = \
 """Frame2D: node {} to node {}:
    material properties: {}  strain:{}   stress:{}  
-   internal force: {}
-   Pi:[ {} {} {} ]  Pj:[ {} {} {} ]""".format( self.nodes[0].index, self.nodes[1].index,
+   internal forces: f0={fi:.2f} V0={Vi:.2f} M0={Mi:.2f} fl={fj:.2f} Vl={Vj:.2f} Ml={Mj:.2f} Pw={Pw:.2f} Mw={Mw:.2f}""".format(
+                            self.nodes[0].index, self.nodes[1].index,
                             repr(self.material), self.material.getStrain(),
                             self.material.getStress(),
-                            self.force, *self.Forces[0], *self.Forces[1] )
+                            **self.internal_forces)
         return s
 
     def __repr__(self):
@@ -114,11 +114,13 @@ class Frame2D(Element):
             else:
                 s   = np.array([0.,1.])
 
-            Ml = self.internal_forces['Mi']
-            Mr = self.internal_forces['Mj']
+            Ml  = self.internal_forces['Mi']
+            Ml += self.internal_forces['Mw']
+            Mr  = self.internal_forces['Mj']
+            Mr += self.internal_forces['Mw']
 
             #val = np.array([Ml, Mr])
-            val = Ml * (1. - s) + Mr * s - 0.5 * self.distributed_load * L*L * s * (1 - s)
+            val = Ml * (1. - s) + Mr * s - 0.5 * (self.distributed_load * self.loadfactor) * L*L * s * (1 - s)
 
         elif variable.lower() == 'v' or variable.lower() == 'vy':
             # transverse shear (in-plane)
@@ -127,10 +129,12 @@ class Frame2D(Element):
             else:
                 s   = np.array([0.,1.])
 
-            Vl = self.internal_forces['Vi']
-            Vr = self.internal_forces['Vj']
+            Vl  = self.internal_forces['Vi']
+            Vl -= self.internal_forces['Pw']
+            #Vr  = self.internal_forces['Vj']
+            #Vr += self.internal_forces['Pw']
 
-            val = Vl + s * self.distributed_load * L
+            val = Vl + s * (self.distributed_load * self.loadfactor) * L
 
         elif variable.lower() == 'f' or variable.lower() == 'fx':
             # transverse shear (in-plane)
@@ -296,19 +300,6 @@ class Frame2D(Element):
         Mi = kmu * (vi - vj) + kmt * thetai + kmth * thetaj
         Mj = kmu * (vi - vj) + kmth * thetai + kmt * thetaj
 
-        if self.distributed_load:
-            Pw = self.distributed_load * L / 2.
-            Mw = -Pw * L / 6.
-
-            Vi -=  Pw
-            Vj -=  Pw
-            Mi -= -Mw
-            Mj -=  Mw
-
-
-        self.internal_forces = {'fi':self.force, 'Vi': Vi, 'Mi':-Mi,
-                                'fj':self.force, 'Vj':-Vj, 'Mj': Mj}
-
         #Fi = Vi * svec - self.force * nvec                   # finite deformation
         #Fj = Vj * svec + self.force * nvec                   # finite deformation
         #Fi = Vi * Svec - self.force * (Nvec + psi/L * Svec)  # von Karman
@@ -325,11 +316,31 @@ class Frame2D(Element):
         KtJJ[0:2,0:2] +=  ke
 
         # ** build element load vector and element tangent stiffness
+
+        # .. internal force
         self.Fi = np.r_[Fi, Mi]
         self.Fj = np.r_[Fj, Mj]
         self.Forces = [self.Fi, self.Fj]
 
+        # .. tangent stiffness
         self.Kt = [[KtII, KtIJ],[KtJI, KtJJ]]
+
+        # internal forces at nodes
+        self.internal_forces = {'fi':self.force, 'Vi': Vi, 'Mi':-Mi,
+                                'fj':self.force, 'Vj':-Vj, 'Mj': Mj,
+                                'Pw':0, 'Mw':0}
+
+        # .. applied element load (reference load)
+        if self.distributed_load:
+            Pw = self.distributed_load * L / 2.
+            Mw = Pw * L / 6.
+
+            Pi = np.r_[Pw * Svec, np.array([ Mw])]
+            Pj = np.r_[Pw * Svec, np.array([-Mw])]
+            self.Loads = (Pi, Pj)
+
+            self.internal_forces['Pw'] = Pw * self.loadfactor
+            self.internal_forces['Mw'] = Mw * self.loadfactor
 
 
 if __name__ == "__main__":

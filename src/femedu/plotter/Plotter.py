@@ -41,7 +41,7 @@ class Plotter(AbstractPlotter):
         """
         self.reactions = np.array(R)
 
-    def displacementPlot(self, file=None):
+    def displacementPlot(self, file=None, **kwargs):
         """
         Create a deformed system plot
 
@@ -112,7 +112,7 @@ class Plotter(AbstractPlotter):
 
         plt.show()
 
-    def valuePlot(self, deformed=False, file=None):
+    def valuePlot(self, deformed=False, file=None, **kwargs):
         """
         Create a plot using colors to identify magnitude of internal force.
 

@@ -16,16 +16,21 @@ class Node():
         else:
             self.pos = np.array([x0, y0])
 
-        self.index     = -1
-        self.disp      = None
-        self.dofs      = {}
-        self.ndofs     = 0
-        self.start     = None
-        self.elements  = []
-        self.fixity    = []
-        self.loads     = {}
-        self._hasLoad  = False
-        self.transform = None    # nodal transformation object
+        self.index       = -1
+        self.disp        = None   # active current displacement vector
+        self.disp_n      = None   # previously converged displacement vector
+        self.disp_pushed = None   # stored displacement vector (see pushU() and popU())
+        self.disp_mode   = None   # stored displacement representing a mode shape
+        self.dofs        = {}
+        self.ndofs       = 0
+        self.start       = None
+        self.elements    = []
+        self.fixity      = []
+        self.loads       = {}
+        self._hasLoad    = False
+        self.transform   = None    # nodal transformation object
+
+        self.setLoadFactor(1.0)
 
     def __str__(self):
         s = \
@@ -126,16 +131,20 @@ class Node():
     def setStart(self, startInt):
         self.start = startInt
 
-    def setDisp(self, U, dof_list):
+    def setDisp(self, U, dof_list=None, modeshape=False):
         """
         use for prescribed displacements
 
         **NEEDS TO BE IMPLEMENTED**
 
         :param U:
+        :param modeshape: set to True if U represents a mode shape (BOOL)
         :param dof_list:
         """
-        self.disp = U
+        if modeshape:
+            self.disp_mode = U
+        else:
+            self.disp = U
 
     def _updateDisp(self, dU):
         """
@@ -145,7 +154,22 @@ class Node():
         """
         self.disp += dU
 
-    def getDisp(self, caller=None, dofs=None):
+    def pushU(self):
+        """
+        Store the current displacement vector for later restore using :code:`popU()`.
+        """
+        self.disp_pushed = self.disp
+
+    def popU(self):
+        """
+        Restore a previously pushed displacement vector (using :code:`pushU()`).
+        """
+        if isinstance(self.disp_pushed, np.ndarray):
+            self.disp = self.disp_pushed
+        else:
+            raise TypeError("no pushed displacement data available")
+
+    def getDisp(self, caller=None, dofs=None, **kwargs):
         """
         return a vector (nd.array) of (generalized) displacements.
 
@@ -166,29 +190,33 @@ class Node():
         :param dofs: tuple or list of d.o.f. keys
         :return: nodal displacement vector
         """
-        if not isinstance(self.disp, np.ndarray):
-            self.disp = np.zeros(self.ndofs)
+        if 'modeshape' in kwargs and kwargs['modeshape']:
+            if not isinstance(self.disp_mode, np.ndarray):
+                self.disp_mode = np.zeros(self.ndofs)
+            U = self.disp_mode
+        else:
+            if not isinstance(self.disp, np.ndarray):
+                self.disp = np.zeros(self.ndofs)
+            U = self.disp
 
         if dofs:
             ans = []
             for dof in dofs:
                 if dof in self.dofs:
-                    ans.append(self.disp[self.dofs[dof]])
+                    ans.append(U[self.dofs[dof]])
                 else:
                     ans.append(0.0)
             return np.array(ans)
         else:
-            return self.disp
+            return U
 
     def getPos(self):
         """
-
         :return: initial position vector
         """
-
         return self.pos
 
-    def getDeformedPos(self, caller=None, factor=1.0):
+    def getDeformedPos(self, caller=None, factor=1.0, **kwargs):
         """
         Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
 
@@ -199,10 +227,16 @@ class Node():
         :param factor: deformation magnification factor, :math:`f`.
         :return: deformed position vector, :math:`{\\bf x}`.
         """
-        if not isinstance(self.disp, np.ndarray):
-            self.disp = np.zeros(self.ndofs)
+        if 'modeshape' in kwargs and kwargs['modeshape']:
+            if not isinstance(self.disp_mode, np.ndarray):
+                self.disp_mode = np.zeros(self.ndofs)
 
-        return self.pos + factor * self.disp
+            return self.pos + factor * self.disp_mode
+        else:
+            if not isinstance(self.disp, np.ndarray):
+                self.disp = np.zeros(self.ndofs)
+
+            return self.pos + factor * self.disp
 
     def addTransformation(self, T):
         """
@@ -246,14 +280,17 @@ class Node():
         self.loads = {}
         self._hasLoad = False
 
-    def getLoad(self, dof_list=None):
+    def getLoad(self, dof_list=None, apply_load_factor=False):
         """
         :returns: nodal load vector (ndarray)
         """
         force = np.zeros(self.ndofs)
         for dof in self.loads:
             if dof in self.dofs:
-                force[self.dofs[dof]] = self.loads[dof]
+                if apply_load_factor:
+                    force[self.dofs[dof]] = self.loads[dof] * self.loadfactor
+                else:
+                    force[self.dofs[dof]] = self.loads[dof]
         return force
 
     def hasLoad(self):
@@ -274,6 +311,23 @@ class Node():
         """
         self.resetDisp()
         self.resetLoad()
+
+    def setLoadFactor(self, lam):
+        """
+        Set the target load factor to **lam**
+
+        .. warning::
+
+            This method should not be called by the user.
+            **USE** :code:`System.setLoadFactor(lam)` instead!
+
+        The entered load pattern is considered a reference load,
+        to be multiplied by a scalar load factor, :math:`\lambda`.
+
+        If no load factor is set explicitly, a factor of 1.0 is assumed, i.e., the
+        entire entered load is applied in full.
+        """
+        self.loadfactor = lam
 
 
 

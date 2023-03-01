@@ -113,11 +113,13 @@ class Beam2D(Element):
             else:
                 s   = np.array([0.,1.])
 
-            Ml = self.internal_forces['Mi']
-            Mr = self.internal_forces['Mj']
+            Ml  = self.internal_forces['Mi']
+            Ml += self.internal_forces['Mw']
+            Mr  = self.internal_forces['Mj']
+            Mr += self.internal_forces['Mw']
 
             #val = np.array([Ml, Mr])
-            val = Ml * (1. - s) + Mr * s - 0.5 * self.distributed_load * L*L * s * (1 - s)
+            val = Ml * (1. - s) + Mr * s - 0.5 * (self.distributed_load * self.loadfactor) * L*L * s * (1 - s)
 
         elif variable.lower() == 'v' or variable.lower() == 'vy':
             # transverse shear (in-plane)
@@ -126,10 +128,12 @@ class Beam2D(Element):
             else:
                 s   = np.array([0.,1.])
 
-            Vl = self.internal_forces['Vi']
-            Vr = self.internal_forces['Vj']
+            Vl  = self.internal_forces['Vi']
+            Vl -= self.internal_forces['Pw']
+            #Vr  = self.internal_forces['Vj']
+            #Vr += self.internal_forces['Pw']
 
-            val = Vl + s * self.distributed_load * L
+            val = Vl + s * (self.distributed_load * self.loadfactor) * L
 
         else:
             s   = np.array([0.,1.])
@@ -218,24 +222,33 @@ class Beam2D(Element):
         Mi = kmu * (vi - vj) + kmt * thetai + kmth * thetaj
         Mj = kmu * (vi - vj) + kmth * thetai + kmt * thetaj
 
-        if self.distributed_load:
-            Pw = self.distributed_load * L / 2.
-            Mw = -Pw * L / 6.
-
-            Vi -=  Pw
-            Vj -=  Pw
-            Mi -= -Mw
-            Mj -=  Mw
-
-        self.internal_forces = {'fi':0.0, 'Vi': Vi, 'Mi':-Mi,
-                                'fj':0.0, 'Vj':-Vj, 'Mj': Mj}
 
         # build element load vector and element tangent stiffness
+
+        # .. internal force
         self.Fi = np.array([Vi, Mi])
         self.Fj = np.array([Vj, Mj])
         self.Forces = (self.Fi, self.Fj)
 
+        # .. tangent stiffness
         self.Kt = np.array( [[KtII, KtIJ],[KtJI, KtJJ]] )
+
+        # internal forces at nodes
+        self.internal_forces = {'fi':0.0, 'Vi': Vi, 'Mi':-Mi,
+                                'fj':0.0, 'Vj':-Vj, 'Mj': Mj,
+                                'Pw':0, 'Mw':0}
+
+        # .. applied element load (reference load)
+        if self.distributed_load:
+            Pw = self.distributed_load * L / 2.
+            Mw = Pw * L / 6.
+
+            Pi = np.array([Pw,  Mw])
+            Pj = np.array([Pw, -Mw])
+            self.Loads = (Pi, Pj)
+
+            self.internal_forces['Pw'] = Pw * self.loadfactor
+            self.internal_forces['Mw'] = Mw * self.loadfactor
 
     # prepare for removal
     def getAxialForce(self):

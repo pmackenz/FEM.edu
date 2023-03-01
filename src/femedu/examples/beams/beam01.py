@@ -26,7 +26,7 @@ class ExampleBeam01(Example):
         # initialize a system model
         SpanLength = 10.0 * 12
         w =  -1.0   # distributed load (positive if acting in local y-direction
-        P =   -50.0   # center point load (uses global system)
+        P =   -40.0   # center point load (uses global system)
 
         Nelems = 4    # number of elements
         params = {'E': 29000., 'A': 4.7, 'I':103}

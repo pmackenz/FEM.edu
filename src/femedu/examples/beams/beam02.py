@@ -25,7 +25,7 @@ class ExampleBeam02(Example):
     def problem(self):
         # initialize a system model
         SpanLengths = [ 8.0 * 12, 10.0 * 12, 8.0 * 12 ]
-        Nelems = 10    # number of elements
+        Nelems = 2     # number of elements
         params = {'E': 29000., 'A': 5, 'I':50}
 
         # define load

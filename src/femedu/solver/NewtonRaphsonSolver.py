@@ -22,7 +22,8 @@ class NewtonRaphsonSolver(Solver):
         # compute force vector and tangent stiffness
             self.assemble()
 
-            normR = self.checkResiduum(verbose)
+            # we are using , force_only=False and simply reuse self.Kt from that run (!)
+            normR = self.checkResiduum(verbose, force_only=False)
 
             if normR<self.TOL:
                 break
@@ -36,7 +37,6 @@ class NewtonRaphsonSolver(Solver):
         print('+')
 
         return normR
-
 
     def solveSingleStep(self):
         """
@@ -77,20 +77,14 @@ class NewtonRaphsonSolver(Solver):
 
         # update nodal displacements
         for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(dU[K])
+            idxK = node.start + np.arange(node.ndofs)
+            node._updateDisp(dU[idxK])
 
-    def assemble(self):
+    def assemble(self, force_only=False):
         """
         inherited from :code:`Solver` class.
         """
-        super(NewtonRaphsonSolver, self).assemble()
-
-    def setLoadFactor(self, lam):
-        """
-        Set the target load factor to **lam**
-        """
-        self.loadfactor = lam
+        super(NewtonRaphsonSolver, self).assemble(force_only=force_only)
 
     def getDisplacements(self):
         U = self.sysU.copy()

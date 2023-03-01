@@ -28,7 +28,7 @@ class ElementPlotter(AbstractPlotter):
         """
         self.reactions = np.array(R)
 
-    def displacementPlot(self, factor=1.0, file=None):
+    def displacementPlot(self, factor=1.0, filename=None, modeshape=False, **kwargs):
         """
         Create a deformed system plot
 
@@ -45,7 +45,7 @@ class ElementPlotter(AbstractPlotter):
 
             # plot the undeformed elements
             for elem in self.elements:
-                ans = elem.draw(factor=0.0)
+                ans = elem.draw(factor=0.0, modeshape=False)
                 if len(ans)>=3:
                     x = ans[0]
                     y = ans[1]
@@ -56,7 +56,7 @@ class ElementPlotter(AbstractPlotter):
             # plot the deformed elements
             if factor:
                 for elem in self.elements:
-                    ans = elem.draw(factor=factor)
+                    ans = elem.draw(factor=factor, modeshape=modeshape)
                     if len(ans)>=3:
                         x = ans[0]
                         y = ans[1]
@@ -84,7 +84,7 @@ class ElementPlotter(AbstractPlotter):
             # plot the deformed elements
             if factor:
                 for elem in self.elements:
-                    ans = elem.draw(factor=factor)
+                    ans = elem.draw(factor=factor,modeshape=modeshape)
                     if len(ans)>=2:
                         x = ans[0]
                         y = ans[1]
@@ -94,15 +94,21 @@ class ElementPlotter(AbstractPlotter):
             # if self.reactions != []:
             #     self.addForces(axs)
 
-            axs.set_title(f"Deformed System (magnification={factor:.2f})")
+            if 'title' in kwargs:
+                axs.set_title(kwargs['title'])
+            else:
+                axs.set_title(f"Deformed System (magnification={factor:.2f})")
+
             axs.set_aspect('equal')
             axs.set_xmargin(0.10)
             axs.set_ymargin(0.10)
             axs.set_axis_off()
 
+        if filename:
+            plt.savefig(filename)
         plt.show()
 
-    def valuePlot(self, variable_name='', factor=0.0, file=None):
+    def valuePlot(self, variable_name='', factor=0.0, filename=None):
         """
         Create a plot using colors to identify magnitude of internal force.
 
@@ -110,7 +116,7 @@ class ElementPlotter(AbstractPlotter):
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
         :param factor: True | **False**
-        :param file: filename (str)
+        :param filename:  (str)
         """
         print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
         return
@@ -148,9 +154,11 @@ class ElementPlotter(AbstractPlotter):
 
         plt.autoscale(enable=True, axis='x', tight=False)
         plt.autoscale(enable=True, axis='y', tight=False)
+        if filename:
+            plt.savefig(filename)
         plt.show()
 
-    def beamValuePlot(self, variable_name='', factor=0.0, file=None, show_arrows=False):
+    def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False):
         """
         Create a deformed system plot
 
@@ -276,6 +284,8 @@ class ElementPlotter(AbstractPlotter):
             axs.set_ymargin(0.10)
             axs.set_axis_off()
 
+        if filename:
+            plt.savefig(filename)
         plt.show()
 
     def _arrow(self,axs,x,y,dx,dy,val,show_point=True):

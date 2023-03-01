@@ -1,5 +1,15 @@
 import numpy as np
 
+###
+### matplotlib is needed for deprecated methods only
+###
+### remove this section onve ALL plotting has been moved into suitable plotter classes
+###
+import matplotlib.pyplot as plt
+###
+### end of deprecated section
+###
+
 from .Node     import *
 from ..elements.Element import *
 from ..solver.LinearSolver import LinearSolver
@@ -26,6 +36,9 @@ class System():
 
         self.solver = LinearSolver()
         self.solver.connect(self.nodes, self.elements)
+
+        self.initRecorder()
+        self.trackStability(False)
 
     def __str__(self):
         s = "System object"
@@ -108,6 +121,8 @@ class System():
         """
         return self.solver
 
+# --------- this should become a solver object ------------
+
     def initArcLength(self, load=1., alpha=0.0, tolerance=1.0e-12):
         # store analysis parameter(s)
         self.alpha = alpha
@@ -166,12 +181,15 @@ class System():
         self.NewtonSolver(verbose)
 
 
-
-# -------- recorder methods -------------
+    # --------- recorder methods ------------------------------
 
     def initRecorder(self):
+        """
+        initializes data arrays for gathering of load history data
+        """
         self.record = False
         self.recorder = {'U':[], 'lambda':[], 'stability':None}
+
 
     def startRecorder(self):
         """
@@ -193,6 +211,7 @@ class System():
         self.recorder['lambda'].append(self.loadfactor)
         if self.track_stability:
             self.recorder['stability'].append(self.checkStability())
+
     def trackStability(self, on=True):
         if on:
             self.track_stability = True
@@ -219,9 +238,15 @@ class System():
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)
 
+    def getBucklingMode(self, mode=0, **kwargs):
+        if self.solver:
+            return self.solver.getBucklingMode(mode=mode, **kwargs)
+        else:
+            return (np.nan,None)
+
 # ------------ plot methods -----------------
 
-    def plot(self, factor=1.0, filename=None):
+    def plot(self, factor=1.0, **kwargs):
         """
         Create mesh plot showing the undeformed and the deformed system
 
@@ -238,7 +263,7 @@ class System():
         # R = self.Rsys.copy().reshape((ndof//2, 2))
         # self.plotter.setReactions(R)
 
-        self.plotter.displacementPlot(factor=factor, file=filename)
+        self.plotter.displacementPlot(factor=factor, **kwargs)
 
     def valuePlot(self, variable, factor=0.0, filename=None):
         """
@@ -257,7 +282,7 @@ class System():
         self.plotter.setMesh(self.nodes, self.elements)
         self.plotter.valuePlot(variable_name=variable, factor=factor, file=filename)
 
-    def beamValuePlot(self, variable, factor=0.0, filename=None):
+    def beamValuePlot(self, variable, factor=0.0, filename=None, **kwargs):
         """
         Create a traditional beam value plot, i.e., moment and shear diagrams.
 
@@ -270,7 +295,128 @@ class System():
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
-        self.plotter.beamValuePlot(variable_name=variable, factor=factor, file=filename)
+        self.plotter.beamValuePlot(variable_name=variable, factor=factor, filename=filename, **kwargs)
+
+    def plotDOF(self, dofs=[]):
+        """
+        .. warning::
+
+            This method has been marked **DEPRECATED** !
+
+            Use the :code:`System.plot()` method with appropriate :code:`**kwargs` instead.
+        """
+
+
+        if self.track_stability:
+            fig, (ax1, ax2) = plt.subplots(1,2, figsize=(10,4))
+        else:
+            fig, ax1 = plt.subplots(1,1, figsize=(5,4))
+
+        if not dofs:
+            dofs = range(self.sdof)
+
+        loadfactors   = self.recorder['lambda']
+        displacements = np.array(self.recorder['U'])
+
+        for idx in dofs:
+
+            nodeID    = idx // self.ndof + 1
+            direction = idx % self.ndof
+
+            if direction==0:
+                style = '--x'
+                lbl = '$ u_{{{}}} $'.format(nodeID)
+            elif direction==1:
+                style = '-o'
+                lbl = '$ v_{{{}}} $'.format(nodeID)
+            elif direction==2 and direction < self.ndim:
+                style = ':+'
+                lbl = '$ w_{{{}}} $'.format(nodeID)
+            else:
+                if direction < self.ndim:
+                    style = '-+'
+                    lbl = '$ u_{{{},{}}} $'.format(nodeID,direction)
+                else:
+                    style = '-.o'
+                    if self.ndim < 3:
+                        lbl = '$ \\theta_{{{}}} $'.format(nodeID)
+                    else:
+                        lbl = '$ \\theta_{{{},{}}} $'.format(nodeID,direction-self.ndim)
+
+            ax1.plot(displacements[:,idx],loadfactors, style,label=lbl)
+
+        ax1.grid(True)
+        ax1.set_xlabel('component of displacement, $ u_i$')
+        ax1.set_ylabel('load factor, $\lambda$')
+        ax1.legend()
+
+        if self.track_stability:
+
+            detKt = np.array(self.recorder['stability'])
+
+            ax2.plot(detKt, loadfactors,'-r')
+            ax2.plot(np.zeros_like(loadfactors), loadfactors,'-k', lw=2)
+            ax2.grid(True)
+            ax2.set_xlabel('stability index, $ det({\\bf K}_t) $ or $ \min |\lambda| $')
+            ax2.set_ylabel('load factor, $\lambda$')
+
+        plt.savefig("history_plots.png")
+        plt.show()
+
+    def plotSystem(self, factor=1.0):
+        """
+        .. warning::
+
+            This method has been marked **DEPRECATED** !
+
+            Use the :code:`System.plot()` method with appropriate :code:`**kwargs` instead.
+        """
+
+        for element_description in self.elements:
+            elem = element_description['element']   # the actual element
+            (x, y) = elem.getCurve(0.0)
+            plt.plot(x, y, '-b')
+
+        for element_description in self.elements:
+            elem = element_description['element']   # the actual element
+            (x, y) = elem.getCurve(factor)
+            plt.plot(x, y, '-r')
+
+        plt.title(f"Deformed system (magnified by {factor:.1f})")
+
+        plt.gca().set_aspect('equal')
+        plt.gca().axis('off')
+        plt.savefig("deformed_system.png")
+        plt.show()
+
+    def pushU(self):
+        """
+        Store the current displacement vector for later restore using :code:`popU()`.
+        """
+        for node in self.nodes:
+            node.pushU()
+
+    def popU(self):
+        """
+        Restore a previously pushed displacement vector (using :code:`pushU()`).
+        """
+        for node in self.nodes:
+            node.popU()
+
+    def plotBucklingMode(self, factor=1.0):
+        """
+        .. warning::
+
+            This method has been marked **DEPRECATED** !
+
+            Use the :code:`System.plot()` method with appropriate :code:`**kwargs` instead.
+        """
+
+        # perform eigenvalue analysis
+        lam = self.getBucklingMode()
+        title_text = f"Mode Shape for $ \lambda = {lam:.2f} $"
+        file_name  = "buckling_mode.png"
+        self.plot(factor=factor, filename=file_name, title=title_text, modeshape=True)
 
 
     def report(self):
@@ -293,6 +439,30 @@ class System():
         print(s)
 
 # ------------ operational support methods --------------
+
+    def setLoadFactor(self, lam):
+        """
+        Set the target load factor to **lam**
+
+        The entered load pattern is considered a reference load,
+        to be multiplied by a scalar load factor, :math:`\lambda`.
+
+        If no load factor is set explicitly, a factor of 1.0 is assumed, i.e., the
+        entire entered load is applied in full.
+        """
+        self.loadfactor = lam
+
+        # inform elements about the load factor
+        for elem in self.elements:
+            elem.setLoadFactor(lam)
+
+        # inform nodes about the new load factor
+        for node in self.nodes:
+            node.setLoadFactor(lam)
+
+        # let solver know about the new load factor
+        if self.solver:
+            self.solver.setLoadFactor(lam)
 
     def resetDisp(self):
         """

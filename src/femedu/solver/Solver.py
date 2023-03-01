@@ -63,6 +63,7 @@ class Solver():
         state = {}
         state['nodes']    = self.nodes
         state['elements'] = self.elements
+        state['lam1']     = self.loadfactor
 
         return state
 
@@ -102,6 +103,23 @@ class Solver():
         else:
             raise TypeError("'elements' missing from state")
 
+        if 'lam1' in state:
+            self.loadfactor = state['lam1']
+        else:
+            raise TypeError("'lam1' missing from state")
+
+    def setLoadFactor(self, lam):
+        """
+        Set the target load factor to **lam**
+
+        The entered load pattern is considered a reference load,
+        to be multiplied by a scalar load factor, :math:`\lambda`.
+
+        If no load factor is set explicitly, a factor of 1.0 is assumed, i.e., the
+        entire entered load is applied in full.
+        """
+        self.loadfactor = lam
+
 
     def assemble(self, force_only=False):
         """
@@ -111,6 +129,13 @@ class Solver():
         and the tangent stiffness matrix (:math:`{\\bf K}_t`) used by most solvers.
 
         Specialized solvers may overload this method.
+
+        .. note::
+
+            The solver will apply the global load factor to the reference load returned by nodes
+            and elements.  While nodes and elements are aware of that load factor, they shall
+            apply it **only if asked explicity** by passing :code:`apply_load_factor=True` to the
+            respective access functions.
 
         :param force_only: set to **True** if only the residual force needs to be assembled
         """
@@ -129,14 +154,18 @@ class Solver():
         for node in self.nodes:
             if node.hasLoad():
                 idx = node.start + np.arange(node.ndofs)
-                Rsys[idx] += node.getLoad()
+                Rsys[idx] += node.getLoad() * self.loadfactor
 
         # Element Loop: assemble element forces and stiffness
         for element in self.elements:
             Fe = element.getForce()     # Element State Update occurs here
+            Pe = element.getLoad()      # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
                 idxK = ndI.start + np.arange(ndI.ndofs)
-                Rsys[idxK] -= Fe[i]
+                if isinstance(Pe[i], np.ndarray):
+                    Rsys[idxK] -= Fe[i] - self.loadfactor * Pe[i]
+                else:
+                    Rsys[idxK] -= Fe[i]
                 if not force_only:
                     for (j,ndJ) in enumerate(element.nodes):
                         idxM = ndJ.start + np.arange(ndJ.ndofs)
@@ -151,7 +180,7 @@ class Solver():
                         Rsys[idx]      = 0.0
                         Ksys[:, idx]   = np.zeros(ndof)
                         Ksys[idx, :]   = np.zeros(ndof)
-                        Ksys[idx, idx] = 1.0
+                        Ksys[idx, idx] = 1.0e3
 
             self.Kt = Ksys
 
@@ -169,38 +198,70 @@ class Solver():
     def initialize(self):
         """
 
-        :return:
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def reset(self):
         """
-
-        :return:
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
-    def checkStability(self):
-        if self.sdof < 10:
+    def checkStability(self, verbose=True):
+        """
+        Computes the stability index as
+
+        * :math:`\mathop{det}([{\\bf K}_t])` for systems with less than 25 d.o.f.s
+        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\\bf K}_t`
+
+        :returns: stability index
+        """
+        if self.sdof < 5:
             detKt = np.linalg.det(self.Kt)
+            msg = f"\n ** Stability check: det(Kt) = {detKt}\n"
         else:
             detKt = np.min(np.abs(sp.linalg.eigvals(self.Kt)))
+            msg = f"\n ** Stability check: (smallest eigenvalue of Kt) = {detKt}\n"
+
+        if verbose:
+            print(msg)
+
         return detKt
 
-    def getBucklingMode(self):
-        w, v = sp.linalg.eigh(self.Kt)
-        lam = np.abs(w).min()
-        idx = np.argwhere(np.abs(w) == lam)
-        lam = w[idx[0]]
-        vec = v[:,idx[0]]
-        return (lam, vec)
+    def getBucklingMode(self, mode=0, **kwargs):
+        """
+        Perform an eigen-analysis on :math:`{\\bf K}_t` for the requested **mode**.
+        Default is the mode with the smallest absolute eigenvalue (:math:`\min\{\lambda_i\}`)
 
-    def checkResiduum(self, report=False):
+        The mode shape will be pushed to the nodes.
+
+        .. note::
+
+            Use **System.plotBucklingMode()** for plotting of the eigenmode (see :doc:`System_class`).
+            This plotting method will be replaced by :code:`System.plot(...)` in a future release.
+
+        :return: the eigenvalue, :math:`\lambda_{\mathtt{mode}}`
+        """
+        w, v = sp.linalg.eigh(self.Kt, subset_by_index=[0, 0])
+        # lam = np.abs(w).min()
+        # idx = np.argwhere(np.abs(w) == lam)
+        # lam = w[idx[0,0]]
+        # U   = v[:,idx[0,0]]
+        lam = w[0]
+        U = v[:,0]
+
+        # update nodal displacements
+        for node in self.nodes:
+            idxK = node.start + np.arange(node.ndofs)
+            node.setDisp(U[idxK], modeshape=True)
+
+        return lam
+
+    def checkResiduum(self, report=False, force_only=True):
 
         # compute residual force and tangent stiffness
-        self.assemble()
+        self.assemble(force_only=force_only)
 
         normR = np.dot(self.R, self.R)
 

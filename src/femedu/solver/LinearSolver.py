@@ -63,8 +63,8 @@ class LinearSolver(Solver):
 
         # update nodal displacements
         for node in self.nodes:
-            K = node.start + np.arange(node.ndofs)
-            node._updateDisp(dU[K])
+            idxK = node.start + np.arange(node.ndofs)
+            node._updateDisp(dU[idxK])
 
 
     def assemble(self, force_only=False):

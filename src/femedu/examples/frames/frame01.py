@@ -80,16 +80,48 @@ class ExampleFrame01(Example):
         return s
 
     def problem(self):
-        # initialize a system model
 
-        N  = 16     # number of elements
-        L  = 100.0
-        E  = 20000.
-        EA = 2000000.0
-        EI = 210000.0
-        w  = -0.1
+        #
+        # ==== Initialization ====
+        #
 
-        params = {'E': E, 'A': EA/E, 'I': EI/E}
+        # ========== setting mesh parameters ==============
+
+        N = 8         # number of elements in the mesh
+        L = 100.0     # column free length
+
+
+        # ========== setting material parameters ==============
+
+        params = dict(
+            E = 20000.,    # Young's modulus
+            A = 100.0,     # cross section area
+            I = 10.0       # cross section moment of inertia
+        )
+
+        # ========== setting load parameters ==============
+
+        w   = -0.1         # uniform lateral load on the column
+        Pcr = np.pi**2 * params['E'] * params['I'] / L**2    # Euler buckling load
+
+        # ========== setting analysis parameters ==============
+
+        target_load_level = 0.99      # 99% of Euler load
+        max_steps = 10                # solve max_steps points on the primary path
+
+
+        w   *= 0.01
+        Pcr *= 0.01
+        target_load_level = 99.      # 99% of Euler load
+
+
+
+        # define a list of target load levels
+        load_levels = np.linspace(0, target_load_level, max_steps)
+
+        #
+        # ==== Build the system model ====
+        #
 
         model = System()
         model.setSolver(NewtonRaphsonSolver())
@@ -107,57 +139,34 @@ class ExampleFrame01(Example):
 
             # elements
             elem = Frame2D(ndi, ndj, ElasticSection(params))
-            elem.setDistLoad(w)
             model += elem
 
-            ndi = ndj
+            # ** apply the element portion of the reference load
+            elem.setDistLoad(w)
+
+            ndi = ndj    # jump to next element: make current end-node the next start-node
 
         # define support(s)
+
         nd0.fixDOF('ux', 'uy')    # horizontal support left end
         ndi.fixDOF('uy')          # vertical support right end
 
-        # add loads
-        # .. load only the upper nodes
-        Pcr = np.pi**2 * EI / L**2
-        ndi.setLoad((-0.5*Pcr,), ('ux',))
+        # ==== complete the reference load ====
+
+        # these are only nodal forces as part of the reference load
+        # .. load only the upper node
+        ndi.setLoad((-Pcr,), ('ux',))
 
         # show model information
         print(model)
 
-        model.solve(verbose=True)
+        #
+        # ==== perform the analysis ===
+        #
 
-        model.report()
+        print("\n==== perform the analysis ===\n")
 
-        model.plot(factor=10.0)
-
-        model.beamValuePlot("F")
-        model.beamValuePlot("M")
-        model.beamValuePlot("V")
-
-        return
-
-
-
-
-
-
-
-
-
-        # ========== setting global parameters ==============
-
-        target_load_level = 0.99
-        max_steps = 50
-        load_levels = np.linspace(0, target_load_level, max_steps)
-
-        # ========= build your structural model =============
-
-
-
-
-        print(model)
-
-        # ===== applying the load in multiple smaller time steps ========
+        # * apply the load in multiple smaller load steps
 
         # set up data recorder
         model.initRecorder()
@@ -169,21 +178,43 @@ class ExampleFrame01(Example):
 
         model.startRecorder()
 
+        detKt   = []
+        lambdas = []
+
         # solve for all load_levels
         for loadfactor in load_levels:
 
             # define node X2 as the controled node; downward direction is prescribed:
             model.setLoadFactor(loadfactor)
-            model.NewtonSolver()
+            model.solve(verbose=True)
+
+            # stability check
+            lambdas.append(model.loadfactor)
+            detKt.append(model.solver.checkStability())
 
             # report results
             print('+')
-            model.report()
+            #model.report()
 
             print("\n=== next load level ===\n")
 
-        model.plot([3*(N//2),3*(N//2)+1,3*(N//2)+2,3*N])
 
-        model.plotSystem(1.0)
+        #
+        # ==== create some nice plots ===
+        #
 
-        model.plotBucklingMode(10.)
+        model.report()
+
+        plt.plot(lambdas,detKt,'--*r')
+        plt.grid(True)
+        plt.xlabel('Load factor, $ \lambda $')
+        plt.ylabel("Stability index, $ {det}\: {\\bf K}_t $")
+        plt.show()
+
+        model.plot(factor=10.0)
+
+        model.beamValuePlot("F")
+        model.beamValuePlot("M")
+        model.beamValuePlot("V")
+
+        model.plotBucklingMode(factor=10.)
