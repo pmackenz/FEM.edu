@@ -202,3 +202,4 @@ class ExampleFrame03(Example):
         model.beamValuePlot("V")
 
         model.plotBucklingMode(factor=25.)
+

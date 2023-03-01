@@ -243,11 +243,10 @@ class Solver():
 
         :return: the eigenvalue, :math:`\lambda_{\mathtt{mode}}`
         """
-        w, v = sp.linalg.eigh(self.Kt, subset_by_index=[0, 0])
-        # lam = np.abs(w).min()
-        # idx = np.argwhere(np.abs(w) == lam)
-        # lam = w[idx[0,0]]
-        # U   = v[:,idx[0,0]]
+        if not isinstance(mode,int) or mode < 0 or mode >= self.Kt.shape[0]:
+            raise TypeError(f"mode out of range: must be an int between 0 and the number of d.o.f.s")
+
+        w, v = sp.linalg.eigh(self.Kt, subset_by_index=[mode, mode])
         lam = w[0]
         U = v[:,0]
 

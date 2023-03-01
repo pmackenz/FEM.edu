@@ -403,20 +403,31 @@ class System():
         for node in self.nodes:
             node.popU()
 
-    def plotBucklingMode(self, factor=1.0):
+    def plotBucklingMode(self, factor=1.0, mode=0, filename=None, **kwargs):
         """
         .. warning::
 
             This method has been marked **DEPRECATED** !
 
             Use the :code:`System.plot()` method with appropriate :code:`**kwargs` instead.
+
+        Select a mode shape by setting `mode` to an integer, where `0` stands for the mode with the smallest
+        absolute eigenvalue, `1` the second smallest, and so forth.  If the resulting eigenvalue (shown in the plot)
+        is negative, the load-level associated with that mode is below the current load level.
+
+        If a `filename` is given, e.g., `filename="buckling_mode.png"`, the plot will be saved to the respective file.
+        The file type will be determined from the given extensions, e.g., `.png` for a PNG format.
+
+        :param factor: Scale the mode shape by this factor.
+        :param mode:   which mode shape shall be plotted?
+        :param filename: string
+        :param kwargs: not specified here.  These are handed over to the :code:`Solver(...)` instance.
         """
 
         # perform eigenvalue analysis
-        lam = self.getBucklingMode()
+        lam = self.getBucklingMode(mode=mode, **kwargs)
         title_text = f"Mode Shape for $ \lambda = {lam:.2f} $"
-        file_name  = "buckling_mode.png"
-        self.plot(factor=factor, filename=file_name, title=title_text, modeshape=True)
+        self.plot(factor=factor, filename=filename, title=title_text, modeshape=True)
 
 
     def report(self):
@@ -486,73 +497,10 @@ class System():
         self.resetLoad()
 
 
-
 if __name__ == "__main__":
 
-    from ..elements  import Element
-    from ..materials import Material
-
-    # testing the System class
-    B = 6.0*12
-    H = 8.0*12
-    params = {'E':1000000., 'A':10., 'nu':0.0, 'fy':1.e30}
-
-    model = System()
-
-    nd0 = Node(0.0, 0.0)
-    nd1 = Node(  B, 0.0)
-    nd2 = Node(2*B, 0.0)
-    nd3 = Node(3*B, 0.0)
-    nd4 = Node(4*B, 0.0)
-    nd5 = Node(0.5*B, H)
-    nd6 = Node(1.5*B, H)
-    nd7 = Node(2.5*B, H)
-    nd8 = Node(3.5*B, H)
-
-    model.addNode(nd0)
-    model.addNode(nd1)
-    model.addNode(nd2)
-    model.addNode(nd3)
-    model.addNode(nd4)
-    model.addNode(nd5)
-    model.addNode(nd6)
-    model.addNode(nd7)
-    model.addNode(nd8)
-
-    model.addElement(Element(nd0, nd1, Material(params)))  # bottom 1
-    model.addElement(Element(nd1, nd2, Material(params)))  # bottom 2
-    model.addElement(Element(nd2, nd3, Material(params)))  # bottom 3
-    model.addElement(Element(nd3, nd4, Material(params)))  # bottom 4
-
-    model.addElement(Element(nd5, nd6, Material(params)))  # upper 1
-    model.addElement(Element(nd6, nd7, Material(params)))  # upper 2
-    model.addElement(Element(nd7, nd8, Material(params)))  # upper 3
-
-    model.addElement(Element(nd0, nd5, Material(params)))  # up right diag 1
-    model.addElement(Element(nd1, nd6, Material(params)))  # up right diag 2
-    model.addElement(Element(nd2, nd7, Material(params)))  # up right diag 3
-    model.addElement(Element(nd3, nd8, Material(params)))  # up right diag 4
-
-    model.addElement(Element(nd1, nd5, Material(params)))  # up left diag 1
-    model.addElement(Element(nd2, nd6, Material(params)))  # up left diag 2
-    model.addElement(Element(nd3, nd7, Material(params)))  # up left diag 3
-    model.addElement(Element(nd4, nd8, Material(params)))  # up left diag 4
-
-    # boundary conditions
-    nd0.fixDOF(0)
-    nd0.fixDOF(1)
-    nd4.fixDOF(1)
-
-    # load upper nodes
-    nd5.setLoad(0.0, -1.0)
-    nd6.setLoad(0.0, -1.0)
-    nd7.setLoad(0.0, -1.0)
-
-    # solve the system
-    model.solve()
-
-    print(model)
-
-    # write out report
-    model.report()
-
+    msg = """
+    This file is not an executable script.
+    See the FEM.edu manual for details on how to run the program.
+    """
+    print(msg)
