@@ -25,8 +25,11 @@ class ExampleBeam02(Example):
     def problem(self):
         # initialize a system model
         SpanLengths = [ 8.0 * 12, 10.0 * 12, 8.0 * 12 ]
-        Nelems = 4    # number of elements
+        Nelems = 10    # number of elements
         params = {'E': 29000., 'A': 5, 'I':50}
+
+        # define load
+        w = -1.00
 
         # meshing parameters
         Xnode  = 0.0
@@ -58,7 +61,11 @@ class ExampleBeam02(Example):
                     ndP = ndj
 
                 # create elements
-                model += Beam2D(ndi, ndj, ElasticSection(params))
+                elem = Beam2D(ndi, ndj, ElasticSection(params))
+                model += elem
+
+                elem.setDistLoad(w)
+
 
                 # shift one node to the right
                 ndi = ndj
@@ -69,7 +76,7 @@ class ExampleBeam02(Example):
             # add point loads
             # .. load only the center node of each span.
             # .. magnitude of load proportional to the span length
-            ndP.setLoad([0.0, -SpanLength], ('ux', 'uy'))
+            ### ndP.setLoad([0.0, -SpanLength], ('ux', 'uy'))
 
             # move on to the next span
             Offset = Xnode

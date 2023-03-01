@@ -101,21 +101,38 @@ class Beam2D(Element):
         """
         self.updateState()
 
-        s   = np.array([0.,1.])
+        Xi = self.nodes[0].getPos()
+        Xj = self.nodes[1].getPos()
+        Nvec = Xj - Xi
+        L = np.linalg.norm(Nvec)
 
         if variable.lower() == 'm' or variable.lower() == 'mz':
             # bending moment (in plane)
-            Ml = -self.Forces[0][1]
-            Mr =  self.Forces[1][1]
-            val = np.array([Ml, Mr])
+            if self.distributed_load:
+                s   = np.linspace(0,1,10)
+            else:
+                s   = np.array([0.,1.])
+
+            Ml = self.internal_forces['Mi']
+            Mr = self.internal_forces['Mj']
+
+            #val = np.array([Ml, Mr])
+            val = Ml * (1. - s) + Mr * s - 0.5 * self.distributed_load * L*L * s * (1 - s)
 
         elif variable.lower() == 'v' or variable.lower() == 'vy':
             # transverse shear (in-plane)
-            Vl =  self.Forces[0][0]
-            Vr = -self.Forces[1][0]
-            val = np.array([Vl, Vr])
+            if self.distributed_load:
+                s   = np.linspace(0,1,10)
+            else:
+                s   = np.array([0.,1.])
+
+            Vl = self.internal_forces['Vi']
+            Vr = self.internal_forces['Vj']
+
+            val = Vl + s * self.distributed_load * L
 
         else:
+            s   = np.array([0.,1.])
             val = np.zeros_like(s)
 
         return (s,val)
@@ -203,12 +220,15 @@ class Beam2D(Element):
 
         if self.distributed_load:
             Pw = self.distributed_load * L / 2.
-            Mw = Pw * L / 6.
+            Mw = -Pw * L / 6.
 
-            Vi -= Pw
-            Vj -= Pw
+            Vi -=  Pw
+            Vj -=  Pw
             Mi -= -Mw
             Mj -=  Mw
+
+        self.internal_forces = {'fi':0.0, 'Vi': Vi, 'Mi':-Mi,
+                                'fj':0.0, 'Vj':-Vj, 'Mj': Mj}
 
         # build element load vector and element tangent stiffness
         self.Fi = np.array([Vi, Mi])

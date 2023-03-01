@@ -25,8 +25,8 @@ class ExampleBeam01(Example):
     def problem(self):
         # initialize a system model
         SpanLength = 10.0 * 12
-        w =  -0.2   # distributed load (positive if acting in local y-direction
-        P = -10.0   # center point load (uses global system)
+        w =  -1.0   # distributed load (positive if acting in local y-direction
+        P =   -50.0   # center point load (uses global system)
 
         Nelems = 4    # number of elements
         params = {'E': 29000., 'A': 4.7, 'I':103}
@@ -41,6 +41,8 @@ class ExampleBeam01(Example):
         # create left node
         nd0 = Node(Xnode, Ynode)
         model += nd0
+
+        ndP = None
 
         # initialization for node and element creation
         ndi = nd0
@@ -71,7 +73,8 @@ class ExampleBeam01(Example):
 
         # add point loads
         # .. load only the center node
-        ndP.setLoad([0.0, P], ('ux', 'uy'))
+        if ndP:
+            ndP.setLoad([0.0, P], ('ux', 'uy'))
 
         # analyze the model
         model.solve()
@@ -80,7 +83,7 @@ class ExampleBeam01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=100.)
+        model.plot(factor=10.)
 
         model.beamValuePlot('V')
         model.beamValuePlot('M')

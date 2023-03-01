@@ -150,7 +150,7 @@ class ElementPlotter(AbstractPlotter):
         plt.autoscale(enable=True, axis='y', tight=False)
         plt.show()
 
-    def beamValuePlot(self, variable_name='', factor=0.0, file=None):
+    def beamValuePlot(self, variable_name='', factor=0.0, file=None, show_arrows=False):
         """
         Create a deformed system plot
 
@@ -215,7 +215,7 @@ class ElementPlotter(AbstractPlotter):
             Ly = maxY - minY
             Lv = maxV - minV
 
-            scale = 0.100 * np.max([Lx,Ly]) / Lv
+            scale = 0.150 * np.max([Lx,Ly]) / Lv
 
             # plot the elements
             for elem in self.elements:
@@ -238,12 +238,12 @@ class ElementPlotter(AbstractPlotter):
                             if xsi.size > 0 and vals.size > 0:
                                 vals *= scale
 
-                                xv = xi + np.outer(xsi, lvec)
+                                xv = xi + np.outer(xsi,  lvec)
                                 vv = xv + np.outer(vals, svec)
 
                                 axs.plot(vv[:,0], vv[:,1], '-g', lw=1)
-                                self._arrow(axs, xv[0,0], xv[0,1], vv[0,0]- xv[0,0], vv[0,1]- xv[0,1], vals[0])
-                                self._arrow(axs,xv[-1,0],xv[-1,1],vv[-1,0]-xv[-1,0],vv[-1,1]-xv[-1,1],vals[-1])
+                                self._arrow(axs, xv[0,0], xv[0,1], vv[0,0]- xv[0,0], vv[0,1]- xv[0,1], vals[0],show_point=show_arrows)
+                                self._arrow(axs,xv[-1,0],xv[-1,1],vv[-1,0]-xv[-1,0],vv[-1,1]-xv[-1,1],vals[-1],show_point=show_arrows)
 
                         # plot system on top (!)
                         axs.plot(x, y, '-k', lw=2)
@@ -278,9 +278,15 @@ class ElementPlotter(AbstractPlotter):
 
         plt.show()
 
-    def _arrow(self,axs,x,y,dx,dy,val):
-        headWidth  = np.abs(val) * 0.20
-        headLength = np.abs(val) * 0.50
+    def _arrow(self,axs,x,y,dx,dy,val,show_point=True):
+
+        if show_point:
+            headWidth  = np.abs(val) * 0.20
+            headLength = np.abs(val) * 0.50
+        else:
+            headWidth  = 0
+            headLength = 0
+
         if val >= 0.0:
             fc = 'r'
             axs.arrow(x,y,dx,dy, fc=fc, ec=fc, lw=1,

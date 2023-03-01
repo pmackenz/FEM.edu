@@ -51,14 +51,17 @@ class ExampleFrame03(Example):
         B = 720.
         H = 720.
 
-        E  = 20000
-        EA = 2000000.0
-        EI = 21000.0
+        E  = 29000.0
+        A = 150.0
+        I = 250.0
 
         w = 0.0075
+        load_at_nodes_only = False # set to True to apply equivalent nodal forces and moments
 
         Ph = 0.01      # additional horizontal load per floor
-        Ph = 0.00      # additional horizontal load per floor
+        Ph = 0.10      # additional horizontal load per floor
+        Ph = 1.00      # additional horizontal load per floor
+        #Ph = 0.00      # additional horizontal load per floor
 
         # ========== setting global parameters ==============
 
@@ -113,7 +116,7 @@ class ExampleFrame03(Example):
 
         # columns
 
-        params = {'E': E, 'A': EA/E, 'I': EI/E}
+        params = {'E': E, 'A': A, 'I': I}
 
         C11 = Frame2D(X10, X11, ElasticSection(params))
         C12 = Frame2D(X11, X12, ElasticSection(params))
@@ -122,7 +125,7 @@ class ExampleFrame03(Example):
 
         model.addElement(C11,C12,C13,C14)
 
-        params = {'E': E, 'A': 2*EA/E, 'I': 1.5*EI/E}
+        params = {'E': E, 'A': 2*A, 'I': 1.5*I}
 
         C21 = Frame2D(X20, X21, ElasticSection(params))
         C22 = Frame2D(X21, X22, ElasticSection(params))
@@ -138,7 +141,7 @@ class ExampleFrame03(Example):
 
         model.addElement(C31,C32,C33,C34)
 
-        params = {'E': E, 'A': EA/E, 'I': EI/E}
+        params = {'E': E, 'A': A, 'I': I}
 
         C41 = Frame2D(X40, X41, ElasticSection(params))
         C42 = Frame2D(X41, X42, ElasticSection(params))
@@ -149,7 +152,7 @@ class ExampleFrame03(Example):
 
         # floors
 
-        params = {'E': E, 'A': EA/E, 'I': 3*EI/E}
+        params = {'E': E, 'A': A, 'I': 3*I}
 
         F11 = Frame2D(X11, X21, ElasticSection(params))
         F12 = Frame2D(X21, X31, ElasticSection(params))
@@ -186,28 +189,55 @@ class ExampleFrame03(Example):
         model.resetLoad()            # size load vector and initialize
         #model.addLoad(Xn, -Pcr, dof=0) # add a horizontal force (first dof only) ; remember C-style indexing: 0,1,...,(n-1)
 
-        Pe = w * B/3
-        Mi = w * (B/3)**2 /12
+        if load_at_nodes_only:
 
-        X11.addLoad([-Pe/2., -Mi],['uy','rz'])
-        X21.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X31.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X41.addLoad([-Pe/2.,  Mi],['uy','rz'])
+            # floor loading as nodal loads ...
 
-        X12.addLoad([-Pe/2., -Mi],['uy','rz'])
-        X22.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X32.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X42.addLoad([-Pe/2.,  Mi],['uy','rz'])
+            Pe = w * B/3
+            Mi = w * (B/3)**2 /12
 
-        X13.addLoad([-Pe/2., -Mi],['uy','rz'])
-        X23.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X33.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X43.addLoad([-Pe/2.,  Mi],['uy','rz'])
+            X11.addLoad([-Pe/2., -Mi],['uy','rz'])
+            X21.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X31.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X41.addLoad([-Pe/2.,  Mi],['uy','rz'])
 
-        X14.addLoad([-Pe/2., -Mi],['uy','rz'])
-        X24.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X34.addLoad([-Pe/2.,  0.],['uy','rz'])
-        X44.addLoad([-Pe/2.,  Mi],['uy','rz'])
+            X12.addLoad([-Pe/2., -Mi],['uy','rz'])
+            X22.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X32.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X42.addLoad([-Pe/2.,  Mi],['uy','rz'])
+
+            X13.addLoad([-Pe/2., -Mi],['uy','rz'])
+            X23.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X33.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X43.addLoad([-Pe/2.,  Mi],['uy','rz'])
+
+            X14.addLoad([-Pe/2., -Mi],['uy','rz'])
+            X24.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X34.addLoad([-Pe/2.,  0.],['uy','rz'])
+            X44.addLoad([-Pe/2.,  Mi],['uy','rz'])
+
+        else:
+
+            # floor loading as distributed loads ...
+
+            F11.setDistLoad(-w)
+            F12.setDistLoad(-w)
+            F13.setDistLoad(-w)
+
+            F21.setDistLoad(-w)
+            F22.setDistLoad(-w)
+            F23.setDistLoad(-w)
+
+            F31.setDistLoad(-w)
+            F32.setDistLoad(-w)
+            F33.setDistLoad(-w)
+
+            F41.setDistLoad(-w)
+            F42.setDistLoad(-w)
+            F43.setDistLoad(-w)
+
+
+        # wind load ...
 
         X11.addLoad([Ph],['ux'])   # horizontal load
         X12.addLoad([Ph],['ux'])   # horizontal load
@@ -222,7 +252,7 @@ class ExampleFrame03(Example):
 
         #model.report()
 
-        model.plot(factor=25.0)
+        model.plot(factor=250.0)
 
         model.beamValuePlot("F")
         model.beamValuePlot("M")

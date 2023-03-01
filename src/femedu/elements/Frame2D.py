@@ -1,3 +1,5 @@
+import numpy as np
+
 from .Element import *
 from ..materials.Material import *
 from ..domain.Node import *
@@ -100,27 +102,45 @@ class Frame2D(Element):
         """
         self.updateState()
 
-        s   = np.array([0.,1.])
+        Xi = self.nodes[0].getPos()
+        Xj = self.nodes[1].getPos()
+        Nvec = Xj - Xi
+        L = np.linalg.norm(Nvec)
 
         if variable.lower() == 'm' or variable.lower() == 'mz':
             # bending moment (in plane)
+            if self.distributed_load:
+                s   = np.linspace(0,1,10)
+            else:
+                s   = np.array([0.,1.])
+
             Ml = self.internal_forces['Mi']
             Mr = self.internal_forces['Mj']
-            val = np.array([Ml, Mr])
+
+            #val = np.array([Ml, Mr])
+            val = Ml * (1. - s) + Mr * s - 0.5 * self.distributed_load * L*L * s * (1 - s)
 
         elif variable.lower() == 'v' or variable.lower() == 'vy':
             # transverse shear (in-plane)
+            if self.distributed_load:
+                s   = np.linspace(0,1,10)
+            else:
+                s   = np.array([0.,1.])
+
             Vl = self.internal_forces['Vi']
             Vr = self.internal_forces['Vj']
-            val = np.array([Vl, Vr])
+
+            val = Vl + s * self.distributed_load * L
 
         elif variable.lower() == 'f' or variable.lower() == 'fx':
             # transverse shear (in-plane)
             Fl = self.internal_forces['fi']
             Fr = self.internal_forces['fj']
+            s   = np.array([0.,1.])
             val = np.array([Fl, Fr])
 
         else:
+            s   = np.array([0.,1.])
             val = np.zeros_like(s)
 
         return (s,val)
@@ -278,16 +298,16 @@ class Frame2D(Element):
 
         if self.distributed_load:
             Pw = self.distributed_load * L / 2.
-            Mw = Pw * L / 6.
+            Mw = -Pw * L / 6.
 
-            Vi -= Pw
-            Vj -= Pw
+            Vi -=  Pw
+            Vj -=  Pw
             Mi -= -Mw
             Mj -=  Mw
 
 
-        self.internal_forces = {'fi':self.force, 'Vi':Vi, 'Mi':-Mi,
-                                'fj':self.force, 'Vj':-Vj, 'Mj':Mj}
+        self.internal_forces = {'fi':self.force, 'Vi': Vi, 'Mi':-Mi,
+                                'fj':self.force, 'Vj':-Vj, 'Mj': Mj}
 
         #Fi = Vi * svec - self.force * nvec                   # finite deformation
         #Fj = Vj * svec + self.force * nvec                   # finite deformation
