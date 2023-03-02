@@ -208,23 +208,43 @@ class Solver():
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
-    def checkStability(self, verbose=True):
+    def checkStability(self, verbose=True, **kwargs):
         """
         Computes the stability index as
 
         * :math:`\mathop{det}([{\\bf K}_t])` for systems with less than 25 d.o.f.s
         * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\\bf K}_t`
 
+        :param verbose: set to **True** for log info
+        :param num_eigen: if set to a value greater than 0, show the **num_eigen** eigenvalues
+                        closest to the current load level.
         :returns: stability index
         """
-        if self.sdof < 5:
+        if 'num_eigen' in kwargs:
+            num_eigen = kwargs['num_eigen']
+        else:
+            num_eigen = 0
+
+        if self.sdof < 10 and not num_eigen:
             detKt = np.linalg.det(self.Kt)
             msg = f"\n ** Stability check: det(Kt) = {detKt}\n"
         else:
-            evals = sp.linalg.eigvals(self.Kt)
-            idx = np.argmin(np.abs(evals))
+            evals = sp.linalg.eigvalsh(self.Kt)
+            abs_evals = np.abs(evals)
+            idx = np.argmin(abs_evals)
             detKt = evals[idx]  # we need to get the sign back
-            msg = f"\n ** Stability check: (smallest eigenvalue of Kt) = {detKt}\n"
+            if num_eigen > 0:
+                detKt = []
+                for cnt in range(num_eigen):
+                    detKt.append(evals[idx])      # we need to get the sign back
+                    abs_evals[idx] = 1.0e20
+                    idx = np.argmin(abs_evals)
+                detKt.sort()
+                msg = f"\n ** Stability check: (smallest {num_eigen} eigenvalues of Kt)\n"
+                for k, val in enumerate(detKt):
+                    msg += f"\t\t\tmode {k}:{val:12.2f}\n"
+            else:
+                msg = f"\n ** Stability check: (smallest eigenvalue of Kt) = {detKt}\n"
 
         if verbose:
             print(msg)

@@ -8,7 +8,7 @@ SPHINXBUILD   ?= sphinx-build
 SOURCEDIR     = source
 BUILDDIR      = build
 
-DOCSDIR       = ../docs
+DOCSDIR       = ../../FEM.edu.documentation/docs
 
 # Put it first so that "make" without argument is like "make help".
 help:
@@ -23,6 +23,7 @@ help:
 	
 install: 
 	rm -rf $(DOCSDIR)
+	rm -rf build/html
 	touch docs
 	sphinx-build -b html source build/html
 	cp -R $(BUILDDIR)/html $(DOCSDIR)
