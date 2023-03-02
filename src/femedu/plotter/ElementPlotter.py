@@ -158,7 +158,7 @@ class ElementPlotter(AbstractPlotter):
             plt.savefig(filename)
         plt.show()
 
-    def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False):
+    def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False, **kwargs):
         """
         Create a deformed system plot
 

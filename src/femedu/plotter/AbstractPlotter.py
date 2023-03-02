@@ -42,7 +42,7 @@ class AbstractPlotter():
 
         :param disp:
         """
-        msg = "** WARNING ** {}.{} not deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        msg = "** WARNING ** {}.{} marked deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise DeprecationWarning(msg)
 
     def setValues(self, vals):
@@ -50,7 +50,7 @@ class AbstractPlotter():
 
         :param vals:
         """
-        msg = "** WARNING ** {}.{} not deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        msg = "** WARNING ** {}.{} marked deprecated".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise DeprecationWarning(msg)
 
     def setReactions(self, R):

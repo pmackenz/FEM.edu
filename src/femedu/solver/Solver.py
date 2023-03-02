@@ -221,7 +221,9 @@ class Solver():
             detKt = np.linalg.det(self.Kt)
             msg = f"\n ** Stability check: det(Kt) = {detKt}\n"
         else:
-            detKt = np.min(np.abs(sp.linalg.eigvals(self.Kt)))
+            evals = sp.linalg.eigvals(self.Kt)
+            idx = np.argmin(np.abs(evals))
+            detKt = evals[idx]  # we need to get the sign back
             msg = f"\n ** Stability check: (smallest eigenvalue of Kt) = {detKt}\n"
 
         if verbose:
@@ -264,7 +266,7 @@ class Solver():
 
         normR = np.dot(self.R, self.R)
 
-        # Add constriant violation in case we are using displacement control
+        # Add constraint violation in case we are using displacement control
         if self.hasConstraint:
 
             if self.useArcLength:
