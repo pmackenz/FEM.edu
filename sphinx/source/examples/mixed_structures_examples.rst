@@ -1,6 +1,25 @@
 Mixed Structures Examples
 ==========================
 
+.. toctree::
+    :hidden:
+
+    mixed/mixed01/mixed01.rst
+
+.. list-table:: Available Examples
+    :widths:  30 70
+    :header-rows: 1
+
+    * - Example
+      - Description
+    * - **mixed01**
+      - WIP
+
+**More**: :doc:`../examples`
+
+How to run a mixed structures example from the distribution
+--------------------------------------------------------------
+
 All mixed structures examples are packaged in :code:`examples.mixed`.
 To run a specific example use, e.g.:
 
@@ -18,14 +37,3 @@ To run a specific example use, e.g.:
     # run the actual problem
     ex.run()
 
-
-.. list-table:: Available Examples
-    :widths:  30 70
-    :header-rows: 1
-
-    * - Example
-      - Description
-    * - **mixed01**
-      - WIP
-
-**More**: :doc:`../examples`

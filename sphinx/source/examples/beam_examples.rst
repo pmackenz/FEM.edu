@@ -1,6 +1,28 @@
 Beam Examples
 =====================
 
+.. toctree::
+    :hidden:
+
+    beams/beam01/beam01.rst
+    beams/beam02/beam02.rst
+
+.. list-table:: Available Examples
+    :widths:  30 70
+    :header-rows: 1
+
+    * - Example
+      - Description
+    * - **beam01**
+      - Single span beam with point load
+    * - **beam02**
+      - Three-span continuous beam with point loads
+
+**More**: :doc:`../examples`
+
+How to run a beam example from the distribution
+----------------------------------------------------
+
 All Plate examples are packaged in :code:`examples.beams`.
 To run a specific example use, e.g.:
 
@@ -19,15 +41,3 @@ To run a specific example use, e.g.:
     ex.run()
 
 
-.. list-table:: Available Examples
-    :widths:  30 70
-    :header-rows: 1
-
-    * - Example
-      - Description
-    * - **beam01**
-      - Single span beam with point load
-    * - **beam02**
-      - Three-span continuous beam with point loads
-
-**More**: :doc:`../examples`

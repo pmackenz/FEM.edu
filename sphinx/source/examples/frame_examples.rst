@@ -1,23 +1,13 @@
 Frame Examples
 =====================
 
-All frame examples are packaged in :code:`examples.frames`.
-To run a specific example use, e.g.:
+.. toctree::
+    :hidden:
 
-.. code:: python
-
-    from femedu import *
-    from femedu.examples.frames.frame01 import *
-
-    # load the example
-    ex = ExampleFrame01()
-
-    # print the doc-string for the current example
-    print(ex)
-
-    # run the actual problem
-    ex.run()
-
+    frames/frame01/frame01.rst
+    frames/frame02/frame02.rst
+    frames/frame03/frame03.rst
+    frames/frame04/frame04.rst
 
 .. list-table:: Available Examples
     :widths:  30 70
@@ -35,3 +25,25 @@ To run a specific example use, e.g.:
       - Multi story Building frame
 
 **More**: :doc:`../examples`
+
+
+How to run a frame example from the distribution
+----------------------------------------------------
+
+All frame examples are packaged in :code:`examples.frames`.
+To run a specific example use, e.g.:
+
+.. code:: python
+
+    from femedu import *
+    from femedu.examples.frames.frame01 import *
+
+    # load the example
+    ex = ExampleFrame01()
+
+    # print the doc-string for the current example
+    print(ex)
+
+    # run the actual problem
+    ex.run()
+

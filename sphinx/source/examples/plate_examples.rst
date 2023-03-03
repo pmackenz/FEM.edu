@@ -1,6 +1,25 @@
 Plate Examples
 =====================
 
+.. toctree::
+    :hidden:
+
+    plates/plate01/plate01.rst
+
+.. list-table:: Available Examples
+    :widths:  30 70
+    :header-rows: 1
+
+    * - Example
+      - Description
+    * - **plate01**
+      - WIP
+
+**More**: :doc:`../examples`
+
+How to run a plate example from the distribution
+----------------------------------------------------
+
 All Plate examples are packaged in :code:`examples.plates`.
 To run a specific example use, e.g.:
 
@@ -19,14 +38,4 @@ To run a specific example use, e.g.:
     ex.run()
 
 
-.. list-table:: Available Examples
-    :widths:  30 70
-    :header-rows: 1
-
-    * - Example
-      - Description
-    * - **plate01**
-      - WIP
-
-**More**: :doc:`../examples`
 
