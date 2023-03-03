@@ -30,5 +30,4 @@ To run a specific example use, e.g.:
     * - **beam02**
       - Three-span continuous beam with point loads
 
-
-
+**More**: :doc:`../examples`

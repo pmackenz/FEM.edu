@@ -25,13 +25,13 @@ To run a specific example use, e.g.:
 
     * - Example
       - Description
-    * - **truss01**
+    * - :doc:`trusses/truss01/truss01`
       - Basic truss triangle
-    * - **truss02**
+    * - :doc:`trusses/truss02/truss02`
       - Simple statically determinate bridge
-    * - **truss03**
+    * - :doc:`trusses/truss03/truss03`
       - Exploring alternative input format for **truss01**
-    * - **truss04**
+    * - :doc:`trusses/truss04/truss04`
       - 3D truss example
 
-
+**More**: :doc:`../examples`

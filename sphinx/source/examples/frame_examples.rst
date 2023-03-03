@@ -25,11 +25,13 @@ To run a specific example use, e.g.:
 
     * - Example
       - Description
-    * - **frame01**
+    * - :doc:`frames/frame01/frame01`
       - Axially loaded beam with lateral load
-    * - **frame02**
+    * - :doc:`frames/frame02/frame02`
       - Axially loaded column with lateral load. Rotated **frame01** to test invariance.
-    * - **frame03**
-      - Building frame
+    * - :doc:`frames/frame03/frame03`
+      - Single story Building frame
+    * - :doc:`frames/frame04/frame04`
+      - Multi story Building frame
 
-
+**More**: :doc:`../examples`

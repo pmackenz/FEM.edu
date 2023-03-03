@@ -28,4 +28,4 @@ To run a specific example use, e.g.:
     * - **solid01**
       - WIP
 
-
+**More**: :doc:`../examples`

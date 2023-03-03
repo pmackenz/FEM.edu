@@ -28,4 +28,5 @@ To run a specific example use, e.g.:
     * - **plate01**
       - WIP
 
+**More**: :doc:`../examples`
 

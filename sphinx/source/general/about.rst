@@ -31,7 +31,7 @@ About the Developers
 
             |
             | Ph.D. candidate
-            | University of Padua, Italy
+            | IUSS Pavia, Italy
 
 
     * - |JordanS|
@@ -44,17 +44,17 @@ About the Developers
 
 .. |PeterMH| image:: ../images/peter-mackenzie-helnwein.jpeg
     :alt: image of Peter
-    :scale: 50 %
+    :width: 150
 
 .. |TatsuS| image:: ../images/tatsu-sweet.jpeg
     :alt: image of Tatsu
     :scale: 100 %
 
-.. |BillG| image:: ../images/william-galik.jpeg
+.. |BillG| image:: ../images/galik_william.jpg
     :alt: image of Bill
-    :scale: 100 %
+    :width: 150
 
-.. |JordanS| image:: ../images/jordan-seawright.jpeg
+.. |JordanS| image:: ../images/jordan-seawright.jpg
     :alt: image of Jordan
-    :scale: 100 %
+    :width: 150
 

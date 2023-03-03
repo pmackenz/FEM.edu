@@ -64,10 +64,10 @@ class ExampleTruss03(Example):
         model.report()
 
         # create plots
-        model.plot(factor=1.)
+        model.plot(factor=1., filename="truss03_deformed_a.png")
 
         # fix horizontal motion of node 1
-        nd1.fixDOF(0)
+        nd1.fixDOF('ux')
 
         # add loads: same load -- nothing to do
 
@@ -79,5 +79,5 @@ class ExampleTruss03(Example):
         model.report()
 
         # create plots
-        model.plot(factor=1.)
+        model.plot(factor=1., filename="truss03_deformed_b.png")
 

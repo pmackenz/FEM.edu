@@ -57,7 +57,5 @@ class ExampleTruss01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=1.)
-
-        model.beamValuePlot('f')
-
+        model.plot(factor=1., filename="truss01_deformed.png")
+        model.beamValuePlot('f',filename="truss01_forces.png")

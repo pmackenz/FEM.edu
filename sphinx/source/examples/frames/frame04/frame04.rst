@@ -1,0 +1,51 @@
+Example: frame04
+==================
+
+.. figure:: frame04_deformed.png
+    :align: center
+
+    system and deformation
+
+.. figure:: frame04_force.png
+    :align: center
+
+.. figure:: frame04_shear.png
+    :align: center
+
+.. figure:: frame04_moment.png
+    :align: center
+
+.. figure:: frame04_buckling_mode0.png
+    :align: center
+
+    first buckling mode shape
+
+
+.. figure:: frame04_buckling_mode1.png
+    :align: center
+
+    second buckling mode shape
+
+
+.. figure:: frame04_buckling_mode2.png
+    :align: center
+
+    third buckling mode shape
+
+
+.. figure:: frame04_buckling_mode3.png
+    :align: center
+
+    fourth buckling mode shape
+
+
+**Importing the example**
+
+.. code:: python
+
+    from femedu.examples.frames.frame04 import *
+
+    # load the example
+    ex = ExampleFrame04()
+
+**More frame examples**: :doc:`../../frame_examples`
