@@ -16,13 +16,13 @@ Features
     * Spring models
     * 2D and 3D Truss models
     * 1D beam models (continuous beams)
-    * 2D and 3D frame models (:math:`P-\Delta` and nuumerically integrated FE)
+    * 2D and 3D frame models (:math:`P{-}\Delta` and numerically integrated FE)
     * Plate models (triangles and quadrilaterals)
 * Geometrically and physically nonlinear finite element analysis
     * Elements
         * 2D and 3D Truss models for finite deformation
         * 1D beam models (continuous beams)
-        * 2D and 3D frame models (:math:`P-\Delta` and numerically integrated FE)
+        * 2D and 3D frame models (:math:`P{-}\Delta` and numerically integrated FE)
         * Plate models (triangles and quadrilaterals)
         * Continuum models
     * Materials
