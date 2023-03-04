@@ -1,11 +1,13 @@
 Example: truss04
 ==================
 
-.. image:: triangle_deformed.png
-    :width: 45%
+.. comment::
 
-.. image:: triangle_forces.png
-    :width: 45%
+    .. image:: triangle_deformed.png
+        :width: 45%
+
+    .. image:: triangle_forces.png
+        :width: 45%
 
 
 **Importing the example**

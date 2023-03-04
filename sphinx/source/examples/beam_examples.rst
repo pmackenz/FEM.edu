@@ -13,9 +13,9 @@ Beam Examples
 
     * - Example
       - Description
-    * - **beam01**
+    * - :doc:`beams/beam01/beam01`
       - Single span beam with point load
-    * - **beam02**
+    * - :doc:`beams/beam02/beam02`
       - Three-span continuous beam with point loads
 
 **More**: :doc:`../examples`

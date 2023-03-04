@@ -31,12 +31,12 @@ class ExampleBeam02(Example):
         # define load
         w = -1.00
 
+        model = System()
+
         # meshing parameters
         Xnode  = 0.0
         Ynode  = 0.0
         Offset = 0.0
-
-        model = System()
 
         # create left node
         nd0 = Node(Xnode, Ynode)
@@ -56,27 +56,18 @@ class ExampleBeam02(Example):
                 ndj = Node(Xnode, Ynode)
                 model += ndj
 
-                # remember center node for loading
-                if (Xnode - Offset) <= SpanLength/2:
-                    ndP = ndj
-
                 # create elements
                 elem = Beam2D(ndi, ndj, ElasticSection(params))
                 model += elem
 
+                # load the element with a uniform load
                 elem.setDistLoad(w)
-
 
                 # shift one node to the right
                 ndi = ndj
 
             # define support(s)
             ndj.fixDOF('uy')           # roller support right end
-
-            # add point loads
-            # .. load only the center node of each span.
-            # .. magnitude of load proportional to the span length
-            ### ndP.setLoad([0.0, -SpanLength], ('ux', 'uy'))
 
             # move on to the next span
             Offset = Xnode
@@ -90,8 +81,8 @@ class ExampleBeam02(Example):
         model.report()
 
         # create plots
-        model.plot(factor=100.)
+        model.plot(factor=100., filename="beam02_deformed.png")
 
-        model.beamValuePlot('V')
-        model.beamValuePlot('M')
+        model.beamValuePlot('V', filename="beam02_shear.png")
+        model.beamValuePlot('M', filename="beam02_moment.png")
 

@@ -138,3 +138,5 @@ sphinx/build
 .DS_Store
 
 src/buckling_mode.png
+
+*.swp

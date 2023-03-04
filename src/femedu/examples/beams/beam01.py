@@ -31,12 +31,12 @@ class ExampleBeam01(Example):
         Nelems = 4    # number of elements
         params = {'E': 29000., 'A': 4.7, 'I':103}
 
+        model = System()
+
         # meshing parameters
         Le = SpanLength / Nelems
         Xnode = 0.0
         Ynode = 0.0
-
-        model = System()
 
         # create left node
         nd0 = Node(Xnode, Ynode)
@@ -83,8 +83,8 @@ class ExampleBeam01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=10.)
+        model.plot(factor=10., filename="beam01_deformed.png")
 
-        model.beamValuePlot('V')
-        model.beamValuePlot('M')
+        model.beamValuePlot('V', filename="beam01_shear.png")
+        model.beamValuePlot('M', filename="beam01_moment.png")
 
