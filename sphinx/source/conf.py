@@ -31,7 +31,8 @@ extensions = [
     "sphinx.ext.autodoc",
     ]
 
-extensions.append('sphinx_git')
+extensions += ['sphinx_git']
+extensions += ['sphinx_substitution_extensions']
 
 templates_path = ['_templates']
 exclude_patterns = []
@@ -47,3 +48,8 @@ autosectionlabel_maxdepth = 6
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 
+# define global abbreviations
+rst_prolog = """
+.. |PackageName|  replace:: **FEM.edu**
+.. |Author|   replace:: Peter Mackenzie-Helnwein
+"""
