@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 
 class Recorder():
     """A time history recorder
@@ -46,11 +49,18 @@ class Recorder():
         """
         return self.data
 
-    def _addData(self, dta):
+    def addData(self, dta):
         """
-        THIS NEEDS BETTER DESIGN TO ACCOUNT FOR DIFFERENT VARIABLES
+        *For internal use only.*
+
+        :param dta: variable code as key and scalar value pairs.
+        :type dta: dict
         """
-        self.data.append(dta)
+        for var in self.data:
+            if var in dta:
+                self.data[var].append(dta[var])
+            else:
+                self.data[var].append(np.nan)
 
     def enable(self):
         """
@@ -80,7 +90,8 @@ class Recorder():
         This will reset the data recorder to a *disabled* state and wipe all previously collected data.
         """
         self.active = False
-        self.data   = []
+        for var in self.data:
+            self.data[var] = []
 
     def export(self, filename='unknown.txt'):
         """
@@ -94,6 +105,8 @@ class Recorder():
                   - tab-separated text file
                 * - .csv
                   - comma-separated text file
+                * - .hdf
+                  - HDF5 file
                 * - .json, .jsn
                   - comma-separated text file
                 * - .xlsx
@@ -110,6 +123,8 @@ class Recorder():
             self.export_excel(filename)
         elif suffix in ('csv',):
             self.export_csv(filename)
+        elif suffix in ('hdf','hdf5'):
+            self.export_hdf(filename)
         elif suffix in ('jsn','json'):
             self.export_json(filename)
         else:
@@ -122,7 +137,8 @@ class Recorder():
             This method is has not yet been implemented.
 
         """
-        pass
+        df = pd.DataFrame(self.data)
+        df.to_csv(filename, sep='\t', header=True)
 
     def export_csv(self, filename):
         """
@@ -131,7 +147,18 @@ class Recorder():
             This method is has not yet been implemented.
 
         """
-        pass
+        df = pd.DataFrame(self.data)
+        df.to_csv(filename, sep=',', header=True)
+
+    def export_hdf(self, filename):
+        """
+        .. warning::
+
+            This method is has not yet been implemented.
+
+        """
+        df = pd.DataFrame(self.data)
+        df.to_hdf(filename)
 
     def export_json(self, filename):
         """
@@ -140,7 +167,8 @@ class Recorder():
             This method is has not yet been implemented.
 
         """
-        pass
+        df = pd.DataFrame(self.data)
+        df.to_json(filename)
 
     def export_excel(self, filename):
         """
@@ -149,7 +177,8 @@ class Recorder():
             This method is has not yet been implemented.
 
         """
-        pass
+        df = pd.DataFrame(self.data)
+        df.to_excel(filename)
 
 
 

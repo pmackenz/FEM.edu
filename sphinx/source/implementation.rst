@@ -3,7 +3,7 @@ Implementation
 ******************
 
 .. toctree::
-	:maxdepth: 3
+    :maxdepth: 3
 
     implementation/Element_class.rst
     implementation/Material_class.rst
