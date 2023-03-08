@@ -2,6 +2,7 @@ import numpy as np
 import os
 import sys
 from .DrawElement import *
+from ..recorder.Recorder import Recorder
 
 
 class Element(DrawElement):
@@ -29,6 +30,8 @@ class Element(DrawElement):
         self.Forces   = []
         self.Kt       = []
 
+        self.setRecorder(None)
+
         self.setLoadFactor(1.0)
 
 
@@ -37,17 +40,17 @@ class Element(DrawElement):
         """{}: nodes {}
         material properties: {}  
         strain:{},   stress:{},  internal force: {}
-        Pe: {}""".format(self.__class__, self.nodes,
+        Pe: {}""".format(self.__class__, [ node.getID() for node in self.nodes ],
                          repr(self.material), self.material.getStrain(),
                          self.material.getStress(),
                          self.force, self.Forces)
         return s
 
     def __repr__(self):
-        return "{}({},{},{})".format(self.__class__,
-                                     repr(self.nodes[0]),
-                                     repr(self.nodes[1]),
-                                     repr(self.material))
+        fmt = "{}(" + len(self.nodes)*"{}, " + "{})"
+        return fmt.format(self.__class__.__name__,
+                                *[ node.getID() for node in self.nodes ],
+                                repr(self.material))
     def resetLoads(self):
         """
         default implementation for resetting element loads.
@@ -160,13 +163,19 @@ class Element(DrawElement):
         """
         self.loadfactor = lam
 
+    def setRecorder(self, recorder):
+        if isinstance(recorder, Recorder):
+            self.recorder = recorder
+        else:
+            self.recorder = None
+
 
 if __name__ == "__main__":
 
     sys.path.insert(0, os.path.abspath(".."))
 
-    from domain import Node
-    from materials import Material
+    from ..domain import Node
+    from ..materials import Material
 
     # testing the Element class
     nd0 = Node(0.0, 0.0)

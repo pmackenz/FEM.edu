@@ -76,11 +76,6 @@ class Frame2D(Element):
                             **self.internal_forces)
         return s
 
-    def __repr__(self):
-        return "Frame2D({},{},{})".format( repr(self.nodes[0]),
-                                         repr(self.nodes[1]),
-                                         repr(self.material))
-
     def setDistLoad(self, w):
         self.distributed_load = w
 

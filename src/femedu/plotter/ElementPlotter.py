@@ -74,7 +74,7 @@ class ElementPlotter(AbstractPlotter):
 
             # plot the undeformed elements
             for elem in self.elements:
-                ans = elem.draw(factor=0.0)
+                ans = elem.draw(factor=0.0, modeshape=False)
                 if len(ans)>=2:
                     x = ans[0]
                     y = ans[1]

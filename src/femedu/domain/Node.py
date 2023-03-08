@@ -1,5 +1,7 @@
 import numpy as np
 from .Transformation import *
+from ..recorder.Recorder import Recorder
+
 class Node():
     """
     class: representing a single Node
@@ -30,18 +32,26 @@ class Node():
         self._hasLoad    = False
         self.transform   = None    # nodal transformation object
 
+        self.setRecorder(None)
+
         self.setLoadFactor(1.0)
 
     def __str__(self):
         s = \
-        """Node {}: {}
+        """Node {}: 
         x:{}, fix:{}, 
-        P:{}, u:{}""".format(self.index, self.dofs,
+        P:{}, u:{}""".format(self.index,
                              self.pos, self.fixity, self.getLoad(), self.disp)
         return s
 
     def __repr__(self):
-        return "Node{}({}, x={}, u={})".format(self.index, self.dofs, self.pos, self.disp)
+        return "Node{}(x={}, u={})".format(self.index, self.pos, self.disp)
+
+    def getID(self):
+        """
+        :returns: the node ID (``str``)
+        """
+        return "Node{}".format(self.index)
 
     def request(self, dof_list, caller):
         """
@@ -328,6 +338,12 @@ class Node():
         entire entered load is applied in full.
         """
         self.loadfactor = lam
+
+    def setRecorder(self, recorder):
+        if isinstance(recorder, Recorder):
+            self.recorder = recorder
+        else:
+            self.recorder = None
 
 
 

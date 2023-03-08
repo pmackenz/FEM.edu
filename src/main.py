@@ -12,6 +12,7 @@ from femedu.examples.frames.frame01 import *
 from femedu.examples.frames.frame02 import *
 from femedu.examples.frames.frame03 import *
 from femedu.examples.frames.frame04 import *
+from femedu.examples.course_help.final01 import *
 
 
 if __name__ == "__main__":
@@ -26,8 +27,10 @@ if __name__ == "__main__":
 
     #ex = ExampleFrame01()
     #ex = ExampleFrame02()
-    ex = ExampleFrame03()
+    #ex = ExampleFrame03()
     #ex = ExampleFrame04()
+
+    ex = ExampleFinal01()
 
     # print the doc-string for the current example
     print(ex)
