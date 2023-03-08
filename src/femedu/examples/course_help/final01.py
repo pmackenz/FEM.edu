@@ -107,14 +107,22 @@ class ExampleFinal01(Example):
 
         print(model)
 
-        model.setLoadFactor(0.5)
-        model.solve(verbose=True)
-        print(model)
+        model.initRecorder()     # sets variables to track; defaults are load_level and stability index
+
+        model.startRecorder()    # this starts the recording of requested variables
+        model.trackStability(True)
+
+        for lam in np.linspace(0.0, 0.9, 5):
+            model.setLoadFactor(lam)
+            model.solve(verbose=True)
+            model.recordThisStep()
 
         model.plot(factor=100.00)
 
         model.beamValuePlot('F')
         model.beamValuePlot('V')
         model.beamValuePlot('M')
+
+        model.historyPlot('stability')
 
 
