@@ -187,7 +187,38 @@ class System():
     def initRecorder(self, **kwargs):
         """
         initializes data arrays for gathering of load history data
+
+        :keyword variables: list of variables or d.o.f.-codes to be recorded
+        :type variables: list-type
+        :keyword nodes:  nodes for which to record
+        :type nodes: list of :py:class:`Node`
+        :keyword elements:  elements for which to record
+        :type elements: list of :py:class:`Element`
+
+
+
+        .. code::
+
+            # examples:
+
+            # system recorder tracking the stability index
+            initRecorder(variables=['stability',])
+
+            # tracking 'ux' at nodes X1 and X7
+            initRecorder(variables=['ux',], nodes=[X1, X7])
+
+            # tracking all components of stress at Elem2 and Elem42
+            initRecorder(variables=['stress',], elements=[Elem2, Elem42, ...])
+
         """
+        if 'variables' in kwargs:
+            if 'lam' not in kwargs['variables']:
+                kwargs['variables'] = list(kwargs['variables']) + ['lam']
+            if 'stability' not in kwargs['variables']:
+                kwargs['variables'] = list(kwargs['variables']) + ['stability']
+        else:
+            kwargs['variables'] = ['lam','stability']
+
         self.recorder = Recorder(**kwargs)
 
     def startRecorder(self):
@@ -213,18 +244,24 @@ class System():
         """
         record current state of the system
         """
-        self.recorder['U'].append(self.sysU.copy())
-        self.recorder['lambda'].append(self.loadfactor)
-        if self.track_stability:
-            self.recorder['stability'].append(self.checkStability())
+
+        for node in self.nodes:
+            node.recordThisStep(self.loadfactor)
+
+        for elem in self.elements:
+            elem.recordThisStep(self.loadfactor)
+
+        if self.recorder and self.recorder.isActive():
+            data = {'lam':self.loadfactor}
+            if self.track_stability:
+                data['stability'] = self.solver.checkStability()
+            else:
+                data['stability'] = np.nan
+
+            self.recorder.addData(data)
 
     def trackStability(self, on=True):
-        if on:
-            self.track_stability = True
-            if not self.recorder['stability']:
-                self.recorder['stability'] = [ 0.0 for x in self.recorder['lambda'] ]
-        else:
-            self.track_stability = False
+        self.track_stability = on
 
     def fetchRecord(self, keys=[]):
         """
@@ -289,7 +326,8 @@ class System():
 
         :param variable: string code for variable to show
         :param factor: deformation magnification factor (default is undeformed)
-        :param filename: filename (str)
+        :param filename:
+        :type filename: str
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
@@ -304,11 +342,47 @@ class System():
 
         :param variable: string code for variable
         :param deformed: True | **False**
-        :param file: filename (str)
+        :param filename:
+        :type filename: str
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
         self.plotter.beamValuePlot(variable_name=variable, factor=factor, filename=filename, **kwargs)
+
+    def historyPlot(self, varY, filename=None, **kwargs):
+        """
+        Create a generic X-Y plot using recorder data for load-level (horizontal)
+        and varY (vertical).
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param str varY: a variable code previously set by :py:meth:`initRecorder`
+        :param filename:
+        :type filename: str
+        """
+        if not self.recorder:
+            return
+
+        data = self.recorder.fetchRecord(['lam', varY])
+        if 'lam' in data:
+            X = data['lam']
+        else:
+            raise KeyError(f"Recorder has no data for key='lam'")
+        if varY in data:
+            Y = data[varY]
+        else:
+            raise KeyError(f"Recorder has no data for key='{varY}'")
+
+        if 'title' not in kwargs:
+            kwargs['title'] = "Tracking Stability"
+        if 'xlabel' not in kwargs:
+            kwargs['xlabel'] = 'Load factor, $ \lambda $'
+        if 'ylabel' not in kwargs:
+            kwargs['ylabel'] = "Stability index, $ {det}\: {\\bf K}_t $"
+
+        self.plotter.xyPlot(X, Y, filename=filename, **kwargs)
+
 
     def plotDOF(self, dofs=[]):
         """

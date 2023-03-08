@@ -23,8 +23,8 @@ class Recorder():
         self.nodes = []
         self.elements = []
 
-        if 'variable' in kwargs:
-            for var in kwargs['variable']:
+        if 'variables' in kwargs:
+            for var in kwargs['variables']:
                 self.data[var] = []
 
         if 'nodes' in kwargs:
@@ -61,6 +61,11 @@ class Recorder():
                 self.data[var].append(dta[var])
             else:
                 self.data[var].append(np.nan)
+                print(f"Recorder.addData: '{var}' not not in data set: padding with nan")
+
+        for var in dta:
+            if var not in self.data:
+                print(f"Recorder.addData: '{var}' not initialized by the recorder: ignored")
 
     def enable(self):
         """

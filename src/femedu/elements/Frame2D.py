@@ -66,14 +66,8 @@ class Frame2D(Element):
         self.internal_forces = {'fi':0.0, 'Vi':0.0, 'Mi':0.0, 'fj':0.0, 'Vj':0.0, 'Mj':0.0}
 
     def __str__(self):
-        s = \
-"""Frame2D: node {} to node {}:
-   material properties: {}  strain:{}   stress:{}  
-   internal forces: f0={fi:.2f} V0={Vi:.2f} M0={Mi:.2f} fl={fj:.2f} Vl={Vj:.2f} Ml={Mj:.2f} Pw={Pw:.2f} Mw={Mw:.2f}""".format(
-                            self.nodes[0].index, self.nodes[1].index,
-                            repr(self.material), self.material.getStrain(),
-                            self.material.getStress(),
-                            **self.internal_forces)
+        s = super(Frame2D, self).__str__()
+        s += "\n    internal forces: f0={fi:.2f} V0={Vi:.2f} M0={Mi:.2f} fl={fj:.2f} Vl={Vj:.2f} Ml={Mj:.2f} Pw={Pw:.2f} Mw={Mw:.2f}".format(**self.internal_forces)
         return s
 
     def setDistLoad(self, w):

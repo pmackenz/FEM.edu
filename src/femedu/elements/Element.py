@@ -36,14 +36,11 @@ class Element(DrawElement):
 
 
     def __str__(self):
-        s = \
-        """{}: nodes {}
-        material properties: {}  
-        strain:{},   stress:{},  internal force: {}
-        Pe: {}""".format(self.__class__, [ node.getID() for node in self.nodes ],
-                         repr(self.material), self.material.getStrain(),
-                         self.material.getStress(),
-                         self.force, self.Forces)
+        s = "{}: nodes ( ".format(self.__class__.__name__)
+        for node in self.nodes:
+            s += "{} ".format(node.getID())
+        s += ")"
+        s += "\n    material: {}".format(self.material.__class__.__name__)
         return s
 
     def __repr__(self):
@@ -168,6 +165,14 @@ class Element(DrawElement):
             self.recorder = recorder
         else:
             self.recorder = None
+
+    def recordThisStep(self, load_level):
+        """
+        record current state of the system
+        """
+        if self.recorder and self.recorder.isActive():
+            data = {'lam':self.load_level}
+            self.recorder.addData(data)
 
 
 if __name__ == "__main__":

@@ -37,21 +37,23 @@ class Node():
         self.setLoadFactor(1.0)
 
     def __str__(self):
-        s = \
-        """Node {}: 
-        x:{}, fix:{}, 
-        P:{}, u:{}""".format(self.index,
-                             self.pos, self.fixity, self.getLoad(), self.disp)
+        s  = "Node_{}:\n    x:    {}".format(self.index, self.pos)
+        if self.fixity:
+            s += f"\n    fix:  {self.fixity}"
+        load = self.getLoad()
+        if isinstance(load, np.ndarray) and not np.isclose(np.linalg.norm(load), 0.0):
+            s += f"\n    P:    {load}"
+        s += f"\n    u:    {self.disp}"
         return s
 
     def __repr__(self):
-        return "Node{}(x={}, u={})".format(self.index, self.pos, self.disp)
+        return "Node_{}(x={}, u={})".format(self.index, self.pos, self.disp)
 
     def getID(self):
         """
         :returns: the node ID (``str``)
         """
-        return "Node{}".format(self.index)
+        return "Node_{}".format(self.index)
 
     def request(self, dof_list, caller):
         """
@@ -345,6 +347,13 @@ class Node():
         else:
             self.recorder = None
 
+    def recordThisStep(self, load_level):
+        """
+        record current state of the system
+        """
+        if self.recorder and self.recorder.isActive():
+            data = {'lam':self.load_level}
+            self.recorder.addData(data)
 
 
 if __name__ == "__main__":

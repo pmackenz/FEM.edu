@@ -158,6 +158,41 @@ class ElementPlotter(AbstractPlotter):
             plt.savefig(filename)
         plt.show()
 
+    def xyPlot(self, X, Y, filename=None, show_arrows=False, **kwargs):
+        """
+        Create a x-y-plot
+
+        If **filename** is given, store the plot to that file.
+        Use proper file extensions to indicate the desired format (.png, .pdf)
+
+        :param X: one-dimensional :py:class:`numpy.array` holding x-values
+        :param Y: one-dimensional :py:class:`numpy.array` holding y-values
+        :param str filename:
+        :param str title: figure title (optional)
+        :param str xlabel: x-axis label (optional)
+        :param str ylabel: y-axis label (optional)
+        """
+        fig, axs = plt.subplots()
+
+        axs.plot(X, Y,'--*r')
+        axs.plot(X, np.zeros_like(X),'-k')
+        axs.grid(True)
+
+        if 'xlabel' in kwargs:
+            axs.set_xlabel(kwargs['xlabel'])
+        if 'ylabel' in kwargs:
+            axs.set_ylabel(kwargs['ylabel'])
+        if 'title' in kwargs:
+            axs.set_title(kwargs['title'])
+
+        #axs.set_aspect('equal')
+        #axs.set_xmargin(0.10)
+        #axs.set_ymargin(0.10)
+
+        if filename:
+            plt.savefig(filename)
+        plt.show()
+
     def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False, **kwargs):
         """
         Create a deformed system plot
