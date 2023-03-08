@@ -14,6 +14,7 @@ from .Node     import *
 from ..elements.Element import *
 from ..solver.LinearSolver import LinearSolver
 from ..plotter.ElementPlotter import ElementPlotter as Plotter
+from ..recorder.Recorder import *
 
 
 class System():
@@ -183,25 +184,30 @@ class System():
 
     # --------- recorder methods ------------------------------
 
-    def initRecorder(self):
+    def initRecorder(self, **kwargs):
         """
         initializes data arrays for gathering of load history data
         """
-        self.record = False
-        self.recorder = {'U':[], 'lambda':[], 'stability':None}
-
+        self.recorder = Recorder(**kwargs)
 
     def startRecorder(self):
         """
         starts the recorder
         """
-        self.record = True
+        self.recorder.enable()
+
+    def pauseRecorder(self):
+        """
+        pauses the recorder.  You can restart the recorder by calling
+        `startRecorder()`.
+        """
+        self.recorder.disable()
 
     def stopRecorder(self):
         """
         stops the recorder
         """
-        self.record = False
+        self.recorder.disable()
 
     def recordThisStep(self):
         """
@@ -220,11 +226,18 @@ class System():
         else:
             self.track_stability = False
 
-    def fetchRecord(self):
+    def fetchRecord(self, keys=[]):
         """
-        :return: a tuple of ndarrays: (loadfactors, list of system deformations, stability index)
+        Request recorded time history data for the listed keys.
+        If a single key is given as a string, a single `np.array()` is returned.
+        If a list of keys is given, a `list of np.array()` is returned.
+
+        :returns: time history data for the listed keys.
         """
-        return (np.array(self.recorder['lambda']), np.array(self.recorder['U']), np.array(self.recorder['stability']))
+        if keys:
+            return self.recorder.fetchRecord(keys=keys)
+        else:
+            return []
 
 # ------- solver methods ----------
 
@@ -495,6 +508,7 @@ class System():
         """
         self.resetDisp()
         self.resetLoad()
+
 
 
 if __name__ == "__main__":
