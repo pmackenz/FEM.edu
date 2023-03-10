@@ -224,7 +224,7 @@ class Frame2D(Element):
 
         # ** bending portion (P-delta)
 
-        if self.force < -EI / L**2 / 1000:
+        if self.force < -EI / L**2 / 1000000:
             """
             use exact solution for compressive members
             """
@@ -246,7 +246,7 @@ class Frame2D(Element):
             kmt  = EIfact * (kappa*cot - 1.)
             kmth = EIfact * (1. - kappa*csc)
 
-        elif self.force > EI / L**2 / 1000:
+        elif self.force > EI / L**2 / 1000000:
             """
             use exact solution for tensile members 
             """

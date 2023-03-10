@@ -181,7 +181,6 @@ class System():
         # solve for next point on the equilibrium path
         self.NewtonSolver(verbose)
 
-
     # --------- recorder methods ------------------------------
 
     def initRecorder(self, **kwargs):
@@ -254,7 +253,7 @@ class System():
         if self.recorder and self.recorder.isActive():
             data = {'lam':self.loadfactor}
             if self.track_stability:
-                data['stability'] = self.solver.checkStability()
+                data['stability'] = self.solver.checkStability(num_eigen=1)
             else:
                 data['stability'] = np.nan
 
@@ -287,6 +286,23 @@ class System():
         else:
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)
+
+    def checkStability(self, **kwdargs):
+        """
+        Computes the stability index as
+
+        * :math:`\mathop{det}([{\\bf K}_t])` for systems with less than 25 d.o.f.s
+        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\\bf K}_t`
+
+        **Implemented** by :py:class:`Solver`.
+
+        :param verbose: set to **True** for log info
+        :param num_eigen: if set to a value greater than 0, show the **num_eigen** eigenvalues
+                        closest to the current load level.
+        :returns: stability index
+        """
+        if self.solver:
+            return self.solver.checkStability(**kwdargs)
 
     def getBucklingMode(self, mode=0, **kwargs):
         if self.solver:
@@ -382,7 +398,6 @@ class System():
             kwargs['ylabel'] = "Stability index, $ {det}\: {\\bf K}_t $"
 
         self.plotter.xyPlot(X, Y, filename=filename, **kwargs)
-
 
     def plotDOF(self, dofs=[]):
         """
@@ -515,7 +530,6 @@ class System():
         lam = self.getBucklingMode(mode=mode, **kwargs)
         title_text = f"Mode Shape for $ \lambda = {lam:.2f} $"
         self.plot(factor=factor, filename=filename, title=title_text, modeshape=True)
-
 
     def report(self):
         """

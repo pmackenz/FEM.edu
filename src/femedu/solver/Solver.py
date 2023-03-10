@@ -120,7 +120,6 @@ class Solver():
         """
         self.loadfactor = lam
 
-
     def assemble(self, force_only=False):
         """
         A general assembler for mixed element types.
@@ -185,7 +184,6 @@ class Solver():
             self.Kt = Ksys
 
         self.R  = Rsys
-
 
     def solve(self, **kwargs):
         """
