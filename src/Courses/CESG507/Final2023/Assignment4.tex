@@ -1,0 +1,233 @@
+\documentclass[11pt, oneside]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{letterpaper, margin=1.0in}         % ... or a4paper or a5paper or ... 
+%\geometry{landscape}                		% Activate for for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb, amsmath}
+\usepackage{hyperref}
+
+
+\newif\ifsol
+
+%\soltrue
+\solfalse
+
+\usepackage{color}
+%\def\long\solution{#1}{\ifsol{\color{red} #1}\else{}\fi}
+\long\def\solution#1{\ifsol{\color{red}#1}\else{}\fi}
+\long\def\nosolution#1{\ifsol{}\else{#1}\fi}
+
+
+\def\vectorform#1{\ensuremath{\left\{#1\right\}}}
+\def\matrixform#1{\ensuremath{\left[#1\right]}}
+
+\long\def\putinvector#1{\vectorform{\begin{array}{c}#1\end{array}}}
+\long\def\putinmatrix#1{\matrixform{\begin{array}{ccc}#1\end{array}}}
+
+\def\REF#1{(\ref{#1})}
+\def\figref#1{Figure~\ref{#1}}
+\def\tabref#1{Table~\ref{#1}}
+
+\newcommand{\trace}{\mathop{\mathrm{tr}}}
+\newcommand{\sign}{\mathop{\mathrm{sign}}}
+\newcommand{\vol}{\mathop{\mathrm{vol}}}
+\newcommand{\dev}{\mathop{\mathrm{dev}}}
+\newcommand{\norm}[1]{\mathop{\left\Vert#1\right\Vert}}
+
+\def\mathBox#1{\fbox{$\displaystyle  \strut #1$}}
+
+\def\R{\mathbb{R}}
+\def\N{\mathbb{N}}
+
+%\newcommand{\vectr}[1]{\mathbf{#1}}
+\newcommand{\vectr}[1]{\hbox{\boldmath$#1$}}
+\newcommand{\tensor}[1]{\hbox{\boldmath$#1$}}
+
+\newcommand{\Div}{\mathop{\mathrm{Div}}}
+\newcommand{\Grad}{\mathop{\mathrm{Grad}}}
+\newcommand{\diver}{\mathop{\mathrm{div}}}
+\newcommand{\grad}{\mathop{\mathrm{grad}}}
+\newcommand{\deter}{\mathop{\mathrm{det}}}
+
+\newcommand{\diff}[2]{\frac{d #1}{d #2}}
+\newcommand{\pdiff}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\pddiff}[2]{\frac{\partial^2 #1}{\partial #2^2}}
+\newcommand{\ppdiff}[3]{\frac{\partial^2 #1}{\partial #2\otimes\partial #3}}
+
+
+%   General parameters, for ALL pages:
+\renewcommand{\topfraction}{0.9}	% max fraction of floats at top
+\renewcommand{\bottomfraction}{0.8}	% max fraction of floats at bottom
+\renewcommand{\textfraction}{0.10}
+\renewcommand{\floatpagefraction}{0.80}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\lhead{CESG~507}
+\chead{{\large \bf Assignment and Final Exam Project \solution{ -- Solution}}}
+\rhead{Winter 2023}
+
+
+\soltrue
+\solfalse
+
+
+\begin{document}
+
+\noindent
+This Assignment contains two problems. Both include 
+\begin{enumerate}
+\item A setup phase, which shall be a quick turn-around effort for which usual homework rules, i.e.,  collaboration is permitted, apply.
+\item A project phase, which shall be your work only.  That portion will be graded as the final exam.
+\end{enumerate}
+
+\noindent
+\textbf{Remark}: \emph{The problems are designed for using FEM.edu (the python software shared in class), 
+			but you are welcome to use Mathematica or even MATLAB  for some or all work!}
+
+
+\section*{Problem 4-1: Static stability analysis of stiffened beam-columns.}
+
+Figure~\ref{fig:4-1} represents the setup for a series of design options for a steel column.
+The undeformed column shall be perfectly straight between two nodes $A$ and $B$ and loaded at the top (point~B) by a concentrated force $P$.  
+Assume the reference column to have $EI=const.$ over its entire length.  Use that $EI$ to define a normalized load $\lambda = P L^2 / (\pi^2 EI)$.
+
+\begin{figure}[b]
+	\centering
+	\unskip
+	\includegraphics[width=0.900\textwidth]{Problem4-1.png}
+	\caption{Elastic beam-column under axial compression. Design options for stiffeners (I, II, III), 
+			and support options (i, ii, iii for the loaded node; a, b for the bottom node).}
+	\label{fig:4-1}
+\end{figure}
+
+\begin{description}
+\item[Setup Phase:]  
+Build finite element models for the three system options (note that option~II differs from option~I only by the parameter EI for each section).
+Each model shall be able to find the stability limit, i.e., the critical load factor for which the determinant of ${\bf K}_t$ goes through zero.  
+Plot the (controlling) buckling mode at the stability limit and compare it to our in-class exercise.
+ 
+Set up each model to accept any of the support options (i, ii, iii for node~B, and a, b for node~A).  Test your approach by using options (b), (ii), and (III) and comparing the result against Assignment~\#3.  
+I further recommend to pick one setup for each system (I) and (II) and compare results with one or more classmates to ensure your code is working correctly.
+
+\item[Project Phase:]  This is for your final exam project and I expect you to work alone on this part of the question! 
+
+Create stability diagrams in which you show $0\le \alpha\le 1$ on the horizontal axis and the critical load factor on the vertical axis.  
+Use $\gamma = 1.5$ and $\gamma=2.0$.
+Do this for
+
+\fbox{%
+    \begin{minipage}{0.93\hsize}
+        \begin{itemize}
+        \item All \textbf{three} system options and \textbf{one} set of boundary conditions at nodes~A and~B,    {\color{red}\emph{OR}}
+        \item \textbf{Two} system options and \textbf{two} sets of boundary conditions at nodes~A and~B,         {\color{red}\emph{OR}}
+        \item System option~(I) and \textbf{three} sets of boundary conditions at nodes~A and~B.
+        \end{itemize}%
+    \end{minipage}%
+}
+
+These diagrams should be condensed into a single plot (well labeled, please) to study the effect of the structural modifications.
+
+\item[Note:] This can be fully automated, which would make solving for any or all combinations rather simple.  However, if you feel less comfortable with automation (programming a few loops and conditions), find solutions at least for $\alpha=0.00, 0.25, 0.50, 0.75, 1.00$ to create enough information for a diagram.
+\item[Note:] Plotting can be done in python, MATLAB, Excel, or by hand.  Just make sure to add a legend and proper discussion.
+
+\end{description}
+
+\newpage
+
+\section*{Problem 4-2: Static stability analysis  of a building frame.}
+
+Figure~\ref{fig:4-2}  sets up a design study for a four-story building frame.  This is a fictitious model to study the effect of stiffness variation between floor beams and beam-columns.  By picking $EI=10^{3}$ and $EA=10^6$, $B=20$ and $H=10$, we may view this as some \emph{normalized} model.
+
+\begin{figure}[hb]
+	\centering
+	\includegraphics[width=0.900\textwidth]{Problem4-2.png}
+	\caption{Multi-story building frames with load pattern and support condition.}
+	\label{fig:4-2}
+\end{figure}
+
+\begin{description}
+\item[Setup Phase:]  
+Build a finite element model for the three system options.  This can be done in one model by using parameters $EI_c$ and $EI_f$ for columns and floors, respectively.  Use two elements per floor (length $B/2$) for better plotting. The extra constraints at the base of model~II require only two extra lines, so starting with (III) in mind makes this most efficient.
+ 
+Each model shall be able to find the stability limit, i.e., the critical load factor for which the determinant of ${\bf K}_t$ goes through zero.
+Plot the (controlling) buckling mode at the stability limit and compare it to our in-class exercise.
+
+I highly recommend to pick one setup for, e.g., system (I), and compare results with one or more classmates to ensure your code is working correctly.
+
+\item[Project Phase:]   This is for your final exam project and I expect you to work alone on this part of the question! This is a free format question in which I am asking you to conduct a critical study on the impact of design choices on the stability of a multi-story frame.  I am leaving the extent to your level of interest and availability of (your) time to explore.
+
+Here some questions to start with:
+\begin{enumerate}
+\item What is the buckling load of the original system?  Start with system~I, start with a small $w$ and work your way toward the stability limit, then set the reference load to that stability limit.  This makes subsequent comparison easy since the critical factor for the reference system is now 1.00.
+\item How strong is the impact on the support condition at the base on the critical load and the buckling mode shape? (systems~I versus II)
+\item How strong is the impact of stiffer floors (system~III)  on the critical load and the buckling mode shape? 
+\item How would modifying the column stiffness affect critical load and buckling mode shape?  Try floors 1 to 4 using $4 EI$, $3 EI$, $2 EI$ and $EI$, respectively.
+\item Will a simplified load pattern where floor loads are applied at loads yield a reasonable approximation for the buckling loads and modes?
+\item Apply horizontal forces at floors (representing wind or earthquake forces), say 5\,\% of the largest vertical force in any column per floor.  This serves as some serious imperfection.  How will that affect the analysis?  How the results?
+\end{enumerate}
+
+
+\item[Note:] Be creative, come up with your own questions if you like, but please clearly state your study question, hypothesis, and findings.  As always in engineering, a figure is telling more than a thousand words.
+
+\end{description}
+
+
+\end{document}
+
+\newpage
+
+$$
+i
+\qquad
+j
+\qquad
+i'
+\qquad
+j'
+\qquad
+$$
+
+$$
+L
+\qquad
+\ell
+\qquad
+EI
+\qquad
+EI=\text{const.}
+\qquad
+w
+$$
+
+$$
+M_i
+\qquad
+M_j
+\qquad
+R_i
+\qquad
+R_j
+\qquad
+P
+$$
+
+
+$$
+u_i
+\qquad
+u_j
+\qquad
+v_i
+\qquad
+v_j
+\qquad
+\theta_i
+\qquad
+\theta_j
+\qquad
+$$
+
+\end{document}  
