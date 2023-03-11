@@ -12,12 +12,13 @@ The goal is to create an object-oriented Finite Element Analysis program that
 The program will need and use the following objects:
 
 .. toctree::
-	:maxdepth: 3
+    :maxdepth: 3
 
-	design/node.rst
-	design/element.rst
-	design/material.rst
-	design/system.rst
-	design/solver.rst
-	design/plotter.rst
+    design/mesher.rst
+    design/node.rst
+    design/element.rst
+    design/material.rst
+    design/system.rst
+    design/solver.rst
+    design/plotter.rst
 

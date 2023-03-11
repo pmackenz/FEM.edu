@@ -5,7 +5,7 @@ This class represents no particular element but rather defines common functional
 
 .. note::
 
-    Every element in **FEM.edu** is derived from this class.
+    Every element in |PackageName| is derived from this class.
 
 The :code:`Element` class inherits methods from :code:`DrawElement`, which provides default plotting functionality
 for common element types.

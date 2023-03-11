@@ -7,6 +7,7 @@ Implementation
 
     implementation/Element_class.rst
     implementation/Material_class.rst
+    implementation/Mesher_class.rst
     implementation/Node_class.rst
     implementation/Plot_Support_Classes.rst
     implementation/Recorder_class.rst
