@@ -9,7 +9,7 @@
 project = 'FEM.edu'
 copyright = '2023, Peter Mackenzie-Helnwein'
 author = 'Peter Mackenzie-Helnwein'
-release = 'FEM.edu-v0.9-pre3.8.23'
+release = 'FEM.edu-v0.9-pre3.2.23'
 
 # -- add current folder to path
 # https://www.jetbrains.com/pycharm/guide/tutorials/sphinx_sites/documentation/

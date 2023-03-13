@@ -15,9 +15,9 @@ class PlaneStress(Material):
             self.parameters['t'] = 1.0
 
         # initialize strain
-        self.total_strain   = np.zeros(3)
+        self.strain         = np.zeros(3)
         self.plastic_strain = np.zeros(3)
-        self.setStrain({'xx':0.0, 'yy':0.0, 'zz':0.0, 'xy':0.0, 'yz':0.0, 'zx':0.0})
+        self.setStrain({'xx':0.0, 'yy':0.0, 'xy':0.0})
 
     def getThickness(self):
         return self.parameters['t']
@@ -48,8 +48,6 @@ class PlaneStress(Material):
         # elastic predictor
         stress = self.Et @ ( eps - self.plastic_strain )
 
-        self.strain['zz'] = -self.parameters['nu'] * (eps[0] + eps[1])  # elastic thickness strain
-
         # check yield condition
         (sxx, syy, sxy) = stress
         f = stress @ Phi @ stress / 2. - (t*fy)**2
@@ -63,12 +61,9 @@ class PlaneStress(Material):
             r = Phi @ stress
             Xixr = Xi @ r
             gamma += f / (r @ Xixr)
-            Xi = np.linalg.inv(Cinv + gamma * Phi)
+            Xi = (Cinv + gamma * Phi).I
             stress = Xi @ ( eps - self.plastic_strain )
             self.Et  = Xi
-
-            self.strain['zz']  = -0.5 * (self.plastic_strain[0] + self.plastic_strain[1])
-            self.strain['zz'] += -nu * (stress[0] + stress[1]) / E
 
             print("material entering plastic state")
 
@@ -86,4 +81,4 @@ class PlaneStress(Material):
         nu = self.parameters['nu']
 
         Cinv = 1 / (E * t) * np.array([[1., -nu, 0.], [-nu, 1., 0.], [0., 0., 2. * (1. + nu)]])
-        self.plastic_strain = self.total_strain - Cinv @ self.sig
+        self.plastic_strain = self.strain - Cinv @ self.sig

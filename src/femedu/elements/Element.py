@@ -26,7 +26,7 @@ class Element(DrawElement):
         self._requestDofs( tuple() )
 
         self.force    = 0.0
-        self.Loads    = [ [] for i in range(len(nodes)) ]
+        self.Loads    = []
         self.Forces   = []
         self.Kt       = []
 
@@ -48,23 +48,11 @@ class Element(DrawElement):
         return fmt.format(self.__class__.__name__,
                                 *[ node.getID() for node in self.nodes ],
                                 repr(self.material))
-
     def resetLoads(self):
         """
         default implementation for resetting element loads.
         """
         pass
-
-    def setSurfaceLoad(self, face, w):
-        """
-        .. warning::
-
-            This method needs to be implemented by every element that shall accept a surface load.
-
-        :param face: face ID for the laoded face
-        :param w: magnitude of distributed load per area. Tension on a surface is positive.
-        """
-        raise NotImplementedError(msg)
 
     def addTransformation(self, T, local_nodes=[]):
         """

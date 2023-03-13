@@ -20,7 +20,6 @@ class LinearTriangle(Element):
 
         self._requestDofs(dof_list)
 
-        self.distributed_load = [0.0, 0.0, 0.0]
         self.force    = 0.0
         self.Forces   = [ np.zeros(2), np.zeros(2) , np.zeros(2) ]
         self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
@@ -41,40 +40,21 @@ class LinearTriangle(Element):
         self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
 
     def __str__(self):
-        s = super(LinearTriangle, self).__str__()
-        s += "\n    strain: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStrain())
-        s += "\n    stress: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStress())
-        if np.array(self.distributed_load).any():
-            s += "\n    element forces added to node:"
-            for i, P in enumerate(self.Loads):
-                s += "\n        {}: {}".format(self.nodes[i].getID(),P)
+        s = \
+"""LinearTriangle: nodes {} {} {}:
+   material properties: {}  strain:{}   stress:{}  
+   internal force: {}
+   Pe: [ {} {} ]""".format( self.nodes[0].index, self.nodes[1].index, self.nodes[2].index,
+                            repr(self.material), self.material.getStrain(),
+                            self.material.getStress(),
+                            self.force, *self.Forces[1] )
         return s
 
-    def setSurfaceLoad(self, face, w):
-        """
-        .. list-table::
-            :header-rows: 1
-
-            * - face ID
-              - nodes defining that face
-            * - 0
-              - :py:obj:`node 0` to :py:obj:`node 1`
-            * - 1
-              - :py:obj:`node 1` to :py:obj:`node 2`
-            * - 2
-              - :py:obj:`node 2` to :py:obj:`node 0`
-
-
-        :param face: face ID for the laoded face
-        :param w: magnitude of distributed load per area. Tension on a surface is positive.
-        """
-        self.distributed_load[face] = w
-
-    def resetLoads(self):
-        self.setDistLoad(0, 0.0)
-        self.setDistLoad(1, 0.0)
-        self.setDistLoad(2, 0.0)
-        super(LinearTriangle, self).resetLoads()
+    def __repr__(self):
+        return "LinearTriangle({},{},{},{})".format( repr(self.nodes[0]),
+                                                     repr(self.nodes[1]),
+                                                     repr(self.nodes[2]),
+                                                     repr(self.material))
 
     def updateState(self):
 
@@ -88,8 +68,8 @@ class LinearTriangle(Element):
 
         # covariant base vectors (current system)
 
-        gs = node1.getDeformedPos() - node0.getDeformedPos()
-        gt = node2.getDeformedPos() - node0.getDeformedPos()
+        gs = node1.getDeformedPos(self.dof_list) - node0.getDeformedPos(self.dof_list)
+        gt = node2.getDeformedPos(self.dof_list) - node0.getDeformedPos(self.dof_list)
         gu = -gs - gt
 
         # metric (current system)
@@ -150,7 +130,7 @@ class LinearTriangle(Element):
             ]
 
         # tangent stiffness
-        Ct = self.material.getStiffness() * self.area * self.material.getThickness()
+        Ct = self.material.getStiffness()
 
         Kt = []
         One = np.eye(2, dtype=np.float64)
@@ -158,38 +138,46 @@ class LinearTriangle(Element):
             Krow = []
             Ti = Gi @ S
             for Gj, Bj in  zip(GI, BI):
-                GIJ = Ti @ Gj * self.area * self.material.getThickness()
+                GIJ = Ti @ Gj
                 Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
             Kt.append( Krow )
 
         self.Kt = Kt
 
-        # .. applied element load (reference load)
-
-        self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
-
-        for I, w in enumerate(self.distributed_load):
-
-            if w:  # do we have any load?
-
-                J = I+1
-                if J>2:
-                    J -= 3
-
-                # compute local coordinate system
-                LTvec = self.nodes[J].getPos() - self.nodes[I].getPos()
-                LNvec = np.array([[0,1],[-1,0]]) @ LTvec
-
-                # nodal load per adjacent node
-                Pi = 0.5 * w * self.material.getThickness() * LNvec
-
-                # add to element load vectors
-                self.Loads[I] += Pi
-                self.Loads[J] += Pi
-
-
     def getStress(self):
         return self.Stress
 
+
+if __name__ == "__main__":
+    # testing the Element class
+    nd0 = Node(0.0, 0.0)
+    nd0.index = 0
+    nd1 = Node(3.0, 2.0)
+    nd1.index = 1
+    nd2 = Node(2.0, 4.0)
+    nd2.index = 2
+    params = {'E':100, 'A':1.5, 'fy':1.0e20}
+    elem = LinearTriangle(nd0, nd1, nd2, Material(params))
+
+    print(nd0)
+    print(nd1)
+    print(nd2)
+
+    print("stress =", elem.getStress())
+    print("nodal forces: ", *elem.getForce())
+    print("element stiffness: ", elem.getStiffness())
+
+    # change the nodal displacements
+    nd0.setDisp(.1, .05)
+    nd1.setDisp(.05, .2)
+    nd2.setDisp(-.05, .1)
+
+    print(nd0)
+    print(nd1)
+    print(nd2)
+
+    print("force =", elem.getAxialForce())
+    print("nodal forces: ", *elem.getForce())
+    print("element stiffness: ", elem.getStiffness())
 
 

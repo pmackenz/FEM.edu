@@ -331,3 +331,32 @@ class Frame2D(Element):
             self.internal_forces['Pw'] = Pw * self.loadfactor
             self.internal_forces['Mw'] = Mw * self.loadfactor
 
+
+if __name__ == "__main__":
+    # testing the Frame2D class
+    nd0 = Node(0.0, 0.0)
+    nd0.index = 0
+    nd1 = Node(3.0, 2.0)
+    nd1.index = 1
+    params = {'E':100, 'A':1.5, 'I':4.5, 'fy':1.0e20}
+    elem = Frame2D(nd0, nd1, Material(params))
+
+    print(nd0)
+    print(nd1)
+
+    print("force =", elem.getAxialForce())
+    print("nodal forces: ", *elem.getForce())
+    print("element stiffness: ", elem.getStiffness())
+
+    # change the nodal displacements
+    nd0.setDisp(.1, .05)
+    nd1.setDisp(.05, .2)
+
+    print(nd0)
+    print(nd1)
+
+    print("force =", elem.getAxialForce())
+    print("nodal forces: ", *elem.getForce())
+    print("element stiffness: ", elem.getStiffness())
+
+
