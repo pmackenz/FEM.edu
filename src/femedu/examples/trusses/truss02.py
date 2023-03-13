@@ -28,6 +28,7 @@ class ExampleTruss02(Example):
         P = -10.0      # reference load on top nodes
         B = 6.0 * 12   # with of one bay in inches
         H = 8.0 * 12   # height of one bay in inches
+
         # material model parameters
         params = {'E': 10000., 'A': 3., 'nu': 0.0, 'fy': 1.e30}
 
@@ -45,15 +46,7 @@ class ExampleTruss02(Example):
         nd7 = Node(2.5*B, H)
         nd8 = Node(3.5*B, H)
 
-        model.addNode(nd0)
-        model.addNode(nd1)
-        model.addNode(nd2)
-        model.addNode(nd3)
-        model.addNode(nd4)
-        model.addNode(nd5)
-        model.addNode(nd6)
-        model.addNode(nd7)
-        model.addNode(nd8)
+        model.addNode(nd0, nd1, nd2, nd3, nd4, nd5, nd6, nd7, nd8)
 
         # create elements
         model.addElement(Truss(nd0, nd1, FiberMaterial(params)))  # bottom 1
@@ -85,6 +78,8 @@ class ExampleTruss02(Example):
         nd6.setLoad((P,), ('uy',))
         nd7.setLoad((P,), ('uy',))
         nd8.setLoad((P,), ('uy',))
+
+        model.plot(factor=1.,  filename="truss02_undeformed.png", title="Undeformed System")
 
         # analyze the model
         model.solve()
