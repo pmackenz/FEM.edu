@@ -153,6 +153,9 @@ class Node():
         :param modeshape: set to True if U represents a mode shape (BOOL)
         :param dof_list:
         """
+        if isinstance(U,list) or isinstance(U,tuple):
+            U = np.array(U)
+
         if modeshape:
             self.disp_mode = U
         else:

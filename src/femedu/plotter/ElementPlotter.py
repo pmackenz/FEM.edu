@@ -89,7 +89,8 @@ class ElementPlotter(AbstractPlotter):
                         x = ans[0]
                         y = ans[1]
                         if x.size == y.size:
-                            axs.plot(x, y, '-r', lw=3)
+                            axs.fill(x, y, linestyle='-', linewidth=1, edgecolor='r', facecolor='grey', alpha=0.2)
+                            axs.plot(x, y, linestyle='-', linewidth=2, color='r')
 
             # if self.reactions != []:
             #     self.addForces(axs)
