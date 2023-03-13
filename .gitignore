@@ -140,3 +140,5 @@ sphinx/build
 src/buckling_mode.png
 
 *.swp
+
+Student_Help/
