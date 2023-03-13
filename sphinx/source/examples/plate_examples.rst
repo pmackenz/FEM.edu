@@ -5,6 +5,8 @@ Plate Examples
     :hidden:
 
     plates/plate01/plate01.rst
+    plates/plate02/plate02.rst
+    plates/plate03/plate03.rst
 
 .. list-table:: Available Examples
     :widths:  30 70
@@ -12,8 +14,13 @@ Plate Examples
 
     * - Example
       - Description
-    * - **plate01**
-      - WIP
+    * - :doc:`plates/plate01/plate01`
+      - Testing the internal force code
+    * - :doc:`plates/plate02/plate02`
+      - Testing the convergence behavior of a mini-problem
+    * - :doc:`plates/plate03/plate03`
+      - Patch test for in-plane loading.
+
 
 **More**: :doc:`../examples`
 
@@ -36,6 +43,5 @@ To run a specific example use, e.g.:
 
     # run the actual problem
     ex.run()
-
 
 

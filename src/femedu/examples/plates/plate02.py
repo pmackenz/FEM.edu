@@ -77,8 +77,8 @@ class ExamplePlate02(Example):
             fy = 1.e30  # yield stress
         )
 
-        a = 10.
-        b = 10.
+        a = 10.     # length of the plate in the x-direction
+        b = 10.     # length of the plate in the y-direction
 
         model = System()
         model.setSolver(NewtonRaphsonSolver())
@@ -103,11 +103,14 @@ class ExamplePlate02(Example):
 
         model.setLoadFactor(0.0)
         model.solve()
-        model.report()
-        model.plot(factor=1.0)
+        #model.report()  # activate this line for lots of debug info
+        model.plot(factor=1.0,
+                   title="Undeformed system",
+                   filename="plate02_undeformed.png")
 
         model.setLoadFactor(1.0)
         model.solve()
+        model.plot(factor=1.0, filename="plate02_deformed.png")
+
         model.report()
-        model.plot(factor=1.0)
 

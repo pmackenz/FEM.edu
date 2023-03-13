@@ -68,8 +68,8 @@ class ExamplePlate01(Example):
             fy = 1.e30  # yield stress
         )
 
-        a = 10.
-        b = 10.
+        a = 10.     # length of the plate in the x-direction
+        b = 10.     # length of the plate in the y-direction
 
         model = System()
 
@@ -87,7 +87,7 @@ class ExamplePlate01(Example):
 
         elemB.setSurfaceLoad(face=2, w=1.0)
 
-        model.plot()
+        model.plot(title="Undeformed system", filename="plate01_undeformed.png")
 
         model.setLoadFactor(1.0)
 
@@ -100,4 +100,6 @@ class ExamplePlate01(Example):
         elemB.updateState()
 
         model.report()
+
+        model.plot(factor=1.0, filename="plate01_deformed.png")
 

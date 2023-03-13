@@ -35,7 +35,6 @@ class ExamplePlate03(Example):
         Lx = 100.0    # length of plate in the x-direction
         Ly =  80.0    # length of plate in the y-direction
 
-
         # ========== setting material parameters ==============
 
         params = dict(
@@ -129,9 +128,6 @@ class ExamplePlate03(Example):
         model.addElement(*elements)
 
         # define support(s)
-
-        #fix_x = (0,5,10,15)
-        #fix_y = (0,1,2,3,4)
 
         fix_x = (0,)
         fix_y = (0,4)
