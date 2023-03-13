@@ -113,7 +113,7 @@ An internal force plot is created equally simple.
 
     Showing file *beam01_shear.png*
 
-.. figure:: beam01_shear.png
+.. figure:: beam01_moment.png
     :align: center
 
     Showing file *beam01_moment.png*
