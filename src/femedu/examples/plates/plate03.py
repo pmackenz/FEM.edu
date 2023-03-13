@@ -130,8 +130,11 @@ class ExamplePlate03(Example):
 
         # define support(s)
 
-        fix_x = (0,5,10,15)
-        fix_y = (0,1,2,3,4)
+        #fix_x = (0,5,10,15)
+        #fix_y = (0,1,2,3,4)
+
+        fix_x = (0,)
+        fix_y = (0,4)
 
         for idx in fix_x:
             nodes[idx].fixDOF('ux')    # horizontal support left end
@@ -139,6 +142,11 @@ class ExamplePlate03(Example):
             nodes[idx].fixDOF('uy')          # vertical support right end
 
         # ==== complete the reference load ====
+
+        # surface loads on the left side
+        elements[ 0].setSurfaceLoad(2,px)
+        elements[8].setSurfaceLoad(2,px)
+        elements[16].setSurfaceLoad(2,px)
 
         # surface loads on the right side
         elements[ 7].setSurfaceLoad(2,px)
@@ -151,12 +159,12 @@ class ExamplePlate03(Example):
 
         model.report()
 
-        model.plot(factor=100.)
+        model.plot(factor=10., title="undeformed system", filename="plate03_undeformed.png")
 
-        model.setLoadFactor(1.0)
+        model.setLoadFactor(10.0)
         model.solve()
 
         model.report()
 
-        model.plot(factor=100.)
+        model.plot(factor=10., filename="plate03_deformed.png")
 

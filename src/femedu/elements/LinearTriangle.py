@@ -47,7 +47,8 @@ class LinearTriangle(Element):
         if np.array(self.distributed_load).any():
             s += "\n    element forces added to node:"
             for i, P in enumerate(self.Loads):
-                s += "\n        {}: {}".format(self.nodes[i].getID(),P)
+                Pi = np.array(P) * self.loadfactor
+                s += "\n        {}: {}".format(self.nodes[i].getID(), Pi)
         return s
 
     def setSurfaceLoad(self, face, w):
