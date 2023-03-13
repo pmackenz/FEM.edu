@@ -15,13 +15,14 @@ from femedu.examples.frames.frame04 import *
 from femedu.examples.plates.plate01 import *
 from femedu.examples.plates.plate02 import *
 from femedu.examples.plates.plate03 import *
+from femedu.examples.plates.plate04 import *
 from femedu.examples.course_help.final01 import *
 
 
 if __name__ == "__main__":
 
     #ex = ExampleTruss01()
-    ex = ExampleTruss02()
+    #ex = ExampleTruss02()
     #ex = ExampleTruss03()
     #ex = ExampleTruss04()
 
@@ -36,6 +37,7 @@ if __name__ == "__main__":
     #ex = ExamplePlate01()
     #ex = ExamplePlate02()
     #ex = ExamplePlate03()
+    ex = ExamplePlate04()
 
     #ex = ExampleFinal01()
 
