@@ -32,8 +32,8 @@ class ExamplePlate04(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 10        # number of elements in the mesh
-        Ny = 8        # number of elements in the mesh
+        Nx = 6        # number of elements in the mesh
+        Ny = 5        # number of elements in the mesh
         Lx = 100.0    # length of plate in the x-direction
         Ly =  80.0    # length of plate in the y-direction
 
@@ -68,11 +68,21 @@ class ExamplePlate04(Example):
 
         # create nodes
 
-        mesher = PatchMesher(model,
+        mesher1 = PatchMesher(model,
                              (0,0), (Lx,0), (Lx,Ly), (0,Ly),                                     # corner nodes
                              (Lx/2, -0.05*Ly), (1.2*Lx, Ly/2), (Lx/2, 0.90*Ly), (0.05*Lx, Ly/2), # mid-side nodes
                              (0.55*Lx, 0.45*Ly))                                                 # center node
-        nodes, elements = mesher.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+        nodes1, elements1 = mesher1.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+
+        mesher2 = TriPatchMesher(model,
+                                 (0,0), (Lx,0), (Lx/2,Ly),                                       # corner nodes
+                                 (Lx/2,0.15*Ly), (0.85*Lx,0.8*Ly), (0.20*Lx,0.6*Ly) # mid-side nodes
+                                 )
+        mesher2.shift(1.25*Lx, Ly/2)
+        nodes2, elements2 = mesher2.triangleMesh(Nx, LinearTriangle, PlaneStress(params))
+
+        nodes    = nodes1    + nodes2
+        elements = elements1 + elements2
 
         # define support(s)
 

@@ -1,4 +1,7 @@
 import sys
+import numpy as np
+from copy import deepcopy
+
 
 class Mesher():
     """
@@ -7,6 +10,14 @@ class Mesher():
 
     def __init__(self, model, *pts):
         self.model = model
+        self.offset = np.array([0.0, 0.0])
+
+    def shift(self, dx, dy):
+        """
+        :param dx: move patch to the right
+        :param dy: move patch up
+        """
+        self.offset += np.array([dx, dy])
 
     def lineMesh(self, NeX, element_type, material, **kwargs):
         """

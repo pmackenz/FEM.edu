@@ -1,10 +1,6 @@
-import numpy as np
-from copy import deepcopy
-
 from .Mesher import *
 from ..domain import Node, System
 from ..elements.Element import Element
-import sys
 
 class PatchMesher(Mesher):
     """
@@ -167,7 +163,7 @@ class PatchMesher(Mesher):
                ss[1]*tt[2],
                ss[0]*tt[1],
                ss[1]*tt[1] ]
-        x = shp @ self.X
+        x = shp @ self.X + self.offset
 
         return x[0], x[1]
 
