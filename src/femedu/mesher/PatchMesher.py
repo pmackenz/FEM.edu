@@ -165,6 +165,6 @@ class PatchMesher(Mesher):
                ss[1]*tt[1] ]
         x = shp @ self.X + self.offset
 
-        return x[0], x[1]
+        return (x[0], x[1])
 
 

@@ -79,7 +79,8 @@ class ExamplePlate04(Example):
                                  (Lx/2,0.15*Ly), (0.85*Lx,0.8*Ly), (0.20*Lx,0.6*Ly) # mid-side nodes
                                  )
         mesher2.shift(1.25*Lx, Ly/2)
-        nodes2, elements2 = mesher2.triangleMesh(Nx, LinearTriangle, PlaneStress(params))
+        #nodes2, elements2 = mesher2.triangleMesh(Nx, LinearTriangle, PlaneStress(params))
+        nodes2, elements2 = mesher2.quadMesh(Nx, LinearTriangle, PlaneStress(params))
 
         nodes    = nodes1    + nodes2
         elements = elements1 + elements2
