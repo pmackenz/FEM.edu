@@ -38,7 +38,6 @@ class Recorder():
                 elem.setRecorder(Recorder(variable=self.data.keys()))
 
 
-
     def fetchRecord(self, keys=None):
         """
         Request recorded time history data for the listed keys.
@@ -47,7 +46,20 @@ class Recorder():
 
         :returns: time history data for the listed keys.
         """
-        return self.data
+        if isinstance(keys, str):
+            if keys in self.data:
+                return self.data[keys]
+            else:
+                return []
+        elif isinstance(keys, list) or isinstance(keys, tuple):
+            ans = []
+            for key in keys:
+                ans.append(self.data[key])
+            else:
+                ans.append([])
+            return ans
+        else:
+            return []
 
     def addData(self, dta):
         """
