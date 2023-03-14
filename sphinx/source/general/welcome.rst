@@ -34,8 +34,10 @@ Features
         * Newton-Raphson solver (load stepping)
         * Displacement control (with arbitrary load pattern)
         * Arc-length control (with arbitrary load pattern)
+* Meshing features
+    * Curve, Patch, TrianglePatch, Solid meshers
 * Basic plot features for built-in and User-defined elements
-    * Deformeation plot
+    * Deformation plot
     * Beam diagrams (moment, shear, axial force; for beams and frames)
     * Time history plots
 * Easy integration of
