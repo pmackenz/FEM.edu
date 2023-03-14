@@ -46,6 +46,9 @@ class Recorder():
 
         :returns: time history data for the listed keys.
         """
+        if not keys:
+            return self.data
+
         if isinstance(keys, str):
             if keys in self.data:
                 return self.data[keys]
