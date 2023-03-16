@@ -1,6 +1,7 @@
 import numpy as np
 from .Element import *
 from ..domain.Node import *
+from ..utilities.Integration import *
 
 class Quad(Element):
     """
@@ -29,11 +30,8 @@ class Quad(Element):
 
         self.distributed_load = [0.0, 0.0, 0.0, 0.0]   # face loads along the perimeter of the element
         self.force    = 0.0
-        self.Forces   = [ np.zeros(ndof), np.zeros(ndof), np.zeros(ndof), np.zeros(ndof) ]
-        self.Kt       = [ [np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof))],
-                          [np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof))],
-                          [np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof))],
-                          [np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof)), np.zeros((ndof,ndof))] ]
+        self.Forces   = [ np.zeros(ndof) for k in range(len(self.nodes)) ]
+        self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
         self.ndof = ndof
 
         # covariant base vectors (reference system)

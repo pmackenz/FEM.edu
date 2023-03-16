@@ -13,8 +13,10 @@ class LinearTriangle(Element):
 
         if node0.getPos().size == 3:
             dof_list = ('ux','uy','uz')
+            ndof = 3
         elif node0.getPos().size == 2:
             dof_list = ('ux','uy')
+            ndof = 2
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
@@ -22,10 +24,8 @@ class LinearTriangle(Element):
 
         self.distributed_load = [0.0, 0.0, 0.0]
         self.force    = 0.0
-        self.Forces   = [ np.zeros(2), np.zeros(2) , np.zeros(2) ]
-        self.Kt       = [ [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
-                          [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))],
-                          [np.zeros((2,2)), np.zeros((2,2)), np.zeros((2,2))] ]
+        self.Forces   = [ np.zeros(ndof) for k in range(len(self.nodes)) ]
+        self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
 
         # covariant base vectors (reference system)
         base1 = node1.getPos() - node0.getPos()
