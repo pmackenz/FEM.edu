@@ -67,6 +67,10 @@ class Frame2D(Element):
 
     def __str__(self):
         s = super(Frame2D, self).__str__()
+        if not 'Pw' in self.internal_forces:
+            self.internal_forces['Pw'] = 0.0
+        if not 'Mw' in self.internal_forces:
+            self.internal_forces['Mw'] = 0.0
         s += "\n    internal forces: f0={fi:.2f} V0={Vi:.2f} M0={Mi:.2f} fl={fj:.2f} Vl={Vj:.2f} Ml={Mj:.2f} Pw={Pw:.2f} Mw={Mw:.2f}".format(**self.internal_forces)
         return s
 
