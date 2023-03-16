@@ -1,5 +1,8 @@
 
 class Integration():
+    """
+    Abstract interface definition for all Integration classes.
+    """
 
     def __init__(self, order=2, dimension=1):
         self.order = order
@@ -32,6 +35,11 @@ class Integration():
         return (self.xi, self.w)
 
     def gauss1D(self, nGP):
+        """
+        Gauss integration data for :py:data:`nGP` on the domain :math:`[-1,+1]`
+
+        For internal use only.
+        """
 
         if (nGP == 1):
             xi = [ 0.5 ]
@@ -54,6 +62,8 @@ class Integration():
     def dunavant(self, p=0):
         """
         Triangular domain integration for polynomial of order <= p
+
+        For internal use only.
         """
 
         if (p <= 1):
