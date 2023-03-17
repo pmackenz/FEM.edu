@@ -142,3 +142,5 @@ src/buckling_mode.png
 *.swp
 Student_Help/
 
+
+sphinx/source/auto_examples/

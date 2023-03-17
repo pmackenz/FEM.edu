@@ -33,12 +33,19 @@ extensions = [
 
 extensions += ['sphinx_git']
 extensions += ['sphinx_substitution_extensions']
+extensions += ['sphinx_gallery.gen_gallery']
 
 templates_path = ['_templates']
 exclude_patterns = []
 
 autosectionlabel_prefix_document = True
 autosectionlabel_maxdepth = 6
+
+# -- Sphinx-Gallery configuration
+sphinx_gallery_conf = {
+     'examples_dirs': '../../src/femedu/examples',   # path to your example scripts
+     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+}
 
 
 
