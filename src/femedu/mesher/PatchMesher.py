@@ -1,6 +1,5 @@
 from .Mesher import *
 from ..domain import Node, System
-from ..elements.Element import Element
 
 class PatchMesher(Mesher):
     """
@@ -51,8 +50,6 @@ class PatchMesher(Mesher):
     def quadMesh(self, NeX, NeY, element_type, material, **kwargs):
         """
         2D mesher using quadrilateral elements
-
-        This is an abstract class - requires implementation in subclass
 
         :param int NeX: number of elements along the first axis
         :param int NeY: number of elements along the second axis

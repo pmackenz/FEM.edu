@@ -5,6 +5,7 @@ __all__ = (
     "QuadIntegration",
     "TetraIntegration",
     "BrickIntegration",
+    "ShapeFunction",
 )
 
 from .LineIntegration import *
@@ -13,3 +14,4 @@ from .QuadIntegration import *
 from .TetraIntegration import *
 from .BrickIntegration import *
 
+from ShapeFunction import *

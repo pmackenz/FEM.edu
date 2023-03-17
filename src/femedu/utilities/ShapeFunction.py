@@ -3,7 +3,7 @@ import numpy as np
 def shapeFunction(order, xi, Le, n=0):
     '''
 
-    :param order: polynomial order of the shape functions. Options: 0,1,2,3
+    :param order: polynomial order of the shape functions. Options: 0,1,2,3,4,5
     :param xi:    normalized location on interval [0,1]
     :param Le:    element length; needed to correct for rotational dof
     :param n:     return n-th derivative of the requested shape function
@@ -153,10 +153,7 @@ def selfTestShapes():
     for order in range(5):
         print(f"order: {order}")
         for derivative in range(order+2):
-            lst = []
-            for xi in np.linspace(0,1,5):
-                lst.append(shapeFunction(order,xi,1.0,derivative))
-            res = np.array(lst)
+            res = np.array( [ shapeFunction(order,xi,1.0,derivative) for xi in np.linspace(0,1,5) ] )
             print(res.T)
         print()
 

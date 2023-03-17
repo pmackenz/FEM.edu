@@ -11,7 +11,7 @@ FEM Component Classes
 
     implementation/Element_class.rst
     implementation/Material_class.rst
-    implementation/Mesher_class.rst
+    implementation/Mesher/Mesher_class.rst
     implementation/Node_class.rst
     implementation/Solver_class.rst
     implementation/System_class.rst
