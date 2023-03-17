@@ -142,10 +142,10 @@ class ExampleFrame02(Example):
 
         model.report()
 
-        model.plot(factor=10.0)
+        model.plot(factor=10.0, filename="frame2_deformed.png")
 
-        model.beamValuePlot("F")
-        model.beamValuePlot("M")
-        model.beamValuePlot("V")
+        model.beamValuePlot("F", filename="frame2_force.png")
+        model.beamValuePlot("V", filename="frame2_shear.png")
+        model.beamValuePlot("M", filename="frame2_moment.png")
 
         return

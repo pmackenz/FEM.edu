@@ -211,10 +211,10 @@ class ExampleFrame01(Example):
         plt.ylabel("Stability index, $ {det}\: {\\bf K}_t $")
         plt.show()
 
-        model.plot(factor=10.0)
+        model.plot(factor=10.0, filename="frame1_deformed.png")
 
-        model.beamValuePlot("F")
-        model.beamValuePlot("M")
-        model.beamValuePlot("V")
+        model.beamValuePlot("F", filename="frame1_force.png")
+        model.beamValuePlot("V", filename="frame1_shear.png")
+        model.beamValuePlot("M", filename="frame1_moment.png")
 
-        model.plotBucklingMode(factor=10.)
+        model.plotBucklingMode(factor=10., filename="frame1_buckling_mode0.png")

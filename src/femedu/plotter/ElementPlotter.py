@@ -1,3 +1,4 @@
+import math as m
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
@@ -89,7 +90,8 @@ class ElementPlotter(AbstractPlotter):
                         x = ans[0]
                         y = ans[1]
                         if x.size == y.size:
-                            axs.fill(x, y, linestyle='-', linewidth=1, edgecolor='r', facecolor='grey', alpha=0.2)
+                            if m.isclose(x[0], x[-1]) and m.isclose(y[0], y[-1]):
+                                axs.fill(x, y, linestyle='-', linewidth=1, edgecolor='r', facecolor='grey', alpha=0.2)
                             axs.plot(x, y, linestyle='-', linewidth=2, color='r')
 
             # if self.reactions != []:
@@ -106,7 +108,7 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         if filename:
-            plt.savefig(filename)
+            plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
     def valuePlot(self, variable_name='', factor=0.0, filename=None):
@@ -156,7 +158,7 @@ class ElementPlotter(AbstractPlotter):
         plt.autoscale(enable=True, axis='x', tight=False)
         plt.autoscale(enable=True, axis='y', tight=False)
         if filename:
-            plt.savefig(filename)
+            plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
     def xyPlot(self, X, Y, filename=None, show_arrows=False, **kwargs):
@@ -191,7 +193,7 @@ class ElementPlotter(AbstractPlotter):
         #axs.set_ymargin(0.10)
 
         if filename:
-            plt.savefig(filename)
+            plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
     def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False, **kwargs):
@@ -321,7 +323,7 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         if filename:
-            plt.savefig(filename)
+            plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
     def _arrow(self,axs,x,y,dx,dy,val,show_point=True):

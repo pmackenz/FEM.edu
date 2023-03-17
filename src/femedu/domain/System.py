@@ -462,7 +462,7 @@ class System():
             ax2.set_xlabel('stability index, $ det({\\bf K}_t) $ or $ \min |\lambda| $')
             ax2.set_ylabel('load factor, $\lambda$')
 
-        plt.savefig("history_plots.png")
+        plt.savefig("history_plots.png", bbox_inches='tight')
         plt.show()
 
     def plotSystem(self, factor=1.0):
@@ -488,7 +488,7 @@ class System():
 
         plt.gca().set_aspect('equal')
         plt.gca().axis('off')
-        plt.savefig("deformed_system.png")
+        plt.savefig("deformed_system.png", bbox_inches='tight')
         plt.show()
 
     def pushU(self):

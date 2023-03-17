@@ -21,29 +21,36 @@ from femedu.examples.course_help.final01 import *
 
 if __name__ == "__main__":
 
-    #ex = ExampleTruss01()
-    #ex = ExampleTruss02()
-    #ex = ExampleTruss03()
-    #ex = ExampleTruss04()
+    examples = (
+        ExampleTruss01(),
+        ExampleTruss02(),
+        ExampleTruss03(),
+        ExampleTruss04(),
+        #
+        ExampleBeam01(),
+        ExampleBeam02(),
+        #
+        ExampleFrame01(),
+        ExampleFrame02(),
+        ExampleFrame03(),
+        ExampleFrame04(),
+        #
+        ExamplePlate01(),
+        ExamplePlate02(),
+        ExamplePlate03(),
+        ExamplePlate04()
+    )
 
-    #ex = ExampleBeam01()
-    #ex = ExampleBeam02()
 
-    #ex = ExampleFrame01()
-    #ex = ExampleFrame02()
-    #ex = ExampleFrame03()
-    #ex = ExampleFrame04()
 
-    #ex = ExamplePlate01()
-    #ex = ExamplePlate02()
-    #ex = ExamplePlate03()
-    ex = ExamplePlate04()
 
     #ex = ExampleFinal01()
 
-    # print the doc-string for the current example
-    print(ex)
+    for ex in examples:
 
-    # run the actual problem
-    ex.run()
+        # print the doc-string for the current example
+        print(ex)
+
+        # run the actual problem
+        ex.run()
 

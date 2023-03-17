@@ -1,12 +1,10 @@
 Example: truss04
 ==================
 
-..
-
-    .. image:: triangle_deformed.png
+..    .. image:: truss04_deformed.png
         :width: 45%
 
-    .. image:: triangle_forces.png
+..    .. image:: truss04_forces.png
         :width: 45%
 
 
