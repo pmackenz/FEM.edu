@@ -14,4 +14,4 @@ from .QuadIntegration import *
 from .TetraIntegration import *
 from .BrickIntegration import *
 
-from ShapeFunction import *
+from .ShapeFunction import *

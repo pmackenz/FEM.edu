@@ -13,7 +13,7 @@
    general/about.rst
    examples.rst
    design.rst
-   implementation.rst
+   implementation/implementation.rst
 
 
 

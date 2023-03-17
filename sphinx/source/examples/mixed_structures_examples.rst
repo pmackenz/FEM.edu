@@ -14,6 +14,8 @@ Mixed Structures Examples
       - Description
     * - **mixed01**
       - WIP
+    * - **mixed02**
+      - WIP
 
 **More**: :doc:`../examples`
 

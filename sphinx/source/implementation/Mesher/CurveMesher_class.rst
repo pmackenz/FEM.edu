@@ -16,11 +16,6 @@ Meshing of beams and frame components along a curve.
     Meshing a curve with 2-noded elements.
 
 
-.. note::
-
-    Meshers are currently under development but not yet available with the distribution.
-    Stay tuned for updates.
-
 Parent class
 --------------
 

@@ -31,7 +31,7 @@ Lines 18-19 create the elements and line 21 adds them to the model space.
 You only need to create variables for `Node` and `Element` objects, respectively,
 if you need to either add or retrieve information from that object later.
 
-Line 23 adds a surface load to face 2 of element :py:obj:`elemB`. See :doc:`../../../implementation/LinearTriangle_class`
+Line 23 adds a surface load to face 2 of element :py:obj:`elemB`. See :doc:`../../../implementation/Elements/LinearTriangle_class`
 for the definition of faces for this element.
 
 Set the load factor to 1.00 to activate and check element loads,

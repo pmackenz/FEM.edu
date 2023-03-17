@@ -1,7 +1,7 @@
 Example: truss04
 ==================
 
-.. comment::
+..
 
     .. image:: triangle_deformed.png
         :width: 45%

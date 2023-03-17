@@ -258,7 +258,7 @@ class Solver():
 
         .. note::
 
-            Use **System.plotBucklingMode()** for plotting of the eigenmode (see :doc:`System_class`).
+            Use **System.plotBucklingMode()** for plotting of the eigenmode (see :doc:`../Domain/System_class`).
             This plotting method will be replaced by :code:`System.plot(...)` in a future release.
 
         :return: the eigenvalue, :math:`\lambda_{\mathtt{mode}}`
