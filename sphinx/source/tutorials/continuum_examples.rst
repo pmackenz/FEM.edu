@@ -15,7 +15,7 @@ Continuum Examples
     * - **solid01**
       - WIP
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`
 
 How to run a solid model example from the distribution
 --------------------------------------------------------

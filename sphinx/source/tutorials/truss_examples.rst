@@ -45,4 +45,4 @@ To run a specific example use, e.g.:
     ex.run()
 
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`

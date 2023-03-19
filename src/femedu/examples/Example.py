@@ -11,7 +11,7 @@ class Example():
 
     def __str__(self):
         s  = "Example {}\n".format(self.__class__.__name__)
-        s += len(s)*"^" + '\n'
+        #s += len(s)*"-" + '\n'
         doc_string = self.docString()
         if doc_string:
             s += doc_string + '\n'

@@ -5,6 +5,7 @@ Mixed Structures Examples
     :hidden:
 
     mixed/mixed01/mixed01.rst
+    mixed/mixed02/mixed02.rst
 
 .. list-table:: Available Examples
     :widths:  30 70
@@ -17,7 +18,7 @@ Mixed Structures Examples
     * - **mixed02**
       - WIP
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`
 
 How to run a mixed structures example from the distribution
 --------------------------------------------------------------

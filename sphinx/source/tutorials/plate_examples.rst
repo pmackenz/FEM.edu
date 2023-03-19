@@ -7,6 +7,7 @@ Plate Examples
     plates/plate01/plate01.rst
     plates/plate02/plate02.rst
     plates/plate03/plate03.rst
+    plates/plate04/plate04.rst
 
 .. list-table:: Available Examples
     :widths:  30 70
@@ -22,7 +23,7 @@ Plate Examples
       - Patch test for in-plane loading.
 
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`
 
 How to run a plate example from the distribution
 ----------------------------------------------------

@@ -24,7 +24,7 @@ Frame Examples
     * - :doc:`frames/frame04/frame04`
       - Multi story Building frame
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`
 
 
 How to run a frame example from the distribution

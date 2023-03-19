@@ -18,7 +18,7 @@ Beam Examples
     * - :doc:`beams/beam02/beam02`
       - Three-span continuous beam with point loads
 
-**More**: :doc:`../examples`
+**More**: :doc:`../tutorials` and :ref:`examples-index`
 
 How to run a beam example from the distribution
 ----------------------------------------------------

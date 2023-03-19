@@ -144,3 +144,5 @@ Student_Help/
 
 
 sphinx/source/auto_examples/
+galleries/examples/*png
+galleries/examples/*/*png

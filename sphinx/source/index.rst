@@ -11,8 +11,8 @@
    :caption: Contents:
 
    general/about.rst
-   examples.rst
    auto_examples/index.rst
+   tutorials.rst
    design.rst
    implementation/implementation.rst
 

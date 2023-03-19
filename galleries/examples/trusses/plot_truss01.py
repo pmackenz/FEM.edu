@@ -1,20 +1,31 @@
 """
-====================
-Example: truss01
-====================
+==========================
+Simple triangular truss.
+==========================
+
+The system is statically determined and allows for easy validation of
+calculated deformation, reactions and internal forces.
+
+Author: Peter Mackenzie-Helnwein
 
 """
 
-from ...examples.Example import *
+# %%
+# Setup
 
-from ...domain.System import *
-from ...domain.Node import *
-from ...elements.Truss import *
-from ...materials.FiberMaterial import *
+from femedu.examples.Example import *
 
+from femedu.domain.System import *
+from femedu.domain.Node import *
+from femedu.elements.Truss import *
+from femedu.materials.FiberMaterial import *
+
+# %%
+# Create the example by subclassing the :py:class:`Example`
 
 class ExampleTruss01(Example):
 
+    # sphinx_gallery_start_ignore
     def docString(self):
         s = """
         Simple triangular truss. 
@@ -26,6 +37,7 @@ class ExampleTruss01(Example):
         """
         return s
 
+    # sphinx_gallery_end_ignore
     def problem(self):
         # initialize a system model
         B = 6.0 * 12
@@ -65,10 +77,10 @@ class ExampleTruss01(Example):
         model.beamValuePlot('f',filename="truss01_forces.png")
 
 # %%
-# Simple triangular truss.
+# Run the example by creating an instance of the problem and executing it by calling :py:meth:`Example.run()`
 #
-# The system is statically determined and allows for easy validation of
-# calculated deformation, reactions and internal forces.
-#
-# Author: Peter Mackenzie-Helnwein
-#
+
+if __name__ == "__main__":
+    ex = ExampleTruss01()
+    ex.run()
+

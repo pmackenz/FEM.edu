@@ -6,10 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
-project = 'FEM.edu'
+project   = 'FEM.edu'
 copyright = '2023, Peter Mackenzie-Helnwein'
-author = 'Peter Mackenzie-Helnwein'
-release = 'FEM.edu-v0.9-pre3.8.23'
+author    = 'Peter Mackenzie-Helnwein'
+release   = 'FEM.edu-v0.9.2-pre'
 
 # -- add current folder to path
 # https://www.jetbrains.com/pycharm/guide/tutorials/sphinx_sites/documentation/
@@ -21,16 +21,14 @@ import sys
 sys.path.insert(0, os.path.abspath("../../src"))
 sys.path.insert(0, os.path.abspath("."))
 
+from sphinx_gallery.sorting import FileNameSortKey
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = [
-    'sphinx.ext.autosectionlabel',
-    "myst_parser",
-    "sphinx.ext.autodoc",
-    ]
-
+extensions  = ['sphinx.ext.autosectionlabel']
+extensions += ["myst_parser"]
+extensions += ["sphinx.ext.autodoc"]
 extensions += ['sphinx_git']
 extensions += ['sphinx_substitution_extensions']
 extensions += ['sphinx_gallery.gen_gallery']
@@ -43,11 +41,12 @@ autosectionlabel_maxdepth = 6
 
 # -- Sphinx-Gallery configuration
 sphinx_gallery_conf = {
-     'examples_dirs': '../../src/femedu/examples',   # path to your example scripts
-     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+    'examples_dirs': '../../galleries/examples',   # path to your example scripts
+    'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+    'ignore_pattern': r'__init__\.py|runall\.py',
+    # specify that examples should be ordered according to filename
+    'within_subsection_order': FileNameSortKey,
 }
-
-
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
