@@ -3,8 +3,8 @@ PatchMesher class
 
 For beams and frame components.
 
-.. figure:: ../design/images/patch.png
-    :alt: ../design/images/patch.png
+.. figure:: ../../design/images/patch.png
+    :alt: ../../design/images/patch.png
     :align: center
 
     Meshing a quadrilateral patch with quadrilaterals or triangles.

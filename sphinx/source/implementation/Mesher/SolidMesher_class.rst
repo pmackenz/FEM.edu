@@ -3,8 +3,8 @@ SolidMesher class
 
 For 8-node, 20-node, and 27-node brick elements.
 
-.. figure:: ../design/images/solid.png
-    :alt: ../design/images/solid.png
+.. figure:: ../../design/images/solid.png
+    :alt: ../../design/images/solid.png
     :align: center
 
     Meshing a solid domain with brick elements.

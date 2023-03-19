@@ -3,8 +3,8 @@ TriPatchMesher class
 
 For plate and shell elements, including in-plane and out-of plane loaded plates.
 
-.. figure:: ../design/images/tri-patch.png
-    :alt: ../design/images/tri-patch.png
+.. figure:: ../../design/images/tri-patch.png
+    :alt: ../../design/images/tri-patch.png
     :align: center
 
     Meshing a triangular patch with quadrilaterals or triangles.
