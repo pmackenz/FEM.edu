@@ -38,6 +38,19 @@ class ElementPlotter(AbstractPlotter):
 
         :param factor: displacement scaling factor
         :param file: filename (str)
+        :param  \*\*kwargs: see list of optional parameters below.
+
+        :keywords: optional parameters
+
+            .. list-table::
+
+                * - :py:obj:`show_bc`
+                  - set to **True** to mark fixed DOFs
+                * - :py:obj:`show_loads`
+                  - set to **True** to plot loads
+                * - :py:obj:`show_reactions`
+                  - set to **True** to plot nodal reactions
+
         """
 
         if self.plot3D:
@@ -52,7 +65,7 @@ class ElementPlotter(AbstractPlotter):
                     y = ans[1]
                     z = ans[2]
                     if x.size == y.size and x.size == z.size:
-                        axs.plot(x, y, z, '-k', lw=2)
+                        axs.plot(x, y, z, linewidth=1, linestyle='-', color='k')
 
             # plot the deformed elements
             if factor:
@@ -63,7 +76,7 @@ class ElementPlotter(AbstractPlotter):
                         y = ans[1]
                         z = ans[2]
                         if x.size == y.size and x.size == z.size:
-                            axs.plot(x, y, z, '-r', lw=3)
+                            axs.plot(x, y, z, linewidth=2, linestyle='-', color='r')
 
             if self.reactions:
                 self.addForces(axs)
@@ -80,7 +93,7 @@ class ElementPlotter(AbstractPlotter):
                     x = ans[0]
                     y = ans[1]
                     if x.size == y.size:
-                        axs.plot(x, y, '-k', lw=2)
+                        axs.plot(x, y, linestyle='-', linewidth=1, color='k')
 
             # plot the deformed elements
             if factor:
@@ -96,6 +109,30 @@ class ElementPlotter(AbstractPlotter):
 
             # if self.reactions != []:
             #     self.addForces(axs)
+
+            if 'show_bc' in kwargs and kwargs['show_bc']:
+                d = 2.0  # should become a function of mesh dimension or image limits
+                for node in self.nodes:
+                    if node.isFixed('ux'):
+                        pos = node.getPos()
+                        x = [pos[0]-d, pos[0]+d]
+                        y = [pos[1], pos[1]]
+                        axs.plot(x,y,'-g',lw=1)
+                    if node.isFixed('uy'):
+                        pos = node.getPos()
+                        x = [pos[0], pos[0]]
+                        y = [pos[1]-d, pos[1]+d]
+                        axs.plot(x,y,'-g',lw=1)
+                    if node.isFixed('rz'):
+                        pos = node.getPos()
+                        axs.plot(pos[0],pos[1],'og',lw=1,ms=d)
+
+
+            if 'show_loads' in kwargs and kwargs['show_loads']:
+                pass
+
+            if 'show_reactions' in kwargs and kwargs['show_reactions']:
+                pass
 
             if 'title' in kwargs:
                 axs.set_title(kwargs['title'])

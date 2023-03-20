@@ -27,7 +27,7 @@ class Node():
         self.ndofs       = 0
         self.start       = None
         self.elements    = []
-        self.fixity      = []
+        self._fixity     = []
         self.loads       = {}
         self._hasLoad    = False
         self.transform   = None    # nodal transformation object
@@ -38,8 +38,8 @@ class Node():
 
     def __str__(self):
         s  = "Node_{}:\n    x:    {}".format(self.index, self.pos)
-        if self.fixity:
-            s += f"\n    fix:  {self.fixity}"
+        if self._fixity:
+            s += f"\n    fix:  {self._fixity}"
         load = self.getLoad()
         if isinstance(load, np.ndarray) and not np.isclose(np.linalg.norm(load), 0.0):
             s += f"\n    P:    {load}"
@@ -99,12 +99,12 @@ class Node():
 
         see also: :code:`request()`
 
-        :param dofs:
+        :param dofs: fix the dof defined by key(s)
         """
         for dof in dofs:
             if isinstance(dof, str):
-                if dof not in self.fixity:
-                    self.fixity.append(dof)
+                if dof not in self._fixity:
+                    self._fixity.append(dof)
             elif isinstance(dof,list) or isinstance(dof,tuple):
                 for item in dof:
                     self.fixDOF(item)
@@ -126,7 +126,7 @@ class Node():
 
         :param dof: dof code as defined in :code:`request()`
         """
-        return (dof in self.fixity)
+        return (dof in self._fixity)
 
     def areFixed(self):
         """
@@ -136,9 +136,15 @@ class Node():
         Indices are local to this node: :code:`0..num_dofs`
         """
         idx = []
-        for i,dof in enumerate(self.fixity):
+        for i,dof in enumerate(self._fixity):
             idx.append(i)
         return np.array(idx, dtype=int)
+
+    def getFixedDofs(self):
+        """
+        :returns: a list of fixed dofs by dof-code strings.
+        """
+        return self._fixity[:]
 
     def setStart(self, startInt):
         self.start = startInt

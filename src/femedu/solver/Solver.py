@@ -173,13 +173,12 @@ class Solver():
         # apply boundary conditions
         if not force_only:
             for node in self.nodes:
-                for dof in node.dofs:
-                    if node.isFixed(dof):
-                        idx = node.start + node.dofs[dof]
-                        Rsys[idx]      = 0.0
-                        Ksys[:, idx]   = np.zeros(ndof)
-                        Ksys[idx, :]   = np.zeros(ndof)
-                        Ksys[idx, idx] = 1.0e3
+                for dof in node.areFixed():
+                    idx = node.start + node.dofs[dof]
+                    Rsys[idx]      = 0.0
+                    Ksys[:, idx]   = np.zeros(ndof)
+                    Ksys[idx, :]   = np.zeros(ndof)
+                    Ksys[idx, idx] = 1.0e3
 
             self.Kt = Ksys
 
