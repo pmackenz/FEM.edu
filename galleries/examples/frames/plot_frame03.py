@@ -20,7 +20,7 @@ modeled using a 2D frame element
 
 Author: Peter Mackenzie-Helnwein
 """
-
+import matplotlib.pyplot as plt
 from femedu.examples.Example import *
 
 from femedu.domain import *
@@ -185,12 +185,15 @@ class ExampleFrame03(Example):
 
         model.plot(factor=1.0, filename="frame3_deformed.png")
 
-        plt.plot(lambdas,detKt,'--*r')
-        plt.grid(True)
-        plt.xlabel('Load factor, $ \lambda $')
-        plt.ylabel("Stability index, $ {det}\: {\\bf K}_t $")
-        plt.savefig("frame3_stability.png")
-        plt.show()
+        fig, ax = plt.subplots()
+
+        ax.plot(lambdas,detKt,'--*r')
+        ax.grid(True)
+        ax.set_xlabel('Load factor, $ \lambda $')
+        ax.set_ylabel("Stability index, $ {det}\: {\\bf K}_t $")
+
+        fig.savefig("frame3_stability.png")
+        fig.show()
 
         model.beamValuePlot("F", filename="frame3_force.png")
         model.beamValuePlot("V", filename="frame3_shear.png")

@@ -293,11 +293,15 @@ class ExampleFrame04(Example):
 
         model.plot(factor=10.0, filename="frame4_deformed.png")
 
-        plt.plot(lambdas,detKt,'--*r')
-        plt.grid(True)
-        plt.xlabel('Load factor, $ \lambda $')
-        plt.ylabel("Stability index, $ {det}\: {\\bf K}_t $")
-        plt.show()
+        fig, ax = plt.subplots()
+
+        ax.plot(lambdas,detKt,'--*r')
+        ax.grid(True)
+        ax.set_xlabel('Load factor, $ \lambda $')
+        ax.set_ylabel("Stability index, $ {det}\: {\\bf K}_t $")
+
+        fig.savefig("frame4_stability.png")
+        fig.show()
 
         model.beamValuePlot("F", filename="frame4_force.png")
         model.beamValuePlot("V", filename="frame4_shear.png")

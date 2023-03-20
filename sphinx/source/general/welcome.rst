@@ -4,8 +4,9 @@ Welcome to the FEM.edu documentation!
 
 A finite element framework designed with higher education in mind.
 
-.. image:: ./images/FEMedu-CoverPicture.png
+.. image:: /images/FEMedu-CoverPicture.png
     :alt: FEM.edu logo
+    :target: ./images/FEMedu-CoverPicture.png
 
 
 Features
