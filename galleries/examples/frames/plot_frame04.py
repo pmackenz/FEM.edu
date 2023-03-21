@@ -291,7 +291,7 @@ class ExampleFrame04(Example):
 
         model.report()
 
-        model.plot(factor=10.0, filename="frame4_deformed.png")
+        model.plot(factor=10.0, filename="frame4_deformed.png", show_bc=1)
 
         fig, ax = plt.subplots()
 

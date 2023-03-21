@@ -136,7 +136,7 @@ class ExamplePlate01(Example):
 
         elemB.setSurfaceLoad(face=2, w=1.0)
 
-        model.plot(title="Undeformed system", filename="plate01_undeformed.png")
+        model.plot(factor=0, title="Undeformed system", filename="plate01_undeformed.png", show_bc=1)
 
         model.setLoadFactor(1.0)
 

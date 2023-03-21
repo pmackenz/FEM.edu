@@ -1,27 +1,35 @@
 """
-Example
+======================================================
+Three-span continuous beam under uniform load.
+======================================================
+
+The system is statically indeterminate but simple enough to validate
+deformation, reactions and internal forces.
+
+Author: Peter Mackenzie-Helnwein
 """
-from ...examples.Example import *
+from femedu.examples.Example import *
 
-from ...domain.System import *
-from ...domain.Node import *
-from ...elements.Beam2D import *
-from ...materials.ElasticSection import *
-
+from femedu.domain.System import *
+from femedu.domain.Node import *
+from femedu.elements.Beam2D import *
+from femedu.materials.ElasticSection import *
 
 class ExampleBeam02(Example):
 
+    # sphinx_gallery_start_ignore
     def docString(self):
         s = """
         Three-span continuous beam under uniform load. 
         
-        The system is statically determined and allows for easy validation of 
-        calculated deformation, reactions and internal forces.
+        The system is statically indeterminate but simple enough to validate 
+        deformation, reactions and internal forces.
         
         Author: Peter Mackenzie-Helnwein 
         """
         return s
 
+    # sphinx_gallery_end_ignore
     def problem(self):
         # initialize a system model
         SpanLengths = [ 8.0 * 12, 10.0 * 12, 8.0 * 12 ]
@@ -81,8 +89,16 @@ class ExampleBeam02(Example):
         model.report()
 
         # create plots
-        model.plot(factor=100., filename="beam02_deformed.png")
+        model.plot(factor=100., filename="beam02_deformed.png", show_bc=1)
 
         model.beamValuePlot('V', filename="beam02_shear.png")
         model.beamValuePlot('M', filename="beam02_moment.png")
 
+
+# %%
+# Run the example by creating an instance of the problem and executing it by calling :py:meth:`Example.run()`
+#
+
+if __name__ == "__main__":
+    ex = ExampleBeam02()
+    ex.run()

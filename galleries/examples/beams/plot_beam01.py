@@ -1,16 +1,24 @@
 """
-Example
-"""
-from ...examples.Example import *
+======================================================
+Single span beam under uniform load.
+======================================================
 
-from ...domain.System import *
-from ...domain.Node import *
-from ...elements.Beam2D import *
-from ...materials.ElasticSection import *
+The system is statically determined and allows for easy validation of
+calculated deformation, reactions and internal forces.
+
+Author: Peter Mackenzie-Helnwein
+"""
+from femedu.examples.Example import *
+
+from femedu.domain.System import *
+from femedu.domain.Node import *
+from femedu.elements.Beam2D import *
+from femedu.materials.ElasticSection import *
 
 
 class ExampleBeam01(Example):
 
+    # sphinx_gallery_start_ignore
     def docString(self):
         s = """
         Single span beam under uniform load. 
@@ -22,6 +30,7 @@ class ExampleBeam01(Example):
         """
         return s
 
+    # sphinx_gallery_end_ignore
     def problem(self):
         # initialize a system model
         SpanLength = 10.0 * 12
@@ -83,8 +92,17 @@ class ExampleBeam01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=10., filename="beam01_deformed.png")
+        model.plot(factor=10., filename="beam01_deformed.png", show_bc=1)
 
         model.beamValuePlot('V', filename="beam01_shear.png")
         model.beamValuePlot('M', filename="beam01_moment.png")
+
+
+# %%
+# Run the example by creating an instance of the problem and executing it by calling :py:meth:`Example.run()`
+#
+
+if __name__ == "__main__":
+    ex = ExampleBeam01()
+    ex.run()
 

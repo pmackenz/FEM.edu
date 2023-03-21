@@ -161,9 +161,7 @@ class ExamplePlate02(Example):
         model.setLoadFactor(0.0)
         model.solve()
         #model.report()  # activate this line for lots of debug info
-        model.plot(factor=1.0,
-                   title="Undeformed system",
-                   filename="plate02_undeformed.png")
+        model.plot(factor=0.0, title="Undeformed system", filename="plate02_undeformed.png", show_bc=1)
 
         model.setLoadFactor(1.0)
         model.solve()

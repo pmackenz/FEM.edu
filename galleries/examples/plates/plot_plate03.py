@@ -166,7 +166,7 @@ class ExamplePlate03(Example):
 
         model.report()
 
-        model.plot(factor=10., title="undeformed system", filename="plate03_undeformed.png")
+        model.plot(factor=0., title="undeformed system", filename="plate03_undeformed.png", show_bc=1)
 
         model.setLoadFactor(10.0)
         model.solve()
