@@ -29,6 +29,14 @@ Inherited methods
   :members:
 
 
+Helper Classes
+-------------------
+
+.. toctree::
+    :maxdepth: 1
+
+    Face_classes.rst
+
 Derived Classes
 -------------------
 
