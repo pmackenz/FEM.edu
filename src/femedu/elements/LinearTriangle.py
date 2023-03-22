@@ -10,6 +10,7 @@ class LinearTriangle(Element):
     def __init__(self, node0, node1, node2, material):
         super().__init__((node0, node1, node2), material)
         self.element_type = DrawElement.TRIANGLE
+        self.createFaces()
 
         if node0.getPos().size == 3:
             dof_list = ('ux','uy','uz')

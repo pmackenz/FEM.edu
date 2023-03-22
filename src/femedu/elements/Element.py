@@ -3,12 +3,16 @@ import os
 import sys
 from .DrawElement import *
 from ..recorder.Recorder import Recorder
+from .Face2D import *
+from .Face3D import *
 
 
 class Element(DrawElement):
     """
     abstract class: representing a single generic element
     """
+
+    COUNT = 0
 
     def __init__(self, nodes, material):
         """
@@ -17,6 +21,9 @@ class Element(DrawElement):
         :param material:
         """
         super(Element, self).__init__()
+
+        self.ID = self.COUNT # creates a unique ID for each element
+        self.COUNT += 1
         
         self.nodes    = nodes
         self.transforms = [ None for nd in self.nodes ]
@@ -34,9 +41,8 @@ class Element(DrawElement):
 
         self.setLoadFactor(1.0)
 
-
     def __str__(self):
-        s = "{}: nodes ( ".format(self.__class__.__name__)
+        s = "{}_{}: nodes ( ".format(self.__class__.__name__, self.ID)
         for node in self.nodes:
             s += "{} ".format(node.getID())
         s += ")"
@@ -55,6 +61,112 @@ class Element(DrawElement):
         """
         pass
 
+    def createFaces(self):
+
+        self.faces = []
+
+        if self.element_type == self.LINE:
+            msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+            raise NotImplementedError(msg)
+
+        elif self.element_type == self.CURVE :
+            msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+            raise NotImplementedError(msg)
+
+        elif self.element_type == self.TRIANGLE :
+            nNds = len(self.nodes)
+            if nNds == 3:
+                self.faces.append(Face2D(f"{self.ID}.0", self.nodes[0],self.nodes[1]))
+                self.faces.append(Face2D(f"{self.ID}.1", self.nodes[1],self.nodes[2]))
+                self.faces.append(Face2D(f"{self.ID}.2", self.nodes[2],self.nodes[0]))
+            elif nNds == 6:
+                self.faces.append(Face2D(f"{self.ID}.0", self.nodes[0],self.nodes[3],self.nodes[1]))
+                self.faces.append(Face2D(f"{self.ID}.1", self.nodes[1],self.nodes[4],self.nodes[2]))
+                self.faces.append(Face2D(f"{self.ID}.2", self.nodes[2],self.nodes[5],self.nodes[0]))
+            else:
+                msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+                raise NotImplementedError(msg)
+
+        elif self.element_type == self.TETRAHEDRON :
+            nNds = len(self.nodes)
+            if nNds == 4:
+                self.faces.append(Face3D(f"{self.ID}.0", self.nodes[0],self.nodes[2],self.nodes[1]))
+                self.faces.append(Face3D(f"{self.ID}.1", self.nodes[0],self.nodes[1],self.nodes[3]))
+                self.faces.append(Face3D(f"{self.ID}.2", self.nodes[1],self.nodes[2],self.nodes[3]))
+                self.faces.append(Face3D(f"{self.ID}.3", self.nodes[2],self.nodes[0],self.nodes[3]))
+            elif nNds == 10 :
+                self.faces.append(Face3D(f"{self.ID}.0", self.nodes[0],self.nodes[2],self.nodes[1],
+                                                         self.nodes[6],self.nodes[5],self.nodes[4]))
+                self.faces.append(Face3D(f"{self.ID}.1", self.nodes[0],self.nodes[1],self.nodes[3],
+                                                         self.nodes[4],self.nodes[8],self.nodes[7]))
+                self.faces.append(Face3D(f"{self.ID}.2", self.nodes[1],self.nodes[2],self.nodes[3],
+                                                         self.nodes[5],self.nodes[9],self.nodes[8]))
+                self.faces.append(Face3D(f"{self.ID}.3", self.nodes[2],self.nodes[0],self.nodes[3],
+                                                         self.nodes[6],self.nodes[7],self.nodes[9]))
+            else:
+                msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+                raise NotImplementedError(msg)
+
+        elif self.element_type == self.QUAD :
+            nNds = len(self.nodes)
+            if nNds == 4:
+                self.faces.append(Face2D(f"{self.ID}.0", self.nodes[0],self.nodes[1]))
+                self.faces.append(Face2D(f"{self.ID}.1", self.nodes[1],self.nodes[2]))
+                self.faces.append(Face2D(f"{self.ID}.2", self.nodes[2],self.nodes[3]))
+                self.faces.append(Face2D(f"{self.ID}.3", self.nodes[3],self.nodes[0]))
+            elif nNds == 8 or nNds == 9 :
+                self.faces.append(Face2D(f"{self.ID}.0", self.nodes[0],self.nodes[4],self.nodes[1]))
+                self.faces.append(Face2D(f"{self.ID}.1", self.nodes[1],self.nodes[5],self.nodes[2]))
+                self.faces.append(Face2D(f"{self.ID}.2", self.nodes[2],self.nodes[6],self.nodes[3]))
+                self.faces.append(Face2D(f"{self.ID}.3", self.nodes[3],self.nodes[7],self.nodes[0]))
+            else:
+                msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+                raise NotImplementedError(msg)
+
+        elif self.element_type == self.BRICK :
+            nNds = len(self.nodes)
+            if nNds == 8:
+                self.faces.append(Face3D(f"{self.ID}.0", self.nodes[0],self.nodes[3],self.nodes[2],self.nodes[1]))
+                self.faces.append(Face3D(f"{self.ID}.1", self.nodes[0],self.nodes[1],self.nodes[5],self.nodes[4]))
+                self.faces.append(Face3D(f"{self.ID}.2", self.nodes[1],self.nodes[2],self.nodes[6],self.nodes[5]))
+                self.faces.append(Face3D(f"{self.ID}.3", self.nodes[2],self.nodes[3],self.nodes[7],self.nodes[6]))
+                self.faces.append(Face3D(f"{self.ID}.4", self.nodes[3],self.nodes[0],self.nodes[4],self.nodes[7]))
+                self.faces.append(Face3D(f"{self.ID}.5", self.nodes[4],self.nodes[5],self.nodes[6],self.nodes[7]))
+            elif nNds == 20 :
+                self.faces.append(Face3D(f"{self.ID}.0", self.nodes[0],self.nodes[3],self.nodes[2],self.nodes[1],
+                                                         self.nodes[11],self.nodes[10],self.nodes[9],self.nodes[8]))
+                self.faces.append(Face3D(f"{self.ID}.1", self.nodes[0],self.nodes[1],self.nodes[5],self.nodes[4],
+                                                         self.nodes[8],self.nodes[13],self.nodes[16],self.nodes[12]))
+                self.faces.append(Face3D(f"{self.ID}.2", self.nodes[1],self.nodes[2],self.nodes[6],self.nodes[5],
+                                                         self.nodes[9],self.nodes[14],self.nodes[17],self.nodes[13]))
+                self.faces.append(Face3D(f"{self.ID}.3", self.nodes[2],self.nodes[3],self.nodes[7],self.nodes[6],
+                                                         self.nodes[10],self.nodes[15],self.nodes[18],self.nodes[14]))
+                self.faces.append(Face3D(f"{self.ID}.4", self.nodes[3],self.nodes[0],self.nodes[4],self.nodes[7],
+                                                         self.nodes[11],self.nodes[12],self.nodes[19],self.nodes[15]))
+                self.faces.append(Face3D(f"{self.ID}.5", self.nodes[4],self.nodes[5],self.nodes[6],self.nodes[7],
+                                                         self.nodes[16],self.nodes[17],self.nodes[18],self.nodes[19]))
+            elif nNds == 27 :
+                self.faces.append(Face3D(f"{self.ID}.0", self.nodes[0],self.nodes[3],self.nodes[2],self.nodes[1],
+                                            self.nodes[11],self.nodes[10],self.nodes[9],self.nodes[8],self.nodes[20]))
+                self.faces.append(Face3D(f"{self.ID}.1", self.nodes[0],self.nodes[1],self.nodes[5],self.nodes[4],
+                                            self.nodes[8],self.nodes[13],self.nodes[16],self.nodes[12],self.nodes[21]))
+                self.faces.append(Face3D(f"{self.ID}.2", self.nodes[1],self.nodes[2],self.nodes[6],self.nodes[5],
+                                            self.nodes[9],self.nodes[14],self.nodes[17],self.nodes[13],self.nodes[22]))
+                self.faces.append(Face3D(f"{self.ID}.3", self.nodes[2],self.nodes[3],self.nodes[7],self.nodes[6],
+                                            self.nodes[10],self.nodes[15],self.nodes[18],self.nodes[14],self.nodes[23]))
+                self.faces.append(Face3D(f"{self.ID}.4", self.nodes[3],self.nodes[0],self.nodes[4],self.nodes[7],
+                                            self.nodes[11],self.nodes[12],self.nodes[19],self.nodes[15],self.nodes[24]))
+                self.faces.append(Face3D(f"{self.ID}.5", self.nodes[4],self.nodes[5],self.nodes[6],self.nodes[7],
+                                            self.nodes[16],self.nodes[17],self.nodes[18],self.nodes[19],self.nodes[25]))
+            else:
+                msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+                raise NotImplementedError(msg)
+
+        else:
+            msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+            raise NotImplementedError(msg)
+
+
     def setSurfaceLoad(self, face, w):
         """
         .. warning::
@@ -64,6 +176,7 @@ class Element(DrawElement):
         :param face: face ID for the laoded face
         :param w: magnitude of distributed load per area. Tension on a surface is positive.
         """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def addTransformation(self, T, local_nodes=[]):
@@ -113,7 +226,7 @@ class Element(DrawElement):
             return [ None for k in self.nodes ]
 
     def getInternalForce(self, variable=''):
-        msg = "{}(Element): getInternalForce() method has not been implemented".format(self.__class__.__name__)
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def getStress(self):
@@ -132,7 +245,7 @@ class Element(DrawElement):
         """
 
         """
-        msg = "{}(Element): updateState() method has not been implemented".format(self.__class__.__name__)
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def _requestDofs(self, dof_requests):

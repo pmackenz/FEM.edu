@@ -16,6 +16,7 @@ class Quad(Element):
     def __init__(self, node0, node1, node2, node3, material):
         super(Quad, self).__init__((node0, node1, node2, node3), material)
         self.element_type = DrawElement.QUAD
+        self.createFaces()
 
         if node0.getPos().size == 3:
             dof_list = ('ux','uy','uz')

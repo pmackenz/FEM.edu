@@ -29,7 +29,7 @@ class Face2D(Faces):
             # this includes the weight factor for single point integration over [-1,+1]
             self.pos     = [ 0.5*(self.nodes[1].getPos() + self.nodes[0].getPos()) ]
             self.tangent = [ self.nodes[1].getPos() - self.nodes[0].getPos() ]
-            self.area    = [ rot @ self.tangent ]
+            self.area    = [ rot @ tvec for tvec in self.tangent ]
         elif len(self.nodes) == 3:
             # this includes the weight factor for two-point integration over [-1,+1]
             x0 = 0.4553418012614795 * self.nodes[0].getPos() \
@@ -78,21 +78,22 @@ class Face2D(Faces):
         if len(self.nodes) == 2:
             pn = self.load[0]
             ps = self.load[1]
-            forces = np.outer( (pn * self.area + ps * self.tangent), np.array([ 0.50000, 0.50000 ]))
+            forces = np.outer( np.array([ 0.50000, 0.50000 ]), (pn * self.area + ps * self.tangent) )
 
         elif len(self.nodes) == 3:
             pn = self.load[0]
             ps = self.load[1]
 
-
+            tractions = (pn * self.area + ps * self.tangent)  # surface traction * weights at gauss points
             forces = np.array([[ 0.4553418012614795, 0.6666666666666667, -0.1220084679281462 ],
-                               [ -0.1220084679281462, 0.6666666666666667, 0.4553418012614795 ]])
+                               [ -0.1220084679281462, 0.6666666666666667, 0.4553418012614795 ]]).T \
+                     @ tractions
 
         else:
             msg = "{} requires 2 or 3 points - {} given".format(self.__class__.__name__, len(self.nodes))
             raise TypeError(msg)
 
         for i, node in enumerate(self.nodes):
-            node.setLoad(forces[:,i])  # this may need a different approach to account for the global load factor
+            node.setLoad(forces[i,:])  # this may need a different approach to account for the global load factor
 
 
