@@ -59,7 +59,8 @@ class Element(DrawElement):
         """
         default implementation for resetting element loads.
         """
-        pass
+        for face in self.faces:
+            face.setLoad(0.0, 0.0)
 
     def createFaces(self):
 
@@ -167,13 +168,13 @@ class Element(DrawElement):
             raise NotImplementedError(msg)
 
 
-    def setSurfaceLoad(self, face, w):
+    def setSurfaceLoad(self, face, pn, ps=0):
         """
         .. warning::
 
             This method needs to be implemented by every element that shall accept a surface load.
 
-        :param face: face ID for the laoded face
+        :param face: face ID for the laoded face (integer starting at 0)
         :param w: magnitude of distributed load per area. Tension on a surface is positive.
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
