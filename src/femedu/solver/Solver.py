@@ -2,6 +2,8 @@ import sys
 import numpy as np
 import scipy as sp
 
+import matplotlib.pyplot as plt
+
 class Solver():
     """
     Abstract class for any solver implementation.
@@ -337,4 +339,13 @@ class Solver():
         Reset displacement vector to **all zeros**.
         """
         self.sysU = np.zeros(self.sdof)
+
+    def showKt(self, filename="", **kwargs):
+
+        plt.figure()
+        plt.spy(self.Kt, marker='.',mec='b',mfc='b', **kwargs)
+        if filename:
+            plt.savefig(filename)
+        else:
+            plt.show()
 

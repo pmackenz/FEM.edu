@@ -152,7 +152,7 @@ class ExamplePlate03(Example):
 
         # surface loads on the left side
         elements[ 0].setSurfaceLoad(2,px)
-        elements[8].setSurfaceLoad(2,px)
+        elements[ 8].setSurfaceLoad(2,px)
         elements[16].setSurfaceLoad(2,px)
 
         # surface loads on the right side
@@ -170,6 +170,8 @@ class ExamplePlate03(Example):
 
         model.setLoadFactor(10.0)
         model.solve()
+
+        model.solver.showKt(filename="plate03_spy_Kt.png")
 
         model.report()
 
