@@ -1,7 +1,7 @@
 import numpy as np
 from .Element import *
 from ..domain.Node import *
-from ..utilities.Integration import *
+from ..utilities import QuadIntegration, ShapeFunction
 
 class Quad(Element):
     """
@@ -80,16 +80,25 @@ class Quad(Element):
         self.distributed_load[face] = w
 
     def resetLoads(self):
-        self.setDistLoad(0, 0.0)
-        self.setDistLoad(1, 0.0)
-        self.setDistLoad(2, 0.0)
-        super(LinearTriangle, self).resetLoads()
+        super(Quad, self).resetLoads()
 
     def updateState(self):
 
-        node0 = self.nodes[0]
-        node1 = self.nodes[1]
-        node2 = self.nodes[2]
+        X  = np.array([ node.getPos() for node in self.nodes ])
+        xt = np.array([ node.getDeformedPos() for node in self.nodes ])
+
+        # initialization step
+        integrator = QuadIntegration(order=2)
+
+        ndof = self.ndof   # mechanical element
+        R  = [ np.zeros((ndof,ndof)) for i in self.nodes ]
+        Kt = [ np.zeros((ndof,ndof)) for i in self.nodes for j in self.nodes ]
+
+        for xi, wi in integrator.parameters():
+
+            shape = ShapeFunction()
+
+            F += g(xi[0], xi[1], xi[2]) * J(xi[0], xi[1], xi[2]) * wi
 
         Gs = self.gcont[0]
         Gt = self.gcont[1]
@@ -174,27 +183,38 @@ class Quad(Element):
         self.Kt = Kt
 
         # .. applied element load (reference load)
+        self.computeSurfaceLoads()
 
+    def computeSurfaceLoads(self):
+        """
+        compute surface loads using faces
+
+        This method should be called during :py:meth:`updateState()` by every
+        element supporting surface loads
+
+        """
         self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
 
-        for I, w in enumerate(self.distributed_load):
+        for I, face in enumerate(self.faces):
+            loads = face.computeNodalForces()
 
-            if w:  # do we have any load?
+            # indexing
+            J = I+1
+            if J>3:
+                J -= 3
 
-                J = I+1
-                if J>2:
-                    J -= 3
+            # add to element load vectors
+            self.Loads[I] += loads[0]
+            self.Loads[J] += loads[1]
+            if loads.shape[0]>2:
+                numNodes = len(self.nodes)
+                if numNodes == 8 or numNodes == 9:
+                    K = I + 4
+                else:
+                    msg = "Force data provided from Face2D inconsistent with element data"
+                    raise TypeError(msg)
 
-                # compute local coordinate system
-                LTvec = self.nodes[J].getPos() - self.nodes[I].getPos()
-                LNvec = np.array([[0,1],[-1,0]]) @ LTvec
-
-                # nodal load per adjacent node
-                Pi = 0.5 * w * self.material.getThickness() * LNvec
-
-                # add to element load vectors
-                self.Loads[I] += Pi
-                self.Loads[J] += Pi
+                self.Loads[K] += loads[2]
 
 
     def getStress(self):

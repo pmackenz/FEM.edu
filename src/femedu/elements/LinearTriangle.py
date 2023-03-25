@@ -172,7 +172,7 @@ class LinearTriangle(Element):
         """
         compute surface loads using faces
 
-        This method should be called during :py:meth:`updateStae()` by every
+        This method should be called during :py:meth:`updateState()` by every
         element supporting surface loads
 
         """
