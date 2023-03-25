@@ -78,10 +78,9 @@ class System():
         """
         for newNode in nodes:
             if newNode not in self.nodes:
-                newNode.index = len(self.nodes)
                 self.nodes.append(newNode)
             else:
-                print('addNode: node {} already exists in system and was not added again'.format(newNode.index))
+                print('addNode: node {} already exists in system and was not added again'.format(newNode.getID()))
 
     def __add__(self, other):
         if isinstance(other, Node):

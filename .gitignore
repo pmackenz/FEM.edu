@@ -150,3 +150,5 @@ galleries/examples/*/*png
 Kt.npy
 
 Testing Matrix Features.ipynb
+
+*.npy

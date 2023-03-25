@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import scipy as sp
+import scipy as sc
 
 import matplotlib.pyplot as plt
 
@@ -276,7 +276,7 @@ class Solver():
         if not isinstance(mode,int) or mode < 0 or mode >= self.Kt.shape[0]:
             raise TypeError(f"mode out of range: must be an int between 0 and the number of d.o.f.s")
 
-        w, v = sp.linalg.eigh(self.Kt, subset_by_index=[mode, mode])
+        w, v = sc.linalg.eigh(self.Kt, subset_by_index=[mode, mode])
         lam = w[0]
         U = v[:,0]
 
