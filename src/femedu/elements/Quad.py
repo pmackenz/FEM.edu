@@ -1,7 +1,9 @@
 import numpy as np
+from copy import deepcopy
+
 from .Element import *
 from ..domain.Node import *
-from ..utilities import QuadIntegration, ShapeFunction
+from ..utilities import QuadIntegration, QuadShapes
 
 class Quad(Element):
     """
@@ -35,23 +37,52 @@ class Quad(Element):
         self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
         self.ndof = ndof
 
-        # covariant base vectors (reference system)
-        base1 = node1.getPos() - node0.getPos()
-        base2 = node2.getPos() - node0.getPos()
-        self.gcov = np.vstack((base1, base2))
+        self.material  = []   # one material object per integration point
+        self.stress    = []   # hold gauss-point stress (1st Piola-Kirchhoff stress)
+        self.J         = []   # jacobian at integration point
 
-        # metric (reference system)
-        self.GIJ = self.gcov @ self.gcov.T
+        self.Grad      = []   # derivative of shape functions with respect to global coords
 
-        # dual base vectors (reference system)
-        self.gcont = np.linalg.inv(self.GIJ) @ self.gcov
+        X  = np.array([ node.getPos() for node in self.nodes ])
 
-        self.area = np.sqrt(np.linalg.det(self.GIJ))
+        # initialization step
+        integrator = QuadIntegration(order=2)
+        xis, wis = integrator.parameters()
+
+        gpt = 0
+
+        interpolation = QuadShapes()
+
+        for xi, wi in zip(xis, wis):
+
+            dphi_ds = interpolation.shape(1, *xi, n=(1,0))
+            dphi_dt = interpolation.shape(1, *xi, n=(0,1))
+            Grad = np.vstack((dphi_ds, dphi_dt))
+
+            # reference configuration
+            # -------------------------
+
+            #
+            # $ D\Phi_0 $
+            #
+            DPhi0 = (Grad @ X).T
+            self.J.append( np.linalg.det(DPhi0) )  # material model already includes thickness
+
+            # dual base (contra-variant)
+            self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
+
+            self.material.append(deepcopy(material))
+            self.stress.append({})
+            gpt += 1
+
+        pass
+
 
     def __str__(self):
         s = super(Quad, self).__str__()
-        s += "\n    strain: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStrain())
-        s += "\n    stress: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStress())
+        for igpt, material in enumerate(self.material):
+            s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
+            s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
         if np.array(self.distributed_load).any():
             s += "\n    element forces added to node:"
             for i, P in enumerate(self.Loads):
@@ -59,7 +90,7 @@ class Quad(Element):
                 s += "\n        {}: {}".format(self.nodes[i].getID(), Pi)
         return s
 
-    def setSurfaceLoad(self, face, w):
+    def setSurfaceLoad(self, face, pn, ps=0):
         """
         .. list-table::
             :header-rows: 1
@@ -71,119 +102,105 @@ class Quad(Element):
             * - 1
               - :py:obj:`node 1` to :py:obj:`node 2`
             * - 2
-              - :py:obj:`node 2` to :py:obj:`node 0`
+              - :py:obj:`node 2` to :py:obj:`node 3`
+            * - 3
+              - :py:obj:`node 3` to :py:obj:`node 0`
 
 
         :param face: face ID for the laoded face
-        :param w: magnitude of distributed load per area. Tension on a surface is positive.
+        :param pn: magnitude of distributed normal load per area. Tension on a surface is positive.
+        :param ps: magnitude of distributed shear load per area. Positive direction is defined as shown in the above table.
         """
-        self.distributed_load[face] = w
+        if face >= 0 and face <= 3:
+            self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
         super(Quad, self).resetLoads()
 
     def updateState(self):
 
-        X  = np.array([ node.getPos() for node in self.nodes ])
-        xt = np.array([ node.getDeformedPos() for node in self.nodes ])
-
         # initialization step
         integrator = QuadIntegration(order=2)
 
-        ndof = self.ndof   # mechanical element
-        R  = [ np.zeros((ndof,ndof)) for i in self.nodes ]
-        Kt = [ np.zeros((ndof,ndof)) for i in self.nodes for j in self.nodes ]
+        nnds = len(self.nodes)
+        ndof = self.ndof       # mechanical element
 
-        for xi, wi in integrator.parameters():
+        self.Forces = [ np.zeros(ndof) for k in range(nnds) ]
+        R  = [ np.zeros((ndof,ndof)) for i in range(nnds) ]
+        Kt = [ [ np.zeros((ndof,ndof)) for i in range(nnds) ] for j in range(nnds) ]
 
-            shape = ShapeFunction()
+        # create array of deformed nodal coordinates
+        xt = np.array([ node.getDeformedPos() for node in self.nodes ])
 
-            F += g(xi[0], xi[1], xi[2]) * J(xi[0], xi[1], xi[2]) * wi
+        gpt = 0
 
-        Gs = self.gcont[0]
-        Gt = self.gcont[1]
-        Gu = -Gs - Gt
+        # interpolation = QuadShapes()   # we are doing that and the isoparametric transformation in the constructor
 
-        # covariant base vectors (current system)
+        xis, wis = integrator.parameters()
 
-        gs = node1.getDeformedPos() - node0.getDeformedPos()
-        gt = node2.getDeformedPos() - node0.getDeformedPos()
-        gu = -gs - gt
+        for xi, wi in zip(xis, wis):
 
-        # metric (current system)
-        gcov = np.vstack((gs, gt))
-        gIJ = gcov @ gcov.T
+            # dphi_ds = interpolation.shape(1, *xi, n=(1,0))
+            # dphi_dt = interpolation.shape(1, *xi, n=(0,1))
+            # Grad = np.vstack((dphi_ds, dphi_dt))
 
-        # deformation gradient
-        F = np.outer(gs, Gs) + np.outer(gt, Gt)
+            # reference configuration
+            # -------------------------
 
-        convective_strain = 0.5 * (gIJ - self.GIJ)
-        almansi_strain = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(np.size(gs)) )
+            Grad = self.Grad[gpt]  # pre-computed in __init__
+            wi *= self.J[gpt]      # J includes the thickness of the plate
 
-        # Dphi0_inv = np.linalg.inv(self.gcov.T)
-        # val = Dphi0_inv.T @ convective_strain @ Dphi0_inv  # same as almansi_strain
+            # spatial configuration
+            # -------------------------
 
-        eps = almansi_strain
+            # deformation gradient
+            F = (Grad @ xt).T
 
-        # update the material state
+            # compute Green-Lagrange strain tensor
+            eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
 
-        strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            # update the material state
+            strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
 
-        self.material.setStrain(strain)
+            self.material[gpt].setStrain(strain)
 
-        # 2nd Piola-Kirchhoff stress
-        stress = self.material.getStress()
+            # 2nd Piola-Kirchhoff stress
+            stress = self.material[gpt].getStress()
 
-        S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
+            S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
-        # 1st Piola-Kirchhoff stress
-        P = F @ S
+            # 1st Piola-Kirchhoff stress
+            P = F @ S
 
-        # store stress for reporting
-        self.stress = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
+            # store stress for reporting
+            self.stress[gpt] = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
 
-        # tractions
-        ts = P @ Gs
-        tt = P @ Gt
-        tu = P @ Gu
+            # compute kinematic matrices
+            BI = [ np.array([ Grad[0,K]*F[:,0],                       # the XX component
+                              Grad[1,K]*F[:,1],                       # the YY component
+                              Grad[0,K]*F[:,1] + Grad[1,K]*F[:,0] ])  # the XY component is XY + YX ("gammaXY = 2 epsXY")
+                   for K in range(nnds) ]
 
-        # initialize arrays
-        gx = Gs[0] * gs + Gt[0] * gt
-        gy = Gs[1] * gs + Gt[1] * gt
+            # internal forces
+            for i, force in enumerate(self.Forces):
+                # self.Forces[i] += P @ Grad[:,i] * wi  # wi already includes J
+                force += P @ Grad[:,i] * wi  # wi already includes J
 
-        # compute the kinematic matrices
-        GI = (Gu, Gs, Gt)
+            # tangent stiffness
+            Ct = self.material[gpt].getStiffness() * wi
 
-        Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
-        Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
-        Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+            One = np.eye(2, dtype=np.float64)
+            for I, Bi in enumerate(BI):
+                Ti   = Grad[:,I] @ S
+                GCti = Bi.T @ Ct
+                for J, Bj in enumerate(BI):
+                    GIJ = Ti @ Grad[:,J] * wi
+                    Kt[I][J] += GCti @ Bj + GIJ * One
 
-        BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
-
-        # internal force
-        self.Forces = [
-            tu * self.area * self.material.getThickness(),
-            ts * self.area * self.material.getThickness(),
-            tt * self.area * self.material.getThickness()
-            ]
-
-        # tangent stiffness
-        Ct = self.material.getStiffness() * self.area * self.material.getThickness()
-
-        Kt = []
-        One = np.eye(2, dtype=np.float64)
-        for Gi, Bi in zip(GI, BI):
-            Krow = []
-            Ti = Gi @ S
-            for Gj, Bj in  zip(GI, BI):
-                GIJ = Ti @ Gj * self.area * self.material.getThickness()
-                Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
-            Kt.append( Krow )
+            # on to the next integration point
+            gpt += 1
 
         self.Kt = Kt
-
-        # .. applied element load (reference load)
-        self.computeSurfaceLoads()
 
     def computeSurfaceLoads(self):
         """
@@ -201,7 +218,7 @@ class Quad(Element):
             # indexing
             J = I+1
             if J>3:
-                J -= 3
+                J -= 4
 
             # add to element load vectors
             self.Loads[I] += loads[0]
@@ -215,7 +232,6 @@ class Quad(Element):
                     raise TypeError(msg)
 
                 self.Loads[K] += loads[2]
-
 
     def getStress(self):
         return self.Stress

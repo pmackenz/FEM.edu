@@ -1,6 +1,6 @@
 import sys
 import numpy as np
-import scipy as sp
+import scipy as sc
 
 import matplotlib.pyplot as plt
 
@@ -15,9 +15,10 @@ class Solver():
         """
         Initialize a solver instance with empty elements and nodes lists
         """
-        self.loadfactor = 1.0
-        self.elements = []
-        self.nodes = []
+        self.loadfactor  = 1.0
+        self.elements    = []
+        self.nodes       = []
+        self.constraints = []
         self.sdof = 0
 
         # numeric iteration tolerance
@@ -26,15 +27,16 @@ class Solver():
         self.hasConstraint = False
         self.targetU       = 0.0
 
-        self.useArcLength = False
+        self.useArcLength  = False
         self.lastConverged = {}
 
         # shall result be recorded?
         self.record = False
 
-    def connect(self, nodes, elems):
-        self.nodes = nodes
-        self.elements = elems
+    def connect(self, nodes, elems, constraints):
+        self.nodes       = nodes
+        self.elements    = elems
+        self.constraints = constraints
 
     def fetchState(self):
         """
@@ -146,10 +148,15 @@ class Solver():
         for node in self.nodes:
             node.setStart(ndof)
             ndof += node.ndofs
-        Rsys = np.zeros(ndof)
-        Ksys = np.zeros((ndof, ndof))
+
+        for constraint in self.constraints:
+            constraint.setStart(ndof)
+            ndof += constraint.countConditions()
 
         self.sdof = ndof  # number of system d.o.f.s
+
+        Rsys = np.zeros(ndof)
+        Ksys = np.zeros((ndof, ndof))
 
         # assemble loads
         for node in self.nodes:
@@ -179,9 +186,10 @@ class Solver():
                     if node.isFixed(dof):
                         idx = node.start + node.dofs[dof]
                         Rsys[idx]      = 0.0
-                        Ksys[:, idx]   = np.zeros(ndof)
-                        Ksys[idx, :]   = np.zeros(ndof)
+                        Ksys[:, idx]   = np.zeros(ndof)   # the range might need adjustment for constraints
+                        Ksys[idx, :]   = np.zeros(ndof)   # the range might need adjustment for constraints
                         Ksys[idx, idx] = 1.0e3
+
 
             self.Kt = Ksys
 
@@ -268,7 +276,7 @@ class Solver():
         if not isinstance(mode,int) or mode < 0 or mode >= self.Kt.shape[0]:
             raise TypeError(f"mode out of range: must be an int between 0 and the number of d.o.f.s")
 
-        w, v = sp.linalg.eigh(self.Kt, subset_by_index=[mode, mode])
+        w, v = sc.linalg.eigh(self.Kt, subset_by_index=[mode, mode])
         lam = w[0]
         U = v[:,0]
 

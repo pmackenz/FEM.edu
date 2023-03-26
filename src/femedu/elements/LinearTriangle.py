@@ -52,7 +52,7 @@ class LinearTriangle(Element):
                 s += "\n        {}: {}".format(self.nodes[i].getID(), Pi)
         return s
 
-    def setSurfaceLoad(self, face, w):
+    def setSurfaceLoad(self, face, pn, ps=0):
         """
         .. list-table::
             :header-rows: 1
@@ -68,14 +68,13 @@ class LinearTriangle(Element):
 
 
         :param face: face ID for the laoded face
-        :param w: magnitude of distributed load per area. Tension on a surface is positive.
+        :param pn: magnitude of distributed normal load per area. Tension on a surface is positive.
+        :param ps: magnitude of distributed shear load per area. Positive direction is defined as shown in the above table.
         """
-        self.distributed_load[face] = w
+        if face >= 0 and face <= 2:
+            self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        self.setDistLoad(0, 0.0)
-        self.setDistLoad(1, 0.0)
-        self.setDistLoad(2, 0.0)
         super(LinearTriangle, self).resetLoads()
 
     def updateState(self):
@@ -146,13 +145,13 @@ class LinearTriangle(Element):
 
         # internal force
         self.Forces = [
-            tu * self.area * self.material.getThickness(),
-            ts * self.area * self.material.getThickness(),
-            tt * self.area * self.material.getThickness()
+            tu * self.area,
+            ts * self.area,
+            tt * self.area
             ]
 
         # tangent stiffness
-        Ct = self.material.getStiffness() * self.area * self.material.getThickness()
+        Ct = self.material.getStiffness() * self.area
 
         Kt = []
         One = np.eye(2, dtype=np.float64)
@@ -160,36 +159,47 @@ class LinearTriangle(Element):
             Krow = []
             Ti = Gi @ S
             for Gj, Bj in  zip(GI, BI):
-                GIJ = Ti @ Gj * self.area * self.material.getThickness()
+                GIJ = Ti @ Gj * self.area
                 Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
             Kt.append( Krow )
 
         self.Kt = Kt
 
         # .. applied element load (reference load)
+        self.computeSurfaceLoads()
 
-        self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
+    def computeSurfaceLoads(self):
+        """
+        compute surface loads using faces
 
         This method should be called during :py:meth:`updateState()` by every
         element supporting surface loads
 
-            if w:  # do we have any load?
+        """
+        self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
 
-                J = I+1
-                if J>2:
-                    J -= 3
+        for I, face in enumerate(self.faces):
+            loads = face.computeNodalForces()
 
-                # compute local coordinate system
-                LTvec = self.nodes[J].getPos() - self.nodes[I].getPos()
-                LNvec = np.array([[0,1],[-1,0]]) @ LTvec
+            # indexing
+            J = I+1
+            if J>2:
+                J -= 3
 
-                # nodal load per adjacent node
-                Pi = 0.5 * w * self.material.getThickness() * LNvec
+            # add to element load vectors
+            self.Loads[I] += loads[0]
+            self.Loads[J] += loads[1]
+            if loads.shape[0]>2:
+                numNodes = len(self.nodes)
+                if numNodes == 6:
+                    K = I + 3
+                elif numNodes == 8 or numNodes == 9:
+                    K = I + 4
+                else:
+                    msg = "Force data provided from Face2D inconsistent with element data"
+                    raise TypeError(msg)
 
-                # add to element load vectors
-                self.Loads[I] += Pi
-                self.Loads[J] += Pi
-
+                self.Loads[K] += loads[2]
 
     def getStress(self):
         return self.Stress

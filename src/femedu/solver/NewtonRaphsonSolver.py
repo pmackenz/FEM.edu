@@ -1,5 +1,4 @@
 import numpy as np
-import scipy as sp
 
 from ..solver.Solver import Solver
 
@@ -16,6 +15,12 @@ class NewtonRaphsonSolver(Solver):
         :param max_step: maximum number of iterations (int)
         :param verbose: set to :code:`True` for additional information
         """
+        TOL = self.TOL
+
+        if 'tol' in kwargs:
+            TOL = kwargs['tol']
+        if 'tolerance' in kwargs:
+            TOL = kwargs['tolerance']
 
         for k in range(max_steps):
 
@@ -25,7 +30,7 @@ class NewtonRaphsonSolver(Solver):
             # we are using , force_only=False and simply reuse self.Kt from that run (!)
             normR = self.checkResiduum(verbose, force_only=False)
 
-            if normR<self.TOL:
+            if normR < TOL:
                 break
 
             # Solve for equilibrium
