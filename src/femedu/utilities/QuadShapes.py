@@ -14,7 +14,7 @@ class QuadShapes(ShapeFunctions):
     """
 
     def __init__(self):
-        super(QuadShapes, self).__init__(ShapeFunctions.QUAD)
+        super(QuadShapes, self).__init__(ShapeFunctions.QUADS)
 
     def shape(self, order, s, t, n=(0,0), serendipity=False):
         '''

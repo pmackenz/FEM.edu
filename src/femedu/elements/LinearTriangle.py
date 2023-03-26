@@ -201,7 +201,6 @@ class LinearTriangle(Element):
 
                 self.Loads[K] += loads[2]
 
-
     def getStress(self):
         return self.Stress
 

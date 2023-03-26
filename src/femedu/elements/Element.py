@@ -221,7 +221,11 @@ class Element(DrawElement):
 
         :return:  element load vector
         """
-        self.updateState()
+        #self.updateState()
+
+        # .. applied element load (reference load)
+        self.computeSurfaceLoads()
+
         if self.Loads:
             return self.Loads
         else:

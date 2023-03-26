@@ -34,7 +34,7 @@ class Integration():
         """
         return (self.xi, self.w)
 
-    def gauss1D(self, nGP):
+    def gauss1D(self, nGP, biunit=False):
         """
         Gauss integration data for :py:data:`nGP` on the domain :math:`[-1,+1]`
 
@@ -56,6 +56,10 @@ class Integration():
         else:
             xi = [ 0.046910077030668, 0.23076534494716, 0.50000000000000, 0.76923465505284, 0.95308992296933 ]
             w  = [ 0.118463442528095, 0.239314335249683, 0.284444444444444, 0.239314335249683, 0.118463442528095 ]
+
+        if biunit:
+            xi = [ 2*s-1. for s in xi ]
+            w  = [ 2*s    for s in  w ]
 
         return (xi, w)
 

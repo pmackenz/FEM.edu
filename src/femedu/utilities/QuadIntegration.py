@@ -10,7 +10,7 @@ class QuadIntegration(Integration):
         self.init_points_and_weights(nGP=(order + 2)//2)
 
     def init_points_and_weights(self, nGP):
-        xi, w = self.gauss1D( nGP )
-        self.xi = [ xi[i]*xi[j] for j in range(nGP) for i in range(nGP) ]
+        xi, w = self.gauss1D( nGP, biunit=True )
+        self.xi = [ (xi[i], xi[j]) for j in range(nGP) for i in range(nGP) ]
         self.w  = [  w[i]* w[j] for j in range(nGP) for i in range(nGP) ]
 
