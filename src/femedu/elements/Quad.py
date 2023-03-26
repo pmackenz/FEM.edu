@@ -4,9 +4,12 @@
 ======================================
 incomplete bi-quadratic interpolation
 
+.. code::
+
          1
       x     y
         x*y
+
 
 """
 import numpy as np

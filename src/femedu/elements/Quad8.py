@@ -4,10 +4,13 @@
 ======================================
 incomplete bi-quadratic interpolation
 
-         1
-      x     y
-  x^2   x*y   y^2
-    x^2*y x*y^2
+.. code::
+
+             1
+          x     y
+      x^2   x*y   y^2
+        x^2*y x*y^2
+
 
 """
 import numpy as np
