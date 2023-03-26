@@ -65,7 +65,7 @@ class Beam2D(Element):
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
 
     def __str__(self):
-        s  = "Beam2D: node {} to node {}:\n".format( self.nodes[0].index, self.nodes[1].index)
+        s  = "Beam2D: {} to {}:\n".format( self.nodes[0].getID(), self.nodes[1].getID())
         s += "   material {} properties: {}  strain:{}   stress:{}\n".format(self.material.__class__.__name__,
                                                                            self.material.parameters,
                                                                            self.material.getStrain(),

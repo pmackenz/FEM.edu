@@ -1,7 +1,12 @@
 import numpy as np
 
 
-class ShapeFunctions:
+class ShapeFunctions():
+    """
+    Abstract parent class for shape functions or their
+    n-th (mixed) derivative for various interpolation functions.
+
+    """
 
     UNKNOW    = 0x0000
     BEAMS     = 0x1000
@@ -18,7 +23,7 @@ class ShapeFunctions:
     def __init__(self, type):
         self.type = type
 
-    def shape(selforder, *argvs, **kwargs):
+    def shape(self, order, *argvs, **kwargs):
         """
         interface function to gets shape functions or their
         n-th derivative for various interpolation functions.
@@ -37,7 +42,7 @@ def selfTestShapes():
     for order in range(5):
         print(f"order: {order}")
         for derivative in range(order+2):
-            res = np.array( [ BeamShapes().shape(order,xi,1.0,derivative) for xi in np.linspace(0,1,5) ] )
+            res = np.array( [ LineShapes().shape(order,xi,1.0,derivative) for xi in np.linspace(0,1,5) ] )
             print(res.T)
         print()
 

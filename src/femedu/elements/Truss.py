@@ -51,10 +51,10 @@ class Truss(Element):
 
     def __str__(self):
         s = \
-"""Truss: node {} to node {}:
+"""Truss: {} to {}:
    material properties: {}  strain:{}   stress:{}  
    internal force: {}
-   Pe: [ {} {} ]""".format( self.nodes[0].index, self.nodes[1].index,
+   Pe: [ {} {} ]""".format( self.nodes[0].getID(), self.nodes[1].getID(),
                             repr(self.material), self.material.getStrain(),
                             self.material.getStress(),
                             self.force, *self.Forces[1] )

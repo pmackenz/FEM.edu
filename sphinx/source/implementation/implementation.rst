@@ -25,6 +25,7 @@ Utility Classes
     :maxdepth: 3
 
     Utilities/Integration_class.rst
+    Utilities/ShapeFunction_classes.rst
     Plotter/Plot_Support_Classes.rst
     Recorder/Recorder_class.rst
 

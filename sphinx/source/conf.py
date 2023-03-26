@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.abspath("../../src"))
 sys.path.insert(0, os.path.abspath("."))
 
-from sphinx_gallery.sorting import FileNameSortKey
+from sphinx_gallery.sorting import FileNameSortKey, ExplicitOrder
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -43,9 +43,16 @@ autosectionlabel_maxdepth = 6
 sphinx_gallery_conf = {
     'examples_dirs': '../../galleries/examples',   # path to your example scripts
     'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
-    'ignore_pattern': r'__init__\.py|runall\.py',
+    'ignore_pattern': r'__init__\.py|runall\.py|read_profile_stats.py',
     # specify that examples should be ordered according to filename
     'within_subsection_order': FileNameSortKey,
+    'subsection_order': ExplicitOrder(['../../galleries/examples/beams',
+                                       '../../galleries/examples/trusses',
+                                       '../../galleries/examples/frames',
+                                       '../../galleries/examples/plates',
+                                       '../../galleries/examples/solids',
+                                       '../../galleries/examples/mixed',
+                                       ]),
 }
 
 # -- Options for HTML output -------------------------------------------------

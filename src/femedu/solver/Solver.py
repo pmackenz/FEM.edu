@@ -237,7 +237,7 @@ class Solver():
             detKt = np.linalg.det(self.Kt)
             msg = f"\n ** Stability check: det(Kt) = {detKt}\n"
         else:
-            evals = sp.linalg.eigvalsh(self.Kt)
+            evals = sc.linalg.eigvalsh(self.Kt)
             abs_evals = np.abs(evals)
             idx = np.argmin(abs_evals)
             detKt = evals[idx]  # we need to get the sign back

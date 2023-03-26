@@ -40,7 +40,7 @@ class Node():
         self.setLoadFactor(1.0)
 
     def __str__(self):
-        s  = "Node_{}:\n    x:    {}".format(self.index, self.pos)
+        s  = "Node_{}:\n    x:    {}".format(self.ID, self.pos)
         if self._fixity:
             s += f"\n    fix:  {self._fixity}"
         load = self.getLoad()
@@ -50,7 +50,7 @@ class Node():
         return s
 
     def __repr__(self):
-        return "Node_{}(x={}, u={})".format(self.index, self.pos, self.disp)
+        return "Node_{}(x={}, u={})".format(self.ID, self.pos, self.disp)
 
     def getID(self):
         """

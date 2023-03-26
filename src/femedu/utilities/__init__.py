@@ -5,7 +5,7 @@ __all__ = (
     "QuadIntegration",
     "TetraIntegration",
     "BrickIntegration",
-    "ShapeFunction",
+    "ShapeFunctions",
     "LineShapes",
     "QuadShapes",
     "TriangleShapes",
