@@ -1,9 +1,16 @@
 import sys
 import numpy as np
 
-from .ShapeFunction import ShapeFunctions
+from .ShapeFunctions import ShapeFunctions
 
 class LineShapes(ShapeFunctions):
+    """
+    Shape functions or their n-th derivative
+    for one-dimensional domains :math:`[0,+1]`.
+
+    Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
+
+    """
 
     def __init__(self):
         super(LineShapes, self).__init__(ShapeFunctions.BEAMS)

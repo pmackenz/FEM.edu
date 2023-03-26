@@ -1,12 +1,19 @@
 import sys
 import numpy as np
 
-from .ShapeFunction import ShapeFunctions
+from .ShapeFunctions import ShapeFunctions
 from .LineShapes import LineShapes
 
 class QuadShapes(ShapeFunctions):
+    """
+    Shape functions or their :code:`*n-th` mixed derivative
+    for the bi-unit-square (two-dimensional domain :math:`(s,t)\in[-1,+1]\\times[-1,+1]`.
 
-    def __init__(self, serendipity=False):
+    Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
+
+    """
+
+    def __init__(self):
         super(QuadShapes, self).__init__(ShapeFunctions.QUAD)
 
     def shape(self, order, s, t, n=(0,0), serendipity=False):

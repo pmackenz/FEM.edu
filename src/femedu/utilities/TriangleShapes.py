@@ -1,14 +1,21 @@
 import sys
 import numpy as np
 
-from .ShapeFunction import ShapeFunctions
+from .ShapeFunctions import ShapeFunctions
 
 class TriangleShapes(ShapeFunctions):
+    """
+    Shape functions or their `*n-th` mixed derivative
+    for the unit-triangle (two-dimensional domain :math:`(s,t)\in[0,+1]\\times[0,+1]` with :math:`s+t\le +1`).
 
-    def __init__(self, serendipity=False):
+    Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
+
+    """
+
+    def __init__(self):
         super(TriangleShapes, self).__init__(ShapeFunctions.TRIANGLE)
 
-    def shape(self, order, s, t, n=(0,0), serendipity=False):
+    def shape(self, order, s, t, n=(0,0)):
         '''
 
         :param order: polynomial order of the shape functions. Options: 0,1,2,
@@ -21,10 +28,7 @@ class TriangleShapes(ShapeFunctions):
 
             Use :code:`n=(1,0)` for first derivative with respect to the first variable.
             Use :code:`n=(2,1)` for second derivative with respect to the first variable and
-            first with respect to the second variable, i.e., a mixed derivative..
-
-        :param serendipity: set to **True** for 8-node serendipity or **False** for bi-quadratic (9-node) quads.
-        :type serendipity: bool
+            first with respect to the second variable, i.e., a mixed derivative.
 
         :return: PHI: a list of shape function values
         '''
