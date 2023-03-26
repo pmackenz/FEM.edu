@@ -145,13 +145,13 @@ class LinearTriangle(Element):
 
         # internal force
         self.Forces = [
-            tu * self.area * self.material.getThickness(),
-            ts * self.area * self.material.getThickness(),
-            tt * self.area * self.material.getThickness()
+            tu * self.area,
+            ts * self.area,
+            tt * self.area
             ]
 
         # tangent stiffness
-        Ct = self.material.getStiffness() * self.area * self.material.getThickness()
+        Ct = self.material.getStiffness() * self.area
 
         Kt = []
         One = np.eye(2, dtype=np.float64)
@@ -159,7 +159,7 @@ class LinearTriangle(Element):
             Krow = []
             Ti = Gi @ S
             for Gj, Bj in  zip(GI, BI):
-                GIJ = Ti @ Gj * self.area * self.material.getThickness()
+                GIJ = Ti @ Gj * self.area
                 Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
             Kt.append( Krow )
 

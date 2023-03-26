@@ -146,14 +146,9 @@ class ExamplePlate07(Example):
 
         np.save('../../../Kplate.npy', model.solver.Kt)
 
-        model.plotBucklingMode(mode=0,filename="plate07_mode0.png")
-        model.plotBucklingMode(mode=1,filename="plate07_mode1.png")
-        model.plotBucklingMode(mode=2,filename="plate07_mode2.png")
-        model.plotBucklingMode(mode=3,filename="plate07_mode3.png")
-        model.plotBucklingMode(mode=4,filename="plate07_mode4.png")
-        model.plotBucklingMode(mode=5,filename="plate07_mode5.png")
-        model.plotBucklingMode(mode=6,filename="plate07_mode6.png")
-        model.plotBucklingMode(mode=7,filename="plate07_mode7.png")
+        for k in range(8):
+            name = f"plate07_mode{k:2d}.png"
+            model.plotBucklingMode(mode=k,filename=name,factor=1.0)
 
         # %%
         # Note the three rigid body modes (lam=0.0). It can be shown that all three

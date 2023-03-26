@@ -65,8 +65,8 @@ class Quad(Element):
             #
             # $ D\Phi_0 $
             #
-            DPhi0 = Grad @ X
-            self.J.append( np.linalg.det(DPhi0) * material.getThickness() )
+            DPhi0 = (Grad @ X).T
+            self.J.append( np.linalg.det(DPhi0) )  # material model already includes thickness
 
             # dual base (contra-variant)
             self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
@@ -154,7 +154,7 @@ class Quad(Element):
             # -------------------------
 
             # deformation gradient
-            F = Grad @ xt
+            F = (Grad @ xt).T
 
             # compute Green-Lagrange strain tensor
             eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
@@ -218,7 +218,7 @@ class Quad(Element):
             # indexing
             J = I+1
             if J>3:
-                J -= 3
+                J -= 4
 
             # add to element load vectors
             self.Loads[I] += loads[0]

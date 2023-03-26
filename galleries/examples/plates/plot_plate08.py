@@ -1,21 +1,43 @@
 """
-=========================================================================
-Patch test for quadrilateral plate elements under in-plane loading
-=========================================================================
+===============================================================
+A square patch made of one quadrilateral plate elements
+===============================================================
 
-The patch test is an empirical minimum test which every finite element has to pass to ensure convergence with mesh refinement.
+Basic implementation test with applied loads.
+    Testing the tangent stiffness computation.
 
-It consists of a problem for which a known homogeneous solution exists.
-For plates, we commonly use a rectangular plate subject to homogeneous edge loading,
-e.g., constant tension in the x-direction, or constant shear, etc.
+.. code::
 
-The mesh must contain distorted elements and at least one element not attached to any node on the boundary.
+    free   free
+     ^     ^
+     |     |
+     3-----2 -> free
+     |     | >
+     |  a  | > (w = 1.0)
+     |     | >
+     0-----1 -> free
+
+    width:  10.
+    height: 10.
+
+    Material parameters: St. Venant-Kirchhoff, plane stress
+        E  = 10.0
+        nu =  0.30
+        t  =  1.0
+
+    Element loads:
+        node 0: [ 0.0, 0.0]
+        node 1: [ 5.0, 0.0]
+        node 2: [ 5.0, 0.0]
+        node 3: [ 0.0, 0.0]
 
 Author: Peter Mackenzie-Helnwein
 """
+import numpy as np
+
 from femedu.examples.Example import *
 
-from femedu.domain import *
+from femedu.domain.System import *
 from femedu.solver.NewtonRaphsonSolver import *
 from femedu.elements.Quad import *
 from femedu.materials.PlaneStress import *
@@ -26,13 +48,27 @@ class ExamplePlate08(Example):
     # sphinx_gallery_start_ignore
     def docString(self):
         s = """
-    ## Patch test for triangular plate under in-plane loading
+    ## A square patch made of one quadrilateral plate elements
 
-    The patch test is an empirical minimum test which every finite element has to pass to ensure convergence with mesh refinement.
+    Basic implementation test with applied loads.
+    Testing the tangent stiffness computation. 
 
-    It consists of a problem for which a known homogeneous solution exists.  For plates, we commonly use a rectangular plate subject to homogenous edge loading, e.g., constant tension in the x-direction, or constant shear, etc.
-
-    The mesh must contain distorted elements and at least one element not attached to any node on the boundary.
+    free   free
+     ^     ^
+     |     |
+     3-----2 -> free
+     |     | >
+     |  a  | > (w = 1.0)
+     |     | >
+     0-----1 -> free
+    
+    width:  10.
+    height: 10.
+    
+    Material parameters: St. Venant-Kirchhoff, plane stress
+        E  = 10.0
+        nu =  0.30
+        t  =  1.0
         
     Author: Peter Mackenzie-Helnwein 
     """
@@ -40,128 +76,85 @@ class ExamplePlate08(Example):
 
     # sphinx_gallery_end_ignore
     def problem(self):
-        # ========== setting mesh parameters ==============
-
-        N = 8         # number of elements in the mesh
-        Lx = 100.0    # length of plate in the x-direction
-        Ly =  80.0    # length of plate in the y-direction
-
-        # ========== setting material parameters ==============
 
         params = dict(
-            E  = 20000.,    # Young's modulus
-            nu = 0.250,     # Poisson's ratio
-            t  = 1.00       # thickness of the plate
+            E  = 10., # Young's modulus
+            nu = 0.3,   # Poisson's ratio
+            t  = 1.0,   # thickness of the plate
+            fy = 1.e30  # yield stress
         )
 
-        # ========== setting load parameters ==============
-
-        px  = 10.0         # uniform load normal to x=const
-        py  =  0.0         # uniform load normal to y=const
-        pxy =  0.0         # uniform shear load on x=const and y=const
-
-        # ========== setting analysis parameters ==============
-
-        target_load_level = 1.00     # reference load
-        max_steps = 2                # number of load steps: 2 -> [0.0, 1.0]
-
-        # define a list of target load levels
-        load_levels = np.linspace(0, target_load_level, max_steps)
-
-        #
-        # ==== Build the system model ====
-        #
+        a = 10.     # length of the plate in the x-direction
+        b = 10.     # length of the plate in the y-direction
+        c = 1.5
 
         model = System()
         model.setSolver(NewtonRaphsonSolver())
 
-        # create nodes
+        nd0 = Node( 0.0, 0.0)
+        nd1 = Node(a/2+c,0.0)
+        nd2 = Node(   a, 0.0)
+        nd3 = Node( 0.0,   b)
+        nd4 = Node( a/2-c, b)
+        nd5 = Node(   a,   b)
 
-        nodes = (
-            Node(0.0*Lx, 0.0*Ly),  # nd 0
-            Node(0.2*Lx, 0.0*Ly),  # nd 1
-            Node(0.5*Lx, 0.0*Ly),  # nd 2
-            Node(0.7*Lx, 0.0*Ly),  # nd 3
-            Node(1.0*Lx, 0.0*Ly),  # nd 4
-            #
-            Node(0.0*Lx, 0.2*Ly),  # nd 5
-            Node(0.15*Lx,0.3*Ly),  # nd 6
-            Node(0.5*Lx, 0.2*Ly),  # nd 7
-            Node(0.8*Lx, 0.3*Ly),  # nd 8
-            Node(1.0*Lx, 0.2*Ly),  # nd 9
-            #
-            Node(0.0*Lx, 0.6*Ly),  # nd 10
-            Node(0.2*Lx, 0.5*Ly),  # nd 11
-            Node(0.7*Lx, 0.7*Ly),  # nd 12
-            Node(0.9*Lx, 0.6*Ly),  # nd 13
-            Node(1.0*Lx, 0.7*Ly),  # nd 14
-            #
-            Node(0.0*Lx, 1.0*Ly),  # nd 15
-            Node(0.3*Lx, 1.0*Ly),  # nd 16
-            Node(0.55*Lx,1.0*Ly),  # nd 17
-            Node(0.8*Lx, 1.0*Ly),  # nd 18
-            Node(1.0*Lx, 1.0*Ly),  # nd 19
-        )
+        # nd0.fixDOF('ux', 'uy')
+        # nd1.fixDOF('uy')
+        # nd2.fixDOF('uy')
+        # nd3.fixDOF('ux')
 
-        elements = (
-            Quad(nodes[0],nodes[1],nodes[6],nodes[5],PlaneStress(params)),  # elem 0
-            Quad(nodes[1],nodes[2],nodes[7],nodes[6],PlaneStress(params)),  # elem 1
-            Quad(nodes[2],nodes[3],nodes[8],nodes[7],PlaneStress(params)),  # elem 2
-            Quad(nodes[3],nodes[4],nodes[9],nodes[8],PlaneStress(params)),  # elem 3
-            #
-            Quad(nodes[5],nodes[6],nodes[11],nodes[10],PlaneStress(params)),  # elem 4
-            Quad(nodes[6],nodes[7],nodes[12],nodes[11],PlaneStress(params)),  # elem 5
-            Quad(nodes[7],nodes[8],nodes[13],nodes[12],PlaneStress(params)),  # elem 6
-            Quad(nodes[8],nodes[9],nodes[14],nodes[13],PlaneStress(params)),  # elem 7
-            #
-            Quad(nodes[10],nodes[11],nodes[16],nodes[15],PlaneStress(params)),  # elem 8
-            Quad(nodes[11],nodes[12],nodes[17],nodes[16],PlaneStress(params)),  # elem 9
-            Quad(nodes[12],nodes[13],nodes[18],nodes[17],PlaneStress(params)),  # elem 10
-            Quad(nodes[13],nodes[14],nodes[19],nodes[18],PlaneStress(params)),  # elem 11
-            #
-        )
+        model.addNode(nd0, nd1, nd2, nd3, nd4, nd5)
 
-        model.addNode(*nodes)
-        model.addElement(*elements)
+        elemA = Quad(nd0, nd1, nd4, nd3, PlaneStress(params))
+        elemB = Quad(nd1, nd2, nd5, nd4, PlaneStress(params))
 
-        # define support(s)
+        model.addElement(elemA, elemB)
 
-        fix_x = (0,)
-        fix_y = (0,4)
+        #elemA.setSurfaceLoad(face=3, pn=1.0)
+        elemB.setSurfaceLoad(face=1, pn=1.0)
 
-        for idx in fix_x:
-            nodes[idx].fixDOF('ux')    # horizontal support left end
-        for idx in fix_y:
-            nodes[idx].fixDOF('uy')          # vertical support right end
+        model.plot(factor=0.0, title="Undeformed system", filename="plate08_undeformed.png", show_bc=1)
 
-        # ==== complete the reference load ====
+        # %%
+        # We can have a quick look at the stiffness mode shapes using the
+        # buckling-mode plotter.  These are simply eigenvalues and eigenvectors of Kt
+        # at the current load level (0.0)
+        #
+        model.setLoadFactor(0.0)
+        model.solve(tol=1000.)
 
-        # surface loads on the left side
-        elements[0].setSurfaceLoad(3,px)
-        elements[4].setSurfaceLoad(3,px)
-        elements[8].setSurfaceLoad(3,px)
+        for k in range(8):
+            name = f"plate08_mode{k:2d}.png"
+            model.plotBucklingMode(mode=k,filename=name,factor=1.0)
 
-        # surface loads on the right side
-        elements[ 3].setSurfaceLoad(1,px)
-        elements[ 7].setSurfaceLoad(1,px)
-        elements[11].setSurfaceLoad(1,px)
+        # %%
+        # Note the three rigid body modes (lam=0.0). It can be shown that all three
+        # are limear combinations of translations in x and y-directions and a
+        # rigid body rotation.
+        #
 
-        # these are only nodal forces as part of the reference load
-        # .. load only the upper node
-        #print(model)
+        # %%
+        # Now it is time to add boundary conditions, apply loads
+        # and check the convergence behavior.
+        #
 
-        model.report()
+        nd0.fixDOF('ux', 'uy')
+        nd1.fixDOF('uy')
+        nd2.fixDOF('uy')
+        nd3.fixDOF('ux')
 
-        model.plot(factor=0., title="undeformed system", filename="plate08_undeformed.png", show_bc=1)
-
-        model.setLoadFactor(10.0)
+        model.setLoadFactor(1.0)
         model.solve()
 
-        model.solver.showKt(filename="plate08_spy_Kt.png")
+        # %%
+        # The output shows that we do have a quadratic rate of convergence.
 
-        model.report()
+        # %%
+        # Let's finish off with a nice plot of the deformed system.
 
-        model.plot(factor=10., filename="plate08_deformed.png")
+        model.plot(factor=1.0, filename="plate08_deformed.png")
+
+        #model.report()
 
 
 # %%
