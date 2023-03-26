@@ -170,7 +170,8 @@ class LinearTriangle(Element):
 
         self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
 
-        for I, w in enumerate(self.distributed_load):
+        This method should be called during :py:meth:`updateState()` by every
+        element supporting surface loads
 
             if w:  # do we have any load?
 
