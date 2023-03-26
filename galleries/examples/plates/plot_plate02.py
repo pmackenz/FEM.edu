@@ -156,7 +156,7 @@ class ExamplePlate02(Example):
 
         model.addElement(elemA, elemB)
 
-        elemB.setSurfaceLoad(face=2, w=1.0)
+        elemB.setSurfaceLoad(face=2, pn=1.0)
 
         model.setLoadFactor(0.0)
         model.solve()

@@ -23,11 +23,13 @@ class System():
     """
 
     def __init__(self):
-        self.nodes    = []
-        self.elements = []
-        self.plotter  = Plotter()
-        self.disp     = np.array([])
-        self.loads    = np.zeros_like(self.disp)
+        self.nodes       = []
+        self.elements    = []
+        self.constraints = []
+        self.plotter     = Plotter()
+
+        self.disp        = np.array([])
+        self.loads       = np.zeros_like(self.disp)
 
         # global analysis settings
         self.loadfactor = 1.0
@@ -36,7 +38,7 @@ class System():
         self.trackStability(False)
 
         self.solver = LinearSolver()
-        self.solver.connect(self.nodes, self.elements)
+        self.solver.connect(self.nodes, self.elements, self.constraints)
 
         self.initRecorder()
         self.trackStability(False)
@@ -96,6 +98,14 @@ class System():
         """
         for elem in newElements:
             self.elements.append(elem)
+
+    def addConstraint(self, *newConstraints):
+        """
+
+        :param newConstraints: one or more :py:class:`Constraint` or a subclass objects
+        """
+        for constraint in newConstraints:
+            self.constraints.append(constraint)
 
     def setLoadFactor(self, lam):
         self.solver.setLoadFactor(lam)

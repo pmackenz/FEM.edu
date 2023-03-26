@@ -147,11 +147,17 @@ sphinx/source/auto_examples/
 galleries/examples/*png
 galleries/examples/*/*png
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> implementing_constraints
 
 Kt.npy
 
 Testing Matrix Features.ipynb
 
 *.npy
+<<<<<<< HEAD
 >>>>>>> 139f5e6... toward a sparse solver
+=======
+>>>>>>> implementing_constraints

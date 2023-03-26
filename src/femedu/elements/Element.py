@@ -59,7 +59,8 @@ class Element(DrawElement):
         """
         default implementation for resetting element loads.
         """
-        pass
+        for face in self.faces:
+            face.setLoad(0.0, 0.0)
 
     def createFaces(self):
 
@@ -166,26 +167,16 @@ class Element(DrawElement):
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)
 
-<<<<<<< HEAD
-
-    def setSurfaceLoad(self, face, w):
-=======
     def setSurfaceLoad(self, face_idx, pn, ps=0):
->>>>>>> 139f5e6... toward a sparse solver
         """
         .. warning::
 
             This method needs to be implemented by every element that shall accept a surface load.
 
-<<<<<<< HEAD
-        :param face: face ID for the laoded face
-        :param w: magnitude of distributed load per area. Tension on a surface is positive.
-=======
         :param face_ix: face index for the laoded face (integer starting at 0)
         :type face_idx: int
         :param pn: magnitude of distributed normal load per unit length. Tension on a surface is positive.
         :param ps: magnitude of distributed shear load per unit length. Positive shear rotates the element counter-clockwise.
->>>>>>> 139f5e6... toward a sparse solver
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)

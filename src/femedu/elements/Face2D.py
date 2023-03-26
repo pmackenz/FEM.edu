@@ -23,13 +23,13 @@ class Face2D(Faces):
             msg = "{} requires 2D or 3D points - {} dimensions given".format(self.__class__.__name__, self.dim)
             raise TypeError(msg)
 
-        rot = np.array([[0.,-1.],[1.,0.]])
+        rot = np.array([[0.,1.],[-1.,0.]])
 
         if len(self.nodes) == 2:
             # this includes the weight factor for single point integration over [-1,+1]
-            self.pos     = [ 0.5*(self.nodes[1].getPos() + self.nodes[0].getPos()) ]
-            self.tangent = [ self.nodes[1].getPos() - self.nodes[0].getPos() ]
-            self.area    = [ rot @ tvec for tvec in self.tangent ]
+            self.pos     = np.array( [ 0.5*(self.nodes[1].getPos() + self.nodes[0].getPos()) ] )
+            self.tangent = np.array( [ self.nodes[1].getPos() - self.nodes[0].getPos() ] )
+            self.area    = np.array( [ rot @ tvec for tvec in self.tangent ] )
         elif len(self.nodes) == 3:
             # this includes the weight factor for two-point integration over [-1,+1]
             x0 = 0.4553418012614795 * self.nodes[0].getPos() \
@@ -44,9 +44,9 @@ class Face2D(Faces):
             t1 = 0.07735026918962576 * self.nodes[0].getPos() \
                  - 1.154700538379252 * self.nodes[1].getPos() \
                  + 1.077350269189626 * self.nodes[2].getPos()
-            self.pos     = [ x0, x1 ]
-            self.tangent = [ t0, t1 ]
-            self.area    = [ rot @ t0, rot @ t1 ]
+            self.pos     = np.array( [ x0, x1 ] )
+            self.tangent = np.array( [ t0, t1 ] )
+            self.area    = np.array( [ rot @ t0, rot @ t1 ] )
         else:
             msg = "{} requires 2 or 3 points - {} given".format(self.__class__.__name__, len(self.nodes))
             raise TypeError(msg)
@@ -78,7 +78,8 @@ class Face2D(Faces):
         if len(self.nodes) == 2:
             pn = self.load[0]
             ps = self.load[1]
-            forces = np.outer( np.array([ 0.50000, 0.50000 ]), (pn * self.area + ps * self.tangent) )
+            dF = (pn * self.area + ps * self.tangent)
+            forces = np.outer( np.array([ 0.50000, 0.50000 ]), dF )
 
         elif len(self.nodes) == 3:
             pn = self.load[0]
@@ -93,7 +94,9 @@ class Face2D(Faces):
             msg = "{} requires 2 or 3 points - {} given".format(self.__class__.__name__, len(self.nodes))
             raise TypeError(msg)
 
-        for i, node in enumerate(self.nodes):
-            node.setLoad(forces[i,:])  # this may need a different approach to account for the global load factor
+        # for i, node in enumerate(self.nodes):
+        #     node.setLoad(forces[i])
+
+        return forces  # this may need a different approach to account for the global load factor
 
 
