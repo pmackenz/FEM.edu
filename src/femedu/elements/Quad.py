@@ -1,3 +1,14 @@
+"""
+======================================
+4-node quadrilateral
+======================================
+incomplete bi-quadratic interpolation
+
+         1
+      x     y
+        x*y
+
+"""
 import numpy as np
 from copy import deepcopy
 

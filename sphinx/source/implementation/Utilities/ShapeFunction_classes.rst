@@ -30,7 +30,7 @@ Integrating a bi-quadratic function g(s,t,u) over a quad-shaped domain
     print(f"Int_V g(s,t,u) dV = {F}")
 
 
-Abstract Integration Class
+Abstract Shape Function Class
 --------------------------------
 
 .. automodule:: femedu.utilities.ShapeFunctions
