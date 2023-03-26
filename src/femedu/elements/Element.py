@@ -22,8 +22,8 @@ class Element(DrawElement):
         """
         super(Element, self).__init__()
 
-        self.ID = self.COUNT # creates a unique ID for each element
-        self.COUNT += 1
+        self.ID = Element.COUNT # creates a unique ID for each element
+        Element.COUNT += 1      # ensure the next call will create a unique ID as well
         
         self.nodes    = nodes
         self.transforms = [ None for nd in self.nodes ]
@@ -166,15 +166,26 @@ class Element(DrawElement):
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)
 
+<<<<<<< HEAD
 
     def setSurfaceLoad(self, face, w):
+=======
+    def setSurfaceLoad(self, face_idx, pn, ps=0):
+>>>>>>> 139f5e6... toward a sparse solver
         """
         .. warning::
 
             This method needs to be implemented by every element that shall accept a surface load.
 
+<<<<<<< HEAD
         :param face: face ID for the laoded face
         :param w: magnitude of distributed load per area. Tension on a surface is positive.
+=======
+        :param face_ix: face index for the laoded face (integer starting at 0)
+        :type face_idx: int
+        :param pn: magnitude of distributed normal load per unit length. Tension on a surface is positive.
+        :param ps: magnitude of distributed shear load per unit length. Positive shear rotates the element counter-clockwise.
+>>>>>>> 139f5e6... toward a sparse solver
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
@@ -224,6 +235,9 @@ class Element(DrawElement):
             return self.Loads
         else:
             return [ None for k in self.nodes ]
+
+    def getID(self):
+        return "Elem_{}".format(self.ID)
 
     def getInternalForce(self, variable=''):
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)

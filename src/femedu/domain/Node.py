@@ -6,6 +6,7 @@ class Node():
     """
     class: representing a single Node
     """
+    COUNT = 0
 
     def __init__(self, x0, y0, z0=None):
         """
@@ -13,12 +14,14 @@ class Node():
         :param x0: Initial position (List)
 
         """
+        self.ID = Node.COUNT
+        Node.COUNT += 1
+
         if isinstance(z0, (int, float)):
             self.pos = np.array([x0, y0, z0])
         else:
             self.pos = np.array([x0, y0])
 
-        self.index       = -1
         self.disp        = None   # active current displacement vector
         self.disp_n      = None   # previously converged displacement vector
         self.disp_pushed = None   # stored displacement vector (see pushU() and popU())
@@ -53,7 +56,7 @@ class Node():
         """
         :returns: the node ID (``str``)
         """
-        return "Node_{}".format(self.index)
+        return "Node_{}".format(self.ID)
 
     def request(self, dof_list, caller):
         """

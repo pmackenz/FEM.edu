@@ -146,3 +146,12 @@ Student_Help/
 sphinx/source/auto_examples/
 galleries/examples/*png
 galleries/examples/*/*png
+<<<<<<< HEAD
+=======
+
+Kt.npy
+
+Testing Matrix Features.ipynb
+
+*.npy
+>>>>>>> 139f5e6... toward a sparse solver
