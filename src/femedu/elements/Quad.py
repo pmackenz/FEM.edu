@@ -2,7 +2,7 @@
 ======================================
 4-node quadrilateral
 ======================================
-incomplete bi-quadratic interpolation
+incomplete bi-linear interpolation
 
 .. code::
 
