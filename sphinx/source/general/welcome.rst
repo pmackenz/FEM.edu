@@ -1,4 +1,4 @@
-.. include:: ../VERSION.rst
+.. include:: ../../VERSION.rst
 
 #####################################
 Welcome to the FEM.edu documentation!

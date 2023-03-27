@@ -12,6 +12,7 @@
 
    general/about.rst
    auto_examples/index.rst
+   general/Installation.rst
    tutorials.rst
    design.rst
    implementation/implementation.rst
