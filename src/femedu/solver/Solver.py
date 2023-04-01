@@ -169,14 +169,14 @@ class Solver():
             Fe = element.getForce()     # Element State Update occurs here
             Pe = element.getLoad()      # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
-                idxK = ndI.start + np.arange(ndI.ndofs)
+                idxK = ndI.start + ndI.getIdx4Element(element)
                 if isinstance(Pe[i], np.ndarray):
                     Rsys[idxK] -= Fe[i] - self.loadfactor * Pe[i]
                 else:
                     Rsys[idxK] -= Fe[i]
                 if not force_only:
                     for (j,ndJ) in enumerate(element.nodes):
-                        idxM = ndJ.start + np.arange(ndJ.ndofs)
+                        idxM = ndJ.start + ndJ.getIdx4Element(element)
                         Ksys[idxK[:, np.newaxis], idxM] += element.Kt[i][j]
 
         # apply boundary conditions

@@ -144,15 +144,15 @@ class Frame2D(Element):
 
     def updateState(self):
 
-        Xi = self.nodes[0].getPos()
-        Xj = self.nodes[1].getPos()
+        Xi = self.getPos(0)
+        Xj = self.getPos(1)
 
         # 0 ... ux
         # 1 ... uy
         # 2 ... theta
-        dispi = self.nodes[0].getDisp()
+        dispi = self.getDisp(0)
         Ui = dispi[:2]
-        dispj = self.nodes[1].getDisp()
+        dispj = self.getDisp(1)
         Uj = dispj[:2]
 
         # compute local coordinate system
@@ -319,9 +319,29 @@ class Frame2D(Element):
         self.Kt = [[KtII, KtIJ],[KtJI, KtJJ]]
 
         # internal forces at nodes
+        if 'Pw' in self.internal_forces:
+            Pw = self.internal_forces['Pw']
+        else:
+            Pw = 0.0
+
+        if 'Mw' in self.internal_forces:
+            Mw = self.internal_forces['Mw']
+        else:
+            Mw = 0.0
         self.internal_forces = {'fi':self.force, 'Vi': Vi, 'Mi':-Mi,
                                 'fj':self.force, 'Vj':-Vj, 'Mj': Mj,
-                                'Pw':0, 'Mw':0}
+                                'Pw':Pw, 'Mw':Mw}
+
+    def computeSurfaceLoads(self):
+
+        Xi = self.getPos(0)
+        Xj = self.getPos(1)
+
+        # compute local coordinate system
+        Nvec = Xj - Xi
+        L = np.linalg.norm(Nvec)
+        Nvec /= L
+        Svec = np.array([[0,-1],[1,0]]) @ Nvec
 
         # .. applied element load (reference load)
         if self.distributed_load:
@@ -334,4 +354,3 @@ class Frame2D(Element):
 
             self.internal_forces['Pw'] = Pw * self.loadfactor
             self.internal_forces['Mw'] = Mw * self.loadfactor
-

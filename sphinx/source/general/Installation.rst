@@ -7,7 +7,7 @@ Installation
 
     $ pip install femedu
 
-This will install the actual package in your :code:`${PYTHONPATH}/site-packages` folder
+This will install the actual package in your :code:`site-packages` folder
 
 You should be ready to go.
 

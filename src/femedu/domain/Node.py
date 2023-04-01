@@ -34,6 +34,7 @@ class Node():
         self.loads       = {}
         self._hasLoad    = False
         self.transform   = None    # nodal transformation object
+        self.dof_maps    = {}      # dof_idx maps for attached elements
 
         self.setRecorder(None)
 
@@ -93,6 +94,9 @@ class Node():
 
         if caller not in self.elements:
             self.elements.append(caller)
+
+        # remember the dof_idx map for this element for future interaction
+        self.dof_maps[caller] = dof_idx
 
         return tuple(dof_idx)
 
@@ -164,10 +168,21 @@ class Node():
         if isinstance(U,list) or isinstance(U,tuple):
             U = np.array(U)
 
-        if modeshape:
-            self.disp_mode = U
+        if dof_list:
+            for ui, dof in zip(U, dof_list):
+                if dof in self.dofs:
+                    if modeshape:
+                        self.disp_mode[self.dofs[dof]] = ui
+                    else:
+                        self.disp[self.dofs[dof]] = ui
+                else:
+                    msg = f"requested dof:{dof} not present at current node.  Available dofs are {self.dofs.keys()}"
+                    raise TypeError(msg)
         else:
-            self.disp = U
+            if modeshape:
+                self.disp_mode = U
+            else:
+                self.disp = U
 
     def _updateDisp(self, dU):
         """
@@ -222,19 +237,35 @@ class Node():
                 self.disp = np.zeros(self.ndofs)
             U = self.disp
 
-        if dofs:
-            ans = []
-            for dof in dofs:
-                if dof in self.dofs:
-                    ans.append(U[self.dofs[dof]])
-                else:
-                    ans.append(0.0)
-            return np.array(ans)
-        else:
-            return U
+        if caller:
+            # we know the calling element.
+            # ... ignoring dofs and using dof list from element map
 
-    def getPos(self):
+            if caller not in self.dof_maps:
+                msg = "caller not registered with this node"
+                raise TypeError(msg)
+
+            idx = self.dof_maps[caller]
+            ans = U[idx]
+            return np.array(ans)
+
+        else:
+            # we do not know who is requesting displacements, so provide all requested or ALL if no dofs were specified.
+            if dofs:
+                ans = []
+                for dof in dofs:
+                    if dof in self.dofs:
+                        ans.append(U[self.dofs[dof]])
+                    else:
+                        ans.append(0.0)
+            else:
+                ans = U
+
+            return np.array(ans)
+
+    def getPos(self, caller=None, **kwargs):
         """
+        :param caller: pointer to calling element
         :return: initial position vector
         """
         return self.pos
@@ -260,6 +291,13 @@ class Node():
                 self.disp = np.zeros(self.ndofs)
 
             return self.pos + factor * self.disp
+
+    def getIdx4Element(self, elem):
+        if elem in self.dof_maps:
+            return np.array(self.dof_maps[elem], dtype=np.int)
+        else:
+            msg = f"Element {elem} not in dof_map for node {self.ID}"
+            raise TypeError(msg)
 
     def addTransformation(self, T):
         """

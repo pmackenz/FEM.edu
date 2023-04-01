@@ -11,6 +11,7 @@ from femedu.examples.Example import *
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
 from femedu.elements.LinearTriangle import *
+from femedu.elements.Quad import *
 from femedu.materials.PlaneStress import *
 from femedu.mesher import *
 
@@ -78,7 +79,8 @@ class ExamplePlate04(Example):
                              (0,0), (Lx,0), (Lx,Ly), (0,Ly),                                     # corner nodes
                              (Lx/2, -0.05*Ly), (1.2*Lx, Ly/2), (Lx/2, 0.90*Ly), (0.05*Lx, Ly/2), # mid-side nodes
                              (0.55*Lx, 0.45*Ly))                                                 # center node
-        nodes1, elements1 = mesher1.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+        #nodes1, elements1 = mesher1.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+        nodes1, elements1 = mesher1.quadMesh(Nx, Ny, Quad, PlaneStress(params))
 
         mesher2 = TriPatchMesher(model,
                                  (0,0), (Lx,0), (Lx/2,Ly),                                       # corner nodes

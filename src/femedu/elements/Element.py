@@ -200,6 +200,28 @@ class Element(DrawElement):
         else:
             self.transforms = [ T for nd in self.nodes ]
 
+    def getPos(self, node, **kwargs):
+        """
+        Use this function to get nodal displacements from inside your element implementation.
+
+        This is a wrapper around the :py:meth:`Node.getPos(caller)` method that adds the caller information
+        for the node.
+
+        :param node: local node number for which displacements are requested.
+        """
+        return self.nodes[node].getPos(self, **kwargs)
+
+    def getDisp(self, node, **kwargs):
+        """
+        Use this function to get nodal displacements from inside your element implementation.
+
+        This is a wrapper around the :py:meth:`Node.getDisp(caller)` method that adds the caller information
+        for the node.
+
+        :param node: local node number for which displacements are requested.
+        """
+        return self.nodes[node].getDisp(self, **kwargs)
+
     def getForce(self):
         """
         Request the internal force vector (stress driven force only; **no applied element loads**)
@@ -230,6 +252,9 @@ class Element(DrawElement):
             return self.Loads
         else:
             return [ None for k in self.nodes ]
+
+    def computeSurfaceLoads(self):
+        self.Loads = []
 
     def getID(self):
         return "Elem_{}".format(self.ID)

@@ -52,12 +52,10 @@ class Truss(Element):
     def __str__(self):
         s = \
 """Truss: {} to {}:
-   material properties: {}  strain:{}   stress:{}  
-   internal force: {}
-   Pe: [ {} {} ]""".format( self.nodes[0].getID(), self.nodes[1].getID(),
+    material properties: {}  strain:{}   stress:{}  
+    internal force: {}""".format( self.nodes[0].getID(), self.nodes[1].getID(),
                             repr(self.material), self.material.getStrain(),
-                            self.material.getStress(),
-                            self.force, *self.Forces[1] )
+                            self.material.getStress(), self.force)
         return s
 
     def __repr__(self):
@@ -95,10 +93,10 @@ class Truss(Element):
         """
         Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
         """
-        U0 = self.nodes[0].getDisp()
-        X0 = self.nodes[0].getPos()
-        U1 = self.nodes[1].getDisp()
-        X1 = self.nodes[1].getPos()
+        U0 = self.getDisp(0)
+        X0 = self.getPos(0)
+        U1 = self.getDisp(1)
+        X1 = self.getPos(1)
 
 
         Lvec = (X1 + U1) - (X0 + U0)
