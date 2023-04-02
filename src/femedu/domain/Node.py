@@ -281,16 +281,26 @@ class Node():
         :param factor: deformation magnification factor, :math:`f`.
         :return: deformed position vector, :math:`{\\bf x}`.
         """
+        if self.pos.shape[0] == 1:
+            my_dofs = ('ux',)
+        elif self.pos.shape[0] == 2:
+            my_dofs = ('ux','uy')
+        elif self.pos.shape[0] == 3:
+            my_dofs = ('ux','uy','uz')
+        else:  # don't know what that would be
+            msg = f"Don't know how to interprete position: {self.pos}"
+            raise TypeError(msg)
+
         if 'modeshape' in kwargs and kwargs['modeshape']:
             if not isinstance(self.disp_mode, np.ndarray):
                 self.disp_mode = np.zeros(self.ndofs)
 
-            return self.pos + factor * self.getDisp(caller=None, dofs=('ux','uy'), modeshape=1)
+            return self.pos + factor * self.getDisp(caller=None, dofs=my_dofs, modeshape=1)
         else:
             if not isinstance(self.disp, np.ndarray):
                 self.disp = np.zeros(self.ndofs)
 
-            return self.pos + factor * self.getDisp(caller=None, dofs=('ux','uy'))
+            return self.pos + factor * self.getDisp(caller=None, dofs=my_dofs)
 
     def getIdx4Element(self, elem):
         if elem in self.dof_maps:
@@ -403,6 +413,12 @@ class Node():
         if self.recorder and self.recorder.isActive():
             data = {'lam':self.load_level}
             self.recorder.addData(data)
+
+    def on_converged(self):
+        pass
+
+    def revert(self):
+        pass
 
 
 if __name__ == "__main__":
