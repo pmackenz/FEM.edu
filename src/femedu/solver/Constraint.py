@@ -32,3 +32,9 @@ class Constraint():
         """
         return self.neqns
 
+    def on_converged(self):
+        pass
+
+    def revert(self):
+        pass
+

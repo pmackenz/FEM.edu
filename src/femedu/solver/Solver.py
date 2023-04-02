@@ -216,6 +216,36 @@ class Solver():
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
+    def on_converged(self):
+        """
+        This function needs to be called once a converged state was achieved by the solver.
+
+        It tells all components to update its state to "converged"
+        """
+        for node in self.nodes:
+            node.on_converged()
+
+        for elem in self.elements:
+            elem.on_converged()
+
+        for const in self.constraints:
+            const.on_converged()
+
+    def revert(self):
+        """
+        This function needs to be called if the iterative procedure fails to converge.
+
+        It will revert the entire system to the last converged state.
+        """
+        for node in self.nodes:
+            node.revert()
+
+        for elem in self.elements:
+            elem.revert()
+
+        for const in self.constraints:
+            const.revert()
+
     def checkStability(self, verbose=True, **kwargs):
         """
         Computes the stability index as

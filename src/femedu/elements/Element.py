@@ -333,6 +333,12 @@ class Element(DrawElement):
             data = {'lam':self.load_level}
             self.recorder.addData(data)
 
+    def on_converged(self):
+        pass
+
+    def revert(self):
+        pass
+
 
 if __name__ == "__main__":
 
