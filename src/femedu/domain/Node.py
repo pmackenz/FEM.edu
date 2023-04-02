@@ -285,12 +285,12 @@ class Node():
             if not isinstance(self.disp_mode, np.ndarray):
                 self.disp_mode = np.zeros(self.ndofs)
 
-            return self.pos + factor * self.disp_mode
+            return self.pos + factor * self.getDisp(caller=None, dofs=('ux','uy'), modeshape=1)
         else:
             if not isinstance(self.disp, np.ndarray):
                 self.disp = np.zeros(self.ndofs)
 
-            return self.pos + factor * self.disp
+            return self.pos + factor * self.getDisp(caller=None, dofs=('ux','uy'))
 
     def getIdx4Element(self, elem):
         if elem in self.dof_maps:

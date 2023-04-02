@@ -1,22 +1,10 @@
 """
 ======================================================
-Buckling of a braced building frame
+Braced building frame
 ======================================================
 
-modeled using a 2D frame element
+modeled using a 2D frame element for the main structure and a truss element for the brace
 
-.. list-table:: setting given parameters
-
-    * - N  = 2
-      - number of elements
-    * - L  = 100.0
-      - column length
-    * - EA = 2000000.0
-      - axial stiffness
-    * - EI = 21000.0
-      - flexural stiffness
-    * - w  = 0.1
-      - applied lateral load
 
 Author: Peter Mackenzie-Helnwein
 """
@@ -36,12 +24,14 @@ class ExampleMixed01(Example):
     # sphinx_gallery_start_ignore
     def docString(self):
         s = """
-    Buckling of a building frame
+    Braced building frame
 
     degrees of freedom:
         ux ... horizontal displacement
         uy ... vertical displacement
         rz ... rotation, theta
+        
+    The brace has no flexural stiffness and only uses 'ux' and 'uy'
         
     Author: Peter Mackenzie-Helnwein 
     """
@@ -51,27 +41,22 @@ class ExampleMixed01(Example):
     def problem(self):
         # initialize a system model
 
-        N  = 8     # number of elements
+        B = 80.
+        H = 50.
 
-        B = 240.
-        H = 200.
+        E  = 29000.0   # steel MOE
 
-        E  = 29000.0     # steel MOE
+        A = 20.0       # frame area
+        I = 10.0       # frame moment of inertia
+        Ab = 1.0       # brace area
 
-        A = 20.0         # frame area
-        I = 10.0         # frame moment of inertia
-        Ab = 1.0         # brace area
+        w = 0.50       # uniform load on floor beam
 
-        w = 1.0
-
-        Ph = 0.01      # additional horizontal load per floor
-        Ph = 0.10      # additional horizontal load per floor
-        Ph = 1.00      # additional horizontal load per floor
-        Ph = 0.00      # additional horizontal load per floor
+        Ph = 20.00      # additional horizontal load per floor
 
         # ========== setting global parameters ==============
 
-        target_load_level = 27
+        target_load_level = 10
         max_steps = 10
         load_levels = np.linspace(0, target_load_level, max_steps)
 
@@ -80,22 +65,11 @@ class ExampleMixed01(Example):
         model = System()
         model.setSolver(NewtonRaphsonSolver())
 
-        x0 = 0.0
-        x1 = B / 3
-        x2 = 2 * B / 3
-        x3 = B
+        X10 = Node(0.0, 0.0)
+        X11 = Node(0.0, H)
 
-        y0 = 0.0
-        y1 = H / 4
-        y2 = 2 * H / 4
-        y3 = 3 * H / 4
-        y4 = H
-
-        X10 = Node(x0, y0)
-        X11 = Node(x0, y1)
-
-        X20 = Node(x1, y0)
-        X21 = Node(x1, y1)
+        X20 = Node(B, 0.0)
+        X21 = Node(B, H)
 
         model.addNode(X10,X11)
         model.addNode(X20,X21)
@@ -142,16 +116,14 @@ class ExampleMixed01(Example):
 
         # set up data recorder
         model.initRecorder()
-        model.trackStability(True)
 
         # initialize the analysis:
         model.resetDisplacements()   # set U to all zeros
         model.setLoadFactor(0.0)     # define a known equilibrium solution
 
-        model.startRecorder()
+        model.plot(factor=0.0, title="undeformed system", filename="mixed01_undeformed.png")
 
-        detKt   = []
-        lambdas = []
+        model.startRecorder()
 
         # solve for all load_levels
         for loadfactor in load_levels:
@@ -160,13 +132,7 @@ class ExampleMixed01(Example):
             model.setLoadFactor(loadfactor)
             model.solve(verbose=True)
 
-            # stability check
-            lambdas.append(model.loadfactor)
-            detKt.append(model.solver.checkStability())
-
-            # report results
-            print('+')
-            #model.report()
+            model.recordThisStep()
 
             print("\n=== next load level ===\n")
 
@@ -176,23 +142,10 @@ class ExampleMixed01(Example):
 
         model.report()
 
-        model.plot(factor=1.0, filename="frame3_deformed.png")
-
-        fig, ax = plt.subplots()
-
-        ax.plot(lambdas,detKt,'--*r')
-        ax.grid(True)
-        ax.set_xlabel('Load factor, $ \lambda $')
-        ax.set_ylabel("Stability index, $ {det}\: {\\bf K}_t $")
-
-        fig.savefig("frame3_stability.png")
-        fig.show()
-
-        model.beamValuePlot("F", filename="frame3_force.png")
-        model.beamValuePlot("V", filename="frame3_shear.png")
-        model.beamValuePlot("M", filename="frame3_moment.png")
-
-        model.plotBucklingMode(factor=25., filename="frame3_buckling_mode0.png")
+        model.plot(factor=10.0, filename="mixed01_deformed.png")
+        model.beamValuePlot("F", filename="mixed01_force.png")
+        model.beamValuePlot("V", filename="mixed01_shear.png")
+        model.beamValuePlot("M", filename="mixed01_moment.png")
 
 
 # %%
