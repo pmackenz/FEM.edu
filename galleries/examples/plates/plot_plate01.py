@@ -52,7 +52,7 @@ from femedu.examples.Example import *
 
 from femedu.domain.System import *
 from femedu.domain.Node import *
-from femedu.elements.LinearTriangle import *
+from femedu.elements.linear.Triangle import *
 from femedu.materials.PlaneStress import *
 
 
@@ -129,8 +129,8 @@ class ExamplePlate01(Example):
 
         model.addNode(nd0, nd1, nd2, nd3)
 
-        elemA = LinearTriangle(nd0, nd1, nd3, PlaneStress(params))
-        elemB = LinearTriangle(nd2, nd3, nd1, PlaneStress(params))
+        elemA = Triangle(nd0, nd1, nd3, PlaneStress(params))
+        elemB = Triangle(nd2, nd3, nd1, PlaneStress(params))
 
         model.addElement(elemA, elemB)
 

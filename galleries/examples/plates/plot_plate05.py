@@ -14,7 +14,7 @@ from femedu.examples.Example import *
 
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.LinearTriangle import *
+from femedu.elements.linear.Triangle import *
 from femedu.materials.PlaneStress import *
 from femedu.mesher import *
 
@@ -102,13 +102,13 @@ class ExamplePlate05(Example):
         )
 
         mesher1 = PatchMesher(model, pts[3], pts[4], pts[6], pts[5], pts[8])
-        nodes1, elements1 = mesher1.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+        nodes1, elements1 = mesher1.triangleMesh(Nx, Ny, Triangle, PlaneStress(params))
 
         mesher2 = PatchMesher(model, pts[0], pts[1], pts[6], pts[4], None, None, None, pts[9])                                               # center node
-        nodes2, elements2 = mesher2.triangleMesh(Ny, Nx, LinearTriangle, PlaneStress(params))
+        nodes2, elements2 = mesher2.triangleMesh(Ny, Nx, Triangle, PlaneStress(params))
 
         mesher3 = PatchMesher(model, pts[1], pts[2], pts[7], pts[6])
-        nodes3, elements3 = mesher3.triangleMesh(Nx, Nx, LinearTriangle, PlaneStress(params))
+        nodes3, elements3 = mesher3.triangleMesh(Nx, Nx, Triangle, PlaneStress(params))
 
         nodes    = nodes1    + nodes2    + nodes3
         elements = elements1 + elements2 + elements3
@@ -135,7 +135,9 @@ class ExamplePlate05(Example):
 
         model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
 
-    def _buffer(self):
+    def _buffer(self, model):
+
+        elements = model.elements
 
         # surface loads on the left side
         elements[ 0].setSurfaceLoad(2,px)

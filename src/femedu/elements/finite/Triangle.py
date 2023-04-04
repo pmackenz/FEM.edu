@@ -1,8 +1,8 @@
 import numpy as np
-from .Element import *
-from ..domain.Node import *
+from ..Element import *
+from ...domain.Node import *
 
-class LinearTriangle(Element):
+class Triangle(Element):
     """
     class: representing a single truss element
     """
@@ -42,7 +42,7 @@ class LinearTriangle(Element):
         self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
 
     def __str__(self):
-        s = super(LinearTriangle, self).__str__()
+        s = super(Triangle, self).__str__()
         s += "\n    strain: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStrain())
         s += "\n    stress: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStress())
         if np.array(self.distributed_load).any():
@@ -75,7 +75,7 @@ class LinearTriangle(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(LinearTriangle, self).resetLoads()
+        super(Triangle, self).resetLoads()
 
     def updateState(self):
 

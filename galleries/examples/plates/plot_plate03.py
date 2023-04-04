@@ -17,7 +17,7 @@ from femedu.examples.Example import *
 
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.LinearTriangle import *
+from femedu.elements.linear.Triangle import *
 from femedu.materials.PlaneStress import *
 
 
@@ -104,35 +104,35 @@ class ExamplePlate03(Example):
         )
 
         elements = (
-            LinearTriangle(nodes[0],nodes[1],nodes[5],PlaneStress(params)),  # elem 0
-            LinearTriangle(nodes[1],nodes[2],nodes[6],PlaneStress(params)),  # elem 1
-            LinearTriangle(nodes[2],nodes[3],nodes[7],PlaneStress(params)),  # elem 2
-            LinearTriangle(nodes[3],nodes[4],nodes[8],PlaneStress(params)),  # elem 3
+            Triangle(nodes[0],nodes[1],nodes[5],PlaneStress(params)),  # elem 0
+            Triangle(nodes[1],nodes[2],nodes[6],PlaneStress(params)),  # elem 1
+            Triangle(nodes[2],nodes[3],nodes[7],PlaneStress(params)),  # elem 2
+            Triangle(nodes[3],nodes[4],nodes[8],PlaneStress(params)),  # elem 3
             #
-            LinearTriangle(nodes[6],nodes[5],nodes[1],PlaneStress(params)),  # elem 4
-            LinearTriangle(nodes[7],nodes[6],nodes[2],PlaneStress(params)),  # elem 5
-            LinearTriangle(nodes[8],nodes[7],nodes[3],PlaneStress(params)),  # elem 6
-            LinearTriangle(nodes[9],nodes[8],nodes[4],PlaneStress(params)),  # elem 7
+            Triangle(nodes[6],nodes[5],nodes[1],PlaneStress(params)),  # elem 4
+            Triangle(nodes[7],nodes[6],nodes[2],PlaneStress(params)),  # elem 5
+            Triangle(nodes[8],nodes[7],nodes[3],PlaneStress(params)),  # elem 6
+            Triangle(nodes[9],nodes[8],nodes[4],PlaneStress(params)),  # elem 7
             #
-            LinearTriangle(nodes[5],nodes[6],nodes[10],PlaneStress(params)),  # elem 8
-            LinearTriangle(nodes[6],nodes[7],nodes[11],PlaneStress(params)),  # elem 9
-            LinearTriangle(nodes[7],nodes[8],nodes[12],PlaneStress(params)),  # elem 10
-            LinearTriangle(nodes[8],nodes[9],nodes[13],PlaneStress(params)),  # elem 11
+            Triangle(nodes[5],nodes[6],nodes[10],PlaneStress(params)),  # elem 8
+            Triangle(nodes[6],nodes[7],nodes[11],PlaneStress(params)),  # elem 9
+            Triangle(nodes[7],nodes[8],nodes[12],PlaneStress(params)),  # elem 10
+            Triangle(nodes[8],nodes[9],nodes[13],PlaneStress(params)),  # elem 11
             #
-            LinearTriangle(nodes[11],nodes[10],nodes[6],PlaneStress(params)),  # elem 12
-            LinearTriangle(nodes[12],nodes[11],nodes[7],PlaneStress(params)),  # elem 13
-            LinearTriangle(nodes[13],nodes[12],nodes[8],PlaneStress(params)),  # elem 14
-            LinearTriangle(nodes[14],nodes[13],nodes[9],PlaneStress(params)),  # elem 15
+            Triangle(nodes[11],nodes[10],nodes[6],PlaneStress(params)),  # elem 12
+            Triangle(nodes[12],nodes[11],nodes[7],PlaneStress(params)),  # elem 13
+            Triangle(nodes[13],nodes[12],nodes[8],PlaneStress(params)),  # elem 14
+            Triangle(nodes[14],nodes[13],nodes[9],PlaneStress(params)),  # elem 15
             #
-            LinearTriangle(nodes[10],nodes[11],nodes[15],PlaneStress(params)),  # elem 16
-            LinearTriangle(nodes[11],nodes[12],nodes[16],PlaneStress(params)),  # elem 17
-            LinearTriangle(nodes[12],nodes[13],nodes[17],PlaneStress(params)),  # elem 18
-            LinearTriangle(nodes[13],nodes[14],nodes[18],PlaneStress(params)),  # elem 19
+            Triangle(nodes[10],nodes[11],nodes[15],PlaneStress(params)),  # elem 16
+            Triangle(nodes[11],nodes[12],nodes[16],PlaneStress(params)),  # elem 17
+            Triangle(nodes[12],nodes[13],nodes[17],PlaneStress(params)),  # elem 18
+            Triangle(nodes[13],nodes[14],nodes[18],PlaneStress(params)),  # elem 19
             #
-            LinearTriangle(nodes[16],nodes[15],nodes[11],PlaneStress(params)),  # elem 20
-            LinearTriangle(nodes[17],nodes[16],nodes[12],PlaneStress(params)),  # elem 21
-            LinearTriangle(nodes[18],nodes[17],nodes[13],PlaneStress(params)),  # elem 22
-            LinearTriangle(nodes[19],nodes[18],nodes[14],PlaneStress(params)),  # elem 23
+            Triangle(nodes[16],nodes[15],nodes[11],PlaneStress(params)),  # elem 20
+            Triangle(nodes[17],nodes[16],nodes[12],PlaneStress(params)),  # elem 21
+            Triangle(nodes[18],nodes[17],nodes[13],PlaneStress(params)),  # elem 22
+            Triangle(nodes[19],nodes[18],nodes[14],PlaneStress(params)),  # elem 23
         )
 
         model.addNode(*nodes)

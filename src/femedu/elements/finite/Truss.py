@@ -1,11 +1,11 @@
 import numpy as np
 
-from .Element import *
-from ..domain.Node import *
+from ..Element import *
+from ...domain.Node import *
 
 class Truss(Element):
     """
-    Representing a single truss element between 2 nodes.
+    Representing a single truss element for finite deformation analysis between 2 nodes.
 
     The element is using the following dofs:
 
@@ -51,7 +51,7 @@ class Truss(Element):
 
     def __str__(self):
         s = \
-"""Truss: {} to {}:
+"""NLTruss: {} to {}:
     material properties: {}  strain:{}   stress:{}  
     internal force: {}""".format( self.nodes[0].getID(), self.nodes[1].getID(),
                             repr(self.material), self.material.getStrain(),
@@ -59,7 +59,7 @@ class Truss(Element):
         return s
 
     def __repr__(self):
-        return "Truss({},{},{})".format( repr(self.nodes[0]),
+        return "NLTruss({},{},{})".format( repr(self.nodes[0]),
                                          repr(self.nodes[1]),
                                          repr(self.material))
 
@@ -98,51 +98,21 @@ class Truss(Element):
         U1 = self.getDisp(1)
         X1 = self.getPos(1)
 
+        lvec = (X1 + U1) - (X0 + U0)
+        ell = np.linalg.norm(lvec)
+        nvec = lvec / ell
 
-        Lvec = (X1 + U1) - (X0 + U0)
-        ell = np.linalg.norm(Lvec)
-        Nvec = Lvec / ell
-
-        eps = Nvec @ (U1 - U0) / ell
+        eps = np.log( ell/self.L0 )
         self.material.setStrain({'xx':eps})
         stress = self.material.getStress()
         sig = stress['xx']
         area   = self.material.getArea()
         self.force = sig * area
 
-        Pe = self.force * Nvec
+        Pe = self.force * nvec
         self.Forces = [-Pe, Pe]
 
         Et = self.material.getStiffness()
-        ke = (Et * area / ell) * np.outer(Nvec, Nvec)
+        n_outer_n = np.outer(nvec, nvec)
+        ke = (Et * area / ell) * n_outer_n + self.force / ell * (np.eye(len(nvec)) - n_outer_n)
         self.Kt = [[ke, -ke], [-ke, ke]]
-
-
-if __name__ == "__main__":
-    # testing the Element class
-    nd0 = Node(0.0, 0.0)
-    nd0.index = 0
-    nd1 = Node(3.0, 2.0)
-    nd1.index = 1
-    params = {'E':100, 'A':1.5, 'fy':1.0e20}
-    elem = Truss(nd0, nd1, Material(params))
-
-    print(nd0)
-    print(nd1)
-
-    print("force =", elem.getAxialForce())
-    print("nodal forces: ", *elem.getForce())
-    print("element stiffness: ", elem.getStiffness())
-
-    # change the nodal displacements
-    nd0.setDisp(.1, .05)
-    nd1.setDisp(.05, .2)
-
-    print(nd0)
-    print(nd1)
-
-    print("force =", elem.getAxialForce())
-    print("nodal forces: ", *elem.getForce())
-    print("element stiffness: ", elem.getStiffness())
-
-

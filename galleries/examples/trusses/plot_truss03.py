@@ -20,7 +20,7 @@ from femedu.examples.Example import *
 
 from femedu.domain.System import *
 from femedu.domain.Node import *
-from femedu.elements.Truss import *
+from femedu.elements.linear.Truss import *
 from femedu.materials.FiberMaterial import *
 
 

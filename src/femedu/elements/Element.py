@@ -334,9 +334,22 @@ class Element(DrawElement):
             self.recorder.addData(data)
 
     def on_converged(self):
+        """
+        This method is called by the solver if convergence has been achieved.
+
+        The element shall perform all necessary state updates,
+        especially inform it's material instances about the necessary updates.
+        """
         pass
 
     def revert(self):
+        """
+        This method is called by the solver if the current load step failed to converge
+        and the system shall be returned to the last converged state.
+
+        The element shall perform all necessary state updates,
+        especially inform it's material instances about the necessary updates.
+        """
         pass
 
 

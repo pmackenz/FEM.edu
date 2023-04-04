@@ -39,7 +39,7 @@ from femedu.examples.Example import *
 
 from femedu.domain.System import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.Quad import *
+from femedu.elements.linear.Quad import *
 from femedu.materials.PlaneStress import *
 
 

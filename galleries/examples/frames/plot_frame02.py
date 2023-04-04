@@ -49,7 +49,7 @@ from femedu.examples.Example import *
 
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.Frame2D import *
+from femedu.elements.finite.Frame2D import *
 from femedu.materials.ElasticSection import *
 
 

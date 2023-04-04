@@ -12,7 +12,7 @@ from femedu.examples.Example import *
 
 from femedu.domain.System import *
 from femedu.domain.Node import *
-from femedu.elements.Beam2D import *
+from femedu.elements.linear.Beam2D import *
 from femedu.materials.ElasticSection import *
 
 class ExampleBeam02(Example):

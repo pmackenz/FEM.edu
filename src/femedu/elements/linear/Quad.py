@@ -1,30 +1,27 @@
 """
-============================
-9-node quadrilateral
-============================
-Full bi-quadratic interpolation
+==============================================
+4-node quadrilateral - small displacement
+==============================================
+incomplete bi-linear interpolation
 
 .. code::
 
-             1
-          x     y
-      x^2   x*y   y^2
-        x^2*y x*y^2
-          x^2*y^2
+         1
+      x     y
+        x*y
 
 
 """
-
 import numpy as np
 from copy import deepcopy
 
-from .Element import *
-from ..domain.Node import *
-from ..utilities import QuadIntegration, QuadShapes
+from ..Element import *
+from ...domain.Node import *
+from ...utilities import QuadIntegration, QuadShapes
 
-class Quad9(Element):
+class Quad(Element):
     """
-    class: representing a plane 9-node quadrilateral
+    class: representing a plane 4-node quadrilateral
 
     This element works as 2D plate, loaded in-plane, and as a 3D membrane element.
 
@@ -32,8 +29,8 @@ class Quad9(Element):
     * For 3D membrane behavior, define nodes as three-dimensional nodes
     """
 
-    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, node8, material):
-        super(Quad9, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7, node8), material)
+    def __init__(self, node0, node1, node2, node3, material):
+        super(Quad, self).__init__((node0, node1, node2, node3), material)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
@@ -63,7 +60,7 @@ class Quad9(Element):
         X  = np.array([ node.getPos() for node in self.nodes ])
 
         # initialization step
-        integrator = QuadIntegration(order=3)
+        integrator = QuadIntegration(order=2)
         xis, wis = integrator.parameters()
 
         gpt = 0
@@ -96,7 +93,7 @@ class Quad9(Element):
 
 
     def __str__(self):
-        s = super(Quad9, self).__str__()
+        s = super(Quad, self).__str__()
         for igpt, material in enumerate(self.material):
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
             s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
@@ -115,13 +112,13 @@ class Quad9(Element):
             * - face ID
               - nodes defining that face
             * - 0
-              - :py:obj:`node 0` to :py:obj:`node 4` to :py:obj:`node 1`
+              - :py:obj:`node 0` to :py:obj:`node 1`
             * - 1
-              - :py:obj:`node 1` to :py:obj:`node 5` to :py:obj:`node 2`
+              - :py:obj:`node 1` to :py:obj:`node 2`
             * - 2
-              - :py:obj:`node 2` to :py:obj:`node 6` to :py:obj:`node 3`
+              - :py:obj:`node 2` to :py:obj:`node 3`
             * - 3
-              - :py:obj:`node 3` to :py:obj:`node 7` to :py:obj:`node 0`
+              - :py:obj:`node 3` to :py:obj:`node 0`
 
 
         :param face: face ID for the laoded face
@@ -132,12 +129,12 @@ class Quad9(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Quad9, self).resetLoads()
+        super(Quad, self).resetLoads()
 
     def updateState(self):
 
         # initialization step
-        integrator = QuadIntegration(order=3)
+        integrator = QuadIntegration(order=2)
 
         nnds = len(self.nodes)
         ndof = self.ndof       # mechanical element
@@ -173,8 +170,8 @@ class Quad9(Element):
             # deformation gradient
             F = (Grad @ xt).T
 
-            # compute Green-Lagrange strain tensor
-            eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
+            # compute small strain tensor
+            eps = 0.5 * ( F + F.T ) - np.eye(self.ndof)
 
             # update the material state
             strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
@@ -186,33 +183,27 @@ class Quad9(Element):
 
             S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
-            # 1st Piola-Kirchhoff stress
-            P = F @ S
-
             # store stress for reporting
-            self.stress[gpt] = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
+            self.stress[gpt] = {'xx':S[0,0], 'xy':S[0,1], 'yx':S[1,0], 'yy':S[1,1]}
 
+            Ones = np.eye(self.ndof)
             # compute kinematic matrices
-            BI = [ np.array([ Grad[0,K]*F[:,0],                       # the XX component
-                              Grad[1,K]*F[:,1],                       # the YY component
-                              Grad[0,K]*F[:,1] + Grad[1,K]*F[:,0] ])  # the XY component is XY + YX ("gammaXY = 2 epsXY")
+            BI = [ np.array([ Grad[0,K]*Ones[:,0],                         # the XX component
+                              Grad[1,K]*Ones[:,1],                         # the YY component
+                              Grad[0,K]*Ones[:,1] + Grad[1,K]*Ones[:,0] ]) # the XY component is XY + YX ("gammaXY = 2 epsXY")
                    for K in range(nnds) ]
 
             # internal forces
             for i, force in enumerate(self.Forces):
-                # self.Forces[i] += P @ Grad[:,i] * wi  # wi already includes J
-                force += P @ Grad[:,i] * wi  # wi already includes J
+                force += S @ Grad[:,i] * wi  # wi already includes J
 
             # tangent stiffness
             Ct = self.material[gpt].getStiffness() * wi
 
-            One = np.eye(2, dtype=np.float64)
             for I, Bi in enumerate(BI):
-                Ti   = Grad[:,I] @ S
                 GCti = Bi.T @ Ct
                 for J, Bj in enumerate(BI):
-                    GIJ = Ti @ Grad[:,J] * wi
-                    Kt[I][J] += GCti @ Bj + GIJ * One
+                    Kt[I][J] += GCti @ Bj
 
             # on to the next integration point
             gpt += 1

@@ -15,9 +15,9 @@ incomplete bi-linear interpolation
 import numpy as np
 from copy import deepcopy
 
-from .Element import *
-from ..domain.Node import *
-from ..utilities import QuadIntegration, QuadShapes
+from ..Element import *
+from ...domain.Node import *
+from ...utilities import QuadIntegration, QuadShapes
 
 class Quad(Element):
     """

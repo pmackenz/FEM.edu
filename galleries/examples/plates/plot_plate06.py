@@ -17,7 +17,7 @@ from femedu.examples.Example import *
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
 from femedu.solver.SparseSolver import *
-from femedu.elements.LinearTriangle import *
+from femedu.elements.linear.Triangle import *
 from femedu.materials.PlaneStress import *
 from femedu.mesher import *
 
@@ -99,7 +99,7 @@ class ExamplePlate06(Example):
         )
 
         mesher = PatchMesher(model, pts[0], pts[1], pts[2], pts[3])
-        nodes, elements = mesher.triangleMesh(Nx, Ny, LinearTriangle, PlaneStress(params))
+        nodes, elements = mesher.triangleMesh(Nx, Ny, Triangle, PlaneStress(params))
 
         # define support(s)
 

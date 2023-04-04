@@ -1,8 +1,8 @@
 import numpy as np
 
-from .Element import *
-from ..materials.Material import *
-from ..domain.Node import *
+from ..Element import *
+from ...materials.Material import *
+from ...domain.Node import *
 
 class Beam2D(Element):
     """
@@ -63,6 +63,7 @@ class Beam2D(Element):
         self.Forces   = [np.zeros(ndof), np.zeros(ndof)]
         self.Kt       = [[np.zeros((ndof, ndof)), np.zeros((ndof, ndof))],
                          [np.zeros((ndof, ndof)), np.zeros((ndof, ndof))]]
+        self.internal_forces = {'fi':0.0, 'Vi':0.0, 'Mi':0.0, 'fj':0.0, 'Vj':0.0, 'Mj':0.0}
 
     def __str__(self):
         s  = "Beam2D: {} to {}:\n".format( self.nodes[0].getID(), self.nodes[1].getID())
@@ -146,13 +147,13 @@ class Beam2D(Element):
         Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
         """
 
-        Xi = self.nodes[0].getPos()
-        Xj = self.nodes[1].getPos()
+        Xi = self.getPos(0)
+        Xj = self.getPos(1)
 
         # 0 ... uy
         # 1 ... theta
-        dispi = self.nodes[0].getDisp()
-        dispj = self.nodes[1].getDisp()
+        dispi = self.getDisp(0)
+        dispj = self.getDisp(1)
 
         # compute local coordinate system
         L = Xj[0] - Xi[0]
@@ -234,16 +235,38 @@ class Beam2D(Element):
         self.Kt = np.array( [[KtII, KtIJ],[KtJI, KtJJ]] )
 
         # internal forces at nodes
-        self.internal_forces = {'fi':0.0, 'Vi': Vi, 'Mi':-Mi,
-                                'fj':0.0, 'Vj':-Vj, 'Mj': Mj,
-                                'Pw':0, 'Mw':0}
+        if 'Pw' in self.internal_forces:
+            Pw = self.internal_forces['Pw']
+        else:
+            Pw = 0.0
+
+        if 'Mw' in self.internal_forces:
+            Mw = self.internal_forces['Mw']
+        else:
+            Mw = 0.0
+        self.internal_forces = {'fi':self.force, 'Vi': Vi, 'Mi':-Mi,
+                                'fj':self.force, 'Vj':-Vj, 'Mj': Mj,
+                                'Pw':Pw, 'Mw':Mw}
+
+    def computeSurfaceLoads(self):
+
+        Xi = self.getPos(0)
+        Xj = self.getPos(1)
+
+        # compute local coordinate system
+        Nvec = Xj - Xi
+        L = np.linalg.norm(Nvec)
+        Nvec /= L
+        Svec = np.array([[0,-1],[1,0]]) @ Nvec
 
         # .. applied element load (reference load)
         if self.distributed_load:
             Pw = self.distributed_load * L / 2.
             Mw = Pw * L / 6.
 
-            Pi = np.array([Pw,  Mw])
+            #Pi = np.r_[Pw * Svec, np.array([ Mw])]
+            #Pj = np.r_[Pw * Svec, np.array([-Mw])]
+            Pi = np.array([Pw, Mw])
             Pj = np.array([Pw, -Mw])
             self.Loads = (Pi, Pj)
 
@@ -253,34 +276,4 @@ class Beam2D(Element):
     # prepare for removal
     def getAxialForce(self):
         raise DeprecationWarning
-
-
-
-if __name__ == "__main__":
-
-
-    # testing the Element class
-    nd0 = Node(0.0, 0.0)
-    nd1 = Node(3.0, 0.0)
-    params = {'E':100, 'A':1.5, 'I':1.0}
-    elem = Beam2D(nd0, nd1, ElasticSection(params))
-
-    print(nd0)
-    print(nd1)
-
-    print("force =", elem.getAxialForce())
-    print("nodal forces: ", *elem.getForce())
-    print("element stiffness: ", elem.getStiffness())
-
-    # change the nodal displacements
-    nd0.setDisp(.1, .05)
-    nd1.setDisp(.05, .2)
-
-    print(nd0)
-    print(nd1)
-
-    print("force =", elem.getAxialForce())
-    print("nodal forces: ", *elem.getForce())
-    print("element stiffness: ", elem.getStiffness())
-
 

@@ -129,10 +129,10 @@ class ElementPlotter(AbstractPlotter):
 
 
             if 'show_loads' in kwargs and kwargs['show_loads']:
-                pass
+                self.addForces(axs, loads=1)
 
             if 'show_reactions' in kwargs and kwargs['show_reactions']:
-                pass
+                self.addForces(axs, reactions=1)
 
             if 'title' in kwargs:
                 axs.set_title(kwargs['title'])
@@ -383,12 +383,18 @@ class ElementPlotter(AbstractPlotter):
                       length_includes_head=True,
                       head_width=headWidth, head_length=headLength)
 
-    def addForces(self, axs):
+    def addForces(self, axs, loads=False, reactions=False):
         """
         add nodal forces to the plot shown in **axs**
 
         :param axs: axis on which to plot
         """
+        if loads:
+            pass
+
+        if reactions:
+            pass
+
         print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
         return
 

@@ -1,8 +1,8 @@
 import numpy as np
 
-from .Element import *
-from ..materials.Material import *
-from ..domain.Node import *
+from ..Element import *
+from ...materials.Material import *
+from ...domain.Node import *
 
 class Frame2D(Element):
     """

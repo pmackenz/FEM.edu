@@ -10,8 +10,8 @@ from femedu.examples.Example import *
 
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.LinearTriangle import *
-from femedu.elements.Quad import *
+from femedu.elements.linear.Triangle import *
+from femedu.elements.linear.Quad import *
 from femedu.materials.PlaneStress import *
 from femedu.mesher import *
 
@@ -88,7 +88,7 @@ class ExamplePlate04(Example):
                                  )
         mesher2.shift(1.25*Lx, Ly/2)
         #nodes2, elements2 = mesher2.triangleMesh(Nx, LinearTriangle, PlaneStress(params))
-        nodes2, elements2 = mesher2.quadMesh(Nx, LinearTriangle, PlaneStress(params))
+        nodes2, elements2 = mesher2.quadMesh(Nx, Triangle, PlaneStress(params))
 
         nodes    = nodes1    + nodes2
         elements = elements1 + elements2

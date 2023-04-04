@@ -31,15 +31,27 @@ class NewtonRaphsonSolver(Solver):
             normR = self.checkResiduum(verbose, force_only=False)
 
             if normR < TOL:
+                # we achieved convergence
+                #
+                # now broadcast that we can switch to this converged state
+                self.on_converged()
+
+                # time to add the information to the recorded data
+                if self.record:
+                    self.recordThisStep()
+
                 break
 
             # Solve for equilibrium
             self.solveSingleStep()
 
-        if self.record:
-            self.recordThisStep()
-
         print('+')
+
+        if normR > TOL:
+            # we failed to converge
+            #
+            # back to safety: revert to the last converged step
+            self.revert()
 
         return normR
 

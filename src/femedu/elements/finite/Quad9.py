@@ -1,8 +1,8 @@
 """
-======================================
-8-node serendipity quadrilateral
-======================================
-incomplete bi-quadratic interpolation
+============================
+9-node quadrilateral
+============================
+Full bi-quadratic interpolation
 
 .. code::
 
@@ -10,19 +10,21 @@ incomplete bi-quadratic interpolation
           x     y
       x^2   x*y   y^2
         x^2*y x*y^2
+          x^2*y^2
 
 
 """
+
 import numpy as np
 from copy import deepcopy
 
-from .Element import *
-from ..domain.Node import *
-from ..utilities import QuadIntegration, QuadShapes
+from ..Element import *
+from ...domain.Node import *
+from ...utilities import QuadIntegration, QuadShapes
 
-class Quad8(Element):
+class Quad9(Element):
     """
-    class: representing a plane 8-node quadrilateral
+    class: representing a plane 9-node quadrilateral
 
     This element works as 2D plate, loaded in-plane, and as a 3D membrane element.
 
@@ -30,8 +32,8 @@ class Quad8(Element):
     * For 3D membrane behavior, define nodes as three-dimensional nodes
     """
 
-    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, material):
-        super(Quad8, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7), material)
+    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, node8, material):
+        super(Quad9, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7, node8), material)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
@@ -70,8 +72,8 @@ class Quad8(Element):
 
         for xi, wi in zip(xis, wis):
 
-            dphi_ds = interpolation.shape(1, *xi, n=(1,0), serendipity=True)
-            dphi_dt = interpolation.shape(1, *xi, n=(0,1), serendipity=True)
+            dphi_ds = interpolation.shape(1, *xi, n=(1,0))
+            dphi_dt = interpolation.shape(1, *xi, n=(0,1))
             Grad = np.vstack((dphi_ds, dphi_dt))
 
             # reference configuration
@@ -94,7 +96,7 @@ class Quad8(Element):
 
 
     def __str__(self):
-        s = super(Quad8, self).__str__()
+        s = super(Quad9, self).__str__()
         for igpt, material in enumerate(self.material):
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
             s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
@@ -130,7 +132,7 @@ class Quad8(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Quad8, self).resetLoads()
+        super(Quad9, self).resetLoads()
 
     def updateState(self):
 
