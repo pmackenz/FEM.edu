@@ -8,5 +8,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: femedu.elements.Frame2D
+.. automodule:: femedu.elements.finite.Frame2D
   :members:

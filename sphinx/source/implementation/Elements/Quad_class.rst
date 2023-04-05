@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: femedu.elements.Quad
+.. automodule:: femedu.elements.finite.Quad
   :members:
 

@@ -1,4 +1,4 @@
-LinearTriangle class
+Triangle class
 ==========================
 
 Coordinate-free formulation for a finite deformation bi-linear triangle.
@@ -47,5 +47,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: femedu.elements.LinearTriangle
+.. automodule:: femedu.elements.linear.Triangle
   :members:

@@ -309,6 +309,17 @@ class Node():
             msg = f"Element {elem} not in dof_map for node {self.ID}"
             raise TypeError(msg)
 
+    def getIdx4DOFs(self, dofs=[]):
+        idx = []
+        for dof in dofs:
+            if dof in self.dofs:
+                idx.append(self.dofs[dof])
+            else:
+                msg = f"dof {dof} not present at node {self.ID}"
+                raise TypeError(msg)
+
+        return np.array(idx, dtype=np.int)
+
     def addTransformation(self, T):
         """
         Attach a transformation object to this node.

@@ -20,6 +20,8 @@ class AbstractPlotter():
         self.nodes     = []  # node pointer list
         self.factor    = 0.0 # displacement factor
         self.variable  = ''  # code for state variable to plot
+        self.loads     = []  # list of nodal applied loads (from nodes and elements)
+        self.reactions = []  # list of nodal reactions (from residual)
 
     def __str__(self):
         return "{}() object".format(self.__class__.__name__)
@@ -56,10 +58,22 @@ class AbstractPlotter():
     def setReactions(self, R):
         """
 
-        :param R: array of nodal force vectors
+        :param R: list or tuple of nodal force vectors
         """
-        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
-        raise NotImplementedError(msg)
+        self.reactions = R
+
+        # msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        # raise NotImplementedError(msg)
+
+    def setNodalLoads(self, P):
+        """
+
+        :param P: list or tuple of nodal force vectors
+        """
+        self.loads = P
+
+        # msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        # raise NotImplementedError(msg)
 
     def displacementPlot(self, factor=1.0, file=None):
         """

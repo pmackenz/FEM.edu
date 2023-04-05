@@ -379,3 +379,52 @@ class Solver():
         else:
             plt.show()
 
+    def getNodalReactions(self, dofs=None, cut_off=1.0e-6):
+
+        self.assemble(force_only=True)
+
+        R = []
+
+        # assemble loads
+        for node in self.nodes:
+
+            reaction = np.zeros(3)
+
+            if 'ux' in node.dofs:
+                reaction[0] = self.R[node.start + node.getIdx4DOFs(dofs=['ux'])]
+            if 'uy' in node.dofs:
+                reaction[1] = self.R[node.start + node.getIdx4DOFs(dofs=['uy'])]
+            if 'rz' in node.dofs:
+                reaction[2] = self.R[node.start + node.getIdx4DOFs(dofs=['rz'])]
+
+            if np.linalg.norm(reaction) <= cut_off:
+                reaction = np.zeros_like(reaction)
+
+            R.append(reaction)
+
+        return R
+
+
+    def getNodalLoads(self, dofs=None, cut_off=1.0e-6):
+        R = {}
+
+        # collect nodal loads
+        for node in self.nodes:
+            R[node] = node.getLoad(dof_list=dofs, apply_load_factor=True)
+
+        # Element Loop: assemble element forces and stiffness
+        for element in self.elements:
+            Pe = element.getLoad()      # Element State Update occurs here
+            for (i,ndI) in enumerate(element.nodes):
+                if isinstance(Pe[i], np.ndarray):
+                    R[ndI] += self.loadfactor * Pe[i]
+
+        Lds = []
+        for node in self.nodes:
+            force = R[node]
+            if np.linalg.norm(force) <= cut_off:
+                force = np.zeros_like(force)
+            Lds.append(force)
+
+        return Lds
+

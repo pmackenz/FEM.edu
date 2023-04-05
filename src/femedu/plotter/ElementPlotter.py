@@ -22,13 +22,6 @@ class ElementPlotter(AbstractPlotter):
     def __init__(self):
         super(ElementPlotter, self).__init__()
 
-    def setReactions(self, R):
-        """
-
-        :param R: array of nodal force vectors
-        """
-        self.reactions = np.array(R)
-
     def displacementPlot(self, factor=1.0, filename=None, modeshape=False, **kwargs):
         """
         Create a deformed system plot
@@ -79,7 +72,7 @@ class ElementPlotter(AbstractPlotter):
                             axs.plot(x, y, z, linewidth=2, linestyle='-', color='r')
 
             if self.reactions:
-                self.addForces(axs)
+                self.addForces(axs, factor=factor)
 
             self.set_axes_equal(axs)
 
@@ -129,10 +122,10 @@ class ElementPlotter(AbstractPlotter):
 
 
             if 'show_loads' in kwargs and kwargs['show_loads']:
-                self.addForces(axs, loads=1)
+                self.addForces(axs, loads=1, factor=factor)
 
             if 'show_reactions' in kwargs and kwargs['show_reactions']:
-                self.addForces(axs, reactions=1)
+                self.addForces(axs, reactions=1, factor=factor)
 
             if 'title' in kwargs:
                 axs.set_title(kwargs['title'])
@@ -140,8 +133,8 @@ class ElementPlotter(AbstractPlotter):
                 axs.set_title(f"Deformed System (magnification={factor:.2f})")
 
             axs.set_aspect('equal')
-            axs.set_xmargin(0.10)
-            axs.set_ymargin(0.10)
+            axs.set_xmargin(0.20)
+            axs.set_ymargin(0.20)
             axs.set_axis_off()
 
         if filename:
@@ -383,34 +376,45 @@ class ElementPlotter(AbstractPlotter):
                       length_includes_head=True,
                       head_width=headWidth, head_length=headLength)
 
-    def addForces(self, axs, loads=False, reactions=False):
+    def addForces(self, axs, loads=False, reactions=False, factor=0.0):
         """
         add nodal forces to the plot shown in **axs**
 
         :param axs: axis on which to plot
         """
-        if loads:
-            pass
+        if loads and len(self.nodes) == len(self.loads):
 
-        if reactions:
-            pass
+            X=[]
+            Y=[]
+            Fx=[]
+            Fy=[]
 
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        return
-
-
-        if len(self.reactions) == len(self.vertices):
-            Fx = []
-            Fy = []
-            X = []
-            Y = []
-            for (point, force) in zip(self.vertices, self.reactions):
+            for (node, force) in zip(self.nodes, self.loads):
                 if np.linalg.norm(force) > 1.0e-3:
+                    point = node.getDeformedPos(factor=factor)
+                    X.append(point[0])
+                    Y.append(point[1])
+                    Fx.append(force[0])
+                    Fy.append(force[1])
+
+            axs.quiver(X,Y, Fx, Fy, color='blue')
+
+        if reactions and len(self.nodes) == len(self.reactions):
+
+            X=[]
+            Y=[]
+            Fx=[]
+            Fy=[]
+
+            for (node, force) in zip(self.nodes, self.reactions):
+                if np.linalg.norm(force) > 1.0e-3:
+                    point = node.getDeformedPos(factor=factor)
                     X.append(point[0])
                     Y.append(point[1])
                     Fx.append(-force[0])
                     Fy.append(-force[1])
 
-            axs.quiver(X,Y, Fx, Fy, color='green')
+            axs.quiver(X,Y, Fx, Fy, color='green', pivot='tip')
+
 
 

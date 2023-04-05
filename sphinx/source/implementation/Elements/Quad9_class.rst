@@ -8,6 +8,6 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: femedu.elements.Quad9
+.. automodule:: femedu.elements.finite.Quad9
   :members:
 

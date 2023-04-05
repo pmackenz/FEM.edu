@@ -8,7 +8,6 @@ __all__ = (
     "Quad8",
     "Quad9",
     "Truss",
-    "Beam2D",
     "Frame2D",
 )
 

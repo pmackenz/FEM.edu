@@ -46,7 +46,7 @@ Derived Classes
     Truss_class.rst
     Beam2D_class.rst
     Frame2D_class.rst
-    LinearTriangle_class.rst
+    Triangle_class.rst
     Quad_class.rst
     Quad8_class.rst
     Quad9_class.rst

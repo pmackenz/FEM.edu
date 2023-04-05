@@ -183,7 +183,7 @@ class ExampleFrame03(Example):
 
         model.report()
 
-        model.plot(factor=1.0, filename="frame3_deformed.png")
+        model.plot(factor=1.0, filename="frame3_deformed.png", show_loads=1, show_reactions=1)
 
         fig, ax = plt.subplots()
 

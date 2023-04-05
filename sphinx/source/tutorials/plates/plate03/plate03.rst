@@ -50,7 +50,7 @@ A uniform horizontal tension is applied using surface loads.
    :lineno-start: 106
    :lines: 142-150
 
-See :doc:`../plate02/plate02` for another, simpler example, and :doc:`../../../implementation/Elements/LinearTriangle_class` for the definition of faces for this element.
+See :doc:`../plate02/plate02` for another, simpler example, and :doc:`../../../implementation/Elements/Triangle_class` for the definition of faces for this element.
 
 
 The actual computation is as simple as a single call to the solver:

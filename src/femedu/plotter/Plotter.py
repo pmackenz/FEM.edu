@@ -37,9 +37,9 @@ class Plotter(AbstractPlotter):
     def setReactions(self, R):
         """
 
-        :param R: array of nodal force vectors
+        :param R: list or tuple of nodal force vectors
         """
-        self.reactions = np.array(R)
+        self.reactions = R
 
     def displacementPlot(self, file=None, **kwargs):
         """

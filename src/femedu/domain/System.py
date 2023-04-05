@@ -321,7 +321,7 @@ class System():
 
 # ------------ plot methods -----------------
 
-    def plot(self, factor=1.0, **kwargs):
+    def plot(self, factor=1.0, show_reactions=True, show_loads=True, force_limit=1.0e-6, **kwargs):
         """
         Create mesh plot showing the undeformed and the deformed system
 
@@ -329,14 +329,25 @@ class System():
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
         :param factor: deformation magnification factor
+        :param show_reactions: plot reaction forces if this evaluates to **True**
+        :param show_loads:  plot nodal load vectors if this evaluates to **True**
+        :param force_limit: don't plot forces smaller than this value
         :param filename:  filename (str)
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
 
-        # ndof = len(self.Rsys)
-        # R = self.Rsys.copy().reshape((ndof//2, 2))
-        # self.plotter.setReactions(R)
+        if show_loads:
+
+            kwargs['show_loads'] = True
+            R = self.solver.getNodalLoads(cut_off=force_limit)
+            self.plotter.setNodalLoads(R)
+
+        if show_reactions:
+
+            kwargs['show_reactions'] = True
+            R = self.solver.getNodalReactions(cut_off=force_limit)
+            self.plotter.setReactions(R)
 
         self.plotter.displacementPlot(factor=factor, **kwargs)
 

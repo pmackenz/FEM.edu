@@ -100,35 +100,22 @@ class Triangle(Element):
         # deformation gradient
         F = np.outer(gs, Gs) + np.outer(gt, Gt)
 
-        convective_strain = 0.5 * (gIJ - self.GIJ)
-        almansi_strain = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(np.size(gs)) )
-
-        # Dphi0_inv = np.linalg.inv(self.gcov.T)
-        # val = Dphi0_inv.T @ convective_strain @ Dphi0_inv  # same as almansi_strain
-
-        eps = almansi_strain
+        # strain
+        eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
 
         # update the material state
-
         strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
-
         self.material.setStrain(strain)
 
-        # 2nd Piola-Kirchhoff stress
-        stress = self.material.getStress()
+        # stress
+        self.stress = self.material.getStress()
 
-        S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
-
-        # 1st Piola-Kirchhoff stress
-        P = F @ S
-
-        # store stress for reporting
-        self.stress = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
+        S = np.array( [[self.stress['xx'],self.stress['xy']],[self.stress['xy'],self.stress['yy']]] )
 
         # tractions
-        ts = P @ Gs
-        tt = P @ Gt
-        tu = P @ Gu
+        ts = S @ Gs
+        tt = S @ Gt
+        tu = S @ Gu
 
         # initialize arrays
         gx = Gs[0] * gs + Gt[0] * gt
@@ -154,13 +141,10 @@ class Triangle(Element):
         Ct = self.material.getStiffness() * self.area
 
         Kt = []
-        One = np.eye(2, dtype=np.float64)
         for Gi, Bi in zip(GI, BI):
             Krow = []
-            Ti = Gi @ S
             for Gj, Bj in  zip(GI, BI):
-                GIJ = Ti @ Gj * self.area
-                Krow.append( Bi.T @ Ct @ Bj + GIJ * One)
+                Krow.append( Bi.T @ Ct @ Bj )
             Kt.append( Krow )
 
         self.Kt = Kt

@@ -92,7 +92,7 @@ class ExampleBeam01(Example):
         model.report()
 
         # create plots
-        model.plot(factor=10., filename="beam01_deformed.png", show_bc=1)
+        model.plot(factor=10., filename="beam01_deformed.png", show_bc=1, show_reactions=1)
 
         model.beamValuePlot('V', filename="beam01_shear.png")
         model.beamValuePlot('M', filename="beam01_moment.png")
