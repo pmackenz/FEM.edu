@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
+from matplotlib.patches import Arc, FancyArrow
 import sys
 
 from .AbstractPlotter import *
@@ -121,10 +122,10 @@ class ElementPlotter(AbstractPlotter):
                         axs.plot(pos[0],pos[1],'og',lw=1,ms=d)
 
 
-            if 'show_loads' in kwargs and kwargs['show_loads']:
+            if 'show_loads' in kwargs and kwargs['show_loads'] and not modeshape:
                 self.addForces(axs, loads=1, factor=factor)
 
-            if 'show_reactions' in kwargs and kwargs['show_reactions']:
+            if 'show_reactions' in kwargs and kwargs['show_reactions'] and not modeshape:
                 self.addForces(axs, reactions=1, factor=factor)
 
             if 'title' in kwargs:
@@ -397,6 +398,24 @@ class ElementPlotter(AbstractPlotter):
                     Fx.append(force[0])
                     Fy.append(force[1])
 
+                    if force.size > 2:
+                        M = force[2]
+                        w = 10
+                        if M<0:
+                            axs.add_artist( Arc((point[0],point[1]), w, w, 45., 0.0, 270.,
+                                                color='green') )
+                            axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(45.)),
+                                                        point[1]+0.5*w*np.sin(np.radians(45.)),
+                                                        2., -2., length_includes_head=True,
+                                                        head_length=3, head_width=2, color='blue') )
+                        else:
+                            axs.add_artist( Arc((point[0],point[1]), w, w, 225., 0.0, 270.,
+                                                color='green') )
+                            axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(135.)),
+                                                        point[1]+0.5*w*np.sin(np.radians(135.)),
+                                                        -2., -2., length_includes_head=True,
+                                                        head_length=3, head_width=2, color='blue') )
+
             axs.quiver(X,Y, Fx, Fy, color='blue')
 
         if reactions and len(self.nodes) == len(self.reactions):
@@ -413,6 +432,24 @@ class ElementPlotter(AbstractPlotter):
                     Y.append(point[1])
                     Fx.append(-force[0])
                     Fy.append(-force[1])
+
+                    if force.size > 2:
+                        M = force[2]
+                        w = 10
+                        if M>0:
+                            axs.add_artist( Arc((point[0],point[1]), w, w, 45., 0.0, 270.,
+                                                color='green') )
+                            axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(45.)),
+                                                        point[1]+0.5*w*np.sin(np.radians(45.)),
+                                                        2., -2., length_includes_head=True,
+                                                        head_length=3, head_width=2, color='green') )
+                        else:
+                            axs.add_artist( Arc((point[0],point[1]), w, w, 225., 0.0, 270.,
+                                                color='green') )
+                            axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(135.)),
+                                                        point[1]+0.5*w*np.sin(np.radians(135.)),
+                                                        -2., -2., length_includes_head=True,
+                                                        head_length=3, head_width=2, color='green') )
 
             axs.quiver(X,Y, Fx, Fy, color='green', pivot='tip')
 
