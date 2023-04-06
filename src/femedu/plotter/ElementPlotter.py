@@ -398,7 +398,7 @@ class ElementPlotter(AbstractPlotter):
                     Fx.append(force[0])
                     Fy.append(force[1])
 
-                    if force.size > 2:
+                    if force.size > 2 and np.abs(force[2])>1.e-3:
                         M = force[2]
                         w = 10
                         if M<0:
@@ -433,7 +433,7 @@ class ElementPlotter(AbstractPlotter):
                     Fx.append(-force[0])
                     Fy.append(-force[1])
 
-                    if force.size > 2:
+                    if force.size > 2 and np.abs(force[2])>1.e-3:
                         M = force[2]
                         w = 10
                         if M>0:

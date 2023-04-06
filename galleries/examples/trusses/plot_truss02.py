@@ -88,9 +88,11 @@ class ExampleTruss02(Example):
         nd7.setLoad((P,), ('uy',))
         nd8.setLoad((P,), ('uy',))
 
-        model.plot(factor=1.,  filename="truss02_undeformed.png", title="Undeformed System")
+        model.setLoadFactor(0.0)
+        model.plot(factor=1., filename="truss02_undeformed.png", title="Undeformed System", show_bc=1)
 
         # analyze the model
+        model.setLoadFactor(1.0)
         model.solve()
 
         # write out report

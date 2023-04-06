@@ -78,6 +78,7 @@ class System():
         """
         for newNode in nodes:
             if newNode not in self.nodes:
+                newNode.setLoadFactor(self.loadfactor)
                 self.nodes.append(newNode)
             else:
                 print('addNode: node {} already exists in system and was not added again'.format(newNode.getID()))
@@ -97,6 +98,7 @@ class System():
         :param newElement: an :code:`Element` object
         """
         for elem in newElements:
+            elem.setLoadFactor(self.loadfactor)
             self.elements.append(elem)
 
     def addConstraint(self, *newConstraints):
