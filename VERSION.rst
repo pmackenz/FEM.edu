@@ -1,5 +1,5 @@
 .. list-table::
 
-    * - **Version 0.9.2-pre**
+    * - **Version 1.0.0**
       - **last updated:** |today|
 
