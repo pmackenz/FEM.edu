@@ -5,7 +5,7 @@ class SPconstraint(Constraint):
     wrapper for a single point constraint
     """
 
-    def __init__(self, node, dofs, a, u0, u1=0, lam0=0):
+    def __init__(self, node, dofs, a, u0, u1=0, lam0=0, **kwargs):
         """
         :param node: one :py:class:`Node` object
         :param dofs: list of dof codes for which to apply those constraints

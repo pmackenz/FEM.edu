@@ -94,7 +94,7 @@ class NewtonRaphsonSolver(Solver):
 
         # update nodal displacements
         for node in self.nodes:
-            idxK = node.start + np.arange(node.ndofs)
+            idxK = node.lead.start + np.arange(node.ndofs)
             node._updateDisp(dU[idxK])
 
     def assemble(self, force_only=False):

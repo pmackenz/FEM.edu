@@ -33,3 +33,17 @@ class Face3D(Faces):
 
         super(Face3D, self).initialize()
 
+    def isFace(self, X, N):
+        """
+        Implementation of the test function.
+
+        :param X: position vector for a point
+        :type X: np.array
+        :param N: outward normal vector at **X**
+        :type N: np.array
+        :return: **True** if **X** and **N** match this face. **False** otherwise.
+        """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
+
+

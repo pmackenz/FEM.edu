@@ -48,3 +48,20 @@ class Faces():
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
+
+    def isFace(self, X, N):
+        """
+        Abstract interface for test function.
+
+        .. note::
+
+            This method needs to be implemented by every derived class.
+
+        :param X: position vector for a point
+        :type X: np.array
+        :param N: outward normal vector at **X**
+        :type N: np.array
+        :return: **True** if **X** and **N** match this face. **False** otherwise.
+        """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)

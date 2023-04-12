@@ -146,8 +146,9 @@ class Solver():
         # compute size parameters
         ndof = 0
         for node in self.nodes:
-            node.setStart(ndof)
-            ndof += node.ndofs
+            if node.isLead():
+                node.setStart(ndof)
+                ndof += node.ndofs
 
         for constraint in self.constraints:
             constraint.setStart(ndof)
@@ -169,14 +170,14 @@ class Solver():
             Fe = element.getForce()     # Element State Update occurs here
             Pe = element.getLoad()      # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
-                idxK = ndI.start + ndI.getIdx4Element(element)
+                idxK = ndI.lead.start + ndI.getIdx4Element(element)
                 if isinstance(Pe[i], np.ndarray):
                     Rsys[idxK] -= Fe[i] - self.loadfactor * Pe[i]
                 else:
                     Rsys[idxK] -= Fe[i]
                 if not force_only:
                     for (j,ndJ) in enumerate(element.nodes):
-                        idxM = ndJ.start + ndJ.getIdx4Element(element)
+                        idxM = ndJ.lead.start + ndJ.getIdx4Element(element)
                         Ksys[idxK[:, np.newaxis], idxM] += element.Kt[i][j]
 
         # apply boundary conditions
@@ -184,7 +185,7 @@ class Solver():
             for node in self.nodes:
                 for dof in node.dofs:
                     if node.isFixed(dof):
-                        idx = node.start + node.dofs[dof]
+                        idx = node.lead.start + node.dofs[dof]
                         Rsys[idx]      = 0.0
                         Ksys[:, idx]   = np.zeros(ndof)   # the range might need adjustment for constraints
                         Ksys[idx, :]   = np.zeros(ndof)   # the range might need adjustment for constraints
@@ -391,11 +392,11 @@ class Solver():
             reaction = np.zeros(3)
 
             if 'ux' in node.dofs:
-                reaction[0] = self.R[node.start + node.getIdx4DOFs(dofs=['ux'])]
+                reaction[0] = self.R[node.lead.start + node.getIdx4DOFs(dofs=['ux'])]
             if 'uy' in node.dofs:
-                reaction[1] = self.R[node.start + node.getIdx4DOFs(dofs=['uy'])]
+                reaction[1] = self.R[node.lead.start + node.getIdx4DOFs(dofs=['uy'])]
             if 'rz' in node.dofs:
-                reaction[2] = self.R[node.start + node.getIdx4DOFs(dofs=['rz'])]
+                reaction[2] = self.R[node.lead.start + node.getIdx4DOFs(dofs=['rz'])]
 
             if np.linalg.norm(reaction) <= cut_off:
                 reaction = np.zeros_like(reaction)

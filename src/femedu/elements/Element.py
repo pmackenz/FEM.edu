@@ -28,7 +28,7 @@ class Element(DrawElement):
         self.nodes    = nodes
         self.transforms = [ None for nd in self.nodes ]
         self.material = material
-        self.dof_idx  = {}
+        self.dof_idx  = {}   # marked for removal
 
         self._requestDofs( tuple() )
 
@@ -294,7 +294,7 @@ class Element(DrawElement):
         """
         for node in self.nodes:
             dof_idx = node.request(dof_requests, self)
-            self.dof_idx[node] = dof_idx
+            self.dof_idx[node] = dof_idx   # marked for removal
 
     def getDofs(self):
         """

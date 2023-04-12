@@ -102,10 +102,10 @@ class Truss(Element):
         ell = np.linalg.norm(lvec)
         nvec = lvec / ell
 
-        eps = np.log( ell/self.L0 )
+        eps    = np.log( ell/self.L0 )
         self.material.setStrain({'xx':eps})
         stress = self.material.getStress()
-        sig = stress['xx']
+        sig    = stress['xx']
         area   = self.material.getArea()
         self.force = sig * area
 

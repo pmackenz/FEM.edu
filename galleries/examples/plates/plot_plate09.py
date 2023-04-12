@@ -26,7 +26,7 @@ class ExamplePlate09(Example):
     # sphinx_gallery_start_ignore
     def docString(self):
         s = """
-    ## Patch test for triangular plate under in-plane loading
+    ## Patch test for quadrilateral plate elements under in-plane loading
 
     The patch test is an empirical minimum test which every finite element has to pass to ensure convergence with mesh refinement.
 
