@@ -99,4 +99,41 @@ class Face2D(Faces):
 
         return forces  # this may need a different approach to account for the global load factor
 
+    def isFace(self, X, N):
+        """
+        Implementation of the test function.
+
+        :param X: position vector for a point
+        :type X: np.array
+        :param N: outward normal vector at **X**
+        :type N: np.array
+        :return: **True** if **X** and **N** match this face. **False** otherwise.
+        """
+        Lvec = self.nodes[-1].getPos() - self.nodes[0].getPos()
+        L = np.linalg.norm(Lvec)
+
+        if self.num_nodes == 2:
+            xm = 0.5 * (self.nodes[-1].getPos() + self.nodes[0].getPos())
+            Nvec = self.area[0]
+        elif self.num_nodes == 3:
+            xm = self.nodes[1].getPos()
+            Nvec = self.area[0] + self.area[-1]
+        else:
+            msg = f"Face2D does not understand {self.num_nodes} nodes on one surface"
+            raise ValueError(msg)
+
+        # approximate projection
+        area = np.linalg.norm(Nvec)
+        Nvec /= area
+        s = 2.0 * (X-xm) @ Lvec / (Lvec @ Lvec)
+        t = (X-xm) @ Nvec
+
+        dir = N @ Nvec / np.linalg.norm(N)
+        if dir > 0.98:
+            pass
+
+
+
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 
