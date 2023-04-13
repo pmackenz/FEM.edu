@@ -252,7 +252,7 @@ class Node():
         else:
             raise TypeError("no pushed displacement data available")
 
-    def getDisp(self, caller=None, dofs=None, **kwargs):
+    def getDisp(self, dofs=None, caller=None, **kwargs):
         """
         return a vector (nd.array) of (generalized) displacements.
 
@@ -298,6 +298,8 @@ class Node():
             else:
                 # we do not know who is requesting displacements, so provide all requested or ALL if no dofs were specified.
                 if dofs:
+                    if isinstance(dofs,str):
+                        dofs = [dofs]
                     ans = []
                     for dof in dofs:
                         if dof in self.dofs:
@@ -310,7 +312,7 @@ class Node():
                 return np.array(ans)
 
         else:
-            self.lead.getDisp(caller=caller, dofs=dofs, **kwargs)
+            self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
 
     def getPos(self, caller=None, **kwargs):
         """
@@ -358,7 +360,7 @@ class Node():
     def getIdx4Element(self, elem):
         if self.is_lead:
             if elem in self.dof_maps:
-                return np.array(self.dof_maps[elem], dtype=np.int)
+                return np.array(self.dof_maps[elem], dtype=int)
             else:
                 msg = f"Element {elem} not in dof_map for node {self.ID}"
                 raise TypeError(msg)
@@ -375,7 +377,7 @@ class Node():
                     msg = f"dof {dof} not present at node {self.ID}"
                     raise TypeError(msg)
 
-            return np.array(idx, dtype=np.int)
+            return np.array(idx, dtype=int)
 
         else:
             return self.lead.getIdx4DOFs(dofs=dofs)

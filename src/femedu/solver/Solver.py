@@ -161,7 +161,7 @@ class Solver():
 
         # assemble loads
         for node in self.nodes:
-            if node.hasLoad():
+            if node.isLead() and node.hasLoad():
                 idx = node.start + np.arange(node.ndofs)
                 Rsys[idx] += node.getLoad() * self.loadfactor
 

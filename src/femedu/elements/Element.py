@@ -220,7 +220,7 @@ class Element(DrawElement):
 
         :param node: local node number for which displacements are requested.
         """
-        return self.nodes[node].getDisp(self, **kwargs)
+        return self.nodes[node].getDisp(caller=self, **kwargs)
 
     def getForce(self):
         """

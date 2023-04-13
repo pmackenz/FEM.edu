@@ -4,17 +4,23 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "femedu"
-authors = [{name = "Peter Mackenzie-Helnwein", email = "pmackenz@uw.edu"}]
+authors = [
+    {name = "Peter Mackenzie-Helnwein", email = "pmackenz@uw.edu"},
+    {name = "Tatsuhiko Sweet", email = "sweetta@uw.edu"},
+    {name = "William Galik", email = "william.galik@iusspavia.it"},
+    {name = "Jordan Seawright", email = "jseawrig@uw.edu"},
+]
 readme = "README.md"
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)"]
 dynamic = ["version", "description"]
-requires-python = ">=3.5"
+requires-python = ">=3.9"
 dependencies = [
     "numpy >=1.23",
     "scipy >=1.10.1",
     "matplotlib >=3.5",
+    "pandas",
 ]
 
 [project.urls]
-Home = "https://pmackenz.github.io/FEM.edu.documentation/"
+Documentation = "https://pmackenz.github.io/FEM.edu.documentation/"
