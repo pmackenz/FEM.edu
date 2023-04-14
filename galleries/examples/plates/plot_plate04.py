@@ -103,10 +103,7 @@ class ExamplePlate04(Example):
         #nodes2, elements2 = mesher2.quadMesh(Ny, Triangle, PlaneStress(params))
 
         # tie the patches together
-        for nd1 in nodes1:
-            for nd2 in nodes2:
-                if np.linalg.norm(nd2.getPos() - nd1.getPos()) < 1.0e-3:
-                    nd2.make_follower(nd1)
+        mesher1.tie(mesher2)
 
         nodes    = nodes1    + nodes2
         elements = elements1 + elements2

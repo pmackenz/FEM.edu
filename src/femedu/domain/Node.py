@@ -394,9 +394,19 @@ class Node():
 
     def addLoad(self, loads, dofs):
         """
+        Nodes are applied as components energetically linked to any degree of freedom provided at this node.
+
+        For example, in a 2D-problem with the x-axis to the right and the y-axis pointing up,
+        applying a vertical downward force, P, and a counter-clockwise moment, M, at a node, xn:
+
+        .. code::
+
+            xn.addLoad([-P, M],['uy','rz'])
 
         :param loads:
+        :type loads: list of floats
         :param dofs:
+        :type dofs: list of dof-codes
         """
         if self.is_lead:
             # Check tuple type and if the dof exists (warn and continue)

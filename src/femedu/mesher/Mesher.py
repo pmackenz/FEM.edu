@@ -11,6 +11,8 @@ class Mesher():
     def __init__(self, model, *pts):
         self.model = model
         self.offset = np.array([0.0, 0.0])
+        self.nodes    = []
+        self.elements = []
 
     def shift(self, dx, dy):
         """
@@ -89,4 +91,22 @@ class Mesher():
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
+
+    def tie(self, other, tol=1.0e-3):
+        """
+        Check nodes of **other** Mesher object for (near) identical
+        location to any node in this Mesher object.  If overlap is identified, make the
+        node in **other** a follower of the respective node in this Mesher.
+
+        :param other: Mesher instance
+        """
+        if isinstance(other, Mesher):
+            # tie the patches together
+            for nd1 in self.nodes:
+                for nd2 in other.nodes:
+                    if np.linalg.norm(nd2.getPos() - nd1.getPos()) < tol:
+                        nd2.make_follower(nd1)
+        else:
+            msg = "The tie(other) method requires a Mesher object as argument"
+            raise TypeError(msg)
 

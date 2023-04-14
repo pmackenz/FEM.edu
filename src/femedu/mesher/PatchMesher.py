@@ -91,6 +91,9 @@ class PatchMesher(Mesher):
             self.model.addNode(*nodes)
             self.model.addElement(*elements)
 
+        self.nodes    = nodes
+        self.elements = elements
+
         return (nodes, elements)
 
     def triangleMesh(self, NeX, NeY, element_type, material, **kwargs):
@@ -141,6 +144,9 @@ class PatchMesher(Mesher):
         if self.model and isinstance(self.model, System):
             self.model.addNode(*nodes)
             self.model.addElement(*elements)
+
+        self.nodes    = nodes
+        self.elements = elements
 
         return (nodes, elements)
 
