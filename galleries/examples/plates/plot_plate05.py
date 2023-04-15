@@ -41,8 +41,8 @@ class ExamplePlate05(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 6        # number of elements in the mesh
-        Ny = 5        # number of elements in the mesh
+        Nx = 10        # number of elements in the mesh
+        Ny = 8        # number of elements in the mesh
         Lx = 120.0    # length of plate in the x-direction
         Ly =  80.0    # length of plate in the y-direction
         R  = Ly / 2.
@@ -110,6 +110,9 @@ class ExamplePlate05(Example):
         mesher3 = PatchMesher(model, pts[1], pts[2], pts[7], pts[6])
         nodes3, elements3 = mesher3.triangleMesh(Nx, Nx, Triangle, PlaneStress(params))
 
+        mesher1.tie(mesher2)
+        mesher2.tie(mesher3)
+
         nodes    = nodes1    + nodes2    + nodes3
         elements = elements1 + elements2 + elements3
 
@@ -126,43 +129,30 @@ class ExamplePlate05(Example):
 
         # ==== complete the reference load ====
 
+        Xo = np.array([Lx, 0.0])
+        No = np.array([1.0, 0.0])
+
         for node in nodes:
             X = node.getPos()
             if math.isclose(X[0],Lx):
                 print(node)
                 for elem in node.elements:
                     print('+', elem)
-
-        model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
-
-    def _buffer(self, model):
-
-        elements = model.elements
-
-        # surface loads on the left side
-        elements[ 0].setSurfaceLoad(2,px)
-        elements[ 8].setSurfaceLoad(2,px)
-        elements[16].setSurfaceLoad(2,px)
-
-        # surface loads on the right side
-        elements[ 7].setSurfaceLoad(2,px)
-        elements[15].setSurfaceLoad(2,px)
-        elements[23].setSurfaceLoad(2,px)
-
-        # these are only nodal forces as part of the reference load
-        # .. load only the upper node
-        #print(model)
+                    for face in elem.faces:
+                        for x, area in zip(face.pos, face.area):
+                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
+                                face.setLoad(px, 0.0)
 
         model.report()
 
-        model.plot(factor=0., title="undeformed system", filename="plate05_undeformed.png")
+        model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
 
         model.setLoadFactor(10.0)
         model.solve()
 
         model.report()
 
-        model.plot(factor=10., filename="plate05_deformed.png")
+        model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
 
 
 # %%

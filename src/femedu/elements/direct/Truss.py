@@ -5,7 +5,7 @@ from ...domain.Node import *
 
 class Truss(Element):
     """
-    Representing a single truss element for finite deformation analysis between 2 nodes.
+    Representing a single truss element between 2 nodes.
 
     The element is using the following dofs:
 
@@ -42,32 +42,50 @@ class Truss(Element):
 
         self._requestDofs(dof_list)
 
-        # local coordinate system
-        X0 = self.getPos(0)
-        X1 = self.getPos(1)
-
-        Lvec = X1 - X0
-        self.L0   = np.linalg.norm(Lvec)
-        self.Nvec = Lvec / self.L0
-
-        # initialize forces and stiffness
+        self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
         self.force    = 0.0
         self.Forces   = [np.zeros(dim), np.zeros(dim)]
         self.Kt       = [[np.zeros((dim, dim)), np.zeros((dim, dim))],
                          [np.zeros((dim, dim)), np.zeros((dim, dim))]]
 
+        """
+        Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
+        """
+        X0 = self.getPos(0)
+        X1 = self.getPos(1)
+
+        # local coordinate system
+        Lvec = X1 - X0
+        L = np.linalg.norm(Lvec)   # element length (undeformed)
+        Nvec = Lvec / L            # axial vector (unity)
+
+        # get initial material stiffness
+        self.material.setStrain({'xx':0.0})     # set strain to 0.0 for the initial stiffness
+        EA   = self.material.getStiffness() * self.material.getArea()
+
+        # nodal stiffness and element stiffness
+        ke = (EA / L) * np.outer(Nvec, Nvec)
+        self.Kt = [[ke, -ke], [-ke, ke]]
+
+        # remember for force recovery
+        self.L    = L
+        self.Nvec = Nvec
+        self.EA   = EA
+
 
     def __str__(self):
+        area = self.material.getArea()
+        stress = self.force / area
+        strain = self.force / self.EA
         s = \
 """Truss: {} to {}:
-    material properties: {}  strain:{}   stress:{}  
+    material properties: EA:{}  strain:{}   stress:{}  
     internal force: {}""".format( self.nodes[0].getID(), self.nodes[1].getID(),
-                            repr(self.material), self.material.getStrain(),
-                            self.material.getStress(), self.force)
+                            self.EA, strain, stress, self.force)
         return s
 
     def __repr__(self):
-        return "NLTruss({},{},{})".format( repr(self.nodes[0].getID()),
+        return "Truss({},{},{})".format( repr(self.nodes[0].getID()),
                                          repr(self.nodes[1].getID()),
                                          repr(self.material))
 
@@ -90,7 +108,7 @@ class Truss(Element):
         elif variable.lower() == 'eps' or variable.lower() == 'strain':
             # axial force
             s   = np.array([0.,1.])
-            strain = self.material.getStrain()
+            strain = self.force / self.EA
             val = np.array([strain,strain])
             return (s,val)
 
@@ -99,36 +117,22 @@ class Truss(Element):
 
     def updateState(self):
         """
-        Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
+        Stress/force recovery
         """
+        L    = self.L
+        Nvec = self.Nvec
+        EA   = self.EA
+
         U0 = self.getDisp(0)
-        X0 = self.getPos(0)
         U1 = self.getDisp(1)
-        X1 = self.getPos(1)
 
-        # local coordinate system
-        lvec = (X1 + U1) - (X0 + U0)
-        ell = np.linalg.norm(lvec)
-        nvec = lvec / ell
+        # compute strain
+        eps = Nvec @ (U1 - U0) / L
 
-        # kinematics: Henky strain
-        eps = np.log( ell/self.L0 )
+        # compute internal force
+        self.force = EA * eps
 
-        # constitutive behavior
-        self.material.setStrain({'xx':eps})
-        stress = self.material.getStress()
-        sig    = stress['xx']
-
-        # stress resultant
-        area   = self.material.getArea()
-        self.force = sig * area
-
-        # nodal forces
-        Pe = self.force * nvec
+        # nodal force vector
+        Pe = self.force * Nvec
         self.Forces = [-Pe, Pe]
 
-        # nodal and element stiffness matrix
-        Et = self.material.getStiffness()
-        n_outer_n = np.outer(nvec, nvec)
-        ke = (Et * area / ell) * n_outer_n + self.force / ell * (np.eye(len(nvec)) - n_outer_n)
-        self.Kt = [[ke, -ke], [-ke, ke]]

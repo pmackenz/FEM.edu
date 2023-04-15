@@ -42,7 +42,15 @@ class Truss(Element):
 
         self._requestDofs(dof_list)
 
-        self.L0       = np.linalg.norm(self.nodes[1].getPos() - self.nodes[0].getPos())
+        # local coordinate system
+        X0 = self.getPos(0)
+        X1 = self.getPos(1)
+
+        Lvec = X1 - X0
+        self.L0   = np.linalg.norm(Lvec)
+        self.Nvec = Lvec / self.L0
+
+        # initialize forces and stiffness
         self.force    = 0.0
         self.Forces   = [np.zeros(dim), np.zeros(dim)]
         self.Kt       = [[np.zeros((dim, dim)), np.zeros((dim, dim))],
@@ -59,8 +67,8 @@ class Truss(Element):
         return s
 
     def __repr__(self):
-        return "Truss({},{},{})".format( repr(self.nodes[0]),
-                                         repr(self.nodes[1]),
+        return "Truss({},{},{})".format( repr(self.nodes[0].getID()),
+                                         repr(self.nodes[1].getID()),
                                          repr(self.material))
 
     def getAxialForce(self):
@@ -94,26 +102,30 @@ class Truss(Element):
         Compute internal state, nodal forces, and tangent stiffness for the current state of deformation.
         """
         U0 = self.getDisp(0)
-        X0 = self.getPos(0)
         U1 = self.getDisp(1)
-        X1 = self.getPos(1)
 
-        #Lvec = (X1 + U1) - (X0 + U0)
-        Lvec = X1 - X0
-        ell = np.linalg.norm(Lvec)
-        Nvec = Lvec / ell
+        # local coordinate system
+        L    = self.L0
+        Nvec = self.Nvec
 
-        eps = Nvec @ (U1 - U0) / ell
+        # kinematics
+        eps = Nvec @ (U1 - U0) / L
+
+        # constitutive
         self.material.setStrain({'xx':eps})
         stress = self.material.getStress()
         sig = stress['xx']
+
+        # stress resultant
         area   = self.material.getArea()
         self.force = sig * area
 
+        # nodal forces
         Pe = self.force * Nvec
         self.Forces = [-Pe, Pe]
 
+        # nodal and element tangent stiffness matrix
         Et = self.material.getStiffness()
-        ke = (Et * area / ell) * np.outer(Nvec, Nvec)
+        ke = (Et * area / L) * np.outer(Nvec, Nvec)
         self.Kt = [[ke, -ke], [-ke, ke]]
 

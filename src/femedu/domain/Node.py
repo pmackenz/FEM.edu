@@ -360,7 +360,7 @@ class Node():
     def getIdx4Element(self, elem):
         if self.is_lead:
             if elem in self.dof_maps:
-                return np.array(self.dof_maps[elem], dtype=int)
+                return self.start + np.array(self.dof_maps[elem], dtype=int)
             else:
                 msg = f"Element {elem} not in dof_map for node {self.ID}"
                 raise TypeError(msg)
@@ -369,6 +369,10 @@ class Node():
 
     def getIdx4DOFs(self, dofs=[]):
         if self.is_lead:
+
+            if not dofs:
+                dofs = self.dofs.keys()
+
             idx = []
             for dof in dofs:
                 if dof in self.dofs:
@@ -377,7 +381,7 @@ class Node():
                     msg = f"dof {dof} not present at node {self.ID}"
                     raise TypeError(msg)
 
-            return np.array(idx, dtype=int)
+            return self.start + np.array(idx, dtype=int)
 
         else:
             return self.lead.getIdx4DOFs(dofs=dofs)
