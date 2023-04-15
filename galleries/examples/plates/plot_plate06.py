@@ -6,8 +6,6 @@ Pulling a plate with a circular hole
 Using PatchMesher to model a quarter of the plate
 
 """
-SPARSE = False
-
 import math
 import sys
 import numpy as np
@@ -16,8 +14,7 @@ from femedu.examples.Example import *
 
 from femedu.domain import *
 from femedu.solver.NewtonRaphsonSolver import *
-from femedu.solver.SparseSolver import *
-from femedu.elements.linear.Triangle import *
+from femedu.elements.linear.Quad import *
 from femedu.materials.PlaneStress import *
 from femedu.mesher import *
 
@@ -44,9 +41,8 @@ class ExamplePlate06(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 60        # number of elements in the mesh
-        Ny = 40        # number of elements in the mesh
-
+        Nx = 10        # number of elements in the mesh
+        Ny = 8        # number of elements in the mesh
         Lx = 120.0    # length of plate in the x-direction
         Ly =  80.0    # length of plate in the y-direction
         R  = Ly / 2.
@@ -54,14 +50,14 @@ class ExamplePlate06(Example):
         # ========== setting material parameters ==============
 
         params = dict(
-            E  = 200.,      # Young's modulus
-            nu = 0.450,     # Poisson's ratio
+            E  = 20000.,    # Young's modulus
+            nu = 0.250,     # Poisson's ratio
             t  = 1.00       # thickness of the plate
         )
 
         # ========== setting load parameters ==============
 
-        px  = 20.0         # uniform load normal to x=const
+        px  = 10.0         # uniform load normal to x=const
         py  =  0.0         # uniform load normal to y=const
         pxy =  0.0         # uniform shear load on x=const and y=const
 
@@ -78,28 +74,47 @@ class ExamplePlate06(Example):
         #
 
         model = System()
-        if SPARSE:
-            model.setSolver(SparseSolver())
-        else:
-            model.setSolver(NewtonRaphsonSolver())
+        model.setSolver(NewtonRaphsonSolver())
 
         # create nodes
 
-        #  3---------2
-        #  |         |
-        #  |         |
-        #  |         |
-        #  1---------1
+        #  5--------------6--------------7
+        #  |             / \             |
+        #  |            /   \            |
+        #  |           /     \           |
+        #  3----8----4        \          |
+        #             \        \         |
+        #              9        \        |
+        #               \        \       |
+        #                0--------1------2
 
         pts = (
-            ( 0, 0),
+            ( R, 0),
+            (0.5*(R+Lx), 0),
             (Lx, 0),
-            (Lx, Ly),
+            (0, R),
+            (R*np.cos(np.radians(45.)), R*np.sin(np.radians(45.))),
             (0, Ly),
+            (0.5*Lx, Ly),
+            (Lx, Ly),
+            (R*np.cos(np.radians(67.5)), R*np.sin(np.radians(67.5))),
+            (R*np.cos(np.radians(22.5)), R*np.sin(np.radians(22.5))),
         )
 
-        mesher = PatchMesher(model, pts[0], pts[1], pts[2], pts[3])
-        nodes, elements = mesher.triangleMesh(Nx, Ny, Triangle, PlaneStress(params))
+        mesher1 = PatchMesher(model, pts[3], pts[4], pts[6], pts[5], pts[8])
+        nodes1, elements1 = mesher1.quadMesh(Nx, Ny, Quad, PlaneStress(params))
+
+        mesher2 = PatchMesher(model, pts[0], pts[1], pts[6], pts[4], None, None, None, pts[9])                                               # center node
+        nodes2, elements2 = mesher2.quadMesh(Ny, Nx, Quad, PlaneStress(params))
+
+        mesher3 = PatchMesher(model, pts[1], pts[2], pts[7], pts[6])
+        nodes3, elements3 = mesher3.quadMesh(Nx, Nx, Quad, PlaneStress(params))
+
+        mesher1.tie(mesher2)
+        mesher2.tie(mesher3)
+
+        nodes    = nodes1    + nodes2    + nodes3
+        elements = elements1 + elements2 + elements3
 
         # define support(s)
 
@@ -112,35 +127,32 @@ class ExamplePlate06(Example):
             if math.isclose(X[1], 0.0):
                 node.fixDOF('uy')    # vertical support at y==0
 
-        # ==== build the reference load ====
+        # ==== complete the reference load ====
 
-        # nodal loads
-        dir = np.array([1.,0.])    # normal to surface
-        x0  = np.array([Lx,0.0])   # reference point on the surface
+        Xo = np.array([Lx, 0.0])
+        No = np.array([1.0, 0.0])
+
         for node in nodes:
             X = node.getPos()
             if math.isclose(X[0],Lx):
-                print(node.getID(), node.getPos())
+                print(node)
                 for elem in node.elements:
-                    print('+', elem.getID(), end=' ')
+                    print('+', elem)
                     for face in elem.faces:
-                        dist = np.allclose( [ (x - x0) @ dir for x in face.pos ], 0.0 ) \
-                            and np.allclose( [ t @ dir for t in face.tangent ], 0.0, atol=0.05)
-                        if dist:
-                            print(face.id, ":", face.area, end=' ')
-                            face_idx = int(face.id[-1])
-                            elem.setSurfaceLoad(face_idx, px, pxy)
-                    print()
+                        for x, area in zip(face.pos, face.area):
+                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
+                                face.setLoad(px, 0.0)
 
-        #model.plot(factor=0, title="undeformed system", filename="plate06_undeformed.png", show_bc=1, show_loads=1)
+        model.report()
 
-        model.setLoadFactor(1.0)
+        model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
+
+        model.setLoadFactor(10.0)
         model.solve()
 
-        #model.plot(factor=1., filename="plate06_deformed.png")
+        model.report()
 
-        #model.solver.showKt(filename="plate06_spy_Kt.png")
-        #np.save("plate6_Kt.npy",model.solver.Kt)
+        model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
 
 
 # %%
@@ -148,13 +160,7 @@ class ExamplePlate06(Example):
 #
 
 if __name__ == "__main__":
-
-    import cProfile
-
     ex = ExamplePlate06()
-    if SPARSE:
-        cProfile.run('ex.run()','profile_data_sparse.txt')
-    else:
-        cProfile.run('ex.run()','profile_data_full.txt')
+    ex.run()
 
 
