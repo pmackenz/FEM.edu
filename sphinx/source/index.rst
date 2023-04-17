@@ -10,9 +10,9 @@
    :maxdepth: 1
    :caption: Contents:
 
+   general/Installation.rst
    general/about.rst
    auto_examples/index.rst
-   general/Installation.rst
    tutorials.rst
    design.rst
    implementation/implementation.rst

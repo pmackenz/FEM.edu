@@ -162,7 +162,8 @@ class Solver():
         # assemble loads
         for node in self.nodes:
             if node.isLead() and node.hasLoad():
-                idx = node.start + np.arange(node.ndofs)
+                # idx = node.start + np.arange(node.ndofs)
+                idx = node.getIdx4DOFs()
                 Rsys[idx] += node.getLoad() * self.loadfactor
 
         # Element Loop: assemble element forces and stiffness
@@ -185,7 +186,8 @@ class Solver():
             for node in self.nodes:
                 for dof in node.dofs:
                     if node.isFixed(dof):
-                        idx = node.lead.start + node.dofs[dof]
+                        #idx = node.lead.start + node.dofs[dof]
+                        idx = node.getIdx4DOFs(dofs=[dof])[0]
                         Rsys[idx]      = 0.0
                         Ksys[:, idx]   = np.zeros(ndof)   # the range might need adjustment for constraints
                         Ksys[idx, :]   = np.zeros(ndof)   # the range might need adjustment for constraints
