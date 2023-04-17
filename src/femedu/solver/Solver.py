@@ -24,9 +24,11 @@ class Solver():
         # numeric iteration tolerance
         self.TOL = 1.0e-6
 
+        # displacement control
         self.hasConstraint = False
         self.targetU       = 0.0
 
+        # arc-length control
         self.useArcLength  = False
         self.lastConverged = {}
 
@@ -116,13 +118,32 @@ class Solver():
         """
         Set the target load factor to **lam**
 
+        This enables load control and disables alternative control methods
+        such as *displacement control* or *arc-length* control.
+
         The entered load pattern is considered a reference load,
         to be multiplied by a scalar load factor, :math:`\lambda`.
 
         If no load factor is set explicitly, a factor of 1.0 is assumed, i.e., the
         entire entered load is applied in full.
         """
-        self.loadfactor = lam
+        self.loadfactor    = lam
+        self.hasConstraint = False
+
+    def setDisplacementControl(self, node, dof, target):
+        """
+        activate displacement control for the next load step
+        """
+        if dof in node.dofs:
+            self.hasConstraint = True
+            self.control_node  = node
+            self.control_dof   = dof
+            self.targetU       = target
+        else:
+            self.hasConstraint = False
+
+            msg = f"{node} has no dof:{dof} to establish displacement control"
+            raise TypeError(msg)
 
     def assemble(self, force_only=False):
         """
@@ -156,15 +177,24 @@ class Solver():
 
         self.sdof = ndof  # number of system d.o.f.s
 
-        Rsys = np.zeros(ndof)
-        Ksys = np.zeros((ndof, ndof))
+        Psys = np.zeros(ndof)           # reference load vector (without load factor)
+        Fsys = np.zeros(ndof)           # system internal force vector
+        Ksys = np.zeros((ndof, ndof))   # system tangent stiffness matrix
+
+        # displacement control or arc-length control
+        if self.hasConstraint:
+            if self.useArcLength:
+                pass
+                #self.g =
+            else:
+                self.g = self.control_node.getDisp(self.control_dof) - self.targetU
 
         # assemble loads
         for node in self.nodes:
             if node.isLead() and node.hasLoad():
                 # idx = node.start + np.arange(node.ndofs)
                 idx = node.getIdx4DOFs()
-                Rsys[idx] += node.getLoad() * self.loadfactor
+                Psys[idx] += node.getLoad()
 
         # Element Loop: assemble element forces and stiffness
         for element in self.elements:
@@ -172,14 +202,23 @@ class Solver():
             Pe = element.getLoad()      # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
                 idxK = ndI.getIdx4Element(element)
+
+                # system reference load vector
                 if isinstance(Pe[i], np.ndarray):
-                    Rsys[idxK] -= Fe[i] - self.loadfactor * Pe[i]
-                else:
-                    Rsys[idxK] -= Fe[i]
+                    Psys[idxK] += Pe[i]
+
+                # system residual force vector
+                Fsys[idxK] += Fe[i]
+
+                # system tangent stiffness matrix
                 if not force_only:
                     for (j,ndJ) in enumerate(element.nodes):
                         idxM = ndJ.getIdx4Element(element)
                         Ksys[idxK[:, np.newaxis], idxM] += element.Kt[i][j]
+
+        # system residual force vector
+        self.P = Psys
+        self.R = self.loadfactor * Psys - Fsys
 
         # apply boundary conditions
         if not force_only:
@@ -188,15 +227,12 @@ class Solver():
                     if node.isFixed(dof):
                         #idx = node.lead.start + node.dofs[dof]
                         idx = node.getIdx4DOFs(dofs=[dof])[0]
-                        Rsys[idx]      = 0.0
+                        self.R[idx]    = 0.0
                         Ksys[:, idx]   = np.zeros(ndof)   # the range might need adjustment for constraints
                         Ksys[idx, :]   = np.zeros(ndof)   # the range might need adjustment for constraints
                         Ksys[idx, idx] = 1.0e3
 
-
             self.Kt = Ksys
-
-        self.R  = Rsys
 
     def solve(self, **kwargs):
         """
@@ -406,7 +442,6 @@ class Solver():
             R.append(reaction)
 
         return R
-
 
     def getNodalLoads(self, dofs=None, cut_off=1.0e-6):
         R = {}

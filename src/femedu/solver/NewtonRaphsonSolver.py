@@ -74,7 +74,7 @@ class NewtonRaphsonSolver(Solver):
                 dload = self.loadfactor - self.lastConverged['lambda']
                 # g = self.arclength2 - delU@delU - self.alpha * dload*dload * self.P@self.P
 
-                denum = 2.*np.dot(dQ[:,1], delU) + 2.*self.alpha * dload * self.P@self.P
+                denum = 2.*np.dot(dQ[:,1], delU) + 2.*self.alpha * dload * self.P @ self.P
 
                 dlam = ( self.g - 2.*np.dot(dQ[:,0], delU) ) / denum
 
