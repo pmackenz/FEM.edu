@@ -81,9 +81,10 @@ class NewtonRaphsonSolver(Solver):
             else:
                 # displacement control
                 # g = (self.targetU - np.dot(self.sysU, self.en))
+                idx = self.control_node.getIdx4DOFs(dofs=[self.control_dof])[0]
 
-                dlam = self.g - np.dot(dQ[:,0], self.en)
-                dlam /= np.dot(dQ[:,1], self.en)
+                dlam = self.g - dQ[idx,0]
+                dlam /= dQ[idx,1]
 
             self.loadfactor += dlam
             dU = dQ[:,0] + dlam * dQ[:,1]

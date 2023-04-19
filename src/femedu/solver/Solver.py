@@ -374,8 +374,9 @@ class Solver():
 
             else:
                 # displacement control
-                self.g = self.targetU - np.dot(self.sysU, self.en)  # this could be done more efficiently
-                                                                    # since most values in self.en are zero
+                ##self.g = self.targetU - np.dot(self.sysU, self.en)
+                self.g = self.targetU - self.control_node.getDisp(self.control_dof)[0]
+
             normR += self.g*self.g
 
         else:

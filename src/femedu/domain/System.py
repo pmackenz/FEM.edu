@@ -109,6 +109,8 @@ class System():
         for constraint in newConstraints:
             self.constraints.append(constraint)
 
+# --------- load control functions ----------------------
+
     def setLoadFactor(self, lam):
         self.solver.setLoadFactor(lam)
 
@@ -132,6 +134,18 @@ class System():
         This function is used to get access to the solver and give instructions directly to that solver.
         """
         return self.solver
+
+# --------- displacement control functions ----------------
+    def setDisplacementControl(self, node, dof, target):
+        """
+        activate displacement control for the next load step
+
+        :param node:     pointer to the controlling node
+        :param dof:      dof code for controlled dof
+        :param target:   target displacement value
+        """
+        if self.solver:
+            self.solver.setDisplacementControl(node, dof, target)
 
 # --------- this should become a solver object ------------
 
@@ -294,6 +308,9 @@ class System():
         """
         if self.solve:
             self.solver.solve(**kwargs)
+            if self.solver.hasConstraint:
+                # spread the news about the new load level throughout the system
+                self.setLoadFactor(self.solver.loadfactor)
         else:
             msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
             raise NotImplementedError(msg)
