@@ -9,6 +9,11 @@ We shall be using displacement control to trace the unstable portion of the stat
 
 Author: Peter Mackenzie-Helnwein
 """
+
+# sphinx_gallery_start_ignore
+# sphinx_gallery_thumbnail_number = -2
+# sphinx_gallery_end_ignore
+
 import numpy as np
 
 # %%
@@ -112,10 +117,10 @@ class ExampleTruss06(Example):
         data = np.array(data_list)
 
         plt.figure()
-        plt.plot(load, data)
+        plt.plot(data, load)
         plt.grid(True)
-        plt.xlabel('load factor $ \lambda $')
-        plt.ylabel('displacements $ u_i $')
+        plt.xlabel('displacements $ u_i $')
+        plt.ylabel('load factor $ \lambda $')
         plt.legend(['$ u_x $','$ u_x $'])
         plt.show()
 
