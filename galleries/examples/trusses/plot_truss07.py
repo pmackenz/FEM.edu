@@ -8,10 +8,6 @@ We shall be using load stepping to illustrate the limitation of this control tec
 Author: Peter Mackenzie-Helnwein
 """
 
-# sphinx_gallery_start_ignore
-# sphinx_gallery_thumbnail_number = -2
-# sphinx_gallery_end_ignore
-
 # %%
 # Setup
 
@@ -29,6 +25,8 @@ from femedu.solver.NewtonRaphsonSolver import *
 class ExampleTruss07(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = -2
+
     def docString(self):
         s = """
         Buckling of a truss column.

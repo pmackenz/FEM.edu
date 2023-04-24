@@ -1,6 +1,7 @@
 import numpy as np
 
 from ..Element import *
+from ...materials.Material import Material
 from ...domain.Node import *
 
 class Truss(Element):
@@ -30,6 +31,11 @@ class Truss(Element):
     def __init__(self, nodei, nodej, material):
         super().__init__((nodei, nodej), material)
         self.element_type = DrawElement.LINE
+
+        if not (self.material.materialType() == Material.SECTION1D
+                or self.material.materialType() == Material.FIBER):
+            msg = "Incompatible material type: need FIBER or SECTION1D"
+            raise TypeError(msg)
 
         dim = nodei.getPos().size
 

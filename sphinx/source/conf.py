@@ -41,8 +41,8 @@ autosectionlabel_maxdepth = 6
 
 # -- Sphinx-Gallery configuration
 sphinx_gallery_conf = {
-    'examples_dirs': '../../galleries/examples',   # path to your example scripts
-    'gallery_dirs': 'auto_examples',  # path to where to save gallery generated output
+    'examples_dirs': ['../../galleries/examples', '../../galleries/tutorials'],   # path to your example scripts
+    'gallery_dirs': ['auto_examples','auto_tutorials'],  # path to where to save gallery generated output
     'ignore_pattern': r'__init__\.py|runall\.py|read_profile_stats.py',
     # specify that examples should be ordered according to filename
     'within_subsection_order': FileNameSortKey,
@@ -52,6 +52,11 @@ sphinx_gallery_conf = {
                                        '../../galleries/examples/plates',
                                        '../../galleries/examples/solids',
                                        '../../galleries/examples/mixed',
+                                       '../../galleries/tutorials/model_creation',
+                                       '../../galleries/tutorials/direct_stiffness',
+                                       '../../galleries/tutorials/linear_fem',
+                                       '../../galleries/tutorials/large_deformation',
+                                       '../../galleries/tutorials/plasticity',
                                        ]),
 }
 
@@ -63,6 +68,7 @@ html_static_path = ['_static']
 
 # define global abbreviations
 rst_prolog = """
+.. |Application|  replace:: **FEM.edu**
 .. |PackageName|  replace:: **FEM.edu**
 .. |Author|   replace:: Peter Mackenzie-Helnwein
 """

@@ -1,6 +1,6 @@
 .. _examples-index:
 
-.. _gallery:
+.. _examples_gallery:
 
 ===================
 Example Gallery
@@ -9,5 +9,5 @@ Example Gallery
 This page contains example plots. Click on any image to see the full image
 and source code.
 
-For longer, more comprehensive example documentation, see our :ref:`Tutorials <tutorials>`.
+For longer, more comprehensive example documentation, see our :ref:`Tutorials Gallery <tutorials_gallery>`.
 

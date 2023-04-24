@@ -3,15 +3,11 @@
 Buckling of a truss column.
 ================================
 
-This is the same structure as in problem `sphx_glr_auto_examples_trusses_plot_truss07.py`_ but
+This is the same structure as in problem :ref:`sphx_glr_auto_examples_trusses_plot_truss07.py` but
 using a mix of load control and displacement control.
 
 Author: Peter Mackenzie-Helnwein
 """
-
-# sphinx_gallery_start_ignore
-# sphinx_gallery_thumbnail_number = -1
-# sphinx_gallery_end_ignore
 
 # %%
 # Setup
@@ -30,6 +26,7 @@ from femedu.solver.NewtonRaphsonSolver import *
 class ExampleTruss08(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = -1
     def docString(self):
         s = """
         Buckling of a truss column.

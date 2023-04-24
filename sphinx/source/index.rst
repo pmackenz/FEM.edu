@@ -13,6 +13,7 @@
    general/Installation.rst
    general/about.rst
    auto_examples/index.rst
+   auto_tutorials/index.rst
    tutorials.rst
    design.rst
    implementation/implementation.rst
