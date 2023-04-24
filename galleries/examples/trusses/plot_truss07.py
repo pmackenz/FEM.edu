@@ -1,7 +1,7 @@
 """
-================================
-Buckling of a truss column.
-================================
+================================================================
+Post-buckling of a truss column using load Control.
+================================================================
 
 We shall be using load stepping to illustrate the limitation of this control technique.
 

@@ -241,7 +241,8 @@ class Node():
         """
         Store the current displacement vector for later restore using :code:`popU()`.
         """
-        self.disp_pushed = self.disp
+        self.disp_pushed       = self.disp.copy()
+        self.loadfactor_pushed = self.loadfactor
 
     def popU(self):
         """
@@ -313,6 +314,13 @@ class Node():
 
         else:
             self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
+
+    def getDeltaU(self):
+        return self.disp - self.disp_pushed
+
+    def getNormDeltaU2(self):
+        dU = self.getDeltaU()
+        return dU @ dU
 
     def getPos(self, caller=None, **kwargs):
         """
@@ -573,7 +581,15 @@ class Node():
         else:
             self.followers.append(follower)
 
-
+    def setTrialState(self):
+        """
+        This will set a suitable trial position for the
+        arc-length method
+        """
+        self.disp *= 2.0
+        self.disp -= self.disp_pushed
+        self.loadfactor *= 2.0
+        self.loadfactor -= self.loadfactor_pushed
 
 if __name__ == "__main__":
     # testing the Node class

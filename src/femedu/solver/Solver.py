@@ -184,8 +184,12 @@ class Solver():
         # displacement control or arc-length control
         if self.hasConstraint:
             if self.useArcLength:
-                pass
-                #self.g =
+                # arc-length control
+                dload = self.loadfactor - self.lastConverged['lambda']
+                self.g = self.arclength2 - self.alpha * dload*dload * self.P@self.P
+                for node in self.nodes:
+                    self.g -= node.getNormDeltaU2()
+
             else:
                 self.g = self.control_node.getDisp(self.control_dof) - self.targetU
 
@@ -237,7 +241,6 @@ class Solver():
     def solve(self, **kwargs):
         """
 
-        :return:
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
@@ -368,13 +371,13 @@ class Solver():
 
             if self.useArcLength:
                 # arc-length control
-                delU  = self.sysU - self.lastConverged['U']
                 dload = self.loadfactor - self.lastConverged['lambda']
-                self.g = self.arclength2 - delU@delU - self.alpha * dload*dload * self.P@self.P
+                self.g = self.arclength2 - self.alpha * dload*dload * self.P@self.P
+                for node in self.nodes:
+                    self.g -= node.getNormDeltaU2()
 
             else:
                 # displacement control
-                ##self.g = self.targetU - np.dot(self.sysU, self.en)
                 self.g = self.targetU - self.control_node.getDisp(self.control_dof)[0]
 
             normR += self.g*self.g
@@ -466,4 +469,19 @@ class Solver():
             Lds.append(force)
 
         return Lds
+
+
+    def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):
+        """
+        This method may be implemented by a nonlinear solver
+        """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
+
+    def stepArcLength(self, verbose=False):
+        """
+        This method may be implemented by a nonlinear solver
+        """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        raise NotImplementedError(msg)
 

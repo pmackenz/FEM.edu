@@ -147,64 +147,34 @@ class System():
         if self.solver:
             self.solver.setDisplacementControl(node, dof, target)
 
-# --------- this should become a solver object ------------
+# --------- Arc-length control functions: forward to Solver ------------
 
-    def initArcLength(self, load=1., alpha=0.0, tolerance=1.0e-12):
-        # store analysis parameter(s)
-        self.alpha = alpha
-        self.TOL = tolerance
+    def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):
+        """
+        Initializes parameters for the arc-length constraint.
 
-        # make sure we start at an equilibrium point
-        self.NewtonSolver()
+        .. math::
 
-        # store current configuration as last converged
-        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':0}
+           g({\\bf u}, \lambda)) := \alpha ||\\bar {\bf P}|| (\lambda-\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
 
-        # use load control to solve for the new equilibrium state
-        self.hasConstraint = False   # this forces load control
-        self.loadfactor += load      # add reference load level
-        self.NewtonSolver()          # find equilibrium configuration for given load level
+        .. note::
 
-        # compute the arc-length for that step and store as target arc length
-        delU  = self.sysU - self.lastConverged['U']
-        dload = self.loadfactor - self.lastConverged['lambda']
-        self.arclength2 = delU@delU + self.alpha * dload*dload * self.P@self.P
+           This feature requires a nonlinear solver. Review the :py:meth:`setSolver` function.
 
-        # store the current point as last converged point
-        self.previousConverged = self.lastConverged
-        self.lastConverged = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
-
-        # set solver parameters
-        self.hasConstraint = True
-        self.useArcLength = True
+        :param load_increment:   load increment used to calibrate the constraint
+        :param alpha:            load contribution factor
+        :param tolerance:        convergence tolerance
+        """
+        if self.solver:
+            self.solver.initArcLength(load_increment=load_increment, alpha=alpha, tolerance=tolerance)
 
     def stepArcLength(self, verbose=False):
 
-        if not self.hasConstraint:
-            # this method makes no sense for load control
-            return
-
-        # set solver parameters
-        self.useArcLength = True
-
-        # store current state as local variable
-        Un = {'U':self.sysU.copy(), 'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
-
-        # set suitable trial state
-        self.sysU *= 2.0
-        self.sysU -= self.previousConverged['U']
-        self.loadfactor *= 2.0
-        self.loadfactor -= self.previousConverged['lambda']
-
-        # store current state as "last converged solution"
-        self.previousConverged = self.lastConverged
-        self.lastConverged = Un
-
-        if verbose:
-            print(self.lastConverged)
-
-        # solve for next point on the equilibrium path
-        self.NewtonSolver(verbose)
+        if self.solver:
+            self.solver.stepArcLength(verbose=verbose)
+            if self.solver.hasConstraint:
+                # spread the news about the new load level throughout the system
+                self.setLoadFactor(self.solver.loadfactor)
 
     # --------- recorder methods ------------------------------
 

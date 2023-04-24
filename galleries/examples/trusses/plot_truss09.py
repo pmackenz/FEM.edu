@@ -1,10 +1,10 @@
 """
 ================================================================
-Post-buckling of a truss column using displacement Control.
+Post-buckling of a truss column using Arc-Length Control.
 ================================================================
 
 This is the same structure as in problem :ref:`sphx_glr_auto_examples_trusses_plot_truss07.py` but
-using a mix of load control and displacement control.
+it will be solved using arc-length-control.
 
 Author: Peter Mackenzie-Helnwein
 """
@@ -23,7 +23,7 @@ from femedu.solver.NewtonRaphsonSolver import *
 # %%
 # Create the example by subclassing the :py:class:`Example`
 
-class ExampleTruss08(Example):
+class ExampleTruss09(Example):
 
     # sphinx_gallery_start_ignore
     # sphinx_gallery_thumbnail_number = -1
@@ -130,102 +130,45 @@ class ExampleTruss08(Example):
         #
         model.resetDisp()
         model.setLoadFactor(0.0)
-
-        # setting target load levels
-        levels = np.linspace(0.0, 2.00, 30)
+        model.solve()
 
         # set up data collection
-        load_list = []
-        data_list = []
+        load_list = [ 0.0 ]
+        data_list = [ nd_11.getDisp() ]
 
-        # reset the analysis
-        model.resetDisp()
+        # initialize the arc-length parameters
+        model.initArcLength(load_increment=0.25, alpha=0.0)
 
-        # apply all load steps
-        for lam in levels:
+        # increments until the load level exceeds 2.0
+        #
+        # use a counter to prevent run-away analysis
+        maxSteps = 3
+        nSteps = 0
 
-            model.setLoadFactor(lam)
-            model.solve()
+        while True:  # an endless loop
+
+            # mode by one reference arc-length
+            model.stepArcLength()
 
             # collect data
-            load_list.append(lam)
+            load_list.append(model.loadfactor)
             data_list.append(nd_11.getDisp())
 
-            # stop load control once lateral displacement of the top node exceeds 75 mm
-            if nd_11.getDisp('ux')[0] > 75 * mm:
+            # emergency exit for run-away jobs
+            nSteps += 1
+            if nSteps > maxSteps:
+                print("Maximum number of load steps exceeded")
                 break
 
         # plot the deformed shape
         model.plot(factor=1.0,
                    title="Deformed Sytem at Transition to Displacement Control",
-                   filename="truss08_deformed_end_load_control.png",
+                   filename="truss09_deformed_end_load_control.png",
                    show_loads=False, show_reactions=False)
 
         #
-        # switching to displacement control
+        # create a nice summary plot
         #
-
-        # remember displacement at which we switched to displacement control
-        disp_switch = nd_11.getDisp('ux')[0]
-
-        # let's start the displacement control at the current level to verify
-        # functionality.
-        target = disp_switch
-
-        while True:
-
-            model.setDisplacementControl(nd_11, 'ux', target)
-            model.solve()
-
-            # collect data
-            lam = model.loadfactor
-            load_list.append(lam)
-            data_list.append(nd_11.getDisp())
-
-            # increase the target displacement by 200 mm
-            target += 200 * mm
-
-            # stop displacement control once lateral displacement of the top node exceeds 3500 mm
-            if nd_11.getDisp('ux')[0] > 3500 * mm:
-                break
-
-        model.plot(factor=1.0,
-                   title="Deformed Sytem at Transition back to Load Control",
-                   filename="truss08_deformed_end_disp_control.png",
-                   show_loads=False, show_reactions=False)
-
-        #
-        # returning to load control
-        #
-
-        # remember displacement at which we switched to displacement control
-        lam_switch = model.loadfactor
-
-        # let's start the load control at the current level to verify
-        # functionality.
-        lam = lam_switch
-
-        while True:
-
-            model.setLoadFactor(lam)
-            model.solve()
-
-            # collect data
-            load_list.append(lam)
-            data_list.append(nd_11.getDisp())
-
-            # increase the target load level by $ \Delta \lambda = 0.10 $
-            lam += 0.10
-
-            # stop load control once the load level exceeds 2.0
-            if lam > 2.0:
-                break
-
-        # plot the deformed shape
-        model.plot(factor=1.0,
-                   title="Deformed Sytem at $ \\lambda={:.2f} $".format(lam),
-                   filename="truss08_deformed_end_load_2_control.png",
-                   show_loads=False, show_reactions=False)
 
         levels = np.array(load_list)
         data   = np.array(data_list)
@@ -233,17 +176,11 @@ class ExampleTruss08(Example):
         plt.figure()
         plt.plot(data, levels, '--o')
 
-        plt.plot([disp_switch, disp_switch], [0.0,1.1],'-r')
-        plt.text(2.0*disp_switch, 1.05, "transition to\ndisplacement control", rotation=90.)
-
-        plt.plot([0.5*target,1.1*target], [lam_switch, lam_switch], '-g')
-        plt.text(0.5*target, 1.05 * lam_switch, "transition to\nload control" , ha='left')
-
         plt.grid(True)
         plt.xlabel('displacements $ u_i $')
         plt.ylabel('load factor $ \lambda $')
         plt.legend(['$ u_x $','$ u_y $'])
-        plt.savefig("truss08_deformation_history.png")
+        plt.savefig("truss09_deformation_history.png")
         plt.show()
 
 # %%
@@ -251,6 +188,6 @@ class ExampleTruss08(Example):
 #
 
 if __name__ == "__main__":
-    ex = ExampleTruss08()
+    ex = ExampleTruss09()
     ex.run()
 

@@ -111,7 +111,7 @@ model.addElement(Truss(nd1, nd2, ElasticSection(params)))
 # The first option allows us to keep `elem0` as element pointer for later access to that element.
 # The second option is sufficient in most cases.
 #
-# |Application| also provides a short version for the :py:meth:`addElement(...)` function in the form
+# |Application| also provides a short version for the :py:meth:`addElement` function in the form
 
 model += Truss(nd0, nd2, ElasticSection(params))
 
