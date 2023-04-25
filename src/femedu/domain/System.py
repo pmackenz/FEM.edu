@@ -155,7 +155,7 @@ class System():
 
         .. math::
 
-           g({\\bf u}, \lambda)) := \alpha ||\\bar {\bf P}|| (\lambda-\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
+           g({\\bf u}, \\lambda)) := \\alpha ||\\bar {\\bf P}|| (\\lambda-\\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
 
         .. note::
 
@@ -169,12 +169,31 @@ class System():
             self.solver.initArcLength(load_increment=load_increment, alpha=alpha, tolerance=tolerance)
 
     def stepArcLength(self, verbose=False):
+        """
+        Progresses the model state by one arc-length.
+
+        .. note::
+
+            You need to initialize arc-length control by one call to
+            :py:meth:`initArcLength` at least once to set all necessary parameters.
+
+        :return normR: the norm of the generalized residuum from the last iteration step
+        """
 
         if self.solver:
-            self.solver.stepArcLength(verbose=verbose)
+            normR = self.solver.stepArcLength(verbose=verbose)
             if self.solver.hasConstraint:
-                # spread the news about the new load level throughout the system
-                self.setLoadFactor(self.solver.loadfactor)
+
+                if normR <= self.solver.TOL:
+                    # converged solution
+                    self.pushU()
+
+                    # spread the news about the new load level throughout the system
+                    self.setLoadFactor(self.solver.loadfactor)
+                else:
+
+                    # restore the old load level throughout the system
+                    self.setLoadFactor(self.loadfactor)
 
     # --------- recorder methods ------------------------------
 

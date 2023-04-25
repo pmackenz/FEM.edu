@@ -2,6 +2,15 @@
 Implementation
 ******************
 
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Model Builder and Model Controls
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. toctree::
+    :maxdepth: 3
+
+    Domain/System_class.rst
+
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 FEM Component Classes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -14,7 +23,6 @@ FEM Component Classes
     Mesher/Mesher_class.rst
     Domain/Node_class.rst
     Solvers/Solver_class.rst
-    Domain/System_class.rst
     Domain/Transformation_class.rst
 
 ^^^^^^^^^^^^^^^^

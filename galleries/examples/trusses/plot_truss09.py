@@ -137,12 +137,12 @@ class ExampleTruss09(Example):
         data_list = [ nd_11.getDisp() ]
 
         # initialize the arc-length parameters
-        model.initArcLength(load_increment=0.25, alpha=0.0)
+        model.initArcLength(load_increment=0.25, alpha=0.0, tolerance=1.0e-7)
 
         # increments until the load level exceeds 2.0
         #
         # use a counter to prevent run-away analysis
-        maxSteps = 3
+        maxSteps = 10
         nSteps = 0
 
         while True:  # an endless loop

@@ -142,24 +142,17 @@ src/buckling_mode.png
 *.swp
 Student_Help/
 
+*.npy
 
 sphinx/source/auto_examples/
 galleries/examples/*png
 galleries/examples/*/*png
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> implementing_constraints
+galleries/examples/plates/profile_data_full.txt
+
+sphinx/source/auto_tutorials/
+galleries/tutorials/*png
+galleries/tutorials/*/*png
 
 Kt.npy
-
 Testing Matrix Features.ipynb
 
-*.npy
-<<<<<<< HEAD
->>>>>>> 139f5e6... toward a sparse solver
-=======
->>>>>>> implementing_constraints
-
-galleries/examples/plates/profile_data_full.txt

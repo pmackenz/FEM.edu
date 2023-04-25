@@ -170,7 +170,7 @@ class NewtonRaphsonSolver(Solver):
 
         .. math::
 
-           g({\\bf u}, \lambda)) := \alpha ||\\bar {\bf P}|| (\lambda-\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
+           g({\\bf u}, \\lambda)) := \\alpha ||\\bar {\\bf P}|| (\\lambda-\\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
 
 
         :param load_increment:   load increment used to calibrate the constraint
@@ -211,6 +211,16 @@ class NewtonRaphsonSolver(Solver):
         self.useArcLength  = True
 
     def stepArcLength(self, verbose=False):
+        """
+        Progresses the model state by one arc-length.
+
+        .. note::
+
+            You need to initialize arc-length control by one call to
+            :py:meth:`initArcLength` at least once to set all necessary parameters.
+
+        :return normR: the norm of the generalized residuum from the last iteration step
+        """
 
         if not self.hasConstraint:
             # this method makes no sense for load control
@@ -236,4 +246,6 @@ class NewtonRaphsonSolver(Solver):
             print(self.lastConverged)
 
         # solve for next point on the equilibrium path
-        self.solve(verbose=True)
+        normR = self.solve(verbose=True)
+
+        return normR

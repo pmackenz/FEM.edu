@@ -1,4 +1,6 @@
 import numpy as np
+from collections import deque
+
 from .Transformation import *
 from ..recorder.Recorder import Recorder
 
@@ -26,10 +28,14 @@ class Node():
         self.lead        = self   # following yourself
         self.followers   = []     # list of following nodes
 
-        self.disp        = None   # active current displacement vector
-        self.disp_n      = None   # previously converged displacement vector
-        self.disp_pushed = None   # stored displacement vector (see pushU() and popU())
-        self.disp_mode   = None   # stored displacement representing a mode shape
+        self.disp          = None   # active current displacement vector
+        self.disp_n        = None   # previously converged displacement vector
+        self.loadfactor_n  = 0.0    # load factor for previously converged state
+        self.disp_nn       = None   # two steps back converged displacement vector
+        self.loadfactor_nn = 0.0    # load factor for two steps back converged state
+        self.disp_mode     = None   # stored displacement representing a mode shape
+        self.disp_pushed   = deque()   # stored displacement vector (see pushU() and popU())
+
         self.dofs        = {}
         self.ndofs       = 0
         self.start       = None
@@ -241,15 +247,18 @@ class Node():
         """
         Store the current displacement vector for later restore using :code:`popU()`.
         """
-        self.disp_pushed       = self.disp.copy()
-        self.loadfactor_pushed = self.loadfactor
+        self.disp_pushed.append({'U':self.disp.copy(), 'lam':self.loadfactor})
+        if len(self.disp_pushed)>2:
+            self.disp_pushed.popleft()
 
     def popU(self):
         """
         Restore a previously pushed displacement vector (using :code:`pushU()`).
         """
-        if isinstance(self.disp_pushed, np.ndarray):
-            self.disp = self.disp_pushed
+        if len(self.disp_pushed):
+            state = self.disp_pushed.pop()
+            self.disp       = state['U']
+            self.loadfactor = state['lam']
         else:
             raise TypeError("no pushed displacement data available")
 
@@ -267,8 +276,6 @@ class Node():
 
             A single d.o.f., e.g., "ux", can be requested using :code:`getDisp(dofs=('ux',))`.
             Do not forget the :code:`,` to indicate the definition of a single-element tuple.
-
-
 
         :param caller: pointer to element
         :param dofs: tuple or list of d.o.f. keys
@@ -316,7 +323,7 @@ class Node():
             self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
 
     def getDeltaU(self):
-        return self.disp - self.disp_pushed
+        return self.disp - self.disp_n
 
     def getNormDeltaU2(self):
         dU = self.getDeltaU()
@@ -486,7 +493,9 @@ class Node():
 
         """
         if self.is_lead:
-            self.disp = np.zeros(len(self.dofs))
+            self.disp_nn = np.zeros(len(self.dofs))
+            self.disp_n  = np.zeros(len(self.dofs))
+            self.disp    = np.zeros(len(self.dofs))
         else:
             self.lead.resetDisp()
 
@@ -532,7 +541,15 @@ class Node():
             self.recorder.addData(data)
 
     def on_converged(self):
-        pass
+        """
+        This method is called every time a solver signals a converged solution.
+        """
+
+        # rotate states (n)->(n-1) and current->(n)
+        self.disp_nn = self.disp_n
+        self.disp_n  = self.disp
+        self.loadfactor_nn = self.loadfactor_n
+        self.loadfactor_n  = self.loadfactor
 
     def revert(self):
         pass
@@ -584,12 +601,17 @@ class Node():
     def setTrialState(self):
         """
         This will set a suitable trial position for the
-        arc-length method
+        arc-length method to
+
+        .. math::
+
+           {\\bf u}^{(0)}_{n+1} = 2{\\bf u}^{(\\infty)}_{n} - {\\bf u}^{(\\infty)}_{n-1}
+
+        This should be used by a solution algorithm but not by regular
+        user input.
         """
-        self.disp *= 2.0
-        self.disp -= self.disp_pushed
-        self.loadfactor *= 2.0
-        self.loadfactor -= self.loadfactor_pushed
+        self.disp       = 2.0 * self.disp_n - self.disp_nn
+        self.loadfactor = 2.0 * self.loadfactor_n - self.loadfactor_nn
 
 if __name__ == "__main__":
     # testing the Node class
