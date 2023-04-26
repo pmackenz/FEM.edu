@@ -322,12 +322,29 @@ class Node():
         else:
             self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
 
-    def getDeltaU(self):
-        return self.disp - self.disp_n
+    def getDeltaU(self, previous_step=False):
+        """
+        :return: delta u = (current u) -  (last converged u)
+        """
+        if self.is_lead:
+            if previous_step:
+                dU = self.disp_n - self.disp_nn
+            else:
+                dU = self.disp - self.disp_n
+            return dU
+        else:
+            return self.lead.getDeltaU(previous_step=previous_step)
 
-    def getNormDeltaU2(self):
-        dU = self.getDeltaU()
-        return dU @ dU
+    def getNormDeltaU2(self, previous_step=False):
+        """
+        :return: norm of delta u = (current u) -  (last converged u)
+        :return: 0.0 if node is a "follower"
+        """
+        if self.is_lead:
+            dU = self.getDeltaU(previous_step)
+            return dU @ dU
+        else:
+            return 0.0
 
     def getPos(self, caller=None, **kwargs):
         """
@@ -544,12 +561,14 @@ class Node():
         """
         This method is called every time a solver signals a converged solution.
         """
+        if self.is_lead:
+            # rotate states (n)->(n-1) and current->(n)
+            self.disp_nn = self.disp_n.copy()
+            self.disp_n  = self.disp.copy()
+            self.loadfactor_nn = self.loadfactor_n
+            self.loadfactor_n  = self.loadfactor
 
-        # rotate states (n)->(n-1) and current->(n)
-        self.disp_nn = self.disp_n
-        self.disp_n  = self.disp
-        self.loadfactor_nn = self.loadfactor_n
-        self.loadfactor_n  = self.loadfactor
+        # do not duplicate this step for the load node !!
 
     def revert(self):
         pass
@@ -613,14 +632,3 @@ class Node():
         self.disp       = 2.0 * self.disp_n - self.disp_nn
         self.loadfactor = 2.0 * self.loadfactor_n - self.loadfactor_nn
 
-if __name__ == "__main__":
-    # testing the Node class
-    node = Node(2.0, 3.5)
-    node.index = 42
-    node.setLoad(1.2, 3.4)
-    node.addLoad(5.6, 7.8)
-    node.setDisp(0.1234, -4.321)
-    node.fixDOF('uy')   # fixes y-direction
-
-    print(repr(node))
-    print(node)

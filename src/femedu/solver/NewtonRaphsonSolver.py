@@ -70,19 +70,17 @@ class NewtonRaphsonSolver(Solver):
 
             if self.useArcLength:
                 # arc-length control
-                dload = self.loadfactor - self.lastConverged['lambda']
-                # g = self.arclength2 - delU@delU - self.alpha * dload*dload * self.P@self.P
-
+                dload = self.loadfactor - self.loadfactor_n
                 denum = 2.*self.alpha * dload * self.P @ self.P
-                numerator = 0.0
+                numerator = self.g
 
                 for node in self.nodes:
                     idx = node.getIdx4DOFs()
                     delU = node.getDeltaU()
                     denum     += 2.*np.dot(dQ[idx,1], delU)
-                    numerator += 2.*np.dot(dQ[idx,0], delU)
+                    numerator -= 2.*np.dot(dQ[idx,0], delU)
 
-                dlam = ( self.g - numerator ) / denum
+                dlam = numerator / denum
 
             else:
                 # displacement control
@@ -122,7 +120,7 @@ class NewtonRaphsonSolver(Solver):
 
     def getResiduum(self):
         """
-        **NEEDS REDESIGN TO WORK WITH SMART NODES**
+        ** NEEDS REDESIGN TO WORK WITH SMART NODES **
         """
 
         # R = self.R.copy()
@@ -185,12 +183,6 @@ class NewtonRaphsonSolver(Solver):
         # make sure we start at an equilibrium point
         self.solve()
 
-        # store current configuration as last converged
-        for node in self.nodes:
-            node.pushU()
-
-        self.lastConverged = {'lambda':0.0, 'ds':0}
-
         # use load control to solve for the new equilibrium state
         self.hasConstraint = False          # this forces load control
         self.loadfactor += load_increment   # add reference load level
@@ -199,18 +191,14 @@ class NewtonRaphsonSolver(Solver):
         # compute the arc-length for that step and store as target arc length
         g = self.alpha * load_increment**2 * self.P@self.P
         for node in self.nodes:
-            g += node.getNormDeltaU2()
+            g += node.getNormDeltaU2(previous_step=True)
         self.arclength2 = g                 # target arc-length
-
-        # # store the current point as last converged point
-        # self.previousConverged = self.lastConverged
-        # self.lastConverged = {'lambda':0.0, 'ds':np.sqrt(self.arclength2)}
 
         # set solver parameters
         self.hasConstraint = True
         self.useArcLength  = True
 
-    def stepArcLength(self, verbose=False):
+    def stepArcLength(self, verbose=False, max_iter=10):
         """
         Progresses the model state by one arc-length.
 
@@ -219,33 +207,26 @@ class NewtonRaphsonSolver(Solver):
             You need to initialize arc-length control by one call to
             :py:meth:`initArcLength` at least once to set all necessary parameters.
 
+        :params max_iter: maximum number of iteration steps; handed on to the solver
         :return normR: the norm of the generalized residuum from the last iteration step
         """
 
-        if not self.hasConstraint:
+        if not self.useArcLength:
             # this method makes no sense for load control
             return
 
         # set solver parameters
-        self.useArcLength = True
+        self.hasConstraint = True
+        self.useArcLength  = True
 
         # set suitable trial state
         for node in self.nodes:
             node.setTrialState()
 
-        # self.sysU *= 2.0
-        # self.sysU -= self.previousConverged['U']
-        # self.loadfactor *= 2.0
-        # self.loadfactor -= self.previousConverged['lambda']
-        #
-        # # store current state as "last converged solution"
-        # self.previousConverged = self.lastConverged
-        # self.lastConverged = Un
-
         if verbose:
-            print(self.lastConverged)
+            print("Last converged state stored at lam={}".format(self.loadfactor_n))
 
         # solve for next point on the equilibrium path
-        normR = self.solve(verbose=True)
+        normR = self.solve(max_steps=max_iter, verbose=True)
 
-        return normR
+        return (self.loadfactor, normR)

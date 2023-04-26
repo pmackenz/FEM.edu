@@ -168,7 +168,7 @@ class System():
         if self.solver:
             self.solver.initArcLength(load_increment=load_increment, alpha=alpha, tolerance=tolerance)
 
-    def stepArcLength(self, verbose=False):
+    def stepArcLength(self, verbose=False, max_iter=10):
         """
         Progresses the model state by one arc-length.
 
@@ -181,19 +181,8 @@ class System():
         """
 
         if self.solver:
-            normR = self.solver.stepArcLength(verbose=verbose)
-            if self.solver.hasConstraint:
-
-                if normR <= self.solver.TOL:
-                    # converged solution
-                    self.pushU()
-
-                    # spread the news about the new load level throughout the system
-                    self.setLoadFactor(self.solver.loadfactor)
-                else:
-
-                    # restore the old load level throughout the system
-                    self.setLoadFactor(self.loadfactor)
+            loadfactor, normR = self.solver.stepArcLength(verbose=verbose, max_iter=max_iter)
+            self.setLoadFactor(loadfactor)
 
     # --------- recorder methods ------------------------------
 

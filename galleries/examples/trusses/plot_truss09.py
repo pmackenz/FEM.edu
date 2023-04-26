@@ -137,18 +137,18 @@ class ExampleTruss09(Example):
         data_list = [ nd_11.getDisp() ]
 
         # initialize the arc-length parameters
-        model.initArcLength(load_increment=0.25, alpha=0.0, tolerance=1.0e-7)
+        model.initArcLength(load_increment=0.33, alpha=0.05, tolerance=1.0e-4)
 
         # increments until the load level exceeds 2.0
         #
         # use a counter to prevent run-away analysis
-        maxSteps = 10
+        maxSteps = 200
         nSteps = 0
 
         while True:  # an endless loop
 
             # mode by one reference arc-length
-            model.stepArcLength()
+            model.stepArcLength(max_iter=20, verbose=True)
 
             # collect data
             load_list.append(model.loadfactor)
@@ -158,6 +158,10 @@ class ExampleTruss09(Example):
             nSteps += 1
             if nSteps > maxSteps:
                 print("Maximum number of load steps exceeded")
+                break
+
+            if model.loadfactor > 2.0:
+                print(f"Reached the target load level after {nSteps} steps")
                 break
 
         # plot the deformed shape

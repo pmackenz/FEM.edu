@@ -15,11 +15,15 @@ class Solver():
         """
         Initialize a solver instance with empty elements and nodes lists
         """
-        self.loadfactor  = 1.0
-        self.elements    = []
-        self.nodes       = []
-        self.constraints = []
-        self.sdof = 0
+        self.loadfactor    = 1.0    # holds the current load factor
+
+        self.loadfactor_n  = 0.0    # load factor for previously converged state
+        self.loadfactor_nn = 0.0    # load factor for two steps back converged state
+
+        self.elements    = []       # list of element pointers
+        self.nodes       = []       # list of node pointers
+        self.constraints = []       # list of constraint pointers
+        self.sdof = 0               # number of DOFs in the current system
 
         # numeric iteration tolerance
         self.TOL = 1.0e-6
@@ -185,11 +189,10 @@ class Solver():
         if self.hasConstraint:
             if self.useArcLength:
                 # arc-length control
-                dload = self.loadfactor - self.lastConverged['lambda']
+                dload = self.loadfactor - self.loadfactor_n
                 self.g = self.arclength2 - self.alpha * dload*dload * self.P@self.P
                 for node in self.nodes:
                     self.g -= node.getNormDeltaU2()
-
             else:
                 self.g = self.control_node.getDisp(self.control_dof) - self.targetU
 
@@ -265,13 +268,19 @@ class Solver():
         It tells all components to update its state to "converged"
         """
         for node in self.nodes:
+            node.setLoadFactor(self.loadfactor)
             node.on_converged()
 
         for elem in self.elements:
+            elem.setLoadFactor(self.loadfactor)
             elem.on_converged()
 
         for const in self.constraints:
+            const.setLoadFactor(self.loadfactor)
             const.on_converged()
+
+        self.loadfactor_nn = self.loadfactor_n
+        self.loadfactor_n  = self.loadfactor
 
     def revert(self):
         """
@@ -359,7 +368,7 @@ class Solver():
 
         return lam
 
-    def checkResiduum(self, report=False, force_only=True):
+    def checkResiduum(self, verbose=False, force_only=True):
 
         # compute residual force and tangent stiffness
         self.assemble(force_only=force_only)
@@ -371,7 +380,7 @@ class Solver():
 
             if self.useArcLength:
                 # arc-length control
-                dload = self.loadfactor - self.lastConverged['lambda']
+                dload = self.loadfactor - self.loadfactor_n
                 self.g = self.arclength2 - self.alpha * dload*dload * self.P@self.P
                 for node in self.nodes:
                     self.g -= node.getNormDeltaU2()
@@ -387,16 +396,12 @@ class Solver():
 
         normR = np.sqrt(normR)
 
-        if report:
+        if verbose:
             #print('-')
             if self.hasConstraint:
-                print(f"Constraint violation: {self.g:12.4e}")
-
-            # R = self.getResiduum()
-            # for i in range(len(R)):
-            #     print("R({}): {:12.4e} {:12.4e}".format(i,*R[i]))
-
-        print(f"norm of the out-of-balance force: {normR:12.4e}")
+                print(f"norm of the out-of-balance force: {normR:12.4e} with g={self.g:12.4e}")
+            else:
+                print(f"norm of the out-of-balance force: {normR:12.4e}")
 
         # convergence check
         return normR
