@@ -288,7 +288,9 @@ class Node():
                 U = self.disp_mode
             else:
                 if not isinstance(self.disp, np.ndarray):
-                    self.disp = np.zeros(self.ndofs)
+                    self.disp    = np.zeros(self.ndofs)
+                    self.disp_n  = np.zeros(self.ndofs)
+                    self.disp_nn = np.zeros(self.ndofs)
                 U = self.disp
 
             if caller:
@@ -382,7 +384,9 @@ class Node():
                 return self.pos + factor * self.getDisp(caller=None, dofs=my_dofs, modeshape=1)
             else:
                 if not isinstance(self.disp, np.ndarray):
-                    self.disp = np.zeros(self.ndofs)
+                    self.disp    = np.zeros(self.ndofs)
+                    self.disp_n  = np.zeros(self.ndofs)
+                    self.disp_nn = np.zeros(self.ndofs)
 
                 return self.pos + factor * self.getDisp(caller=None, dofs=my_dofs)
 
