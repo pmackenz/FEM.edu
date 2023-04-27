@@ -47,6 +47,7 @@ Derived Classes
     Beam2D_class.rst
     Frame2D_class.rst
     Triangle_class.rst
+    Diffusion/Triangle_class.rst
     Quad_class.rst
     Quad8_class.rst
     Quad9_class.rst

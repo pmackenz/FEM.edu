@@ -49,6 +49,7 @@ sphinx_gallery_conf = {
     'subsection_order': ExplicitOrder(['../../galleries/examples/beams',
                                        '../../galleries/examples/trusses',
                                        '../../galleries/examples/frames',
+                                       '../../galleries/examples/diffusion',
                                        '../../galleries/examples/plates',
                                        '../../galleries/examples/solids',
                                        '../../galleries/examples/mixed',

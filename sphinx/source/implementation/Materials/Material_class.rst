@@ -15,3 +15,4 @@ Derived Classes
     Sections.rst
     PlaneStress.rst
     PlaneStrain.rst
+    Diffusion.rst

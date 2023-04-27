@@ -5,6 +5,8 @@ __all__ = (
     'PlaneStress',
     'SectionMaterial',
     'ElasticSection',
+    'DiffusionGeneral',
+    'Thermal',
 )
 
 # from .Material import *

@@ -27,6 +27,7 @@ class Material():
     PLASTIC     = 0x020000
     CREEP       = 0x040000
     HARDENING   = 0x080000
+    DIFFUSION   = 0x100000
 
 
     def __init__(self, params={'E':1.0, 'A':1.0, 'nu':0.0, 'fy':1.0e30}):
@@ -60,6 +61,9 @@ class Material():
 
     def materialType(self):
         return self._type
+
+    def isMaterialType(self, type):
+        return ( self._type == type )
 
     def getStress(self):
         """
