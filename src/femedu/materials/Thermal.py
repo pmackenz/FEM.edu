@@ -26,12 +26,12 @@ class Thermal(DiffusionGeneral):
     
     def __init__(self, params):
 
-        if 'conductivity' not in self.parameters:
-            self.parameters['conductivity'] = 1.0
-        if 'specific heat' not in self.parameters:
-            self.parameters['specific heat'] = 1.0
-        if 'density' not in self.parameters:
-            self.parameters['density'] = 1.0
+        if 'conductivity' not in params:
+            params['conductivity'] = 1.0
+        if 'specific heat' not in params:
+            params['specific heat'] = 1.0
+        if 'density' not in params:
+            params['density'] = 1.0
 
         general_params = dict(
             diffusivity = params['conductivity'],

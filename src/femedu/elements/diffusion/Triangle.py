@@ -35,6 +35,9 @@ class Triangle(Element):
         self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
 
         # dual base vectors (reference system)
+        if np.linalg.det(self.GIJ)<1.0e-10:
+            print("Peter, we are having a problem")
+
         self.gcont = np.linalg.inv(self.GIJ) @ self.gcov
 
         # dual basis in triangle coordinates
@@ -54,8 +57,10 @@ class Triangle(Element):
 
     def __str__(self):
         s = super(Triangle, self).__str__()
-        s += "\n    grad phi: x={x:.3e} y={y:.3e}".format(**self.material.getGrad())
-        s += "\n    flux:     x={x:.3e} y={y:.3e}".format(**self.material.getFlux())
+        gradPhi = self.material.getGrad()
+        s += "\n    grad phi: x={:.3e} y={:.3e}".format(gradPhi[0], gradPhi[1])
+        flux = self.material.getFlux()
+        s += "\n    flux:     x={:.3e} y={:.3e}".format(flux[0], flux[1])
         if np.array(self.distributed_load).any():
             s += "\n    element flux added to node:"
             for i, P in enumerate(self.Loads):
