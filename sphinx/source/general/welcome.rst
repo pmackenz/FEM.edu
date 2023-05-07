@@ -1,8 +1,8 @@
 .. include:: ../../VERSION.rst
 
-#####################################
-Welcome to the FEM.edu documentation!
-#####################################
+############################################
+Welcome to the |Application| documentation!
+############################################
 
 .. image:: /images/FEMedu-CoverPicture.png
     :alt: FEM.edu logo
