@@ -1,445 +1,1262 @@
 .
 ├── Contents.txt
-├── Courses
-│  ├── CESG501
-│  ├── CESG502
-│  ├── CESG504
-│  ├── CESG506
-│  ├── CESG507
-│  │  └── Final2023
-│  │     ├── Assignment4.pdf
-│  │     ├── Assignment4.tex
-│  │     ├── Problem4-1.png
-│  │     ├── Problem4-2.png
-│  │     ├── run.py
-│  │     ├── setup.py
-│  │     ├── study_2.0_fix_fix.png
-│  │     ├── study_2.0_fix_free.png
-│  │     ├── study_2.0_fix_pin.png
-│  │     ├── study_2.0_pin_fix.png
-│  │     └── study_2.0_pin_pin.png
-│  └── CESG508
-├── README.md
-├── sphinx
-│  ├── build
-│  │  ├── doctrees
-│  │  │  ├── design
-│  │  │  │  ├── element.doctree
-│  │  │  │  ├── material.doctree
-│  │  │  │  ├── mesher.doctree
-│  │  │  │  ├── node.doctree
-│  │  │  │  ├── plotter.doctree
-│  │  │  │  ├── solver.doctree
-│  │  │  │  └── system.doctree
-│  │  │  ├── design.doctree
-│  │  │  ├── environment.pickle
-│  │  │  ├── examples
-│  │  │  │  ├── beam_examples.doctree
-│  │  │  │  ├── beams
-│  │  │  │  │  ├── beam01
-│  │  │  │  │  │  └── beam01.doctree
-│  │  │  │  │  └── beam02
-│  │  │  │  │     └── beam02.doctree
-│  │  │  │  ├── continuum_examples.doctree
-│  │  │  │  ├── frame_examples.doctree
-│  │  │  │  ├── frames
-│  │  │  │  │  ├── frame01
-│  │  │  │  │  │  └── frame01.doctree
-│  │  │  │  │  ├── frame02
-│  │  │  │  │  │  └── frame02.doctree
-│  │  │  │  │  ├── frame03
-│  │  │  │  │  │  └── frame03.doctree
-│  │  │  │  │  └── frame04
-│  │  │  │  │     └── frame04.doctree
-│  │  │  │  ├── mixed_structures_examples.doctree
-│  │  │  │  ├── plate_examples.doctree
-│  │  │  │  ├── truss_examples.doctree
-│  │  │  │  └── trusses
-│  │  │  │     ├── truss01
-│  │  │  │     │  └── truss01.doctree
-│  │  │  │     ├── truss02
-│  │  │  │     │  └── truss02.doctree
-│  │  │  │     ├── truss03
-│  │  │  │     │  └── truss03.doctree
-│  │  │  │     └── truss04
-│  │  │  │        └── truss04.doctree
-│  │  │  ├── examples.doctree
-│  │  │  ├── general
-│  │  │  │  ├── about.doctree
-│  │  │  │  └── welcome.doctree
-│  │  │  ├── implementation
-│  │  │  │  ├── Beam2D_class.doctree
-│  │  │  │  ├── CurveMesher_class.doctree
-│  │  │  │  ├── DOF_class.doctree
-│  │  │  │  ├── ElasticSection.doctree
-│  │  │  │  ├── Element_class.doctree
-│  │  │  │  ├── ElementPlotter3D_class.doctree
-│  │  │  │  ├── ElementPlotter_class.doctree
-│  │  │  │  ├── FiberMaterial.doctree
-│  │  │  │  ├── FiberSection.doctree
-│  │  │  │  ├── Frame2D_class.doctree
-│  │  │  │  ├── LinearSolver_class.doctree
-│  │  │  │  ├── LinearTriangle_class.doctree
-│  │  │  │  ├── Material_class.doctree
-│  │  │  │  ├── Mesher_class.doctree
-│  │  │  │  ├── NewtonRaphsonSolver_class.doctree
-│  │  │  │  ├── Node_class.doctree
-│  │  │  │  ├── PatchMesher_class.doctree
-│  │  │  │  ├── PlaneStrain.doctree
-│  │  │  │  ├── PlaneStress.doctree
-│  │  │  │  ├── PlateSection.doctree
-│  │  │  │  ├── Plot_Support_Classes.doctree
-│  │  │  │  ├── Plotter3D_class.doctree
-│  │  │  │  ├── Plotter_class.doctree
-│  │  │  │  ├── Recorder_class.doctree
-│  │  │  │  ├── Sections.doctree
-│  │  │  │  ├── SolidMesher_class.doctree
-│  │  │  │  ├── Solver_class.doctree
-│  │  │  │  ├── System_class.doctree
-│  │  │  │  ├── Transformation_class.doctree
-│  │  │  │  ├── TriPatchMesher_class.doctree
-│  │  │  │  └── Truss_class.doctree
-│  │  │  ├── implementation.doctree
-│  │  │  └── index.doctree
-│  │  ├── html
-│  │  │  ├── _images
-│  │  │  │  ├── beam01_deformed.png
-│  │  │  │  ├── beam01_shear.png
-│  │  │  │  ├── beam02_deformed.png
-│  │  │  │  ├── beam02_shear.png
-│  │  │  │  ├── curve.png
-│  │  │  │  ├── FEMedu-CoverPicture.png
-│  │  │  │  ├── frame04_buckling_mode0.png
-│  │  │  │  ├── frame04_buckling_mode1.png
-│  │  │  │  ├── frame04_buckling_mode2.png
-│  │  │  │  ├── frame04_buckling_mode3.png
-│  │  │  │  ├── frame04_deformed.png
-│  │  │  │  ├── frame04_force.png
-│  │  │  │  ├── frame04_moment.png
-│  │  │  │  ├── frame04_shear.png
-│  │  │  │  ├── frame1_buckling_mode0.png
-│  │  │  │  ├── frame1_deformed.png
-│  │  │  │  ├── frame1_force.png
-│  │  │  │  ├── frame1_moment.png
-│  │  │  │  ├── frame1_shear.png
-│  │  │  │  ├── frame2_buckling_mode0.png
-│  │  │  │  ├── frame2_deformed.png
-│  │  │  │  ├── frame2_force.png
-│  │  │  │  ├── frame2_moment.png
-│  │  │  │  ├── frame2_shear.png
-│  │  │  │  ├── frame3_buckling_mode0.png
-│  │  │  │  ├── frame3_deformed.png
-│  │  │  │  ├── frame3_force.png
-│  │  │  │  ├── frame3_moment.png
-│  │  │  │  ├── frame3_shear.png
-│  │  │  │  ├── galik_william.jpg
-│  │  │  │  ├── jordan-seawright.jpg
-│  │  │  │  ├── patch.png
-│  │  │  │  ├── pedro-arduino.jpeg
-│  │  │  │  ├── peter-mackenzie-helnwein.jpeg
-│  │  │  │  ├── richard-wiebe.jpeg
-│  │  │  │  ├── solid.png
-│  │  │  │  ├── tatsu-sweet.jpg
-│  │  │  │  ├── tri-patch.png
-│  │  │  │  ├── truss01_deformed.png
-│  │  │  │  ├── truss01_forces.png
-│  │  │  │  ├── truss02_deformed.png
-│  │  │  │  ├── truss02_forces.png
-│  │  │  │  ├── truss03_deformed_a.png
-│  │  │  │  └── truss03_deformed_b.png
-│  │  │  ├── _sources
-│  │  │  │  ├── design
-│  │  │  │  │  ├── element.rst.txt
-│  │  │  │  │  ├── material.rst.txt
-│  │  │  │  │  ├── mesher.rst.txt
-│  │  │  │  │  ├── node.rst.txt
-│  │  │  │  │  ├── plotter.rst.txt
-│  │  │  │  │  ├── solver.rst.txt
-│  │  │  │  │  └── system.rst.txt
-│  │  │  │  ├── design.rst.txt
-│  │  │  │  ├── examples
-│  │  │  │  │  ├── beam_examples.rst.txt
-│  │  │  │  │  ├── beams
-│  │  │  │  │  │  ├── beam01
-│  │  │  │  │  │  │  └── beam01.rst.txt
-│  │  │  │  │  │  └── beam02
-│  │  │  │  │  │     └── beam02.rst.txt
-│  │  │  │  │  ├── continuum_examples.rst.txt
-│  │  │  │  │  ├── frame_examples.rst.txt
-│  │  │  │  │  ├── frames
-│  │  │  │  │  │  ├── frame01
-│  │  │  │  │  │  │  └── frame01.rst.txt
-│  │  │  │  │  │  ├── frame02
-│  │  │  │  │  │  │  └── frame02.rst.txt
-│  │  │  │  │  │  ├── frame03
-│  │  │  │  │  │  │  └── frame03.rst.txt
-│  │  │  │  │  │  └── frame04
-│  │  │  │  │  │     └── frame04.rst.txt
-│  │  │  │  │  ├── mixed_structures_examples.rst.txt
-│  │  │  │  │  ├── plate_examples.rst.txt
-│  │  │  │  │  ├── truss_examples.rst.txt
-│  │  │  │  │  └── trusses
-│  │  │  │  │     ├── truss01
-│  │  │  │  │     │  └── truss01.rst.txt
-│  │  │  │  │     ├── truss02
-│  │  │  │  │     │  └── truss02.rst.txt
-│  │  │  │  │     ├── truss03
-│  │  │  │  │     │  └── truss03.rst.txt
-│  │  │  │  │     └── truss04
-│  │  │  │  │        └── truss04.rst.txt
-│  │  │  │  ├── examples.rst.txt
-│  │  │  │  ├── general
-│  │  │  │  │  ├── about.rst.txt
-│  │  │  │  │  └── welcome.rst.txt
-│  │  │  │  ├── implementation
-│  │  │  │  │  ├── Beam2D_class.rst.txt
-│  │  │  │  │  ├── CurveMesher_class.rst.txt
-│  │  │  │  │  ├── DOF_class.rst.txt
-│  │  │  │  │  ├── ElasticSection.rst.txt
-│  │  │  │  │  ├── Element_class.rst.txt
-│  │  │  │  │  ├── ElementPlotter3D_class.rst.txt
-│  │  │  │  │  ├── ElementPlotter_class.rst.txt
-│  │  │  │  │  ├── FiberMaterial.rst.txt
-│  │  │  │  │  ├── FiberSection.rst.txt
-│  │  │  │  │  ├── Frame2D_class.rst.txt
-│  │  │  │  │  ├── LinearSolver_class.rst.txt
-│  │  │  │  │  ├── LinearTriangle_class.rst.txt
-│  │  │  │  │  ├── Material_class.rst.txt
-│  │  │  │  │  ├── Mesher_class.rst.txt
-│  │  │  │  │  ├── NewtonRaphsonSolver_class.rst.txt
-│  │  │  │  │  ├── Node_class.rst.txt
-│  │  │  │  │  ├── PatchMesher_class.rst.txt
-│  │  │  │  │  ├── PlaneStrain.rst.txt
-│  │  │  │  │  ├── PlaneStress.rst.txt
-│  │  │  │  │  ├── PlateSection.rst.txt
-│  │  │  │  │  ├── Plot_Support_Classes.rst.txt
-│  │  │  │  │  ├── Plotter3D_class.rst.txt
-│  │  │  │  │  ├── Plotter_class.rst.txt
-│  │  │  │  │  ├── Recorder_class.rst.txt
-│  │  │  │  │  ├── Sections.rst.txt
-│  │  │  │  │  ├── SolidMesher_class.rst.txt
-│  │  │  │  │  ├── Solver_class.rst.txt
-│  │  │  │  │  ├── System_class.rst.txt
-│  │  │  │  │  ├── Transformation_class.rst.txt
-│  │  │  │  │  ├── TriPatchMesher_class.rst.txt
-│  │  │  │  │  └── Truss_class.rst.txt
-│  │  │  │  ├── implementation.rst.txt
-│  │  │  │  └── index.rst.txt
-│  │  │  ├── _static
-│  │  │  │  ├── _sphinx_javascript_frameworks_compat.js
-│  │  │  │  ├── basic.css
-│  │  │  │  ├── css
-│  │  │  │  │  ├── badge_only.css
-│  │  │  │  │  ├── fonts
-│  │  │  │  │  │  ├── fontawesome-webfont.eot
-│  │  │  │  │  │  ├── fontawesome-webfont.svg
-│  │  │  │  │  │  ├── fontawesome-webfont.ttf
-│  │  │  │  │  │  ├── fontawesome-webfont.woff
-│  │  │  │  │  │  ├── fontawesome-webfont.woff2
-│  │  │  │  │  │  ├── lato-bold-italic.woff
-│  │  │  │  │  │  ├── lato-bold-italic.woff2
-│  │  │  │  │  │  ├── lato-bold.woff
-│  │  │  │  │  │  ├── lato-bold.woff2
-│  │  │  │  │  │  ├── lato-normal-italic.woff
-│  │  │  │  │  │  ├── lato-normal-italic.woff2
-│  │  │  │  │  │  ├── lato-normal.woff
-│  │  │  │  │  │  ├── lato-normal.woff2
-│  │  │  │  │  │  ├── Roboto-Slab-Bold.woff
-│  │  │  │  │  │  ├── Roboto-Slab-Bold.woff2
-│  │  │  │  │  │  ├── Roboto-Slab-Regular.woff
-│  │  │  │  │  │  └── Roboto-Slab-Regular.woff2
-│  │  │  │  │  └── theme.css
-│  │  │  │  ├── doctools.js
-│  │  │  │  ├── documentation_options.js
-│  │  │  │  ├── file.png
-│  │  │  │  ├── jquery-3.6.0.js
-│  │  │  │  ├── jquery.js
-│  │  │  │  ├── js
-│  │  │  │  │  ├── badge_only.js
-│  │  │  │  │  ├── html5shiv-printshiv.min.js
-│  │  │  │  │  ├── html5shiv.min.js
-│  │  │  │  │  └── theme.js
-│  │  │  │  ├── language_data.js
-│  │  │  │  ├── minus.png
-│  │  │  │  ├── plus.png
-│  │  │  │  ├── pygments.css
-│  │  │  │  ├── searchtools.js
-│  │  │  │  ├── underscore-1.13.1.js
-│  │  │  │  └── underscore.js
-│  │  │  ├── design
-│  │  │  │  ├── element.html
-│  │  │  │  ├── material.html
-│  │  │  │  ├── mesher.html
-│  │  │  │  ├── node.html
-│  │  │  │  ├── plotter.html
-│  │  │  │  ├── solver.html
-│  │  │  │  └── system.html
-│  │  │  ├── design.html
-│  │  │  ├── examples
-│  │  │  │  ├── beam_examples.html
-│  │  │  │  ├── beams
-│  │  │  │  │  ├── beam01
-│  │  │  │  │  │  └── beam01.html
-│  │  │  │  │  └── beam02
-│  │  │  │  │     └── beam02.html
-│  │  │  │  ├── continuum_examples.html
-│  │  │  │  ├── frame_examples.html
-│  │  │  │  ├── frames
-│  │  │  │  │  ├── frame01
-│  │  │  │  │  │  └── frame01.html
-│  │  │  │  │  ├── frame02
-│  │  │  │  │  │  └── frame02.html
-│  │  │  │  │  ├── frame03
-│  │  │  │  │  │  └── frame03.html
-│  │  │  │  │  └── frame04
-│  │  │  │  │     └── frame04.html
-│  │  │  │  ├── mixed_structures_examples.html
-│  │  │  │  ├── plate_examples.html
-│  │  │  │  ├── truss_examples.html
-│  │  │  │  └── trusses
-│  │  │  │     ├── truss01
-│  │  │  │     │  └── truss01.html
-│  │  │  │     ├── truss02
-│  │  │  │     │  └── truss02.html
-│  │  │  │     ├── truss03
-│  │  │  │     │  └── truss03.html
-│  │  │  │     └── truss04
-│  │  │  │        └── truss04.html
-│  │  │  ├── examples.html
-│  │  │  ├── general
-│  │  │  │  ├── about.html
-│  │  │  │  └── welcome.html
-│  │  │  ├── genindex.html
-│  │  │  ├── implementation
-│  │  │  │  ├── Beam2D_class.html
-│  │  │  │  ├── CurveMesher_class.html
-│  │  │  │  ├── DOF_class.html
-│  │  │  │  ├── ElasticSection.html
-│  │  │  │  ├── Element_class.html
-│  │  │  │  ├── ElementPlotter3D_class.html
-│  │  │  │  ├── ElementPlotter_class.html
-│  │  │  │  ├── FiberMaterial.html
-│  │  │  │  ├── FiberSection.html
-│  │  │  │  ├── Frame2D_class.html
-│  │  │  │  ├── LinearSolver_class.html
-│  │  │  │  ├── LinearTriangle_class.html
-│  │  │  │  ├── Material_class.html
-│  │  │  │  ├── Mesher_class.html
-│  │  │  │  ├── NewtonRaphsonSolver_class.html
-│  │  │  │  ├── Node_class.html
-│  │  │  │  ├── PatchMesher_class.html
-│  │  │  │  ├── PlaneStrain.html
-│  │  │  │  ├── PlaneStress.html
-│  │  │  │  ├── PlateSection.html
-│  │  │  │  ├── Plot_Support_Classes.html
-│  │  │  │  ├── Plotter3D_class.html
-│  │  │  │  ├── Plotter_class.html
-│  │  │  │  ├── Recorder_class.html
-│  │  │  │  ├── Sections.html
-│  │  │  │  ├── SolidMesher_class.html
-│  │  │  │  ├── Solver_class.html
-│  │  │  │  ├── System_class.html
-│  │  │  │  ├── Transformation_class.html
-│  │  │  │  ├── TriPatchMesher_class.html
-│  │  │  │  └── Truss_class.html
-│  │  │  ├── implementation.html
-│  │  │  ├── index.html
-│  │  │  ├── objects.inv
-│  │  │  ├── py-modindex.html
-│  │  │  ├── search.html
-│  │  │  └── searchindex.js
-│  │  └── latex
-│  │     ├── beam01_deformed.png
-│  │     ├── beam01_shear.png
-│  │     ├── beam02_deformed.png
-│  │     ├── beam02_shear.png
-│  │     ├── curve.png
-│  │     ├── FEMedu-CoverPicture.png
-│  │     ├── femedu.aux
-│  │     ├── femedu.fdb_latexmk
-│  │     ├── femedu.fls
-│  │     ├── femedu.idx
-│  │     ├── femedu.ilg
-│  │     ├── femedu.ind
-│  │     ├── femedu.log
-│  │     ├── femedu.out
-│  │     ├── femedu.pdf
-│  │     ├── femedu.tex
-│  │     ├── femedu.toc
-│  │     ├── frame04_buckling_mode0.png
-│  │     ├── frame04_buckling_mode1.png
-│  │     ├── frame04_buckling_mode2.png
-│  │     ├── frame04_buckling_mode3.png
-│  │     ├── frame04_deformed.png
-│  │     ├── frame04_force.png
-│  │     ├── frame04_moment.png
-│  │     ├── frame04_shear.png
-│  │     ├── frame1_buckling_mode0.png
-│  │     ├── frame1_deformed.png
-│  │     ├── frame1_force.png
-│  │     ├── frame1_moment.png
-│  │     ├── frame1_shear.png
-│  │     ├── frame2_buckling_mode0.png
-│  │     ├── frame2_deformed.png
-│  │     ├── frame2_force.png
-│  │     ├── frame2_moment.png
-│  │     ├── frame2_shear.png
-│  │     ├── frame3_buckling_mode0.png
-│  │     ├── frame3_deformed.png
-│  │     ├── frame3_force.png
-│  │     ├── frame3_moment.png
-│  │     ├── frame3_shear.png
-│  │     ├── galik_william.jpg
-│  │     ├── jordan-seawright.jpg
-│  │     ├── latexmkjarc
-│  │     ├── latexmkrc
-│  │     ├── LatinRules.xdy
-│  │     ├── LICRcyr2utf8.xdy
-│  │     ├── LICRlatin2utf8.xdy
-│  │     ├── make.bat
-│  │     ├── Makefile
-│  │     ├── patch.png
-│  │     ├── pedro-arduino.jpeg
-│  │     ├── peter-mackenzie-helnwein.jpeg
-│  │     ├── python.ist
-│  │     ├── richard-wiebe.jpeg
-│  │     ├── solid.png
-│  │     ├── sphinx.sty
-│  │     ├── sphinx.xdy
-│  │     ├── sphinxhighlight.sty
-│  │     ├── sphinxhowto.cls
-│  │     ├── sphinxlatexadmonitions.sty
-│  │     ├── sphinxlatexcontainers.sty
-│  │     ├── sphinxlatexgraphics.sty
-│  │     ├── sphinxlatexindbibtoc.sty
-│  │     ├── sphinxlatexlists.sty
-│  │     ├── sphinxlatexliterals.sty
-│  │     ├── sphinxlatexnumfig.sty
-│  │     ├── sphinxlatexobjects.sty
-│  │     ├── sphinxlatexshadowbox.sty
-│  │     ├── sphinxlatexstyleheadings.sty
-│  │     ├── sphinxlatexstylepage.sty
-│  │     ├── sphinxlatexstyletext.sty
-│  │     ├── sphinxlatextables.sty
-│  │     ├── sphinxmanual.cls
-│  │     ├── sphinxmessages.sty
-│  │     ├── sphinxoptionsgeometry.sty
-│  │     ├── sphinxoptionshyperref.sty
-│  │     ├── sphinxpackageboxes.sty
-│  │     ├── sphinxpackagecyrillic.sty
-│  │     ├── sphinxpackagefootnote.sty
-│  │     ├── tatsu-sweet.jpg
-│  │     ├── tri-patch.png
+├── dist
+│  ├── femedu-1.0.1-py3-none-any.whl
+│  ├── femedu-1.0.1.tar.gz
+│  ├── femedu-1.0.3-py3-none-any.whl
+│  ├── femedu-1.0.3.tar.gz
+│  ├── femedu-1.0.6-py3-none-any.whl
+│  └── femedu-1.0.6.tar.gz
+├── galleries
+│  ├── examples
+│  │  ├── __init__.py
+│  │  ├── beams
+│  │  │  ├── beam01_deformed.png
+│  │  │  ├── beam01_moment.png
+│  │  │  ├── beam01_shear.png
+│  │  │  ├── beam02_deformed.png
+│  │  │  ├── beam02_moment.png
+│  │  │  ├── beam02_shear.png
+│  │  │  ├── plot_beam01.py
+│  │  │  ├── plot_beam02.py
+│  │  │  ├── README.rst
+│  │  │  └── runall.py
+│  │  ├── course_help
+│  │  │  └── final01.py
+│  │  ├── diffusion
+│  │  │  ├── plot_thermal01.py
+│  │  │  └── README.rst
+│  │  ├── frames
+│  │  │  ├── frame1_buckling_mode0.png
+│  │  │  ├── frame1_deformed.png
+│  │  │  ├── frame1_force.png
+│  │  │  ├── frame1_moment.png
+│  │  │  ├── frame1_shear.png
+│  │  │  ├── frame1_stability.png
+│  │  │  ├── frame2_deformed.png
+│  │  │  ├── frame2_force.png
+│  │  │  ├── frame2_moment.png
+│  │  │  ├── frame2_shear.png
+│  │  │  ├── frame3_buckling_mode0.png
+│  │  │  ├── frame3_deformed.png
+│  │  │  ├── frame3_force.png
+│  │  │  ├── frame3_moment.png
+│  │  │  ├── frame3_shear.png
+│  │  │  ├── frame3_stability.png
+│  │  │  ├── frame4_buckling_mode0.png
+│  │  │  ├── frame4_buckling_mode1.png
+│  │  │  ├── frame4_buckling_mode2.png
+│  │  │  ├── frame4_buckling_mode3.png
+│  │  │  ├── frame4_deformed.png
+│  │  │  ├── frame4_force.png
+│  │  │  ├── frame4_moment.png
+│  │  │  ├── frame4_shear.png
+│  │  │  ├── frame4_stability.png
+│  │  │  ├── plot_frame01.py
+│  │  │  ├── plot_frame02.py
+│  │  │  ├── plot_frame03.py
+│  │  │  ├── plot_frame04.py
+│  │  │  ├── README.rst
+│  │  │  └── runall.py
+│  │  ├── mixed
+│  │  │  ├── mixed01_deformed.png
+│  │  │  ├── mixed01_force.png
+│  │  │  ├── mixed01_moment.png
+│  │  │  ├── mixed01_shear.png
+│  │  │  ├── mixed01_undeformed.png
+│  │  │  ├── plot_mixed01.py
+│  │  │  ├── README.rst
+│  │  │  └── runall.py
+│  │  ├── plates
+│  │  │  ├── plate01_deformed.png
+│  │  │  ├── plate01_undeformed.png
+│  │  │  ├── plate02_deformed.png
+│  │  │  ├── plate02_undeformed.png
+│  │  │  ├── plate03_deformed.png
+│  │  │  ├── plate03_spy_Kt.png
+│  │  │  ├── plate03_undeformed.png
+│  │  │  ├── plate04_deformed.png
+│  │  │  ├── plate04_undeformed.png
+│  │  │  ├── plate05_deformed.png
+│  │  │  ├── plate05_undeformed.png
+│  │  │  ├── plate06_deformed.png
+│  │  │  ├── plate06_spy_Kt.png
+│  │  │  ├── plate06_undeformed.png
+│  │  │  ├── plate07_deformed.png
+│  │  │  ├── plate07_mode 0.png
+│  │  │  ├── plate07_mode 1.png
+│  │  │  ├── plate07_mode 2.png
+│  │  │  ├── plate07_mode 3.png
+│  │  │  ├── plate07_mode 4.png
+│  │  │  ├── plate07_mode 5.png
+│  │  │  ├── plate07_mode 6.png
+│  │  │  ├── plate07_mode 7.png
+│  │  │  ├── plate07_undeformed.png
+│  │  │  ├── plate08_deformed.png
+│  │  │  ├── plate08_mode 0.png
+│  │  │  ├── plate08_mode 1.png
+│  │  │  ├── plate08_mode 2.png
+│  │  │  ├── plate08_mode 3.png
+│  │  │  ├── plate08_mode 4.png
+│  │  │  ├── plate08_mode 5.png
+│  │  │  ├── plate08_mode 6.png
+│  │  │  ├── plate08_mode 7.png
+│  │  │  ├── plate08_undeformed.png
+│  │  │  ├── plate09_deformed.png
+│  │  │  ├── plate09_spy_Kt.png
+│  │  │  ├── plate09_undeformed.png
+│  │  │  ├── plate6_Kt.npy
+│  │  │  ├── plot_plate01.py
+│  │  │  ├── plot_plate02.py
+│  │  │  ├── plot_plate03.py
+│  │  │  ├── plot_plate04.py
+│  │  │  ├── plot_plate05.py
+│  │  │  ├── plot_plate06.py
+│  │  │  ├── plot_plate07.py
+│  │  │  ├── plot_plate08.py
+│  │  │  ├── plot_plate09.py
+│  │  │  ├── plot_plate10.py
+│  │  │  ├── profile_data_full.txt
+│  │  │  ├── read_profile_stats.py
+│  │  │  └── README.rst
+│  │  ├── README.rst
+│  │  ├── runall.py
+│  │  ├── solids
+│  │  │  └── runall.py
+│  │  └── trusses
+│  │     ├── load-displacement.png
+│  │     ├── plot_truss01.py
+│  │     ├── plot_truss02.py
+│  │     ├── plot_truss03.py
+│  │     ├── plot_truss04.py
+│  │     ├── plot_truss05.py
+│  │     ├── plot_truss06.py
+│  │     ├── plot_truss07.py
+│  │     ├── plot_truss08.py
+│  │     ├── plot_truss09.py
+│  │     ├── README.rst
+│  │     ├── runall.py
 │  │     ├── truss01_deformed.png
 │  │     ├── truss01_forces.png
 │  │     ├── truss02_deformed.png
 │  │     ├── truss02_forces.png
+│  │     ├── truss02_undeformed.png
 │  │     ├── truss03_deformed_a.png
-│  │     └── truss03_deformed_b.png
+│  │     ├── truss03_deformed_b.png
+│  │     ├── truss05_deformed.png
+│  │     ├── truss07_deformation_history.png
+│  │     ├── truss07_deformed.png
+│  │     ├── truss07_undeformed.png
+│  │     ├── truss08_deformation_history.png
+│  │     ├── truss08_deformed.png
+│  │     ├── truss08_deformed_end_disp_control.png
+│  │     ├── truss08_deformed_end_load_2_control.png
+│  │     ├── truss08_deformed_end_load_control.png
+│  │     ├── truss08_deformed_end load.png
+│  │     ├── truss08_undeformed.png
+│  │     ├── truss09_deformation_history.png
+│  │     └── truss09_deformed_end_load_control.png
+│  └── tutorials
+│     ├── direct_stiffness
+│     │  └── README.rst
+│     ├── large_deformation
+│     │  └── README.rst
+│     ├── linear_fem
+│     │  └── README.rst
+│     ├── model_creation
+│     │  ├── plot_01_setup.py
+│     │  ├── plot_02_loading.py
+│     │  ├── README.rst
+│     │  └── tutorial01_deformed.png
+│     ├── plasticity
+│     │  └── README.rst
+│     └── README.rst
+├── LICENSE
+├── pyproject.toml
+├── README.md
+├── sphinx
+│  ├── build
+│  │  └── html
+│  │     ├── _downloads
+│  │     │  ├── 01088434f2f8ec92eeb08fc4c886169f
+│  │     │  │  └── plot_mixed01.py
+│  │     │  ├── 02eebd5a31e82a4a7d2597ea7b311397
+│  │     │  │  └── plot_plate09.py
+│  │     │  ├── 07fcc19ba03226cd3d83d4e40ec44385
+│  │     │  │  └── auto_examples_python.zip
+│  │     │  ├── 2a73f877369e6545e02a3ffd5afc818e
+│  │     │  │  └── plot_plate04.py
+│  │     │  ├── 3fa48a4f1bac045233b8cb1537faf242
+│  │     │  │  └── plot_plate08.ipynb
+│  │     │  ├── 5c7bb42081b778e79fe693a6147f6519
+│  │     │  │  └── plot_frame04.ipynb
+│  │     │  ├── 5faf5ff6fcbdfc4cbd4ee5857c763659
+│  │     │  │  └── plot_plate04.ipynb
+│  │     │  ├── 6aba9dd7bdb82d6aafbe357940d3220a
+│  │     │  │  └── plot_truss06.ipynb
+│  │     │  ├── 6e026a8327aaf7199ddd04976d668792
+│  │     │  │  └── plot_frame03.ipynb
+│  │     │  ├── 6f1e7a639e0699d6164445b55e6c116d
+│  │     │  │  └── auto_examples_jupyter.zip
+│  │     │  ├── 7f2cc67a0ff039d8191fc915d6f7c3dc
+│  │     │  │  └── plot_frame01.ipynb
+│  │     │  ├── 8c3e2da51c2ed3e790c9699e4ff8d4ee
+│  │     │  │  └── plot_plate03.py
+│  │     │  ├── 9eb8ba2f493e430b3eb75da73ea80c22
+│  │     │  │  └── plot_mixed01.ipynb
+│  │     │  ├── 10bc747c00013d298ec8be951c6f9b56
+│  │     │  │  └── plot_truss01.ipynb
+│  │     │  ├── 12c7c24aea89d6338595bd26263e0d0b
+│  │     │  │  └── plot_plate01.py
+│  │     │  ├── 29eb8dabe6549980d2a99ec56c347d3a
+│  │     │  │  └── plot_01_setup.ipynb
+│  │     │  ├── 32fd880e109e940272d694bbf6555869
+│  │     │  │  └── plot_frame03.py
+│  │     │  ├── 36f427c63db1f8c46ac8aaa17e1d6938
+│  │     │  │  └── plot_frame02.py
+│  │     │  ├── 40d880429670bf5ce54912b139b4e5d9
+│  │     │  │  └── plot_frame04.py
+│  │     │  ├── 62da168d245b575d03c39c5df76458f1
+│  │     │  │  └── plot_plate07.ipynb
+│  │     │  ├── 72d3487998023b182536b3a270a2199e
+│  │     │  │  └── plot_plate09.ipynb
+│  │     │  ├── 82d91fdc436177ddf50bd42c32fddf6c
+│  │     │  │  └── plot_beam01.ipynb
+│  │     │  ├── 82dfc7b00ab2727b53c95b27d070083c
+│  │     │  │  └── plot_truss02.py
+│  │     │  ├── 97a1de59bce682890841bb846e3dd09c
+│  │     │  │  └── auto_tutorials_jupyter.zip
+│  │     │  ├── 98a4ff55218d11c25cec8786cb531ebf
+│  │     │  │  └── plot_truss05.ipynb
+│  │     │  ├── 117e65f0ef5f45932d2affe0d74efb0a
+│  │     │  │  └── plot_beam02.ipynb
+│  │     │  ├── 199c77719c26cb782ce97943c8809bd9
+│  │     │  │  └── plot_truss08.py
+│  │     │  ├── 385bc28c4289222e87faae37a23fdec7
+│  │     │  │  └── plot_02_loading.ipynb
+│  │     │  ├── 6514daca88a1dd3f06d8eaf1979ddb12
+│  │     │  │  └── plot_plate03.ipynb
+│  │     │  ├── 7146cb6ca099dd75f3b8b34d822536c2
+│  │     │  │  └── plot_truss04.ipynb
+│  │     │  ├── 8374c9d9ae4784e043e0ea6a4e998dff
+│  │     │  │  └── plot_truss09.ipynb
+│  │     │  ├── 8484d34548d21fbaef0a49006b675c4a
+│  │     │  │  └── plot_plate07.py
+│  │     │  ├── 307073f7a96c279b06430f73afb4cc59
+│  │     │  │  └── plot_beam01.py
+│  │     │  ├── 321836c6f30b13a4cad7238ff31388e7
+│  │     │  │  └── plot_02_loading.py
+│  │     │  ├── 638068e1830f896d7cf88c44cafdab05
+│  │     │  │  └── plot_frame02.ipynb
+│  │     │  ├── 837856e8c26c196baad630695d843f53
+│  │     │  │  └── plot_frame01.py
+│  │     │  ├── 512077356cb0a09af21159899ace622f
+│  │     │  │  └── plot_plate06.ipynb
+│  │     │  ├── 553115917cd4150d729e7db698151426
+│  │     │  │  └── plot_truss04.py
+│  │     │  ├── 6756943355a222b85d833bb4056c078f
+│  │     │  │  └── plot_plate08.py
+│  │     │  ├── a5d52ca3a90ce34aef156f04071b160e
+│  │     │  │  └── plot_truss03.ipynb
+│  │     │  ├── a338c2f55ec22149ca3ca7c697593e86
+│  │     │  │  └── plot_truss07.py
+│  │     │  ├── ad614920e9aa091c8d7ffa2695b5f959
+│  │     │  │  └── plot_truss08.ipynb
+│  │     │  ├── ae1fec07aec3868e1f923a0d334ce91b
+│  │     │  │  └── plot_01_setup.py
+│  │     │  ├── ae33efdebb28467e9b52973845e57766
+│  │     │  │  └── plot_plate10.ipynb
+│  │     │  ├── afc506c2ca5f3fc81e20ac6ff43b557e
+│  │     │  │  └── plot_beam02.py
+│  │     │  ├── b94a6b667a7a0e628ad0a181381ed7cf
+│  │     │  │  └── plot_plate02.py
+│  │     │  ├── b688d60488603b015311c11693cca8b3
+│  │     │  │  └── plot_plate05.py
+│  │     │  ├── b2933819fa33a2604a6de3a11eedaea3
+│  │     │  │  └── plot_plate05.ipynb
+│  │     │  ├── bb715000677ea1440bbfa252bf815246
+│  │     │  │  └── plot_plate10.py
+│  │     │  ├── c9801b34c0cb4c58e835a27ddab95676
+│  │     │  │  └── plot_plate01.ipynb
+│  │     │  ├── cab7a090c4183ca69dc0cd84d3b04413
+│  │     │  │  └── auto_tutorials_python.zip
+│  │     │  ├── ce3cdc91b644f367ef14ac5611e599fd
+│  │     │  │  └── plot_plate06.py
+│  │     │  ├── d0fe563a643f28eb226e3bd1bc526659
+│  │     │  │  └── plot_truss07.ipynb
+│  │     │  ├── d0503ada99d89a371a55eece5cfc7c7b
+│  │     │  │  └── plot_truss02.ipynb
+│  │     │  ├── d504150fd4614e8c013fc162a98eb592
+│  │     │  │  └── plot_truss01.py
+│  │     │  ├── d1163735e23686ab15e7e676ea45e8b9
+│  │     │  │  └── plot_truss03.py
+│  │     │  ├── df3f5fcf7b831986fc3aa1479c9d6d16
+│  │     │  │  └── plot_plate02.ipynb
+│  │     │  ├── fa66aff39ae1a4c4dbd27ebd8b1dd2c8
+│  │     │  │  └── plot_truss06.py
+│  │     │  ├── faecc9553f8761dd1223f0a12d1b38ee
+│  │     │  │  └── plot_truss05.py
+│  │     │  └── fd30129719e62f5ca72bea0753f8ea6b
+│  │     │     └── plot_truss09.py
+│  │     ├── _images
+│  │     │  ├── beam01_deformed.png
+│  │     │  ├── beam01_moment.png
+│  │     │  ├── beam01_shear.png
+│  │     │  ├── beam02_deformed.png
+│  │     │  ├── beam02_moment.png
+│  │     │  ├── beam02_shear.png
+│  │     │  ├── curve.png
+│  │     │  ├── CurveMesher01.png
+│  │     │  ├── FEMedu-CoverPicture.png
+│  │     │  ├── frame1_buckling_mode0.png
+│  │     │  ├── frame1_deformed.png
+│  │     │  ├── frame1_force.png
+│  │     │  ├── frame1_moment.png
+│  │     │  ├── frame1_shear.png
+│  │     │  ├── frame2_buckling_mode0.png
+│  │     │  ├── frame2_deformed.png
+│  │     │  ├── frame2_force.png
+│  │     │  ├── frame2_moment.png
+│  │     │  ├── frame2_shear.png
+│  │     │  ├── frame3_buckling_mode0.png
+│  │     │  ├── frame3_deformed.png
+│  │     │  ├── frame3_force.png
+│  │     │  ├── frame3_moment.png
+│  │     │  ├── frame3_shear.png
+│  │     │  ├── frame4_buckling_mode0.png
+│  │     │  ├── frame4_buckling_mode1.png
+│  │     │  ├── frame4_buckling_mode2.png
+│  │     │  ├── frame4_buckling_mode3.png
+│  │     │  ├── frame4_deformed.png
+│  │     │  ├── frame4_force.png
+│  │     │  ├── frame4_moment.png
+│  │     │  ├── frame4_shear.png
+│  │     │  ├── galik_william.jpg
+│  │     │  ├── jordan-seawright.jpg
+│  │     │  ├── patch.png
+│  │     │  ├── pedro-arduino.jpeg
+│  │     │  ├── peter-mackenzie-helnwein.jpeg
+│  │     │  ├── plate01_deformed.png
+│  │     │  ├── plate01_undeformed.png
+│  │     │  ├── plate02_deformed.png
+│  │     │  ├── plate02_undeformed.png
+│  │     │  ├── plate03_deformed.png
+│  │     │  ├── plate03_undeformed.png
+│  │     │  ├── plate04_deformed.png
+│  │     │  ├── plate04_undeformed.png
+│  │     │  ├── richard-wiebe.jpeg
+│  │     │  ├── solid.png
+│  │     │  ├── sphx_glr_plot_01_setup_001.png
+│  │     │  ├── sphx_glr_plot_01_setup_002.png
+│  │     │  ├── sphx_glr_plot_01_setup_thumb.png
+│  │     │  ├── sphx_glr_plot_02_loading_thumb.png
+│  │     │  ├── sphx_glr_plot_beam01_001.png
+│  │     │  ├── sphx_glr_plot_beam01_002.png
+│  │     │  ├── sphx_glr_plot_beam01_003.png
+│  │     │  ├── sphx_glr_plot_beam01_thumb.png
+│  │     │  ├── sphx_glr_plot_beam02_001.png
+│  │     │  ├── sphx_glr_plot_beam02_002.png
+│  │     │  ├── sphx_glr_plot_beam02_003.png
+│  │     │  ├── sphx_glr_plot_beam02_thumb.png
+│  │     │  ├── sphx_glr_plot_frame01_001.png
+│  │     │  ├── sphx_glr_plot_frame01_002.png
+│  │     │  ├── sphx_glr_plot_frame01_003.png
+│  │     │  ├── sphx_glr_plot_frame01_004.png
+│  │     │  ├── sphx_glr_plot_frame01_005.png
+│  │     │  ├── sphx_glr_plot_frame01_006.png
+│  │     │  ├── sphx_glr_plot_frame01_thumb.png
+│  │     │  ├── sphx_glr_plot_frame02_001.png
+│  │     │  ├── sphx_glr_plot_frame02_002.png
+│  │     │  ├── sphx_glr_plot_frame02_003.png
+│  │     │  ├── sphx_glr_plot_frame02_004.png
+│  │     │  ├── sphx_glr_plot_frame02_thumb.png
+│  │     │  ├── sphx_glr_plot_frame03_001.png
+│  │     │  ├── sphx_glr_plot_frame03_002.png
+│  │     │  ├── sphx_glr_plot_frame03_003.png
+│  │     │  ├── sphx_glr_plot_frame03_004.png
+│  │     │  ├── sphx_glr_plot_frame03_005.png
+│  │     │  ├── sphx_glr_plot_frame03_006.png
+│  │     │  ├── sphx_glr_plot_frame03_thumb.png
+│  │     │  ├── sphx_glr_plot_frame04_001.png
+│  │     │  ├── sphx_glr_plot_frame04_002.png
+│  │     │  ├── sphx_glr_plot_frame04_003.png
+│  │     │  ├── sphx_glr_plot_frame04_004.png
+│  │     │  ├── sphx_glr_plot_frame04_005.png
+│  │     │  ├── sphx_glr_plot_frame04_006.png
+│  │     │  ├── sphx_glr_plot_frame04_007.png
+│  │     │  ├── sphx_glr_plot_frame04_008.png
+│  │     │  ├── sphx_glr_plot_frame04_009.png
+│  │     │  ├── sphx_glr_plot_frame04_thumb.png
+│  │     │  ├── sphx_glr_plot_mixed01_001.png
+│  │     │  ├── sphx_glr_plot_mixed01_002.png
+│  │     │  ├── sphx_glr_plot_mixed01_003.png
+│  │     │  ├── sphx_glr_plot_mixed01_004.png
+│  │     │  ├── sphx_glr_plot_mixed01_005.png
+│  │     │  ├── sphx_glr_plot_mixed01_thumb.png
+│  │     │  ├── sphx_glr_plot_plate01_001.png
+│  │     │  ├── sphx_glr_plot_plate01_002.png
+│  │     │  ├── sphx_glr_plot_plate01_thumb.png
+│  │     │  ├── sphx_glr_plot_plate02_001.png
+│  │     │  ├── sphx_glr_plot_plate02_002.png
+│  │     │  ├── sphx_glr_plot_plate02_thumb.png
+│  │     │  ├── sphx_glr_plot_plate03_001.png
+│  │     │  ├── sphx_glr_plot_plate03_002.png
+│  │     │  ├── sphx_glr_plot_plate03_003.png
+│  │     │  ├── sphx_glr_plot_plate03_thumb.png
+│  │     │  ├── sphx_glr_plot_plate04_001.png
+│  │     │  ├── sphx_glr_plot_plate04_002.png
+│  │     │  ├── sphx_glr_plot_plate04_thumb.png
+│  │     │  ├── sphx_glr_plot_plate05_001.png
+│  │     │  ├── sphx_glr_plot_plate05_002.png
+│  │     │  ├── sphx_glr_plot_plate05_thumb.png
+│  │     │  ├── sphx_glr_plot_plate06_001.png
+│  │     │  ├── sphx_glr_plot_plate06_002.png
+│  │     │  ├── sphx_glr_plot_plate06_thumb.png
+│  │     │  ├── sphx_glr_plot_plate07_001.png
+│  │     │  ├── sphx_glr_plot_plate07_002.png
+│  │     │  ├── sphx_glr_plot_plate07_003.png
+│  │     │  ├── sphx_glr_plot_plate07_004.png
+│  │     │  ├── sphx_glr_plot_plate07_005.png
+│  │     │  ├── sphx_glr_plot_plate07_006.png
+│  │     │  ├── sphx_glr_plot_plate07_007.png
+│  │     │  ├── sphx_glr_plot_plate07_008.png
+│  │     │  ├── sphx_glr_plot_plate07_009.png
+│  │     │  ├── sphx_glr_plot_plate07_010.png
+│  │     │  ├── sphx_glr_plot_plate07_thumb.png
+│  │     │  ├── sphx_glr_plot_plate08_001.png
+│  │     │  ├── sphx_glr_plot_plate08_002.png
+│  │     │  ├── sphx_glr_plot_plate08_003.png
+│  │     │  ├── sphx_glr_plot_plate08_004.png
+│  │     │  ├── sphx_glr_plot_plate08_005.png
+│  │     │  ├── sphx_glr_plot_plate08_006.png
+│  │     │  ├── sphx_glr_plot_plate08_007.png
+│  │     │  ├── sphx_glr_plot_plate08_008.png
+│  │     │  ├── sphx_glr_plot_plate08_009.png
+│  │     │  ├── sphx_glr_plot_plate08_010.png
+│  │     │  ├── sphx_glr_plot_plate08_thumb.png
+│  │     │  ├── sphx_glr_plot_plate09_001.png
+│  │     │  ├── sphx_glr_plot_plate09_002.png
+│  │     │  ├── sphx_glr_plot_plate09_003.png
+│  │     │  ├── sphx_glr_plot_plate09_thumb.png
+│  │     │  ├── sphx_glr_plot_plate10_thumb.png
+│  │     │  ├── sphx_glr_plot_truss01_001.png
+│  │     │  ├── sphx_glr_plot_truss01_002.png
+│  │     │  ├── sphx_glr_plot_truss01_thumb.png
+│  │     │  ├── sphx_glr_plot_truss02_001.png
+│  │     │  ├── sphx_glr_plot_truss02_002.png
+│  │     │  ├── sphx_glr_plot_truss02_003.png
+│  │     │  ├── sphx_glr_plot_truss02_thumb.png
+│  │     │  ├── sphx_glr_plot_truss03_001.png
+│  │     │  ├── sphx_glr_plot_truss03_002.png
+│  │     │  ├── sphx_glr_plot_truss03_thumb.png
+│  │     │  ├── sphx_glr_plot_truss04_001.png
+│  │     │  ├── sphx_glr_plot_truss04_thumb.png
+│  │     │  ├── sphx_glr_plot_truss05_001.png
+│  │     │  ├── sphx_glr_plot_truss05_002.png
+│  │     │  ├── sphx_glr_plot_truss05_003.png
+│  │     │  ├── sphx_glr_plot_truss05_004.png
+│  │     │  ├── sphx_glr_plot_truss05_005.png
+│  │     │  ├── sphx_glr_plot_truss05_006.png
+│  │     │  ├── sphx_glr_plot_truss05_thumb.png
+│  │     │  ├── sphx_glr_plot_truss06_001.png
+│  │     │  ├── sphx_glr_plot_truss06_002.png
+│  │     │  ├── sphx_glr_plot_truss06_003.png
+│  │     │  ├── sphx_glr_plot_truss06_004.png
+│  │     │  ├── sphx_glr_plot_truss06_005.png
+│  │     │  ├── sphx_glr_plot_truss06_006.png
+│  │     │  ├── sphx_glr_plot_truss06_007.png
+│  │     │  ├── sphx_glr_plot_truss06_008.png
+│  │     │  ├── sphx_glr_plot_truss06_009.png
+│  │     │  ├── sphx_glr_plot_truss06_010.png
+│  │     │  ├── sphx_glr_plot_truss06_011.png
+│  │     │  ├── sphx_glr_plot_truss06_012.png
+│  │     │  ├── sphx_glr_plot_truss06_013.png
+│  │     │  ├── sphx_glr_plot_truss06_014.png
+│  │     │  ├── sphx_glr_plot_truss06_015.png
+│  │     │  ├── sphx_glr_plot_truss06_016.png
+│  │     │  ├── sphx_glr_plot_truss06_017.png
+│  │     │  ├── sphx_glr_plot_truss06_018.png
+│  │     │  ├── sphx_glr_plot_truss06_019.png
+│  │     │  ├── sphx_glr_plot_truss06_020.png
+│  │     │  ├── sphx_glr_plot_truss06_021.png
+│  │     │  ├── sphx_glr_plot_truss06_022.png
+│  │     │  ├── sphx_glr_plot_truss06_023.png
+│  │     │  ├── sphx_glr_plot_truss06_024.png
+│  │     │  ├── sphx_glr_plot_truss06_025.png
+│  │     │  ├── sphx_glr_plot_truss06_026.png
+│  │     │  ├── sphx_glr_plot_truss06_027.png
+│  │     │  ├── sphx_glr_plot_truss06_thumb.png
+│  │     │  ├── sphx_glr_plot_truss07_001.png
+│  │     │  ├── sphx_glr_plot_truss07_002.png
+│  │     │  ├── sphx_glr_plot_truss07_003.png
+│  │     │  ├── sphx_glr_plot_truss07_thumb.png
+│  │     │  ├── sphx_glr_plot_truss08_001.png
+│  │     │  ├── sphx_glr_plot_truss08_002.png
+│  │     │  ├── sphx_glr_plot_truss08_003.png
+│  │     │  ├── sphx_glr_plot_truss08_004.png
+│  │     │  ├── sphx_glr_plot_truss08_005.png
+│  │     │  ├── sphx_glr_plot_truss08_thumb.png
+│  │     │  ├── sphx_glr_plot_truss09_001.png
+│  │     │  ├── sphx_glr_plot_truss09_002.png
+│  │     │  ├── sphx_glr_plot_truss09_003.png
+│  │     │  ├── sphx_glr_plot_truss09_thumb.png
+│  │     │  ├── tatsu-sweet.jpg
+│  │     │  ├── tri-patch.png
+│  │     │  ├── truss01_deformed.png
+│  │     │  ├── truss01_forces.png
+│  │     │  ├── truss02_deformed.png
+│  │     │  ├── truss02_forces.png
+│  │     │  ├── truss02_undeformed.png
+│  │     │  ├── truss03_deformed_a.png
+│  │     │  └── truss03_deformed_b.png
+│  │     ├── _sources
+│  │     │  ├── auto_examples
+│  │     │  │  ├── beams
+│  │     │  │  │  ├── index.rst.txt
+│  │     │  │  │  ├── plot_beam01.rst.txt
+│  │     │  │  │  ├── plot_beam02.rst.txt
+│  │     │  │  │  └── sg_execution_times.rst.txt
+│  │     │  │  ├── diffusion
+│  │     │  │  │  └── index.rst.txt
+│  │     │  │  ├── frames
+│  │     │  │  │  ├── index.rst.txt
+│  │     │  │  │  ├── plot_frame01.rst.txt
+│  │     │  │  │  ├── plot_frame02.rst.txt
+│  │     │  │  │  ├── plot_frame03.rst.txt
+│  │     │  │  │  ├── plot_frame04.rst.txt
+│  │     │  │  │  └── sg_execution_times.rst.txt
+│  │     │  │  ├── index.rst.txt
+│  │     │  │  ├── mixed
+│  │     │  │  │  ├── index.rst.txt
+│  │     │  │  │  ├── plot_mixed01.rst.txt
+│  │     │  │  │  └── sg_execution_times.rst.txt
+│  │     │  │  ├── plates
+│  │     │  │  │  ├── index.rst.txt
+│  │     │  │  │  ├── plot_plate01.rst.txt
+│  │     │  │  │  ├── plot_plate02.rst.txt
+│  │     │  │  │  ├── plot_plate03.rst.txt
+│  │     │  │  │  ├── plot_plate04.rst.txt
+│  │     │  │  │  ├── plot_plate05.rst.txt
+│  │     │  │  │  ├── plot_plate06.rst.txt
+│  │     │  │  │  ├── plot_plate07.rst.txt
+│  │     │  │  │  ├── plot_plate08.rst.txt
+│  │     │  │  │  ├── plot_plate09.rst.txt
+│  │     │  │  │  ├── plot_plate10.rst.txt
+│  │     │  │  │  └── sg_execution_times.rst.txt
+│  │     │  │  └── trusses
+│  │     │  │     ├── index.rst.txt
+│  │     │  │     ├── plot_truss01.rst.txt
+│  │     │  │     ├── plot_truss02.rst.txt
+│  │     │  │     ├── plot_truss03.rst.txt
+│  │     │  │     ├── plot_truss04.rst.txt
+│  │     │  │     ├── plot_truss05.rst.txt
+│  │     │  │     ├── plot_truss06.rst.txt
+│  │     │  │     ├── plot_truss07.rst.txt
+│  │     │  │     ├── plot_truss08.rst.txt
+│  │     │  │     ├── plot_truss09.rst.txt
+│  │     │  │     └── sg_execution_times.rst.txt
+│  │     │  ├── auto_tutorials
+│  │     │  │  ├── direct_stiffness
+│  │     │  │  │  └── index.rst.txt
+│  │     │  │  ├── index.rst.txt
+│  │     │  │  ├── large_deformation
+│  │     │  │  │  └── index.rst.txt
+│  │     │  │  ├── linear_fem
+│  │     │  │  │  └── index.rst.txt
+│  │     │  │  ├── model_creation
+│  │     │  │  │  ├── index.rst.txt
+│  │     │  │  │  ├── plot_01_setup.rst.txt
+│  │     │  │  │  ├── plot_02_loading.rst.txt
+│  │     │  │  │  └── sg_execution_times.rst.txt
+│  │     │  │  └── plasticity
+│  │     │  │     └── index.rst.txt
+│  │     │  ├── design
+│  │     │  │  ├── element.rst.txt
+│  │     │  │  ├── material.rst.txt
+│  │     │  │  ├── mesher.rst.txt
+│  │     │  │  ├── node.rst.txt
+│  │     │  │  ├── plotter.rst.txt
+│  │     │  │  ├── solver.rst.txt
+│  │     │  │  └── system.rst.txt
+│  │     │  ├── design.rst.txt
+│  │     │  ├── general
+│  │     │  │  ├── about.rst.txt
+│  │     │  │  ├── Installation.rst.txt
+│  │     │  │  └── welcome.rst.txt
+│  │     │  ├── implementation
+│  │     │  │  ├── Domain
+│  │     │  │  │  ├── Node_class.rst.txt
+│  │     │  │  │  ├── System_class.rst.txt
+│  │     │  │  │  └── Transformation_class.rst.txt
+│  │     │  │  ├── Elements
+│  │     │  │  │  ├── Beam2D_class.rst.txt
+│  │     │  │  │  ├── Diffusion
+│  │     │  │  │  │  └── Triangle_class.rst.txt
+│  │     │  │  │  ├── Element_class.rst.txt
+│  │     │  │  │  ├── Face_classes.rst.txt
+│  │     │  │  │  ├── Frame2D_class.rst.txt
+│  │     │  │  │  ├── Quad8_class.rst.txt
+│  │     │  │  │  ├── Quad9_class.rst.txt
+│  │     │  │  │  ├── Quad_class.rst.txt
+│  │     │  │  │  ├── Triangle_class.rst.txt
+│  │     │  │  │  └── Truss_class.rst.txt
+│  │     │  │  ├── implementation.rst.txt
+│  │     │  │  ├── Materials
+│  │     │  │  │  ├── Diffusion.rst.txt
+│  │     │  │  │  ├── ElasticSection.rst.txt
+│  │     │  │  │  ├── FiberMaterial.rst.txt
+│  │     │  │  │  ├── FiberSection.rst.txt
+│  │     │  │  │  ├── Material_class.rst.txt
+│  │     │  │  │  ├── PlaneStrain.rst.txt
+│  │     │  │  │  ├── PlaneStress.rst.txt
+│  │     │  │  │  ├── PlateSection.rst.txt
+│  │     │  │  │  └── Sections.rst.txt
+│  │     │  │  ├── Mesher
+│  │     │  │  │  ├── CurveMesher_class.rst.txt
+│  │     │  │  │  ├── Mesher_class.rst.txt
+│  │     │  │  │  ├── PatchMesher_class.rst.txt
+│  │     │  │  │  ├── SolidMesher_class.rst.txt
+│  │     │  │  │  └── TriPatchMesher_class.rst.txt
+│  │     │  │  ├── Plotter
+│  │     │  │  │  ├── ElementPlotter3D_class.rst.txt
+│  │     │  │  │  ├── ElementPlotter_class.rst.txt
+│  │     │  │  │  ├── Plot_Support_Classes.rst.txt
+│  │     │  │  │  ├── Plotter3D_class.rst.txt
+│  │     │  │  │  └── Plotter_class.rst.txt
+│  │     │  │  ├── Recorder
+│  │     │  │  │  └── Recorder_class.rst.txt
+│  │     │  │  ├── Solvers
+│  │     │  │  │  ├── LinearSolver_class.rst.txt
+│  │     │  │  │  ├── NewtonRaphsonSolver_class.rst.txt
+│  │     │  │  │  └── Solver_class.rst.txt
+│  │     │  │  └── Utilities
+│  │     │  │     ├── Integration_class.rst.txt
+│  │     │  │     └── ShapeFunction_classes.rst.txt
+│  │     │  ├── index.rst.txt
+│  │     │  ├── tutorials
+│  │     │  │  ├── beam_examples.rst.txt
+│  │     │  │  ├── beams
+│  │     │  │  │  ├── beam01
+│  │     │  │  │  │  └── beam01.rst.txt
+│  │     │  │  │  └── beam02
+│  │     │  │  │     └── beam02.rst.txt
+│  │     │  │  ├── continuum_examples.rst.txt
+│  │     │  │  ├── frame_examples.rst.txt
+│  │     │  │  ├── frames
+│  │     │  │  │  ├── frame01
+│  │     │  │  │  │  └── frame01.rst.txt
+│  │     │  │  │  ├── frame02
+│  │     │  │  │  │  └── frame02.rst.txt
+│  │     │  │  │  ├── frame03
+│  │     │  │  │  │  └── frame03.rst.txt
+│  │     │  │  │  └── frame04
+│  │     │  │  │     └── frame04.rst.txt
+│  │     │  │  ├── mixed
+│  │     │  │  │  ├── mixed01
+│  │     │  │  │  │  └── mixed01.rst.txt
+│  │     │  │  │  └── mixed02
+│  │     │  │  │     └── mixed02.rst.txt
+│  │     │  │  ├── mixed_structures_examples.rst.txt
+│  │     │  │  ├── plate_examples.rst.txt
+│  │     │  │  ├── plates
+│  │     │  │  │  ├── plate01
+│  │     │  │  │  │  └── plate01.rst.txt
+│  │     │  │  │  ├── plate02
+│  │     │  │  │  │  └── plate02.rst.txt
+│  │     │  │  │  ├── plate03
+│  │     │  │  │  │  └── plate03.rst.txt
+│  │     │  │  │  └── plate04
+│  │     │  │  │     └── plate04.rst.txt
+│  │     │  │  ├── solids
+│  │     │  │  │  └── solid01
+│  │     │  │  │     └── solid01.rst.txt
+│  │     │  │  ├── truss_examples.rst.txt
+│  │     │  │  └── trusses
+│  │     │  │     ├── truss01
+│  │     │  │     │  └── truss01.rst.txt
+│  │     │  │     ├── truss02
+│  │     │  │     │  └── truss02.rst.txt
+│  │     │  │     ├── truss03
+│  │     │  │     │  └── truss03.rst.txt
+│  │     │  │     └── truss04
+│  │     │  │        └── truss04.rst.txt
+│  │     │  └── tutorials.rst.txt
+│  │     ├── _static
+│  │     │  ├── _sphinx_javascript_frameworks_compat.js
+│  │     │  ├── basic.css
+│  │     │  ├── binder_badge_logo.svg
+│  │     │  ├── broken_example.png
+│  │     │  ├── css
+│  │     │  │  ├── badge_only.css
+│  │     │  │  ├── fonts
+│  │     │  │  │  ├── fontawesome-webfont.eot
+│  │     │  │  │  ├── fontawesome-webfont.svg
+│  │     │  │  │  ├── fontawesome-webfont.ttf
+│  │     │  │  │  ├── fontawesome-webfont.woff
+│  │     │  │  │  ├── fontawesome-webfont.woff2
+│  │     │  │  │  ├── lato-bold-italic.woff
+│  │     │  │  │  ├── lato-bold-italic.woff2
+│  │     │  │  │  ├── lato-bold.woff
+│  │     │  │  │  ├── lato-bold.woff2
+│  │     │  │  │  ├── lato-normal-italic.woff
+│  │     │  │  │  ├── lato-normal-italic.woff2
+│  │     │  │  │  ├── lato-normal.woff
+│  │     │  │  │  ├── lato-normal.woff2
+│  │     │  │  │  ├── Roboto-Slab-Bold.woff
+│  │     │  │  │  ├── Roboto-Slab-Bold.woff2
+│  │     │  │  │  ├── Roboto-Slab-Regular.woff
+│  │     │  │  │  └── Roboto-Slab-Regular.woff2
+│  │     │  │  └── theme.css
+│  │     │  ├── doctools.js
+│  │     │  ├── documentation_options.js
+│  │     │  ├── file.png
+│  │     │  ├── jquery-3.6.0.js
+│  │     │  ├── jquery.js
+│  │     │  ├── js
+│  │     │  │  ├── badge_only.js
+│  │     │  │  ├── html5shiv-printshiv.min.js
+│  │     │  │  ├── html5shiv.min.js
+│  │     │  │  └── theme.js
+│  │     │  ├── jupyterlite_badge_logo.svg
+│  │     │  ├── language_data.js
+│  │     │  ├── minus.png
+│  │     │  ├── no_image.png
+│  │     │  ├── plus.png
+│  │     │  ├── profiler.jpg
+│  │     │  ├── profiler.png
+│  │     │  ├── pygments.css
+│  │     │  ├── searchtools.js
+│  │     │  ├── sg_gallery-binder.css
+│  │     │  ├── sg_gallery-dataframe.css
+│  │     │  ├── sg_gallery-rendered-html.css
+│  │     │  ├── sg_gallery.css
+│  │     │  ├── underscore-1.13.1.js
+│  │     │  └── underscore.js
+│  │     ├── auto_examples
+│  │     │  ├── beams
+│  │     │  │  ├── index.html
+│  │     │  │  ├── plot_beam01.html
+│  │     │  │  ├── plot_beam02.html
+│  │     │  │  └── sg_execution_times.html
+│  │     │  ├── diffusion
+│  │     │  │  └── index.html
+│  │     │  ├── frames
+│  │     │  │  ├── index.html
+│  │     │  │  ├── plot_frame01.html
+│  │     │  │  ├── plot_frame02.html
+│  │     │  │  ├── plot_frame03.html
+│  │     │  │  ├── plot_frame04.html
+│  │     │  │  └── sg_execution_times.html
+│  │     │  ├── index.html
+│  │     │  ├── mixed
+│  │     │  │  ├── index.html
+│  │     │  │  ├── plot_mixed01.html
+│  │     │  │  └── sg_execution_times.html
+│  │     │  ├── plates
+│  │     │  │  ├── index.html
+│  │     │  │  ├── plot_plate01.html
+│  │     │  │  ├── plot_plate02.html
+│  │     │  │  ├── plot_plate03.html
+│  │     │  │  ├── plot_plate04.html
+│  │     │  │  ├── plot_plate05.html
+│  │     │  │  ├── plot_plate06.html
+│  │     │  │  ├── plot_plate07.html
+│  │     │  │  ├── plot_plate08.html
+│  │     │  │  ├── plot_plate09.html
+│  │     │  │  ├── plot_plate10.html
+│  │     │  │  └── sg_execution_times.html
+│  │     │  └── trusses
+│  │     │     ├── index.html
+│  │     │     ├── plot_truss01.html
+│  │     │     ├── plot_truss02.html
+│  │     │     ├── plot_truss03.html
+│  │     │     ├── plot_truss04.html
+│  │     │     ├── plot_truss05.html
+│  │     │     ├── plot_truss06.html
+│  │     │     ├── plot_truss07.html
+│  │     │     ├── plot_truss08.html
+│  │     │     ├── plot_truss09.html
+│  │     │     └── sg_execution_times.html
+│  │     ├── auto_tutorials
+│  │     │  ├── direct_stiffness
+│  │     │  │  └── index.html
+│  │     │  ├── index.html
+│  │     │  ├── large_deformation
+│  │     │  │  └── index.html
+│  │     │  ├── linear_fem
+│  │     │  │  └── index.html
+│  │     │  ├── model_creation
+│  │     │  │  ├── index.html
+│  │     │  │  ├── plot_01_setup.html
+│  │     │  │  ├── plot_02_loading.html
+│  │     │  │  └── sg_execution_times.html
+│  │     │  └── plasticity
+│  │     │     └── index.html
+│  │     ├── design
+│  │     │  ├── element.html
+│  │     │  ├── material.html
+│  │     │  ├── mesher.html
+│  │     │  ├── node.html
+│  │     │  ├── plotter.html
+│  │     │  ├── solver.html
+│  │     │  └── system.html
+│  │     ├── design.html
+│  │     ├── general
+│  │     │  ├── about.html
+│  │     │  ├── Installation.html
+│  │     │  └── welcome.html
+│  │     ├── genindex.html
+│  │     ├── implementation
+│  │     │  ├── Domain
+│  │     │  │  ├── Node_class.html
+│  │     │  │  ├── System_class.html
+│  │     │  │  └── Transformation_class.html
+│  │     │  ├── Elements
+│  │     │  │  ├── Beam2D_class.html
+│  │     │  │  ├── Diffusion
+│  │     │  │  │  └── Triangle_class.html
+│  │     │  │  ├── Element_class.html
+│  │     │  │  ├── Face_classes.html
+│  │     │  │  ├── Frame2D_class.html
+│  │     │  │  ├── Quad8_class.html
+│  │     │  │  ├── Quad9_class.html
+│  │     │  │  ├── Quad_class.html
+│  │     │  │  ├── Triangle_class.html
+│  │     │  │  └── Truss_class.html
+│  │     │  ├── implementation.html
+│  │     │  ├── Materials
+│  │     │  │  ├── Diffusion.html
+│  │     │  │  ├── ElasticSection.html
+│  │     │  │  ├── FiberMaterial.html
+│  │     │  │  ├── FiberSection.html
+│  │     │  │  ├── Material_class.html
+│  │     │  │  ├── PlaneStrain.html
+│  │     │  │  ├── PlaneStress.html
+│  │     │  │  ├── PlateSection.html
+│  │     │  │  └── Sections.html
+│  │     │  ├── Mesher
+│  │     │  │  ├── CurveMesher_class.html
+│  │     │  │  ├── Mesher_class.html
+│  │     │  │  ├── PatchMesher_class.html
+│  │     │  │  ├── SolidMesher_class.html
+│  │     │  │  └── TriPatchMesher_class.html
+│  │     │  ├── Plotter
+│  │     │  │  ├── ElementPlotter3D_class.html
+│  │     │  │  ├── ElementPlotter_class.html
+│  │     │  │  ├── Plot_Support_Classes.html
+│  │     │  │  ├── Plotter3D_class.html
+│  │     │  │  └── Plotter_class.html
+│  │     │  ├── Recorder
+│  │     │  │  └── Recorder_class.html
+│  │     │  ├── Solvers
+│  │     │  │  ├── LinearSolver_class.html
+│  │     │  │  ├── NewtonRaphsonSolver_class.html
+│  │     │  │  └── Solver_class.html
+│  │     │  └── Utilities
+│  │     │     ├── Integration_class.html
+│  │     │     └── ShapeFunction_classes.html
+│  │     ├── index.html
+│  │     ├── objects.inv
+│  │     ├── py-modindex.html
+│  │     ├── search.html
+│  │     ├── searchindex.js
+│  │     ├── tutorials
+│  │     │  ├── beam_examples.html
+│  │     │  ├── beams
+│  │     │  │  ├── beam01
+│  │     │  │  │  └── beam01.html
+│  │     │  │  └── beam02
+│  │     │  │     └── beam02.html
+│  │     │  ├── continuum_examples.html
+│  │     │  ├── frame_examples.html
+│  │     │  ├── frames
+│  │     │  │  ├── frame01
+│  │     │  │  │  └── frame01.html
+│  │     │  │  ├── frame02
+│  │     │  │  │  └── frame02.html
+│  │     │  │  ├── frame03
+│  │     │  │  │  └── frame03.html
+│  │     │  │  └── frame04
+│  │     │  │     └── frame04.html
+│  │     │  ├── mixed
+│  │     │  │  ├── mixed01
+│  │     │  │  │  └── mixed01.html
+│  │     │  │  └── mixed02
+│  │     │  │     └── mixed02.html
+│  │     │  ├── mixed_structures_examples.html
+│  │     │  ├── plate_examples.html
+│  │     │  ├── plates
+│  │     │  │  ├── plate01
+│  │     │  │  │  └── plate01.html
+│  │     │  │  ├── plate02
+│  │     │  │  │  └── plate02.html
+│  │     │  │  ├── plate03
+│  │     │  │  │  └── plate03.html
+│  │     │  │  └── plate04
+│  │     │  │     └── plate04.html
+│  │     │  ├── solids
+│  │     │  │  └── solid01
+│  │     │  │     └── solid01.html
+│  │     │  ├── truss_examples.html
+│  │     │  └── trusses
+│  │     │     ├── truss01
+│  │     │     │  └── truss01.html
+│  │     │     ├── truss02
+│  │     │     │  └── truss02.html
+│  │     │     ├── truss03
+│  │     │     │  └── truss03.html
+│  │     │     └── truss04
+│  │     │        └── truss04.html
+│  │     └── tutorials.html
 │  ├── docs
 │  ├── make.bat
 │  ├── Makefile
 │  └── source
+│     ├── _static
+│     │  ├── profiler.jpg
+│     │  └── profiler.png
+│     ├── auto_examples
+│     │  ├── auto_examples_jupyter.zip
+│     │  ├── auto_examples_python.zip
+│     │  ├── beams
+│     │  │  ├── images
+│     │  │  │  ├── sphx_glr_plot_beam01_001.png
+│     │  │  │  ├── sphx_glr_plot_beam01_002.png
+│     │  │  │  ├── sphx_glr_plot_beam01_003.png
+│     │  │  │  ├── sphx_glr_plot_beam02_001.png
+│     │  │  │  ├── sphx_glr_plot_beam02_002.png
+│     │  │  │  ├── sphx_glr_plot_beam02_003.png
+│     │  │  │  └── thumb
+│     │  │  │     ├── sphx_glr_plot_beam01_thumb.png
+│     │  │  │     └── sphx_glr_plot_beam02_thumb.png
+│     │  │  ├── index.rst
+│     │  │  ├── plot_beam01.ipynb
+│     │  │  ├── plot_beam01.py
+│     │  │  ├── plot_beam01.py.md5
+│     │  │  ├── plot_beam01.rst
+│     │  │  ├── plot_beam01_codeobj.pickle
+│     │  │  ├── plot_beam02.ipynb
+│     │  │  ├── plot_beam02.py
+│     │  │  ├── plot_beam02.py.md5
+│     │  │  ├── plot_beam02.rst
+│     │  │  ├── plot_beam02_codeobj.pickle
+│     │  │  └── sg_execution_times.rst
+│     │  ├── diffusion
+│     │  │  └── index.rst
+│     │  ├── frames
+│     │  │  ├── images
+│     │  │  │  ├── sphx_glr_plot_frame01_001.png
+│     │  │  │  ├── sphx_glr_plot_frame01_002.png
+│     │  │  │  ├── sphx_glr_plot_frame01_003.png
+│     │  │  │  ├── sphx_glr_plot_frame01_004.png
+│     │  │  │  ├── sphx_glr_plot_frame01_005.png
+│     │  │  │  ├── sphx_glr_plot_frame01_006.png
+│     │  │  │  ├── sphx_glr_plot_frame02_001.png
+│     │  │  │  ├── sphx_glr_plot_frame02_002.png
+│     │  │  │  ├── sphx_glr_plot_frame02_003.png
+│     │  │  │  ├── sphx_glr_plot_frame02_004.png
+│     │  │  │  ├── sphx_glr_plot_frame03_001.png
+│     │  │  │  ├── sphx_glr_plot_frame03_002.png
+│     │  │  │  ├── sphx_glr_plot_frame03_003.png
+│     │  │  │  ├── sphx_glr_plot_frame03_004.png
+│     │  │  │  ├── sphx_glr_plot_frame03_005.png
+│     │  │  │  ├── sphx_glr_plot_frame03_006.png
+│     │  │  │  ├── sphx_glr_plot_frame04_001.png
+│     │  │  │  ├── sphx_glr_plot_frame04_002.png
+│     │  │  │  ├── sphx_glr_plot_frame04_003.png
+│     │  │  │  ├── sphx_glr_plot_frame04_004.png
+│     │  │  │  ├── sphx_glr_plot_frame04_005.png
+│     │  │  │  ├── sphx_glr_plot_frame04_006.png
+│     │  │  │  ├── sphx_glr_plot_frame04_007.png
+│     │  │  │  ├── sphx_glr_plot_frame04_008.png
+│     │  │  │  ├── sphx_glr_plot_frame04_009.png
+│     │  │  │  └── thumb
+│     │  │  │     ├── sphx_glr_plot_frame01_thumb.png
+│     │  │  │     ├── sphx_glr_plot_frame02_thumb.png
+│     │  │  │     ├── sphx_glr_plot_frame03_thumb.png
+│     │  │  │     └── sphx_glr_plot_frame04_thumb.png
+│     │  │  ├── index.rst
+│     │  │  ├── plot_frame01.ipynb
+│     │  │  ├── plot_frame01.py
+│     │  │  ├── plot_frame01.py.md5
+│     │  │  ├── plot_frame01.rst
+│     │  │  ├── plot_frame01_codeobj.pickle
+│     │  │  ├── plot_frame02.ipynb
+│     │  │  ├── plot_frame02.py
+│     │  │  ├── plot_frame02.py.md5
+│     │  │  ├── plot_frame02.rst
+│     │  │  ├── plot_frame02_codeobj.pickle
+│     │  │  ├── plot_frame03.ipynb
+│     │  │  ├── plot_frame03.py
+│     │  │  ├── plot_frame03.py.md5
+│     │  │  ├── plot_frame03.rst
+│     │  │  ├── plot_frame03_codeobj.pickle
+│     │  │  ├── plot_frame04.ipynb
+│     │  │  ├── plot_frame04.py
+│     │  │  ├── plot_frame04.py.md5
+│     │  │  ├── plot_frame04.rst
+│     │  │  ├── plot_frame04_codeobj.pickle
+│     │  │  └── sg_execution_times.rst
+│     │  ├── index.rst
+│     │  ├── mixed
+│     │  │  ├── images
+│     │  │  │  ├── sphx_glr_plot_mixed01_001.png
+│     │  │  │  ├── sphx_glr_plot_mixed01_002.png
+│     │  │  │  ├── sphx_glr_plot_mixed01_003.png
+│     │  │  │  ├── sphx_glr_plot_mixed01_004.png
+│     │  │  │  ├── sphx_glr_plot_mixed01_005.png
+│     │  │  │  └── thumb
+│     │  │  │     └── sphx_glr_plot_mixed01_thumb.png
+│     │  │  ├── index.rst
+│     │  │  ├── plot_mixed01.ipynb
+│     │  │  ├── plot_mixed01.py
+│     │  │  ├── plot_mixed01.py.md5
+│     │  │  ├── plot_mixed01.rst
+│     │  │  ├── plot_mixed01_codeobj.pickle
+│     │  │  └── sg_execution_times.rst
+│     │  ├── plates
+│     │  │  ├── images
+│     │  │  │  ├── sphx_glr_plot_plate01_001.png
+│     │  │  │  ├── sphx_glr_plot_plate01_002.png
+│     │  │  │  ├── sphx_glr_plot_plate02_001.png
+│     │  │  │  ├── sphx_glr_plot_plate02_002.png
+│     │  │  │  ├── sphx_glr_plot_plate03_001.png
+│     │  │  │  ├── sphx_glr_plot_plate03_002.png
+│     │  │  │  ├── sphx_glr_plot_plate03_003.png
+│     │  │  │  ├── sphx_glr_plot_plate04_001.png
+│     │  │  │  ├── sphx_glr_plot_plate04_002.png
+│     │  │  │  ├── sphx_glr_plot_plate05_001.png
+│     │  │  │  ├── sphx_glr_plot_plate05_002.png
+│     │  │  │  ├── sphx_glr_plot_plate06_001.png
+│     │  │  │  ├── sphx_glr_plot_plate06_002.png
+│     │  │  │  ├── sphx_glr_plot_plate07_001.png
+│     │  │  │  ├── sphx_glr_plot_plate07_002.png
+│     │  │  │  ├── sphx_glr_plot_plate07_003.png
+│     │  │  │  ├── sphx_glr_plot_plate07_004.png
+│     │  │  │  ├── sphx_glr_plot_plate07_005.png
+│     │  │  │  ├── sphx_glr_plot_plate07_006.png
+│     │  │  │  ├── sphx_glr_plot_plate07_007.png
+│     │  │  │  ├── sphx_glr_plot_plate07_008.png
+│     │  │  │  ├── sphx_glr_plot_plate07_009.png
+│     │  │  │  ├── sphx_glr_plot_plate07_010.png
+│     │  │  │  ├── sphx_glr_plot_plate08_001.png
+│     │  │  │  ├── sphx_glr_plot_plate08_002.png
+│     │  │  │  ├── sphx_glr_plot_plate08_003.png
+│     │  │  │  ├── sphx_glr_plot_plate08_004.png
+│     │  │  │  ├── sphx_glr_plot_plate08_005.png
+│     │  │  │  ├── sphx_glr_plot_plate08_006.png
+│     │  │  │  ├── sphx_glr_plot_plate08_007.png
+│     │  │  │  ├── sphx_glr_plot_plate08_008.png
+│     │  │  │  ├── sphx_glr_plot_plate08_009.png
+│     │  │  │  ├── sphx_glr_plot_plate08_010.png
+│     │  │  │  ├── sphx_glr_plot_plate09_001.png
+│     │  │  │  ├── sphx_glr_plot_plate09_002.png
+│     │  │  │  ├── sphx_glr_plot_plate09_003.png
+│     │  │  │  └── thumb
+│     │  │  │     ├── sphx_glr_plot_plate01_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate02_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate03_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate04_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate05_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate06_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate07_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate08_thumb.png
+│     │  │  │     ├── sphx_glr_plot_plate09_thumb.png
+│     │  │  │     └── sphx_glr_plot_plate10_thumb.png
+│     │  │  ├── index.rst
+│     │  │  ├── plot_plate01.ipynb
+│     │  │  ├── plot_plate01.py
+│     │  │  ├── plot_plate01.py.md5
+│     │  │  ├── plot_plate01.rst
+│     │  │  ├── plot_plate01_codeobj.pickle
+│     │  │  ├── plot_plate02.ipynb
+│     │  │  ├── plot_plate02.py
+│     │  │  ├── plot_plate02.py.md5
+│     │  │  ├── plot_plate02.rst
+│     │  │  ├── plot_plate02_codeobj.pickle
+│     │  │  ├── plot_plate03.ipynb
+│     │  │  ├── plot_plate03.py
+│     │  │  ├── plot_plate03.py.md5
+│     │  │  ├── plot_plate03.rst
+│     │  │  ├── plot_plate03_codeobj.pickle
+│     │  │  ├── plot_plate04.ipynb
+│     │  │  ├── plot_plate04.py
+│     │  │  ├── plot_plate04.py.md5
+│     │  │  ├── plot_plate04.rst
+│     │  │  ├── plot_plate04_codeobj.pickle
+│     │  │  ├── plot_plate05.ipynb
+│     │  │  ├── plot_plate05.py
+│     │  │  ├── plot_plate05.py.md5
+│     │  │  ├── plot_plate05.rst
+│     │  │  ├── plot_plate05_codeobj.pickle
+│     │  │  ├── plot_plate06.ipynb
+│     │  │  ├── plot_plate06.py
+│     │  │  ├── plot_plate06.py.md5
+│     │  │  ├── plot_plate06.rst
+│     │  │  ├── plot_plate06_codeobj.pickle
+│     │  │  ├── plot_plate07.ipynb
+│     │  │  ├── plot_plate07.py
+│     │  │  ├── plot_plate07.py.md5
+│     │  │  ├── plot_plate07.rst
+│     │  │  ├── plot_plate07_codeobj.pickle
+│     │  │  ├── plot_plate08.ipynb
+│     │  │  ├── plot_plate08.py
+│     │  │  ├── plot_plate08.py.md5
+│     │  │  ├── plot_plate08.rst
+│     │  │  ├── plot_plate08_codeobj.pickle
+│     │  │  ├── plot_plate09.ipynb
+│     │  │  ├── plot_plate09.py
+│     │  │  ├── plot_plate09.py.md5
+│     │  │  ├── plot_plate09.rst
+│     │  │  ├── plot_plate09_codeobj.pickle
+│     │  │  ├── plot_plate10.ipynb
+│     │  │  ├── plot_plate10.py
+│     │  │  ├── plot_plate10.py.md5
+│     │  │  ├── plot_plate10.rst
+│     │  │  ├── plot_plate10_codeobj.pickle
+│     │  │  └── sg_execution_times.rst
+│     │  └── trusses
+│     │     ├── images
+│     │     │  ├── sphx_glr_plot_truss01_001.png
+│     │     │  ├── sphx_glr_plot_truss01_002.png
+│     │     │  ├── sphx_glr_plot_truss02_001.png
+│     │     │  ├── sphx_glr_plot_truss02_002.png
+│     │     │  ├── sphx_glr_plot_truss02_003.png
+│     │     │  ├── sphx_glr_plot_truss03_001.png
+│     │     │  ├── sphx_glr_plot_truss03_002.png
+│     │     │  ├── sphx_glr_plot_truss04_001.png
+│     │     │  ├── sphx_glr_plot_truss05_001.png
+│     │     │  ├── sphx_glr_plot_truss05_002.png
+│     │     │  ├── sphx_glr_plot_truss05_003.png
+│     │     │  ├── sphx_glr_plot_truss05_004.png
+│     │     │  ├── sphx_glr_plot_truss05_005.png
+│     │     │  ├── sphx_glr_plot_truss05_006.png
+│     │     │  ├── sphx_glr_plot_truss06_001.png
+│     │     │  ├── sphx_glr_plot_truss06_002.png
+│     │     │  ├── sphx_glr_plot_truss06_003.png
+│     │     │  ├── sphx_glr_plot_truss06_004.png
+│     │     │  ├── sphx_glr_plot_truss06_005.png
+│     │     │  ├── sphx_glr_plot_truss06_006.png
+│     │     │  ├── sphx_glr_plot_truss06_007.png
+│     │     │  ├── sphx_glr_plot_truss06_008.png
+│     │     │  ├── sphx_glr_plot_truss06_009.png
+│     │     │  ├── sphx_glr_plot_truss06_010.png
+│     │     │  ├── sphx_glr_plot_truss06_011.png
+│     │     │  ├── sphx_glr_plot_truss06_012.png
+│     │     │  ├── sphx_glr_plot_truss06_013.png
+│     │     │  ├── sphx_glr_plot_truss06_014.png
+│     │     │  ├── sphx_glr_plot_truss06_015.png
+│     │     │  ├── sphx_glr_plot_truss06_016.png
+│     │     │  ├── sphx_glr_plot_truss06_017.png
+│     │     │  ├── sphx_glr_plot_truss06_018.png
+│     │     │  ├── sphx_glr_plot_truss06_019.png
+│     │     │  ├── sphx_glr_plot_truss06_020.png
+│     │     │  ├── sphx_glr_plot_truss06_021.png
+│     │     │  ├── sphx_glr_plot_truss06_022.png
+│     │     │  ├── sphx_glr_plot_truss06_023.png
+│     │     │  ├── sphx_glr_plot_truss06_024.png
+│     │     │  ├── sphx_glr_plot_truss06_025.png
+│     │     │  ├── sphx_glr_plot_truss06_026.png
+│     │     │  ├── sphx_glr_plot_truss06_027.png
+│     │     │  ├── sphx_glr_plot_truss07_001.png
+│     │     │  ├── sphx_glr_plot_truss07_002.png
+│     │     │  ├── sphx_glr_plot_truss07_003.png
+│     │     │  ├── sphx_glr_plot_truss08_001.png
+│     │     │  ├── sphx_glr_plot_truss08_002.png
+│     │     │  ├── sphx_glr_plot_truss08_003.png
+│     │     │  ├── sphx_glr_plot_truss08_004.png
+│     │     │  ├── sphx_glr_plot_truss08_005.png
+│     │     │  ├── sphx_glr_plot_truss09_001.png
+│     │     │  ├── sphx_glr_plot_truss09_002.png
+│     │     │  ├── sphx_glr_plot_truss09_003.png
+│     │     │  └── thumb
+│     │     │     ├── sphx_glr_plot_truss01_thumb.png
+│     │     │     ├── sphx_glr_plot_truss02_thumb.png
+│     │     │     ├── sphx_glr_plot_truss03_thumb.png
+│     │     │     ├── sphx_glr_plot_truss04_thumb.png
+│     │     │     ├── sphx_glr_plot_truss05_thumb.png
+│     │     │     ├── sphx_glr_plot_truss06_thumb.png
+│     │     │     ├── sphx_glr_plot_truss07_thumb.png
+│     │     │     ├── sphx_glr_plot_truss08_thumb.png
+│     │     │     └── sphx_glr_plot_truss09_thumb.png
+│     │     ├── index.rst
+│     │     ├── plot_truss01.ipynb
+│     │     ├── plot_truss01.py
+│     │     ├── plot_truss01.py.md5
+│     │     ├── plot_truss01.rst
+│     │     ├── plot_truss01_codeobj.pickle
+│     │     ├── plot_truss02.ipynb
+│     │     ├── plot_truss02.py
+│     │     ├── plot_truss02.py.md5
+│     │     ├── plot_truss02.rst
+│     │     ├── plot_truss02_codeobj.pickle
+│     │     ├── plot_truss03.ipynb
+│     │     ├── plot_truss03.py
+│     │     ├── plot_truss03.py.md5
+│     │     ├── plot_truss03.rst
+│     │     ├── plot_truss03_codeobj.pickle
+│     │     ├── plot_truss04.ipynb
+│     │     ├── plot_truss04.py
+│     │     ├── plot_truss04.py.md5
+│     │     ├── plot_truss04.rst
+│     │     ├── plot_truss04_codeobj.pickle
+│     │     ├── plot_truss05.ipynb
+│     │     ├── plot_truss05.py
+│     │     ├── plot_truss05.py.md5
+│     │     ├── plot_truss05.rst
+│     │     ├── plot_truss05_codeobj.pickle
+│     │     ├── plot_truss06.ipynb
+│     │     ├── plot_truss06.py
+│     │     ├── plot_truss06.py.md5
+│     │     ├── plot_truss06.rst
+│     │     ├── plot_truss06_codeobj.pickle
+│     │     ├── plot_truss07.ipynb
+│     │     ├── plot_truss07.py
+│     │     ├── plot_truss07.py.md5
+│     │     ├── plot_truss07.rst
+│     │     ├── plot_truss07_codeobj.pickle
+│     │     ├── plot_truss08.ipynb
+│     │     ├── plot_truss08.py
+│     │     ├── plot_truss08.py.md5
+│     │     ├── plot_truss08.rst
+│     │     ├── plot_truss08_codeobj.pickle
+│     │     ├── plot_truss09.ipynb
+│     │     ├── plot_truss09.py
+│     │     ├── plot_truss09.py.md5
+│     │     ├── plot_truss09.rst
+│     │     ├── plot_truss09_codeobj.pickle
+│     │     └── sg_execution_times.rst
+│     ├── auto_tutorials
+│     │  ├── auto_tutorials_jupyter.zip
+│     │  ├── auto_tutorials_python.zip
+│     │  ├── direct_stiffness
+│     │  │  └── index.rst
+│     │  ├── index.rst
+│     │  ├── large_deformation
+│     │  │  └── index.rst
+│     │  ├── linear_fem
+│     │  │  └── index.rst
+│     │  ├── model_creation
+│     │  │  ├── images
+│     │  │  │  ├── sphx_glr_plot_01_setup_001.png
+│     │  │  │  ├── sphx_glr_plot_01_setup_002.png
+│     │  │  │  └── thumb
+│     │  │  │     ├── sphx_glr_plot_01_setup_thumb.png
+│     │  │  │     └── sphx_glr_plot_02_loading_thumb.png
+│     │  │  ├── index.rst
+│     │  │  ├── plot_01_setup.ipynb
+│     │  │  ├── plot_01_setup.py
+│     │  │  ├── plot_01_setup.py.md5
+│     │  │  ├── plot_01_setup.rst
+│     │  │  ├── plot_01_setup_codeobj.pickle
+│     │  │  ├── plot_02_loading.ipynb
+│     │  │  ├── plot_02_loading.py
+│     │  │  ├── plot_02_loading.py.md5
+│     │  │  ├── plot_02_loading.rst
+│     │  │  ├── plot_02_loading_codeobj.pickle
+│     │  │  └── sg_execution_times.rst
+│     │  └── plasticity
+│     │     └── index.rst
 │     ├── conf.py
 │     ├── design
 │     │  ├── element.rst
@@ -455,7 +1272,76 @@
 │     │  ├── solver.rst
 │     │  └── system.rst
 │     ├── design.rst
-│     ├── examples
+│     ├── general
+│     │  ├── about.rst
+│     │  ├── Installation.rst
+│     │  └── welcome.rst
+│     ├── images
+│     │  ├── FEMedu-CoverPicture.png
+│     │  ├── FEMedu-CoverPicture.psd
+│     │  ├── galik_william.jpg
+│     │  ├── jordan-seawright.jpg
+│     │  ├── pedro-arduino.jpeg
+│     │  ├── peter-mackenzie-helnwein.jpeg
+│     │  ├── richard-wiebe.jpeg
+│     │  ├── tatsu-sweet.jpg
+│     │  ├── TatsuProfile.jpg
+│     │  └── TatsuProfile.psd
+│     ├── implementation
+│     │  ├── Domain
+│     │  │  ├── Node_class.rst
+│     │  │  ├── System_class.rst
+│     │  │  └── Transformation_class.rst
+│     │  ├── Elements
+│     │  │  ├── Beam2D_class.rst
+│     │  │  ├── Diffusion
+│     │  │  │  └── Triangle_class.rst
+│     │  │  ├── Element_class.rst
+│     │  │  ├── Face_classes.rst
+│     │  │  ├── Finite
+│     │  │  ├── Frame2D_class.rst
+│     │  │  ├── Linear
+│     │  │  ├── Quad8_class.rst
+│     │  │  ├── Quad9_class.rst
+│     │  │  ├── Quad_class.rst
+│     │  │  ├── Triangle_class.rst
+│     │  │  └── Truss_class.rst
+│     │  ├── images
+│     │  ├── implementation.rst
+│     │  ├── Materials
+│     │  │  ├── Diffusion.rst
+│     │  │  ├── ElasticSection.rst
+│     │  │  ├── FiberMaterial.rst
+│     │  │  ├── FiberSection.rst
+│     │  │  ├── Material_class.rst
+│     │  │  ├── PlaneStrain.rst
+│     │  │  ├── PlaneStress.rst
+│     │  │  ├── PlateSection.rst
+│     │  │  └── Sections.rst
+│     │  ├── Mesher
+│     │  │  ├── CurveMesher01.png
+│     │  │  ├── CurveMesher_class.rst
+│     │  │  ├── Mesher_class.rst
+│     │  │  ├── PatchMesher_class.rst
+│     │  │  ├── SolidMesher_class.rst
+│     │  │  └── TriPatchMesher_class.rst
+│     │  ├── Plotter
+│     │  │  ├── ElementPlotter3D_class.rst
+│     │  │  ├── ElementPlotter_class.rst
+│     │  │  ├── Plot_Support_Classes.rst
+│     │  │  ├── Plotter3D_class.rst
+│     │  │  └── Plotter_class.rst
+│     │  ├── Recorder
+│     │  │  └── Recorder_class.rst
+│     │  ├── Solvers
+│     │  │  ├── LinearSolver_class.rst
+│     │  │  ├── NewtonRaphsonSolver_class.rst
+│     │  │  └── Solver_class.rst
+│     │  └── Utilities
+│     │     ├── Integration_class.rst
+│     │     └── ShapeFunction_classes.rst
+│     ├── index.rst
+│     ├── tutorials
 │     │  ├── beam_examples.rst
 │     │  ├── beams
 │     │  │  ├── beam01
@@ -495,17 +1381,42 @@
 │     │  │  │  └── frame3_stability_check.png
 │     │  │  └── frame04
 │     │  │     ├── frame04.rst
-│     │  │     ├── frame04_buckling_mode0.png
-│     │  │     ├── frame04_buckling_mode1.png
-│     │  │     ├── frame04_buckling_mode2.png
-│     │  │     ├── frame04_buckling_mode3.png
-│     │  │     ├── frame04_deformed.png
-│     │  │     ├── frame04_force.png
-│     │  │     ├── frame04_moment.png
-│     │  │     ├── frame04_shear.png
+│     │  │     ├── frame4_buckling_mode0.png
+│     │  │     ├── frame4_buckling_mode1.png
+│     │  │     ├── frame4_buckling_mode2.png
+│     │  │     ├── frame4_buckling_mode3.png
+│     │  │     ├── frame4_deformed.png
+│     │  │     ├── frame4_force.png
+│     │  │     ├── frame4_moment.png
+│     │  │     ├── frame4_shear.png
 │     │  │     └── frame4_stability_check.png
+│     │  ├── mixed
+│     │  │  ├── mixed01
+│     │  │  │  └── mixed01.rst
+│     │  │  └── mixed02
+│     │  │     └── mixed02.rst
 │     │  ├── mixed_structures_examples.rst
 │     │  ├── plate_examples.rst
+│     │  ├── plates
+│     │  │  ├── plate01
+│     │  │  │  ├── plate01.rst
+│     │  │  │  ├── plate01_deformed.png
+│     │  │  │  └── plate01_undeformed.png
+│     │  │  ├── plate02
+│     │  │  │  ├── plate02.rst
+│     │  │  │  ├── plate02_deformed.png
+│     │  │  │  └── plate02_undeformed.png
+│     │  │  ├── plate03
+│     │  │  │  ├── plate03.rst
+│     │  │  │  ├── plate03_deformed.png
+│     │  │  │  └── plate03_undeformed.png
+│     │  │  └── plate04
+│     │  │     ├── plate04.rst
+│     │  │     ├── plate04_deformed.png
+│     │  │     └── plate04_undeformed.png
+│     │  ├── solids
+│     │  │  └── solid01
+│     │  │     └── solid01.rst
 │     │  ├── truss_examples.rst
 │     │  └── trusses
 │     │     ├── truss01
@@ -517,165 +1428,143 @@
 │     │     ├── truss02
 │     │     │  ├── truss02.rst
 │     │     │  ├── truss02_deformed.png
-│     │     │  └── truss02_forces.png
+│     │     │  ├── truss02_forces.png
+│     │     │  └── truss02_undeformed.png
 │     │     ├── truss03
 │     │     │  ├── truss03.rst
 │     │     │  ├── truss03_deformed_a.png
 │     │     │  └── truss03_deformed_b.png
 │     │     └── truss04
 │     │        └── truss04.rst
-│     ├── examples.rst
-│     ├── general
-│     │  ├── about.rst
-│     │  └── welcome.rst
-│     ├── images
-│     │  ├── FEMedu-CoverPicture.png
-│     │  ├── FEMedu-CoverPicture.psd
-│     │  ├── galik_william.jpg
-│     │  ├── jordan-seawright.jpg
-│     │  ├── pedro-arduino.jpeg
-│     │  ├── peter-mackenzie-helnwein.jpeg
-│     │  ├── richard-wiebe.jpeg
-│     │  ├── tatsu-sweet.jpg
-│     │  ├── TatsuProfile.jpg
-│     │  └── TatsuProfile.psd
-│     ├── implementation
-│     │  ├── Beam2D_class.rst
-│     │  ├── CurveMesher_class.rst
-│     │  ├── DOF_class.rst
-│     │  ├── ElasticSection.rst
-│     │  ├── Element_class.rst
-│     │  ├── ElementPlotter3D_class.rst
-│     │  ├── ElementPlotter_class.rst
-│     │  ├── FiberMaterial.rst
-│     │  ├── FiberSection.rst
-│     │  ├── Frame2D_class.rst
-│     │  ├── images
-│     │  ├── LinearSolver_class.rst
-│     │  ├── LinearTriangle_class.rst
-│     │  ├── Material_class.rst
-│     │  ├── Mesher_class.rst
-│     │  ├── NewtonRaphsonSolver_class.rst
-│     │  ├── Node_class.rst
-│     │  ├── PatchMesher_class.rst
-│     │  ├── PlaneStrain.rst
-│     │  ├── PlaneStress.rst
-│     │  ├── PlateSection.rst
-│     │  ├── Plot_Support_Classes.rst
-│     │  ├── Plotter3D_class.rst
-│     │  ├── Plotter_class.rst
-│     │  ├── Recorder_class.rst
-│     │  ├── Sections.rst
-│     │  ├── SolidMesher_class.rst
-│     │  ├── Solver_class.rst
-│     │  ├── System_class.rst
-│     │  ├── Transformation_class.rst
-│     │  ├── TriPatchMesher_class.rst
-│     │  └── Truss_class.rst
-│     ├── implementation.rst
-│     └── index.rst
-└── src
-   ├── demo.py
-   ├── Demo_notebooks
-   │  ├── FEM beam example 01.ipynb
-   │  ├── FEM beam example 02.ipynb
-   │  ├── FEM frame example 01.ipynb
-   │  ├── FEM frame example 01b.ipynb
-   │  ├── FEM frame example 01c.ipynb
-   │  ├── FEM frame example 02.ipynb
-   │  ├── FEM frame example 03.ipynb
-   │  ├── FEM frame example 04.ipynb
-   │  ├── FEM frame example 05.ipynb
-   │  ├── FEM plate example 01.ipynb
-   │  ├── FEM truss example 01.ipynb
-   │  ├── FEM truss example 02.ipynb
-   │  ├── FEM truss example 03.ipynb
-   │  ├── plate02_unloaded.png
-   │  └── Theory.ipynb
-   ├── femedu
-   │  ├── __init__.py
-   │  ├── domain
-   │  │  ├── __init__.py
-   │  │  ├── DoF.py
-   │  │  ├── Node.py
-   │  │  ├── System.py
-   │  │  └── Transformation.py
-   │  ├── elements
-   │  │  ├── __init__.py
-   │  │  ├── Beam2D.py
-   │  │  ├── DrawElement.py
-   │  │  ├── Element.py
-   │  │  ├── Frame2D.py
-   │  │  ├── LinearTriangle.py
-   │  │  └── Truss.py
-   │  ├── examples
-   │  │  ├── __init__.py
-   │  │  ├── beams
-   │  │  │  ├── __init__.py
-   │  │  │  ├── beam01.py
-   │  │  │  ├── beam02.py
-   │  │  │  └── runall.py
-   │  │  ├── course_help
-   │  │  │  └── final01.py
-   │  │  ├── Example.py
-   │  │  ├── frames
-   │  │  │  ├── __init__.py
-   │  │  │  ├── frame01.py
-   │  │  │  ├── frame02.py
-   │  │  │  ├── frame03.py
-   │  │  │  ├── frame04.py
-   │  │  │  └── runall.py
-   │  │  ├── mixed
-   │  │  │  ├── __init__.py
-   │  │  │  └── runall.py
-   │  │  ├── plates
-   │  │  │  ├── __init__.py
-   │  │  │  ├── plate01.py
-   │  │  │  ├── plate02.py
-   │  │  │  ├── plate03.py
-   │  │  │  └── runall.py
-   │  │  ├── runall.py
-   │  │  ├── solids
-   │  │  │  ├── __init__.py
-   │  │  │  └── runall.py
-   │  │  └── trusses
-   │  │     ├── __init__.py
-   │  │     ├── runall.py
-   │  │     ├── truss01.py
-   │  │     ├── truss02.py
-   │  │     ├── truss03.py
-   │  │     └── truss04.py
-   │  ├── materials
-   │  │  ├── __init__.py
-   │  │  ├── ElasticSection.py
-   │  │  ├── FiberMaterial.py
-   │  │  ├── Material.py
-   │  │  ├── PlaneStrain.py
-   │  │  ├── PlaneStress.py
-   │  │  ├── SectionMaterial.py
-   │  │  └── VonMises.py
-   │  ├── mesher
-   │  │  ├── __init__.py
-   │  │  ├── CurveMesher.py
-   │  │  ├── Mesher.py
-   │  │  ├── PatchMesher.py
-   │  │  ├── SolidMesher.py
-   │  │  └── TriPatchMesher.py
-   │  ├── plotter
-   │  │  ├── __init__.py
-   │  │  ├── AbstractPlotter.py
-   │  │  ├── ElementPlotter.py
-   │  │  ├── ElementPlotter3D.py
-   │  │  ├── Plotter.py
-   │  │  └── Plotter3D.py
-   │  ├── recorder
-   │  │  ├── __init__.py
-   │  │  └── Recorder.py
-   │  └── solver
-   │     ├── __init__.py
-   │     ├── LinearSolver.py
-   │     ├── NewtonRaphsonSolver.py
-   │     └── Solver.py
-   ├── main.py
-   └── WIP
-      └── PlaneStress.py
+│     └── tutorials.rst
+├── src
+│  ├── demo.py
+│  ├── Demo_notebooks
+│  │  └── Theory.ipynb
+│  ├── femedu
+│  │  ├── __init__.py
+│  │  ├── domain
+│  │  │  ├── __init__.py
+│  │  │  ├── Node.py
+│  │  │  ├── System.py
+│  │  │  └── Transformation.py
+│  │  ├── elements
+│  │  │  ├── __init__.py
+│  │  │  ├── diffusion
+│  │  │  │  └── Triangle.py
+│  │  │  ├── direct
+│  │  │  │  ├── __init__.py
+│  │  │  │  ├── Beam2D.py
+│  │  │  │  ├── Frame2D.py
+│  │  │  │  └── Truss.py
+│  │  │  ├── DrawElement.py
+│  │  │  ├── Element.py
+│  │  │  ├── Face2D.py
+│  │  │  ├── Face3D.py
+│  │  │  ├── Faces.py
+│  │  │  ├── finite
+│  │  │  │  ├── __init__.py
+│  │  │  │  ├── Frame2D.py
+│  │  │  │  ├── Quad.py
+│  │  │  │  ├── Quad8.py
+│  │  │  │  ├── Quad9.py
+│  │  │  │  ├── Triangle.py
+│  │  │  │  └── Truss.py
+│  │  │  └── linear
+│  │  │     ├── __init__.py
+│  │  │     ├── Beam2D.py
+│  │  │     ├── Quad.py
+│  │  │     ├── Triangle.py
+│  │  │     └── Truss.py
+│  │  ├── examples
+│  │  │  ├── __init__.py
+│  │  │  ├── beams
+│  │  │  │  ├── __init__.py
+│  │  │  │  ├── beam01.py
+│  │  │  │  ├── beam02.py
+│  │  │  │  └── runall.py
+│  │  │  ├── Example.py
+│  │  │  ├── frames
+│  │  │  │  ├── __init__.py
+│  │  │  │  ├── frame01.py
+│  │  │  │  ├── frame02.py
+│  │  │  │  ├── frame03.py
+│  │  │  │  ├── frame04.py
+│  │  │  │  └── runall.py
+│  │  │  ├── mixed
+│  │  │  │  ├── __init__.py
+│  │  │  │  └── runall.py
+│  │  │  ├── plates
+│  │  │  │  ├── __init__.py
+│  │  │  │  ├── plate01.py
+│  │  │  │  ├── plate02.py
+│  │  │  │  ├── plate03.py
+│  │  │  │  ├── plate04.py
+│  │  │  │  └── runall.py
+│  │  │  ├── README.rst
+│  │  │  ├── runall.py
+│  │  │  ├── solids
+│  │  │  │  ├── __init__.py
+│  │  │  │  └── runall.py
+│  │  │  └── trusses
+│  │  │     ├── __init__.py
+│  │  │     ├── README.rst
+│  │  │     ├── runall.py
+│  │  │     ├── truss01.py
+│  │  │     ├── truss02.py
+│  │  │     ├── truss03.py
+│  │  │     └── truss04.py
+│  │  ├── materials
+│  │  │  ├── __init__.py
+│  │  │  ├── DiffusionGeneral.py
+│  │  │  ├── ElasticSection.py
+│  │  │  ├── FiberMaterial.py
+│  │  │  ├── Material.py
+│  │  │  ├── PlaneStrain.py
+│  │  │  ├── PlaneStress.py
+│  │  │  ├── SectionMaterial.py
+│  │  │  ├── Thermal.py
+│  │  │  └── VonMises.py
+│  │  ├── mesher
+│  │  │  ├── __init__.py
+│  │  │  ├── CurveMesher.py
+│  │  │  ├── Mesher.py
+│  │  │  ├── PatchMesher.py
+│  │  │  ├── SolidMesher.py
+│  │  │  └── TriPatchMesher.py
+│  │  ├── plotter
+│  │  │  ├── __init__.py
+│  │  │  ├── AbstractPlotter.py
+│  │  │  ├── ElementPlotter.py
+│  │  │  ├── ElementPlotter3D.py
+│  │  │  ├── Plotter.py
+│  │  │  └── Plotter3D.py
+│  │  ├── recorder
+│  │  │  ├── __init__.py
+│  │  │  └── Recorder.py
+│  │  ├── solver
+│  │  │  ├── __init__.py
+│  │  │  ├── Constraint.py
+│  │  │  ├── LinearSolver.py
+│  │  │  ├── NewtonRaphsonSolver.py
+│  │  │  ├── Solver.py
+│  │  │  ├── SparseSolver.py
+│  │  │  ├── SPconstraint.py
+│  │  │  └── TieNodes.py
+│  │  └── utilities
+│  │     ├── __init__.py
+│  │     ├── BrickIntegration.py
+│  │     ├── Integration.py
+│  │     ├── LineIntegration.py
+│  │     ├── LineShapes.py
+│  │     ├── QuadIntegration.py
+│  │     ├── QuadShapes.py
+│  │     ├── ShapeFunctions.py
+│  │     ├── TetraIntegration.py
+│  │     ├── TriangleIntegration.py
+│  │     └── TriangleShapes.py
+│  ├── main.py
+│  ├── tester.py
+│  └── WIP
+│     └── PlaneStress.py
+└── VERSION.rst
