@@ -4,7 +4,7 @@ class Integration():
     Abstract interface definition for all Integration classes.
     """
 
-    def __init__(self, order=2, dimension=1):
+    def __init__(self, order=1, dimension=1):
         self.order = order
         self.xi = [ 0.0 ]
         self.w  = [ 1.0 ]

@@ -10,7 +10,7 @@ class Node():
     """
     COUNT = 0
 
-    def __init__(self, x0, y0, z0=None):
+    def __init__(self, x0, y0=None, z0=None):
         """
 
         :param x0: Initial position (List)
@@ -21,8 +21,10 @@ class Node():
 
         if isinstance(z0, (int, float)):
             self.pos = np.array([x0, y0, z0])
-        else:
+        elif isinstance(y0, (int, float)):
             self.pos = np.array([x0, y0])
+        else:
+            self.pos = np.array([x0])
 
         self.is_lead     = True   # is this a lead node?  Will be set to follower (is_lead = False) if tied
         self.lead        = self   # following yourself

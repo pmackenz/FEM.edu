@@ -18,16 +18,32 @@ In its final form, they will support up to tri-quadratic shape functions, and up
 
 **Usage**:
 
-Integrating a bi-quadratic function g(s,t,u) over a quad-shaped domain
+Integrating a bi-quadratic function :code:`g(s,t)*shape_function(s,t)`
+over a quad-shaped domain, assuming a function
+:code:`Jacobian(s,t)` is defined and returns the jacobian for the current location.
 
 .. code:: python
 
-    integrator = QuadIntegration(order=2)
-    F = 0.0
-    for xi, wi in integrator.parameters():
-        F += g(xi[0], xi[1], xi[2]) * J(xi[0], xi[1], xi[2]) * wi
+    integrator    = QuadIntegration(order=2)
+    interpolation = QuadShapes()
 
-    print(f"Int_V g(s,t,u) dV = {F}")
+    # initialization
+    F = np.zeros((9,))  # 9-node quad
+
+    # integration loop
+    xis, wis = integrator.parameters()
+    for xi, wi in zip(xis, wis):
+        # computing the array of nodal shape functions
+        shape = interpolation.shape(  # requesting spage function array
+                    order=2,          # polynomial order per direction: quadratic
+                    s=xi[0], t=xi[1], # local coordinates for current position
+                    n=(0,0),          # n-th derivative with respect to (s,t)
+                    serendipity=False # if serendipity: "8 nodes" else: "9 nodes"
+                    )
+    `   # adding to the integral
+        F += g(xi[0], xi[1]) * shape * Jacobian(xi[0], xi[1]) * wi
+
+    print(f"Int_V g(s,t) Phi(s,t) dV = {F}")
 
 
 Abstract Shape Function Class

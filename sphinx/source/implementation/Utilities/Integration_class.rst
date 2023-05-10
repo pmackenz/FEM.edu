@@ -20,7 +20,8 @@ Integrating a 4th-order function f(s,t) over a triangular domain
 
     integrator = TrangleIntegration(order=4)
     F = 0.0
-    for xi, wi in integrator.parameters():
+    xis, wis = integrator.parameters()
+    for xi, wi in zip(xis, wis):
         F += f(xi[0], xi[1]) * J(xi[0], xi[1]) * wi
 
     print(f"Int_A f(s,t) dA = {F}")
@@ -32,7 +33,8 @@ Integrating a tri-quadratic function g(s,t,u) over a brick-shaped domain
 
     integrator = BrickIntegration(order=2)
     F = 0.0
-    for xi, wi in integrator.parameters():
+    xis, wis = integrator.parameters()
+    for xi, wi in zip(xis, wis):
         F += g(xi[0], xi[1], xi[2]) * J(xi[0], xi[1], xi[2]) * wi
 
     print(f"Int_V g(s,t,u) dV = {F}")
