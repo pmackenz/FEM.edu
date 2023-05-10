@@ -248,7 +248,10 @@ class Element(DrawElement):
         # .. applied element load (reference load)
         self.computeSurfaceLoads()
 
-        if self.Loads:
+        if isinstance(self.Loads, np.ndarray):
+            Loads = [ np.array(x) for x in self.Loads ]
+            return Loads
+        elif self.Loads:
             return self.Loads
         else:
             return [ None for k in self.nodes ]
