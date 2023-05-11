@@ -17,3 +17,9 @@ __all__ = (
     "Face3D",
 )
 
+from .Element import *
+from .DrawElement import *
+from .Faces import *
+from .Face2D import *
+from .Face3D import *
+

@@ -18,3 +18,10 @@ __all__ = (
     "Frame2D",
 )
 
+from .Frame2D import *
+from .Quad import *
+from .Quad8 import *
+from .Quad9 import *
+from .Triangle import *
+from .Truss import *
+

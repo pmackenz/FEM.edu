@@ -14,3 +14,7 @@ __all__ = (
     "Beam2D",
     "Frame2D",
 )
+
+from .Beam2D import *
+from .Frame2D import *
+from .Truss import *
