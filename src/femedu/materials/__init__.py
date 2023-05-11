@@ -9,6 +9,11 @@ __all__ = (
     'Thermal',
 )
 
-# from .Material import *
-# from .FiberMaterial import *
-# from .PlaneStrain import *
+from .Material import *
+from .FiberMaterial import *
+from .PlaneStrain import *
+from .PlaneStress import *
+from .SectionMaterial import *
+from .ElasticSection import *
+from .DiffusionGeneral import *
+from .Thermal import *

@@ -15,7 +15,7 @@ __all__ = (
     "Face3D",
 )
 
-from Beam2D import *
-from Quad import *
-from Triangle import *
-from Truss import *
+from .Beam2D import *
+from .Quad import *
+from .Triangle import *
+from .Truss import *

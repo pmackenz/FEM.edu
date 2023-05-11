@@ -5,4 +5,6 @@ __all__ = (
 )
 
 from .Solver import *
-# from .LinearSolver import *
+from .LinearSolver import *
+from .NewtonRaphsonSolver import *
+from .SparseSolver import *
