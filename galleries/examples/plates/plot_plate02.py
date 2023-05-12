@@ -56,12 +56,13 @@ Basic implementation test with applied loads.
 
 Author: Peter Mackenzie-Helnwein
 """
-from femedu.examples.Example import *
 
-from femedu.domain.System import *
-from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.linear.Triangle import *
-from femedu.materials.PlaneStress import *
+from femedu.examples import Example
+
+from femedu.domain import System, Node
+from femedu.solver import NewtonRaphsonSolver
+from femedu.elements.linear import Triangle
+from femedu.materials import PlaneStress
 
 
 class ExamplePlate02(Example):

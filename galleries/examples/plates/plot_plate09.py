@@ -13,12 +13,14 @@ The mesh must contain distorted elements and at least one element not attached t
 
 Author: Peter Mackenzie-Helnwein
 """
-from femedu.examples.Example import *
+import numpy as np
 
-from femedu.domain import *
-from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.linear.Quad import *
-from femedu.materials.PlaneStress import *
+from femedu.examples import Example
+
+from femedu.domain import System, Node
+from femedu.solver import NewtonRaphsonSolver
+from femedu.elements.linear import Quad
+from femedu.materials import PlaneStress
 
 
 class ExamplePlate09(Example):

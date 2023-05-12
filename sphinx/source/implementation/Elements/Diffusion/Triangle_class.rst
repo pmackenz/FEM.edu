@@ -66,5 +66,5 @@ Parent class
 Class doc
 -------------
 
-.. automodule:: femedu.elements.diffusion.Triangle
+.. automodule:: femedu.elements.diffusion
   :members:

@@ -14,11 +14,10 @@ Author: Peter Mackenzie-Helnwein
 # sphinx_gallery_thumbnail_number = -2
 # sphinx_gallery_end_ignore
 
-import numpy as np
-import matplotlib.pyplot as plt
-
 # %%
 # Setup
+import numpy as np
+import matplotlib.pyplot as plt
 
 from femedu.examples import Example
 

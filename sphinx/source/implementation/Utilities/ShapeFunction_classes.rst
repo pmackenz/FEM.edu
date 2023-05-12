@@ -46,6 +46,7 @@ over a quad-shaped domain, assuming a function
     print(f"Int_V g(s,t) Phi(s,t) dV = {F}")
 
 
+
 Abstract Shape Function Class
 --------------------------------
 

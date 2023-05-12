@@ -12,14 +12,15 @@ Author: Peter Mackenzie-Helnwein
 
 # %%
 # Setup
+import numpy as np
+import matplotlib.pyplot as plt
 
-from femedu.examples.Example import *
+from femedu.examples import Example
 
-from femedu.domain.System import *
-from femedu.domain.Node import *
-from femedu.elements.finite.Truss import *
-from femedu.materials.FiberMaterial import *
-from femedu.solver.NewtonRaphsonSolver import *
+from femedu.domain import System, Node
+from femedu.elements.finite import Truss
+from femedu.materials import FiberMaterial
+from femedu.solver import NewtonRaphsonSolver
 
 # %%
 # Create the example by subclassing the :py:class:`Example`

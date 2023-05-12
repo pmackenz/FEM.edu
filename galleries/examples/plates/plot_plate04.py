@@ -7,14 +7,14 @@ PatchMesher test for the LinearTriangle (Constant Strain Triangle)
 
 """
 import math
+import numpy as np
 
-from femedu.examples.Example import *
+from femedu.examples import Example
 
-from femedu.domain import *
-from femedu.solver.NewtonRaphsonSolver import *
-from femedu.elements.linear.Triangle import *
-from femedu.elements.linear.Quad import *
-from femedu.materials.PlaneStress import *
+from femedu.domain import System, Node
+from femedu.solver import NewtonRaphsonSolver
+from femedu.elements.linear import Quad, Triangle
+from femedu.materials import PlaneStress
 from femedu.mesher import *
 
 
