@@ -333,8 +333,26 @@ class Element(DrawElement):
         record current state of the system
         """
         if self.recorder and self.recorder.isActive():
-            data = {'lam':self.load_level}
+            data = {}
+            for var in self.recorder.getVariables():
+                value = self.getValue(var)[0]
+                data[var] = value
             self.recorder.addData(data)
+
+    def getValue(self, name, gp='all'):
+        ans = []
+        return ans
+    def startRecorder(self):
+        if self.recorder:
+            self.recorder.enable()
+
+    def pauseRecorder(self):
+        if self.recorder:
+            self.recorder.disable()
+
+    def stopRecorder(self):
+        if self.recorder:
+            self.recorder.disable()
 
     def on_converged(self):
         """

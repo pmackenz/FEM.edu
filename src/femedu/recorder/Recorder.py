@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from ..domain import Node
+
 
 class Recorder():
     """A time history recorder
@@ -17,52 +19,133 @@ class Recorder():
           -- elements for which those variables shall be recorded. Use ``elements=All`` to apply to all elements.
     """
 
+    # hard-coded variable assignments
+    system_types = (
+        'lam',
+        'time',
+        'stability',
+        'arc-length',
+    )
+    node_types = (
+        'ux',
+        'uy',
+        'uz',
+        'rx',
+        'ry',
+        'rz',
+        'vx',
+        'vy',
+        'vz',
+        'omx',
+        'omy',
+        'omz',
+        'T',
+        'stress',
+        'strain'
+    )
+    element_types = (
+        'stress',
+        'strain',
+    )
+
     def __init__(self, **kwargs):
         self.active = False
         self.data = {}
         self.nodes = []
         self.elements = []
 
+        nodevars = []
+        elemvars = []
+
         if 'variables' in kwargs:
             for var in kwargs['variables']:
-                self.data[var] = []
+                var_classified = False
+                if var in self.system_types or 'type' in kwargs:
+                    self.data[var] = []
+                    var_classified = True
+                if var in self.node_types:
+                    nodevars.append(var)
+                    var_classified = True
+                if var in self.element_types:
+                    elemvars.append(var)
+                    var_classified = True
+                if not var_classified:
+                    # this is an unknown/new variable
+                    # maybe from a new element type?
+                    # just for safety, add it to all types
+                    self.data[var] = []
+                    nodevars.append(var)
+                    elemvars.append(var)
 
         if 'nodes' in kwargs:
             self.nodes = kwargs['nodes']
             for node in self.nodes:
-                node.setRecorder(Recorder(variable=self.data.keys()))
+                node.setRecorder(Recorder(variables=nodevars, type='node'))
 
         if 'elements' in kwargs:
             self.elements = kwargs['elements']
             for elem in self.elements:
-                elem.setRecorder(Recorder(variable=self.data.keys()))
+                elem.setRecorder(Recorder(variables=elemvars, type='element'))
 
-
-    def fetchRecord(self, keys=None):
+    def fetchRecord(self, keys=None, source=None):
         """
         Request recorded time history data for the listed keys.
-        If a single key is given as a string, a single `np.array()` is returned.
-        If a list of keys is given, a `list of np.array()` is returned.
 
+        :param keys: If a single key is given as a string, a single `np.array()` is returned.
+                     If a list of keys is given, a `list of np.array()` is returned.
+        :param source: If a single :py:class:`Node` is given, pick record from that node.
+                       If a list of :py:class:`Node` objects is given, match keys and nodes
+                       based on order in lists.  **source** and **keys** list must match in shape.
+                       If a value should be picked from the model domain instead of a node, enter **None**
+                       in the respective slot.
         :returns: time history data for the listed keys.
         """
         if not keys:
             return self.data
 
         if isinstance(keys, str):
-            if keys in self.data:
-                return self.data[keys]
+            if source and isinstance(source,Node.Node):
+                if source.recorder:
+                    return source.recorder.fetchRecord(keys)
+                else:
+                    return {}
+            elif source and (isinstance(source,list) or isinstance(source,tuple)) \
+                    and isinstance(source[0],Node.Node):
+                if source[0].recorder:
+                    return source[0].recorder.fetchRecord(keys)
+                else:
+                    return {}
             else:
-                return []
+                if keys in self.data:
+                    return {keys:self.data[keys]}
+                else:
+                    return {}
+
         elif isinstance(keys, list) or isinstance(keys, tuple):
-            ans = []
-            for key in keys:
-                ans.append(self.data[key])
+            ans = {}
+
+            if source and (isinstance(source,list) or isinstance(source,tuple)):
+                for key, src in zip(keys, source):
+                    if src and isinstance(src, Node.Node):
+                        if src.recorder:
+                            node_data = src.recorder.fetchRecord(key)
+                            for field in node_data:
+                                ans[field] = node_data[field]
+                    else:
+                        if key in self.data:
+                            ans[key] = self.data[key]
+                        else:
+                            ans[key] = [0,]
+
             else:
-                ans.append([])
+                for key in keys:
+                    if key in self.data:
+                        ans[key] = self.data[key]
+                    else:
+                        ans[key] = [0,]
             return ans
         else:
-            return []
+            return {}
 
     def addData(self, dta):
         """
@@ -82,6 +165,8 @@ class Recorder():
             if var not in self.data:
                 print(f"Recorder.addData: '{var}' not initialized by the recorder: ignored")
 
+    def getVariables(self):
+        return list(self.data.keys())
     def enable(self):
         """
         Enables the recorder.  You may suspend data collection without loss of previous data by calling ``disable()``

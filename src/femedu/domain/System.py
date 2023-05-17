@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 ### end of deprecated section
 ###
 
-from .Node     import *
+from .Node import Node
 from ..elements.Element import *
 from ..solver.LinearSolver import LinearSolver
 from ..plotter.ElementPlotter import ElementPlotter as Plotter
@@ -34,11 +34,8 @@ class System():
         # global analysis settings
         self.loadfactor = 1.0
 
-        self.initRecorder()
-        self.trackStability(False)
-
         self.solver = LinearSolver()
-        self.solver.connect(self.nodes, self.elements, self.constraints)
+        self.solver.connect(self, self.nodes, self.elements, self.constraints)
 
         self.initRecorder()
         self.trackStability(False)
@@ -84,7 +81,7 @@ class System():
                 print('addNode: node {} already exists in system and was not added again'.format(newNode.getID()))
 
     def __add__(self, other):
-        if isinstance(other, Node):
+        if isinstance(other, Node.Node):
             self.addNode(other)
         elif isinstance(other, Element):
             self.addElement(other)
@@ -197,8 +194,6 @@ class System():
         :keyword elements:  elements for which to record
         :type elements: list of :py:class:`Element`
 
-
-
         .. code::
 
             # examples:
@@ -216,10 +211,24 @@ class System():
         if 'variables' in kwargs:
             if 'lam' not in kwargs['variables']:
                 kwargs['variables'] = list(kwargs['variables']) + ['lam']
-            if 'stability' not in kwargs['variables']:
-                kwargs['variables'] = list(kwargs['variables']) + ['stability']
+            #if 'stability' not in kwargs['variables']:
+            #    kwargs['variables'] = list(kwargs['variables']) + ['stability']
         else:
             kwargs['variables'] = ['lam','stability']
+
+        if 'nodes' in kwargs and isinstance(kwargs['nodes'],str):
+            if kwargs['nodes'].lower() == 'all':
+                kwargs['nodes'] = self.nodes
+            else:
+                msg = f"Unknown node identifier `nodes={kwargs['nodes']} in Recorder`"
+                raise KeyError(msg)
+
+        if 'elements' in kwargs and isinstance(kwargs['elements'],str):
+            if kwargs['elements'].lower == 'all':
+                kwargs['elements'] = self.elements
+            else:
+                msg = f"Unknown node identifier `elements={kwargs['elements']} in Recorder`"
+                raise KeyError(msg)
 
         self.recorder = Recorder(**kwargs)
 
@@ -227,20 +236,41 @@ class System():
         """
         starts the recorder
         """
-        self.recorder.enable()
+        if self.recorder:
+            self.recorder.enable()
+        if self.solver:
+            self.solver.startRecorder()
+        for node in self.nodes:
+            node.startRecorder()
+        for elem in self.elements:
+            elem.startRecorder()
 
     def pauseRecorder(self):
         """
         pauses the recorder.  You can restart the recorder by calling
         `startRecorder()`.
         """
-        self.recorder.disable()
+        if self.recorder:
+            self.recorder.disable()
+        if self.solver:
+            self.solver.pauseRecorder()
+        for node in self.nodes:
+            node.pauseRecorder()
+        for elem in self.elements:
+            elem.pauseRecorder()
 
     def stopRecorder(self):
         """
         stops the recorder
         """
-        self.recorder.disable()
+        if self.recorder:
+            self.recorder.disable()
+        if self.solver:
+            self.solver.stopRecorder()
+        for node in self.nodes:
+            node.stopRecorder()
+        for elem in self.elements:
+            elem.startRecorderstopRecorder()
 
     def recordThisStep(self):
         """
@@ -397,7 +427,13 @@ class System():
         if not self.recorder:
             return
 
-        data = self.recorder.fetchRecord(['lam', varY])
+        if 'nodes' in kwargs:
+            data = self.recorder.fetchRecord(['lam', varY], source=[None] + kwargs['nodes'])
+        elif 'node' in kwargs:
+            data = self.recorder.fetchRecord(['lam', varY], source=[None] + [kwargs['node']])
+        else:
+            data = self.recorder.fetchRecord(['lam', varY])
+
         if 'lam' in data:
             X = data['lam']
         else:
@@ -408,11 +444,11 @@ class System():
             raise KeyError(f"Recorder has no data for key='{varY}'")
 
         if 'title' not in kwargs:
-            kwargs['title'] = "Tracking Stability"
+            kwargs['title'] = "Load History Plot"
         if 'xlabel' not in kwargs:
             kwargs['xlabel'] = 'Load factor, $ \lambda $'
         if 'ylabel' not in kwargs:
-            kwargs['ylabel'] = "Stability index, $ {det}\: {\\bf K}_t $"
+            kwargs['ylabel'] = f'variable "{varY}"'
 
         self.plotter.xyPlot(X, Y, filename=filename, **kwargs)
 

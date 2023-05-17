@@ -27,6 +27,11 @@ class LinearSolver(Solver):
         errorNorm = self.solveSingleStep()
         # recover residual force vector
         self.assemble(force_only=True)
+
+        # time to add the information to the recorded data
+        if self.record:
+            self.recordThisStep()
+
         return errorNorm
 
     def solveSingleStep(self):

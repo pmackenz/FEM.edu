@@ -208,8 +208,11 @@ class ElementPlotter(AbstractPlotter):
         """
         fig, axs = plt.subplots()
 
-        axs.plot(X, Y,'--*r')
-        axs.plot(X, np.zeros_like(X),'-k')
+        try:
+            axs.plot(X, Y,'--*r')
+            axs.plot(X, np.zeros_like(X),'-k')
+        except:
+            print(f"warning: non-matching data record in XYplot()\n\tX:{X}\n\tY:{Y}")
         axs.grid(True)
 
         if 'xlabel' in kwargs:

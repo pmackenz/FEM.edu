@@ -3,7 +3,7 @@ __all__ = (
     'Transformation',
     'System'
 )
-
-from .System import *
-from .Node import *
-from .Transformation import *
+\
+from .System import System
+from .Node import Node as Node
+from .Transformation import Transformation

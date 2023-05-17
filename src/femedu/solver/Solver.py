@@ -13,13 +13,16 @@ class Solver():
 
     def __init__(self):
         """
-        Initialize a solver instance with empty elements and nodes lists
+        Initialize a solver instance with empty elements and nodes lists.
+
+        Provides a link to the model
         """
         self.loadfactor    = 1.0    # holds the current load factor
 
         self.loadfactor_n  = 0.0    # load factor for previously converged state
         self.loadfactor_nn = 0.0    # load factor for two steps back converged state
 
+        self.model_ptr   = None     # establishes link to parent model
         self.elements    = []       # list of element pointers
         self.nodes       = []       # list of node pointers
         self.constraints = []       # list of constraint pointers
@@ -39,7 +42,8 @@ class Solver():
         # shall result be recorded?
         self.record = False
 
-    def connect(self, nodes, elems, constraints):
+    def connect(self, model, nodes, elems, constraints):
+        self.model_ptr   = model
         self.nodes       = nodes
         self.elements    = elems
         self.constraints = constraints
@@ -50,6 +54,8 @@ class Solver():
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **model**
+              - pointer to the linked model (required)
             * - **nodes**
               - list of node pointers (required)
             * - **elements**
@@ -71,6 +77,7 @@ class Solver():
         :return: state of the solver
         """
         state = {}
+        state['model']    = self.model_ptr
         state['nodes']    = self.nodes
         state['elements'] = self.elements
         state['lam1']     = self.loadfactor
@@ -84,6 +91,8 @@ class Solver():
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
 
+            * - **model**
+              - pointer to the linked model (required)
             * - **nodes**
               - list of node pointers (required)
             * - **elements**
@@ -103,6 +112,11 @@ class Solver():
 
         :param state: state of the solver
         """
+        if 'model' in state:
+            self.model_ptr = state['model']
+        else:
+            raise TypeError("'model' missing from state")
+
         if 'nodes' in state:
             self.nodes = state['nodes']
         else:
@@ -489,4 +503,32 @@ class Solver():
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
+
+    def startRecorder(self):
+        self.record = True
+
+    def pauseRecorder(self):
+        self.record = False
+
+    def stopRecorder(self):
+        self.record = False
+
+    def recordThisStep(self):
+        """
+        initiate writing of the current state to all existing recorders.
+        (system, nodes, elements, materials - as supported by those objects)
+
+        .. note::
+
+           This method is automatically initiated by the solver
+           for every converged solution.  No data will be recorded if a
+           load step fails to converge to the target tolerance.
+
+           Additional states can be recorded from the :py:code:`System` object.
+
+        """
+        # tell model to record
+        if self.model_ptr:
+            self.model_ptr.recordThisStep()
+
 
