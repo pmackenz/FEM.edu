@@ -524,7 +524,7 @@ class Solver():
            for every converged solution.  No data will be recorded if a
            load step fails to converge to the target tolerance.
 
-           Additional states can be recorded from the :py:code:`System` object.
+           Additional states can be recorded from the :py:class:`System` object.
 
         """
         # tell model to record

@@ -22,6 +22,7 @@ from femedu.mesher import *
 class ExamplePlate06(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def docString(self):
         s = """
     ## Pulling a plate with a circular hole

@@ -378,7 +378,7 @@ class System():
 
         self.plotter.displacementPlot(factor=factor, **kwargs)
 
-    def valuePlot(self, variable, factor=0.0, filename=None):
+    def valuePlot(self, variable, factor=0.0, filename=None, **kwargs):
         """
         Create a false color contour plot for the selected variable.
         A value of zero (0.0) will be assigned for any variable not
@@ -394,7 +394,7 @@ class System():
         """
 
         self.plotter.setMesh(self.nodes, self.elements)
-        self.plotter.valuePlot(variable_name=variable, factor=factor, file=filename)
+        self.plotter.valuePlot(variable_name=variable, factor=factor, filename=filename, **kwargs)
 
     def beamValuePlot(self, variable, factor=0.0, filename=None, **kwargs):
         """

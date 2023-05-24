@@ -22,6 +22,8 @@ from femedu.mesher import *
 class ExamplePlate05(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 3
+
     def docString(self):
         s = """
     ## Pulling a plate with a circular hole
@@ -43,6 +45,7 @@ class ExamplePlate05(Example):
 
         Nx = 10        # number of elements in the mesh
         Ny = 8        # number of elements in the mesh
+
         Lx = 120.0    # length of plate in the x-direction
         Ly =  80.0    # length of plate in the y-direction
         R  = Ly / 2.
@@ -153,6 +156,11 @@ class ExamplePlate05(Example):
         model.report()
 
         model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
+
+        model.valuePlot('ux')
+        model.valuePlot('uy', show_mesh=True)
+
+        model.valuePlot('ux', title="Displacement 'ux' using limits=(0.2, 0.8)", limits=(0.2, 0.8))
 
 
 # %%
