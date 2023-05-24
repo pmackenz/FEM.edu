@@ -324,7 +324,7 @@ class Node():
                 return np.array(ans)
 
         else:
-            self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
+            return self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
 
     def getDeltaU(self, previous_step=False):
         """
