@@ -4,6 +4,8 @@ import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 from matplotlib.colors import ListedColormap, BoundaryNorm
 from matplotlib.patches import Arc, FancyArrow
+import matplotlib.tri as tri
+
 import sys
 
 from .AbstractPlotter import *
@@ -46,6 +48,12 @@ class ElementPlotter(AbstractPlotter):
                   - set to **True** to plot nodal reactions
 
         """
+        if 'linewidth' in kwargs:
+            lw1 = kwargs['linewidth']
+            lw2 = 2*lw1
+        else:
+            lw1 = 1
+            lw2 = 2
 
         if self.plot3D:
             fig = plt.figure(figsize=(10, 10))
@@ -78,7 +86,10 @@ class ElementPlotter(AbstractPlotter):
             self.set_axes_equal(axs)
 
         else:
-            fig, axs = plt.subplots()
+            if 'use_axis' in kwargs:
+                fig, axs = kwargs['use_axis']
+            else:
+                fig, axs = plt.subplots()
 
             # plot the undeformed elements
             for elem in self.elements:
@@ -87,7 +98,7 @@ class ElementPlotter(AbstractPlotter):
                     x = ans[0]
                     y = ans[1]
                     if x.size == y.size:
-                        axs.plot(x, y, linestyle='-', linewidth=1, color='k')
+                        axs.plot(x, y, linestyle='-', linewidth=lw1, color='k')
 
             # plot the deformed elements
             if factor:
@@ -99,7 +110,7 @@ class ElementPlotter(AbstractPlotter):
                         if x.size == y.size:
                             if m.isclose(x[0], x[-1]) and m.isclose(y[0], y[-1]):
                                 axs.fill(x, y, linestyle='-', linewidth=1, edgecolor='r', facecolor='grey', alpha=0.2)
-                            axs.plot(x, y, linestyle='-', linewidth=2, color='r')
+                            axs.plot(x, y, linestyle='-', linewidth=lw2, color='r')
 
             # if self.reactions != []:
             #     self.addForces(axs)
@@ -133,6 +144,9 @@ class ElementPlotter(AbstractPlotter):
             else:
                 axs.set_title(f"Deformed System (magnification={factor:.2f})")
 
+            if 'use_axis' in kwargs:
+                return
+
             axs.set_aspect('equal')
             axs.set_xmargin(0.20)
             axs.set_ymargin(0.20)
@@ -142,7 +156,7 @@ class ElementPlotter(AbstractPlotter):
             plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
-    def valuePlot(self, variable_name='', factor=0.0, filename=None):
+    def valuePlot(self, variable_name='', factor=0.0, filename=None, **kwargs):
         """
         Create a plot using colors to identify magnitude of internal force.
 
@@ -152,42 +166,78 @@ class ElementPlotter(AbstractPlotter):
         :param factor: True | **False**
         :param filename:  (str)
         """
-        print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
-        return
+        if 'cmap' in kwargs:
+            cmap = kwargs['cmap']
+        else:
+            cmap = 'jet'
 
-        fig, axs = plt.subplots()
+        if 'limits' in kwargs:
+            limits = kwargs['limits']
+            show_mesh = True
+            if 'linewidth' not in kwargs:
+                kwargs['linewidth'] = 0.125
+        else:
+            limits = (-1.e300, 1.e300)
+            show_mesh = False
 
-        # plot the lines
-        segments = []
+        if 'show_mesh' in kwargs:
+            show_mesh = kwargs['show_mesh']
 
-        if len(self.disp) == len(self.vertices):
-            for line in self.lines:
-                vert0 = self.vertices[line[0]].copy()  # we need a copy since we will be modifying this in the lines below
-                vert1 = self.vertices[line[1]].copy()  # we need a copy since we will be modifying this in the lines below
-                if deformed:
-                    vert0 += self.disp[line[0]]   # it's this += that modifies the vertices if we don't use a copy
-                    vert1 += self.disp[line[1]]   # it's this += that modifies the vertices if we don't use a copy
-                #x = [vert0[0], vert1[0]]
-                #y = [vert0[1], vert1[1]]
-                #axis.plot(x,y,'-r',lw=3)
-                segments.append(np.array([vert0, vert1]))
+        if 'linewidth' not in kwargs:
+            kwargs['linewidth'] = 0.125
 
-        # Create a continuous norm to map from data points to colors
-        lc = LineCollection(np.array(segments), cmap='rainbow')
-        # Set the values used for colormapping
-        lc.set_array(self.values)
-        lc.set_linewidth(3)
-        line = axs.add_collection(lc)
-        fig.colorbar(line, ax=axs)
+        if self.plot3D:
+            print("** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name))
+            return
 
-        if self.reactions != []:
-            self.addForces(axs)
+        else:
+            fig, axs = plt.subplots()
+            axs.set_aspect('equal')
 
-        axs.set_aspect('equal')
-        axs.set_axis_off()
+            # build vertices
+            verts = []
+            values = []
+            vert_ptr = {}
+            for i, node in enumerate(self.nodes):
+                verts.append(node.getPos())
+                vert_ptr[node] = i
+                disps = node.getDisp(variable_name)
 
-        plt.autoscale(enable=True, axis='x', tight=False)
-        plt.autoscale(enable=True, axis='y', tight=False)
+                if not isinstance(disps, np.ndarray):
+                    print(node)
+                    print(disps)
+                    raise
+
+                val = disps[0]
+                if val < limits[0]: val = np.nan
+                if val > limits[1]: val = np.nan
+                values.append(val)
+            verts = np.array(verts)
+
+            # build triangles
+            triangles = []
+            for elem in self.elements:
+                if elem.isType(Element.TRIANGLE):
+                    tri = [ vert_ptr[node] for node in elem.nodes ]
+                    triangles.append(tri)
+
+            # plot contours on undeformed elements
+            tpc = axs.tripcolor(verts[:,0], verts[:,1], triangles, values,
+                                shading='gouraud', edgecolors='k', cmap=cmap)
+            fig.colorbar(tpc)
+
+            if show_mesh:
+                self.displacementPlot(factor=factor, use_axis=(fig, axs), **kwargs)
+
+            if 'title' in kwargs:
+                axs.set_title(kwargs['title'])
+            else:
+                axs.set_title(f"Contours of '{variable_name}'")
+
+            #axs.set_xmargin(0.20)
+            #axs.set_ymargin(0.20)
+            axs.set_axis_off()
+
         if filename:
             plt.savefig(filename, bbox_inches='tight')
         plt.show()
