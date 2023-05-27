@@ -220,6 +220,11 @@ class ElementPlotter(AbstractPlotter):
                 if elem.isType(Element.TRIANGLE):
                     tri = [ vert_ptr[node] for node in elem.nodes ]
                     triangles.append(tri)
+                elif elem.isType(Element.QUAD):
+                    tri = [ vert_ptr[node] for node in [ elem.nodes[k] for k in [0,1,2] ] ]
+                    triangles.append(tri)
+                    tri = [ vert_ptr[node] for node in [ elem.nodes[k] for k in [2,3,0] ] ]
+                    triangles.append(tri)
 
             # plot contours on undeformed elements
             tpc = axs.tripcolor(verts[:,0], verts[:,1], triangles, values,

@@ -1,6 +1,6 @@
 """
 ==========================================================
-Pulling a plate with a circular hole
+Pulling a plate with a circular hole : using quads
 ==========================================================
 
 Using PatchMesher to model a quarter of the plate
@@ -22,7 +22,7 @@ from femedu.mesher import *
 class ExamplePlate06(Example):
 
     # sphinx_gallery_start_ignore
-    # sphinx_gallery_thumbnail_number = 2
+    # sphinx_gallery_thumbnail_number = 3
     def docString(self):
         s = """
     ## Pulling a plate with a circular hole
@@ -146,14 +146,19 @@ class ExamplePlate06(Example):
 
         model.report()
 
-        model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
+        model.plot(factor=0, title="undeformed system", filename="plate06_undeformed.png", show_bc=1, show_loads=1)
 
         model.setLoadFactor(10.0)
         model.solve()
 
         model.report()
 
-        model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
+        model.plot(factor=10., filename="plate06_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
+
+        model.valuePlot('ux')
+        model.valuePlot('uy', show_mesh=True)
+
+        model.valuePlot('ux', title="Displacement 'ux' using limits=(0.2, 0.8)", limits=(0.2, 0.8))
 
 
 # %%

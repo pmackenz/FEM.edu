@@ -437,11 +437,13 @@ class System():
         if 'lam' in data:
             X = data['lam']
         else:
-            raise KeyError(f"Recorder has no data for key='lam'")
+            msg = f"Recorder has no data for key='lam'"
+            raise KeyError(msg)
         if varY in data:
             Y = data[varY]
         else:
-            raise KeyError(f"Recorder has no data for key='{varY}'")
+            msg = f"Recorder has no data for key='{varY}'"
+            raise KeyError(msg)
 
         if 'title' not in kwargs:
             kwargs['title'] = "Load History Plot"

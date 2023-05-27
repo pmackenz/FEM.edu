@@ -1,6 +1,6 @@
 """
 ==========================================================
-Pulling a plate with a circular hole
+Pulling a plate with a circular hole : using triangles
 ==========================================================
 
 Using PatchMesher to model a quarter of the plate
