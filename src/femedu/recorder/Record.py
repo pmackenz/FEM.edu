@@ -5,16 +5,23 @@ class Record():
     container class for recording time history data
     """
 
-    def __init__(self):
+    def __init__(self, key='', label=''):
         self.data  = []
-        self.key   = ''
-        self.label = ''
+        self.key   = key
+        self.label = label
 
     def __str__(self):
         if len(self.data) > 3:
-            s = "{}:{}:{}".format(self.label,self.key,self.data[:3])
+            s = "{}::{}::{}".format(self.label,self.key,self.data[:3])
         else:
-            s = "{}:{}:{}".format(self.label,self.key,self.data)
+            s = "{}::{}::{}".format(self.label,self.key,self.data)
+        return s
+
+    def __repr__(self):
+        if len(self.data) > 3:
+            s = "Record(label={}, key={}, data=[{},{},{},...])".format(self.label,self.key,*self.data[:3])
+        else:
+            s = "Record(label={}, key={}, data={})".format(self.label,self.key,self.data)
         return s
 
     def __len__(self):

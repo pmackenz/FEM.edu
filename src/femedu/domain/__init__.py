@@ -5,5 +5,5 @@ __all__ = (
 )
 \
 from .System import System
-from .Node import Node as Node
+from .Node import Node
 from .Transformation import Transformation

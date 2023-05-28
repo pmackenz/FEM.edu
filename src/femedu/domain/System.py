@@ -14,7 +14,7 @@ from .Node import Node
 from ..elements.Element import *
 from ..solver.LinearSolver import LinearSolver
 from ..plotter.ElementPlotter import ElementPlotter as Plotter
-from ..recorder.Recorder import *
+from ..recorder import *
 
 
 class System():
@@ -230,7 +230,7 @@ class System():
                 msg = f"Unknown node identifier `elements={kwargs['elements']} in Recorder`"
                 raise KeyError(msg)
 
-        self.recorder = Recorder(**kwargs)
+        self.recorder = ModelRecorder(**kwargs)
 
     def startRecorder(self):
         """
@@ -412,7 +412,7 @@ class System():
         self.plotter.setMesh(self.nodes, self.elements)
         self.plotter.beamValuePlot(variable_name=variable, factor=factor, filename=filename, **kwargs)
 
-    def historyPlot(self, varY, filename=None, **kwargs):
+    def historyPlot(self, varX='', varY='', filename=None, **kwargs):
         """
         Create a generic X-Y plot using recorder data for load-level (horizontal)
         and varY (vertical).
@@ -420,37 +420,65 @@ class System():
         If **filename** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
-        :param str varY: a variable code previously set by :py:meth:`initRecorder`
+        :param varX:     X-axis parameter;
+                         This must be a variable code previously set by :py:meth:`initRecorder`.
+
+                         If :py:var:`varX` is a :py:class:`str`, it is assumed to be a global parameter/variable, e.g.,
+                         load factor **lam**, or pseudo time **time** (time not yet supported)
+
+                         If :py:attr:`varX` is a :py:class:`tuple` containing a variable code and a :py:class:`Node` pointer,
+                         the respective nodal DOF defined by the parameter will be used.
+
+                         If :py:attr:`varX` is a :py:class:`tuple` containing a variable code and a :py:class:`Element` pointer,
+                         the respective element DOF defined by the parameter will be used. The parameter must identify a scalar parameter.
+                         Hence, you may use :py:data:`'sig:xx'` but **not** :py:data:`'stress'`.
+
+        :param varY:     a variable code previously set by :py:meth:`initRecorder`
         :param filename:
         :type filename: str
+        :param node: (optional)
+        :param nodes: (optional)
         """
         if not self.recorder:
             return
 
-        if 'nodes' in kwargs:
-            data = self.recorder.fetchRecord(['lam', varY], source=[None] + kwargs['nodes'])
-        elif 'node' in kwargs:
-            data = self.recorder.fetchRecord(['lam', varY], source=[None] + [kwargs['node']])
+        if not varX:
+            variableX = 'lam'
+            src = [None]
+        elif isinstance(varX, list) or isinstance(varX, tuple):
+            variableX = varX[0]
+            src = [varX[1]]
         else:
-            data = self.recorder.fetchRecord(['lam', varY])
+            variableX = varX
+            src = [None]
 
-        if 'lam' in data:
-            X = data['lam']
+        if isinstance(varY, list) or isinstance(varY, tuple):
+            variableY = varY
         else:
-            msg = f"Recorder has no data for key='lam'"
-            raise KeyError(msg)
-        if varY in data:
-            Y = data[varY]
+            variableY = [varY]
+
+        if 'nodes' in kwargs:
+            data = self.recorder.fetchRecord([variableX, *variableY], source=src + kwargs['nodes'])
+        elif 'node' in kwargs:
+            data = self.recorder.fetchRecord([variableX, *variableY], source=src + [kwargs['node']])
+        elif src:
+            data = self.recorder.fetchRecord([variableX, *variableY], source=src + [None]*len(variableY))
         else:
-            msg = f"Recorder has no data for key='{varY}'"
-            raise KeyError(msg)
+            data = self.recorder.fetchRecord([variableX, *variableY])
+
+
+        X = Record()
+        for key, record in data.items():
+            if record.key == variableX:
+                X = record
+
+        Y = []
+        for key, record in data.items():
+            if record.key in variableY:
+                Y.append( record )
 
         if 'title' not in kwargs:
             kwargs['title'] = "Load History Plot"
-        if 'xlabel' not in kwargs:
-            kwargs['xlabel'] = 'Load factor, $ \lambda $'
-        if 'ylabel' not in kwargs:
-            kwargs['ylabel'] = f'variable "{varY}"'
 
         self.plotter.xyPlot(X, Y, filename=filename, **kwargs)
 
