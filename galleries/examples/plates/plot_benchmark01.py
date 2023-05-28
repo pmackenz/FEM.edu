@@ -14,8 +14,8 @@ from femedu.examples import Example
 
 from femedu.domain import System, Node
 from femedu.solver import NewtonRaphsonSolver
-#from femedu.elements.linear import Quad
-from femedu.elements.finite import Quad
+#from femedu.elements.linear import Quad, Triangle
+from femedu.elements.finite import Quad, Triangle
 from femedu.materials import PlaneStress
 from femedu.mesher import *
 
@@ -78,22 +78,30 @@ class ExampleBenchmark01(Example):
         mesher = PatchMesher(model, (0.,0.),(L1, L2),(L1, L2+L3),(0.,L2) )
         nodes, elements = mesher.quadMesh(Nx, Ny, Quad, PlaneStress(params))
 
-        # define support(s)
+        mesher.shift(1.25*L1, 0.0)
+        nodes2, elements2 = mesher.triangleMesh(Nx, Ny, Triangle, PlaneStress(params))
 
-        ## find nodes at y==0 and x==0
+        nodes += nodes2
+        elements += elements2
 
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], 0.0):
-                node.fixDOF('ux','uy')    # fix left side
 
-        # ==== complete the reference load ====
+        # ==== Apply boundary conditions ====
+
+        #
+        # the left model
+        #
 
         Xo = np.array([L1, 0.0])
         No = np.array([1.0, 0.0])
 
         for node in nodes:
             X = node.getPos()
+
+            # define support(s) ...
+            if math.isclose(X[0], 0.0):
+                node.fixDOF('ux','uy')    # fix left side
+
+            # define loads ...
             if math.isclose(X[0],L1):
                 # locate the node at the centerline
                 if math.isclose(X[1],L2+L3):
@@ -104,11 +112,37 @@ class ExampleBenchmark01(Example):
                         for x, area in zip(face.pos, face.area):
                             if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
                                 face.setLoad(px, pxy)
+        #
+        # the right model
+        #
+
+        Xo = np.array([2.25*L1, 0.0])
+        No = np.array([1.0, 0.0])
+
+        for node in nodes:
+            X = node.getPos()
+
+            # define support(s) ...
+            if math.isclose(X[0], 1.25*L1):
+                node.fixDOF('ux','uy')    # fix left side
+
+            # define loads ...
+            X = node.getPos()
+            if math.isclose(X[0],2.25*L1):
+                # locate the node at the centerline
+                if math.isclose(X[1],L2+L3):
+                    nodeB = node
+                # load the end faces
+                for elem in node.elements:
+                    for face in elem.faces:
+                        for x, area in zip(face.pos, face.area):
+                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
+                                face.setLoad(px, pxy)
 
         #model.report()
 
         # set up a recorder
-        model.initRecorder(variables=['ux','uy'], nodes=[nodeA])
+        model.initRecorder(variables=['ux','uy'], nodes=[nodeA, nodeB])
         model.startRecorder()
 
         model.plot(factor=0, title="undeformed system", filename="benchmark01_undeformed.png", show_bc=1, show_loads=1)
@@ -128,8 +162,8 @@ class ExampleBenchmark01(Example):
 
         # create a history plot for the end node
 
-        model.historyPlot('ux', node=nodeA)
-        model.historyPlot('uy', node=nodeA)
+        model.historyPlot('ux', nodes=[nodeA,nodeB])
+        model.historyPlot('uy', nodes=[nodeA,nodeB])
 
 
 # %%

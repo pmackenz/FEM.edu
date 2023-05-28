@@ -109,12 +109,12 @@ class Recorder():
                     return source.recorder.fetchRecord(keys)
                 else:
                     return {}
-            elif source and (isinstance(source,list) or isinstance(source,tuple)) \
-                    and isinstance(source[0],Node.Node):
-                if source[0].recorder:
-                    return source[0].recorder.fetchRecord(keys)
-                else:
-                    return {}
+            elif source and (isinstance(source,list) or isinstance(source,tuple)):
+                for src in source:
+                    if isinstance(src,Node.Node) and src.recorder:
+                        return src.recorder.fetchRecord(keys)
+                    else:
+                        return {}
             else:
                 if keys in self.data:
                     return {keys:self.data[keys]}
@@ -130,7 +130,8 @@ class Recorder():
                         if src.recorder:
                             node_data = src.recorder.fetchRecord(key)
                             for field in node_data:
-                                ans[field] = node_data[field]
+                                lbl = "{}:{}".format(src.getID(),field)
+                                ans[lbl] = node_data[field]
                     else:
                         if key in self.data:
                             ans[key] = self.data[key]
