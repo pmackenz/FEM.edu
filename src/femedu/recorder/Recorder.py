@@ -47,21 +47,28 @@ class Recorder():
         'stress',
         'strain',
     )
+    material_types = (
+        'state',
+    )
 
     def __init__(self, **kwargs):
-        self.active = False
-        self.data = {}
-        self.nodes = []
-        self.elements = []
+        self.active   = False
+        self.data     = {}
 
-        nodevars = []
-        elemvars = []
+        self.classify(**kwargs)
+
+    def classify(self, **kwargs):
+
+        sysvars      = []
+        nodevars     = []
+        elemvars     = []
+        materialvars = []
 
         if 'variables' in kwargs:
             for var in kwargs['variables']:
                 var_classified = False
                 if var in self.system_types or 'type' in kwargs:
-                    self.data[var] = []
+                    sysvars.append(var)
                     var_classified = True
                 if var in self.node_types:
                     nodevars.append(var)
@@ -69,23 +76,22 @@ class Recorder():
                 if var in self.element_types:
                     elemvars.append(var)
                     var_classified = True
+                if var in self.material_types:
+                    materialvars.append(var)
+                    var_classified = True
                 if not var_classified:
                     # this is an unknown/new variable
                     # maybe from a new element type?
                     # just for safety, add it to all types
-                    self.data[var] = []
+                    sysvars.append(var)
                     nodevars.append(var)
                     elemvars.append(var)
+                    # skip materialvars : too much data
 
-        if 'nodes' in kwargs:
-            self.nodes = kwargs['nodes']
-            for node in self.nodes:
-                node.setRecorder(Recorder(variables=nodevars, type='node'))
-
-        if 'elements' in kwargs:
-            self.elements = kwargs['elements']
-            for elem in self.elements:
-                elem.setRecorder(Recorder(variables=elemvars, type='element'))
+        self.sysvars      = sysvars
+        self.nodevars     = nodevars
+        self.elemvars     = elemvars
+        self.materialvars = materialvars
 
     def fetchRecord(self, keys=None, source=None):
         """
@@ -109,12 +115,12 @@ class Recorder():
                     return source.recorder.fetchRecord(keys)
                 else:
                     return {}
-            elif source and (isinstance(source,list) or isinstance(source,tuple)) \
-                    and isinstance(source[0],Node.Node):
-                if source[0].recorder:
-                    return source[0].recorder.fetchRecord(keys)
-                else:
-                    return {}
+            elif source and (isinstance(source,list) or isinstance(source,tuple)):
+                for src in source:
+                    if isinstance(src,Node.Node) and src.recorder:
+                        return src.recorder.fetchRecord(keys)
+                    else:
+                        return {}
             else:
                 if keys in self.data:
                     return {keys:self.data[keys]}
@@ -130,7 +136,8 @@ class Recorder():
                         if src.recorder:
                             node_data = src.recorder.fetchRecord(key)
                             for field in node_data:
-                                ans[field] = node_data[field]
+                                lbl = node_data[field].label
+                                ans[lbl] = node_data[field]
                     else:
                         if key in self.data:
                             ans[key] = self.data[key]
@@ -156,9 +163,9 @@ class Recorder():
         """
         for var in self.data:
             if var in dta:
-                self.data[var].append(dta[var])
+                self.data[var].data.append(dta[var])
             else:
-                self.data[var].append(np.nan)
+                self.data[var].data.append(np.nan)
                 print(f"Recorder.addData: '{var}' not not in data set: padding with nan")
 
         for var in dta:

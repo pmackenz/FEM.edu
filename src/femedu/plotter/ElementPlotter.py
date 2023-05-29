@@ -254,8 +254,8 @@ class ElementPlotter(AbstractPlotter):
         If **filename** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
-        :param X: one-dimensional :py:class:`numpy.array` holding x-values
-        :param Y: one-dimensional :py:class:`numpy.array` holding y-values
+        :param X: :py:class:`Record` holding x-values
+        :param Y: :py:class:`list` or :py:class:`tuple` of :py:class:`Record` holding y-values
         :param str filename:
         :param str title: figure title (optional)
         :param str xlabel: x-axis label (optional)
@@ -263,17 +263,28 @@ class ElementPlotter(AbstractPlotter):
         """
         fig, axs = plt.subplots()
 
-        try:
-            axs.plot(X, Y,'--*r')
-            axs.plot(X, np.zeros_like(X),'-k')
-        except:
-            print(f"warning: non-matching data record in XYplot()\n\tX:{X}\n\tY:{Y}")
+        xlbl, xi = X.getData()
+
+        for Yi in Y:
+            try:
+                ylbl, yi = Yi.getData()
+                axs.plot(xi, yi, ls='--', label=ylbl)
+            except:
+                print(f"warning: non-matching data record in XYplot()\n\tX:{X.label}\n\tY:{Yi.label}")
+
+        x0 = X.getData()[1]
+        axs.plot(x0, np.zeros_like(x0),'-k')
         axs.grid(True)
+        axs.legend()
 
         if 'xlabel' in kwargs:
             axs.set_xlabel(kwargs['xlabel'])
+        else:
+            axs.set_xlabel(xlbl)
+
         if 'ylabel' in kwargs:
             axs.set_ylabel(kwargs['ylabel'])
+
         if 'title' in kwargs:
             axs.set_title(kwargs['title'])
 
