@@ -38,8 +38,8 @@ class ExampleBenchmark01(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 16      # number of elements in the mesh
-        Ny = 8       # number of elements in the mesh
+        Nx = 8      # number of elements in the mesh
+        Ny = 4       # number of elements in the mesh
         L1 =  48.0
         L2 =  44.0
         L3 =  16.0
@@ -162,8 +162,8 @@ class ExampleBenchmark01(Example):
 
         # create a history plot for the end node
 
-        model.historyPlot('lam', ['ux','uy'], nodes=[nodeA,nodeA])
-        model.historyPlot('lam', ['ux','uy'], nodes=[nodeB,nodeB])
+        #model.historyPlot('lam', ['ux','uy'], nodes=[nodeA,nodeA])
+        #model.historyPlot('lam', ['ux','uy'], nodes=[nodeB,nodeB])
         model.historyPlot('lam', ['ux','uy','ux','uy'], nodes=[nodeA,nodeA,nodeB,nodeB])
 
 
