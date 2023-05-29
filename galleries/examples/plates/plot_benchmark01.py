@@ -162,8 +162,9 @@ class ExampleBenchmark01(Example):
 
         # create a history plot for the end node
 
-        model.historyPlot('ux', nodes=[nodeA,nodeB])
-        model.historyPlot('uy', nodes=[nodeA,nodeB])
+        model.historyPlot('lam', ['ux','uy'], nodes=[nodeA,nodeA])
+        model.historyPlot('lam', ['ux','uy'], nodes=[nodeB,nodeB])
+        model.historyPlot('lam', ['ux','uy','ux','uy'], nodes=[nodeA,nodeA,nodeB,nodeB])
 
 
 # %%

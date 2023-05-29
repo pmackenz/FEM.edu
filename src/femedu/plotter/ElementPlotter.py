@@ -268,7 +268,7 @@ class ElementPlotter(AbstractPlotter):
         for Yi in Y:
             try:
                 ylbl, yi = Yi.getData()
-                axs.plot(xi, yi,'--*r', label=ylbl)
+                axs.plot(xi, yi, ls='--', label=ylbl)
             except:
                 print(f"warning: non-matching data record in XYplot()\n\tX:{X.label}\n\tY:{Yi.label}")
 

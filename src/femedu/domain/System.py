@@ -423,7 +423,7 @@ class System():
         :param varX:     X-axis parameter;
                          This must be a variable code previously set by :py:meth:`initRecorder`.
 
-                         If :py:var:`varX` is a :py:class:`str`, it is assumed to be a global parameter/variable, e.g.,
+                         If :py:attr:`varX` is a :py:class:`str`, it is assumed to be a global parameter/variable, e.g.,
                          load factor **lam**, or pseudo time **time** (time not yet supported)
 
                          If :py:attr:`varX` is a :py:class:`tuple` containing a variable code and a :py:class:`Node` pointer,

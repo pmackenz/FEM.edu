@@ -55,15 +55,15 @@ class ExamplePlate11(Example):
 
         px  =  0.0         # uniform load normal to x=Lx
         py  =  0.0         # uniform load normal to y=Ly
-        pxy =  1.0         # uniform shear load on x=L
+        pxy =  1.5         # uniform shear load on x=L
 
         # ========== setting analysis parameters ==============
 
         target_load_level = 100.00    # reference load
         max_steps = 21                # number of load steps: 2 -> [0.0, 1.0]
 
-        target_load_level = 10.00    # reference load
-        max_steps = 3                # number of load steps: 2 -> [0.0, 1.0]
+        # target_load_level = 10.00    # reference load
+        # max_steps = 3                # number of load steps: 2 -> [0.0, 1.0]
 
         # define a list of target load levels
         load_levels = np.linspace(0, target_load_level, max_steps)
@@ -125,7 +125,7 @@ class ExamplePlate11(Example):
         model.initRecorder(variables=['ux','uy'], nodes=[end_node])
         model.startRecorder()
 
-        #model.plot(factor=0, title="undeformed system", filename="plate11_undeformed.png", show_bc=1, show_loads=1)
+        model.plot(factor=0, title="undeformed system", filename="plate11_undeformed.png", show_bc=1, show_loads=1)
 
         for lf in np.linspace(0.0, target_load_level, max_steps):
 
@@ -135,15 +135,14 @@ class ExamplePlate11(Example):
             #model.report()
 
 
-        #model.plot(factor=1., filename=f"plate11_deformed_lf{lf:.2f}.png", show_bc=1, show_loads=1, show_reactions=1)
+        model.plot(factor=1., filename=f"plate11_deformed_lf{lf:.2f}.png", show_bc=1, show_loads=1, show_reactions=1)
 
-        #model.valuePlot('ux', filename=f"plate11_ux_lf{lf:.2f}.png")
-        #model.valuePlot('uy', show_mesh=True, filename=f"plate11_uy_lf{lf:.2f}.png")
+        model.valuePlot('ux', filename=f"plate11_ux_lf{lf:.2f}.png")
+        model.valuePlot('uy', show_mesh=True, filename=f"plate11_uy_lf{lf:.2f}.png")
 
         # create a history plot for the end node
 
-        model.historyPlot('lam', 'ux', node=end_node)
-        model.historyPlot('lam', 'uy', node=end_node)
+        model.historyPlot('lam', ['ux','uy'], nodes=[end_node,end_node])
         model.historyPlot(('ux',end_node), 'uy', node=end_node)
 
 
