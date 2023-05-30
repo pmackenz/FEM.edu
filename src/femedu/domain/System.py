@@ -81,7 +81,7 @@ class System():
                 print('addNode: node {} already exists in system and was not added again'.format(newNode.getID()))
 
     def __add__(self, other):
-        if isinstance(other, Node.Node):
+        if isinstance(other, Node):
             self.addNode(other)
         elif isinstance(other, Element):
             self.addElement(other)

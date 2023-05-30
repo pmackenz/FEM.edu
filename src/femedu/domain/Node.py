@@ -464,8 +464,8 @@ class Node():
     def setLoad(self, loads, dofs):
         """
 
-        :param loads:
-        :param dofs:
+        :param loads: list of force components
+        :param dofs:  associated list of DOFs to which respective loads are to be applied
         """
         if self.is_lead:
             # Check tuple type and if the dof exists (warn and continue)
