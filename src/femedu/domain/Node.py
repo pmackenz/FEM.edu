@@ -393,7 +393,20 @@ class Node():
                 return self.pos + factor * self.getDisp(caller=None, dofs=my_dofs)
 
         else:
-            return self.lead.getDeformedPos(caller=caller, factor=factor, **kwargs)
+            if self.pos.shape[0] == 1:
+                my_dofs = ('ux',)
+            elif self.pos.shape[0] == 2:
+                my_dofs = ('ux','uy')
+            elif self.pos.shape[0] == 3:
+                my_dofs = ('ux','uy','uz')
+            else:  # don't know what that would be
+                msg = f"Don't know how to interprete position: {self.pos}"
+                raise TypeError(msg)
+
+            #return self.lead.getDeformedPos(caller=caller, factor=factor, **kwargs)
+            disp = self.lead.getDisp(dofs=my_dofs, caller=None, factor=factor, **kwargs)
+
+            return self.pos + factor * disp
 
     def getIdx4Element(self, elem):
         """
