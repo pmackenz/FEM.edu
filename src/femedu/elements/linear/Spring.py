@@ -10,7 +10,7 @@ The mechanics of the element is described by length change
 
 .. math::
 
-   \delta = U_{x,j} - U_{x,i}
+   \delta = U_{j} - U_{i}
 
 and internal force
 

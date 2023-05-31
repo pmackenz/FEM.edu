@@ -1,3 +1,5 @@
+.. _system class:
+
 System class
 ==========================
 

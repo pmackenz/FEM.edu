@@ -1,3 +1,5 @@
+.. _node class:
+
 Node class
 ================
 

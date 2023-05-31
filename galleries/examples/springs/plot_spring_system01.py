@@ -12,14 +12,28 @@ A first 1D spring system
    x ... fixed node
    o ... free node (moving in x-direction)
 
+
+.. note::
+
+    **This example uses**
+
+    * :ref:`System class`
+    * :ref:`Spring class`
+    * :ref:`Node class`
+
 """
 
-# %% Initialization
+# %%
+# Initialization
+# ----------------
 #
+
 from femedu.domain import *
 from femedu.elements.linear import Spring
 
-# %% Building the model
+# %%
+# Building the model
+# -------------------
 # 1. Initializing a model
 
 model = System()
@@ -55,6 +69,8 @@ nd4.setLoad([2.0],['ux'])
 model.report()
 
 # %%
+# Performing the analysis
+# -----------------------
 # 6. Assembly and solve
 model.solve()
 
