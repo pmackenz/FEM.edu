@@ -377,7 +377,7 @@ class Solver():
 
         # update nodal displacements
         for node in self.nodes:
-            idxK = node.start + np.arange(node.ndofs)
+            idxK = node.getIdx4DOFs()
             node.setDisp(U[idxK], modeshape=True)
 
         return lam

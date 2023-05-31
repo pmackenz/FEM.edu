@@ -396,6 +396,9 @@ class Node():
             return self.lead.getDeformedPos(caller=caller, factor=factor, **kwargs)
 
     def getIdx4Element(self, elem):
+        """
+        :return: an index list to nodal dofs associated with the attached **elem** within the global dof list
+        """
         if self.is_lead:
             if elem in self.dof_maps:
                 return self.start + np.array(self.dof_maps[elem], dtype=int)
@@ -406,6 +409,9 @@ class Node():
             return self.lead.getIdx4Element(elem)
 
     def getIdx4DOFs(self, dofs=[]):
+        """
+        :return: an index list to this node's dofs in the global list of dofs
+        """
         if self.is_lead:
 
             if not dofs:

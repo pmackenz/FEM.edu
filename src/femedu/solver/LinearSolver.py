@@ -66,9 +66,11 @@ class LinearSolver(Solver):
             # solve for displacement update: a single Newton step
             dU = np.linalg.solve(self.Kt, self.R)
 
+        self.U = dU
+
         # update nodal displacements
         for node in self.nodes:
-            idxK = node.start + np.arange(node.ndofs)
+            idxK = node.getIdx4DOFs()
             node._updateDisp(dU[idxK])
 
 
