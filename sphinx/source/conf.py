@@ -46,7 +46,8 @@ sphinx_gallery_conf = {
     'ignore_pattern': r'__init__\.py|runall\.py|read_profile_stats.py',
     # specify that examples should be ordered according to filename
     'within_subsection_order': FileNameSortKey,
-    'subsection_order': ExplicitOrder(['../../galleries/examples/beams',
+    'subsection_order': ExplicitOrder(['../../galleries/examples/springs',
+                                       '../../galleries/examples/beams',
                                        '../../galleries/examples/trusses',
                                        '../../galleries/examples/frames',
                                        '../../galleries/examples/diffusion',

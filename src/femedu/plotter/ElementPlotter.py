@@ -463,9 +463,16 @@ class ElementPlotter(AbstractPlotter):
                 if np.linalg.norm(force) > 1.0e-3:
                     point = node.getDeformedPos(factor=factor)
                     X.append(point[0])
-                    Y.append(point[1])
+                    if point.size>1:
+                        Y.append(point[1])
+                    else:
+                        Y.append(0.0)
+
                     Fx.append(force[0])
-                    Fy.append(force[1])
+                    if force.size>1:
+                        Fy.append(force[1])
+                    else:
+                        Fy.append(0.0)
 
                     if force.size > 2 and np.abs(force[2])>1.e-3:
                         M = force[2]
