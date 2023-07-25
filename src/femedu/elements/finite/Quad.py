@@ -29,8 +29,8 @@ class Quad(Element):
     * For 3D membrane behavior, define nodes as three-dimensional nodes
     """
 
-    def __init__(self, node0, node1, node2, node3, material):
-        super(Quad, self).__init__((node0, node1, node2, node3), material)
+    def __init__(self, node0, node1, node2, node3, material, label=None):
+        super(Quad, self).__init__((node0, node1, node2, node3), material, label=label)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 

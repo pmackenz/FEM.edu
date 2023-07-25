@@ -14,7 +14,7 @@ class Element(DrawElement):
 
     COUNT = 0
 
-    def __init__(self, nodes, material):
+    def __init__(self, nodes, material, label=None):
         """
 
         :param nodes:
@@ -24,6 +24,8 @@ class Element(DrawElement):
 
         self.ID = Element.COUNT # creates a unique ID for each element
         Element.COUNT += 1      # ensure the next call will create a unique ID as well
+
+        self.label = label
         
         self.nodes    = nodes
         self.transforms = [ None for nd in self.nodes ]
@@ -42,7 +44,10 @@ class Element(DrawElement):
         self.setLoadFactor(1.0)
 
     def __str__(self):
-        s = "{}_{}: nodes ( ".format(self.__class__.__name__, self.ID)
+        if self.label:
+            s = "{} ({}_{}): nodes ( ".format(self.label, self.__class__.__name__, self.ID)
+        else:
+            s = "{}_{}: nodes ( ".format(self.__class__.__name__, self.ID)
         for node in self.nodes:
             s += "{} ".format(node.getID())
         s += ")"
@@ -50,10 +55,17 @@ class Element(DrawElement):
         return s
 
     def __repr__(self):
-        fmt = "{}(" + len(self.nodes)*"{}, " + "{})"
-        return fmt.format(self.__class__.__name__,
-                                *[ node.getID() for node in self.nodes ],
-                                repr(self.material))
+        if self.label:
+            fmt = "{}[{}](" + len(self.nodes)*"{}, " + "{})"
+            ans = fmt.format(self.__class__.__name__, self.label,
+                                    *[ node.getID() for node in self.nodes ],
+                                    repr(self.material))
+        else:
+            fmt = "{}(" + len(self.nodes)*"{}, " + "{})"
+            ans = fmt.format(self.__class__.__name__,
+                                    *[ node.getID() for node in self.nodes ],
+                                    repr(self.material))
+        return ans
 
     def resetLoads(self):
         """
@@ -258,6 +270,12 @@ class Element(DrawElement):
 
     def computeSurfaceLoads(self):
         self.Loads = []
+
+    def getLabel(self):
+        if self.label:
+            return "{}".format(self.label)
+        else:
+            return self.getID()
 
     def getID(self):
         return "Elem_{}".format(self.ID)

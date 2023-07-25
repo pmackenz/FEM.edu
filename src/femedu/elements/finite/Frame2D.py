@@ -32,13 +32,13 @@ class Frame2D(Element):
 
     """
 
-    def __init__(self, nodei, nodej, material):
+    def __init__(self, nodei, nodej, material, label=None):
         """
         :param nodei: (pointer to) start Node object
         :param nodej: (pointer to) end Node object
         :param material: a material for axial and flexural integrated behavior
         """
-        super().__init__((nodei, nodej), material)
+        super().__init__((nodei, nodej), material, label=label)
         self.element_type = DrawElement.CURVE
 
         if not material.materialType() == Material.SECTION1D:

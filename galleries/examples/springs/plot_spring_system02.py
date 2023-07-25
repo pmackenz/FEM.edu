@@ -1,6 +1,6 @@
 """
 ==========================================================
-A first 1D spring system
+A first 1D spring system with nicer plots
 ==========================================================
 
 .. code::
@@ -12,7 +12,7 @@ A first 1D spring system
    x ... fixed node
    o ... free node (moving in x-direction)
 
-This problem is mechanically identical to :ref:`sphx_glr_auto_examples_springs_plot_spring_system01.py`_
+This problem is mechanically identical to :ref:`sphx_glr_auto_examples_springs_plot_spring_system01.py`
 but demonstrates the use of the *leader-follower* concept built into the :py:class:`Node` class.
 We are using the concept to move springs apart in plots while maintaining the 1d kinematics.
 

@@ -28,8 +28,8 @@ class Truss(Element):
 
     """
 
-    def __init__(self, nodei, nodej, material):
-        super().__init__((nodei, nodej), material)
+    def __init__(self, nodei, nodej, material, label=None):
+        super().__init__((nodei, nodej), material, label=label)
         self.element_type = Element.LINE
 
         if not (self.material.materialType() == Material.SECTION1D

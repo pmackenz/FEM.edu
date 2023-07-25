@@ -30,8 +30,8 @@ class Quad8(Element):
     * For 3D membrane behavior, define nodes as three-dimensional nodes
     """
 
-    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, material):
-        super(Quad8, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7), material)
+    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, material, label=None):
+        super(Quad8, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7), material, label=label)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 

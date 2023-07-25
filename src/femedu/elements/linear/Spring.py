@@ -33,13 +33,13 @@ class Spring(Element):
     This element only uses the x-coordinate and the displacement in x-direction ('ux').
     """
 
-    def __init__(self, ndi, ndj, c=1):
+    def __init__(self, ndi, ndj, c=1, label=None):
         """
         :param ndi:  node object
         :param ndj:  node object
         :patam c:    spring stiffness (force/length change)
         """
-        super(Spring, self).__init__((ndi, ndj), Material(params={'E':1.0, 'A':c}))
+        super(Spring, self).__init__((ndi, ndj), Material(params={'E':1.0, 'A':c}), label=label)
         self.element_type = Element.LINE
         self.c = c
 

@@ -46,8 +46,30 @@ class ElementPlotter(AbstractPlotter):
                   - set to **True** to plot loads
                 * - :py:obj:`show_reactions`
                   - set to **True** to plot nodal reactions
+                * - :py:obj:`principal`
+                  - set to **True** to add principal stress orientation. Sets :py:obj:`factor=0`
+                * - :py:obj:`pval`
+                  - set to :py:obj:`stress` or :py:obj:`strain` to select tensor for principal value plot.
+                    (defaults to :py:obj:`stress`)
 
         """
+        #
+        # setup for principal stress|strain plot
+        #
+        if 'principal' in kwargs:
+            show_principal = kwargs['principal']
+            if show_principal and 'pval' in kwargs:
+                show_type = kwargs['pval']
+                factor = 0.0
+            else:
+                show_type = 'stress'
+        else:
+            show_principal = False
+            show_type = ''
+
+        #
+        # generic plot settings
+        #
         if 'linewidth' in kwargs:
             lw1 = kwargs['linewidth']
             lw2 = 2*lw1
@@ -79,6 +101,11 @@ class ElementPlotter(AbstractPlotter):
                         z = ans[2]
                         if x.size == y.size and x.size == z.size:
                             axs.plot(x, y, z, linewidth=2, linestyle='-', color='r')
+
+            # plot orientation of principal stress|strain
+            if show_principal:
+                for elem in self.elements:
+                    pass
 
             if self.reactions:
                 self.addForces(axs, factor=factor)

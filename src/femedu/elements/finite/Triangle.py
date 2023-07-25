@@ -7,8 +7,8 @@ class Triangle(Element):
     class: representing a single truss element
     """
 
-    def __init__(self, node0, node1, node2, material):
-        super().__init__((node0, node1, node2), material)
+    def __init__(self, node0, node1, node2, material, label=None):
+        super().__init__((node0, node1, node2), material, label=label)
         self.element_type = DrawElement.TRIANGLE
         self.createFaces()
 
