@@ -40,7 +40,7 @@ over a quad-shaped domain, assuming a function
                     n=(0,0),          # n-th derivative with respect to (s,t)
                     serendipity=False # if serendipity: "8 nodes" else: "9 nodes"
                     )
-    `   # adding to the integral
+        # adding to the integral
         F += g(xi[0], xi[1]) * shape * Jacobian(xi[0], xi[1]) * wi
 
     print(f"Int_V g(s,t) Phi(s,t) dV = {F}")
