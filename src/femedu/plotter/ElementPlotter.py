@@ -505,14 +505,14 @@ class ElementPlotter(AbstractPlotter):
                         M = force[2]
                         w = 10
                         if M<0:
-                            axs.add_artist( Arc((point[0],point[1]), w, w, 45., 0.0, 270.,
+                            axs.add_artist( Arc((point[0],point[1]), w, w, angle=45., theta1=0.0, theta2=270.,
                                                 color='green') )
                             axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(45.)),
                                                         point[1]+0.5*w*np.sin(np.radians(45.)),
                                                         2., -2., length_includes_head=True,
                                                         head_length=3, head_width=2, color='blue') )
                         else:
-                            axs.add_artist( Arc((point[0],point[1]), w, w, 225., 0.0, 270.,
+                            axs.add_artist( Arc((point[0],point[1]), w, w, angle=225., theta1=0.0, theta2=270.,
                                                 color='green') )
                             axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(135.)),
                                                         point[1]+0.5*w*np.sin(np.radians(135.)),
@@ -540,14 +540,14 @@ class ElementPlotter(AbstractPlotter):
                         M = force[2]
                         w = 10
                         if M>0:
-                            axs.add_artist( Arc((point[0],point[1]), w, w, 45., 0.0, 270.,
+                            axs.add_artist( Arc((point[0],point[1]), w, w, angle=45., theta1=0.0, theta2=270.,
                                                 color='green') )
                             axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(45.)),
                                                         point[1]+0.5*w*np.sin(np.radians(45.)),
                                                         2., -2., length_includes_head=True,
                                                         head_length=3, head_width=2, color='green') )
                         else:
-                            axs.add_artist( Arc((point[0],point[1]), w, w, 225., 0.0, 270.,
+                            axs.add_artist( Arc((point[0],point[1]), w, w, angle=45., theta1=0.0, theta2=270.,
                                                 color='green') )
                             axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(135.)),
                                                         point[1]+0.5*w*np.sin(np.radians(135.)),
