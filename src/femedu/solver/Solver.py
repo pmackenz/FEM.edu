@@ -467,27 +467,43 @@ class Solver():
         return R
 
     def getNodalLoads(self, dofs=None, cut_off=1.0e-6):
-        R = {}
+
+        R = []
 
         # collect nodal loads
         for node in self.nodes:
-            R[node] = node.getLoad(dof_list=dofs, apply_load_factor=True)
+            R.append(node.getLoad(dof_list=dofs, apply_load_factor=True))
 
         # Element Loop: assemble element forces and stiffness
         for element in self.elements:
-            Pe = element.getLoad()      # Element State Update occurs here
+            Pe = element.getLoad()             # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
+                while not ndI.isLead():
+                    ndI = ndI.getLead()
+
+                node_idx = self.nodes.index(ndI)
                 if isinstance(Pe[i], np.ndarray):
-                    R[ndI] += self.loadfactor * Pe[i]
+                    if dofs:
+                        element_dofs = element.getDofs()  # dof list for this element
+                        P_filtered = []
+                        for dof_key in dofs:
+                            if dof_key in element_dofs:
+                                idx = element_dofs.index(dof_key)
+                                P_filtered.append(Pe[i][idx])
+                            else:
+                                P_filtered.append(0.0)
+                        R[node_idx] += self.loadfactor * np.array(P_filtered)
+                    else:
+                        R[node_idx] += self.loadfactor * Pe[i]
 
-        Lds = []
-        for node in self.nodes:
-            force = R[node]
-            if np.linalg.norm(force) <= cut_off:
-                force = np.zeros_like(force)
-            Lds.append(force)
+        # Lds = []
+        # for node in self.nodes:
+        #     force = R[node]
+        #     if np.linalg.norm(force) <= cut_off:
+        #         force = np.zeros_like(force)
+        #     Lds.append(force)
 
-        return Lds
+        return R
 
 
     def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):

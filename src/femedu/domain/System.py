@@ -367,13 +367,13 @@ class System():
         if show_loads:
 
             kwargs['show_loads'] = True
-            R = self.solver.getNodalLoads(cut_off=force_limit)
+            R = self.solver.getNodalLoads(dofs=('ux','uy','rz'), cut_off=force_limit)
             self.plotter.setNodalLoads(R)
 
         if show_reactions:
 
             kwargs['show_reactions'] = True
-            R = self.solver.getNodalReactions(cut_off=force_limit)
+            R = self.solver.getNodalReactions(dofs=('ux','uy','rz'), cut_off=force_limit)
             self.plotter.setReactions(R)
 
         self.plotter.displacementPlot(factor=factor, **kwargs)
