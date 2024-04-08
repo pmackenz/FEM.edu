@@ -313,6 +313,7 @@ class Element(DrawElement):
 
         :param dof_requests: list of dofs for a typical node in this element
         """
+        self._dof_list = dof_requests
         for node in self.nodes:
             dof_idx = node.request(dof_requests, self)
             self.dof_idx[node] = dof_idx   # marked for removal
@@ -321,7 +322,7 @@ class Element(DrawElement):
         """
         returns the dof-codes for this element in a list
         """
-        return self.dof_list
+        return self._dof_list
 
     def setLoadFactor(self, lam):
         """
