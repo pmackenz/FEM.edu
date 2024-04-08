@@ -473,11 +473,15 @@ class ElementPlotter(AbstractPlotter):
                       length_includes_head=True,
                       head_width=headWidth, head_length=headLength)
 
-    def addForces(self, axs, loads=False, reactions=False, factor=0.0):
+    def addForces(self, axs, loads=False, reactions=False, factor=0.0, dofs=('ux','uy','rz')):
         """
         add nodal forces to the plot shown in **axs**
 
         :param axs: axis on which to plot
+        :param loads: set to True for loads added to the plot
+        :param reactions: set to True for reactions added to the plot
+        :param factor: deformation factor. default: 0.0
+        :param dofs: dof mapping. default are 2D forces and in-plane moment
         """
         if loads and len(self.nodes) == len(self.loads):
 
@@ -495,18 +499,22 @@ class ElementPlotter(AbstractPlotter):
                     else:
                         Y.append(0.0)
 
-                    Fx.append(force[0])
-                    if force.size>1:
+                    if 'ux' in dofs and force.size>0:
+                        Fx.append(force[0])
+                    else:
+                        Fx.append(0.0)
+
+                    if 'uy' in dofs and force.size > 1:
                         Fy.append(force[1])
                     else:
                         Fy.append(0.0)
 
-                    if force.size > 2 and np.abs(force[2])>1.e-3:
+                    if 'rz' in dofs and force.size > 2 and np.abs(force[2])>1.e-3:
                         M = force[2]
                         w = 10
                         if M<0:
                             axs.add_artist( Arc((point[0],point[1]), w, w, angle=45., theta1=0.0, theta2=270.,
-                                                color='green') )
+                                                color='blue') )
                             axs.add_artist( FancyArrow( point[0]+0.5*w*np.cos(np.radians(45.)),
                                                         point[1]+0.5*w*np.sin(np.radians(45.)),
                                                         2., -2., length_includes_head=True,
