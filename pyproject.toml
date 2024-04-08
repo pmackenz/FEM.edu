@@ -20,6 +20,11 @@ dependencies = [
     "scipy >=1.10.1",
     "matplotlib >=3.5",
     "pandas",
+    "sphinx",
+    "sphinx_gallery",
+    "myst_parser",
+    "sphinx_git",
+    "sphinx_rtd_theme"
 ]
 
 [project.urls]
