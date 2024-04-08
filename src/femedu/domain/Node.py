@@ -73,6 +73,12 @@ class Node():
         """
         return "Node_{}".format(self.ID)
 
+    def getLead(self):
+        """
+        :returns: pointer to the **lead** node (``Node``)
+        """
+        return self.lead
+
     def getLeadID(self):
         """
         :returns: the node ID of the **lead** node (``str``)
@@ -506,16 +512,28 @@ class Node():
 
     def getLoad(self, dof_list=None, apply_load_factor=False):
         """
+        :param dof_list: list (or tuple) if dof-keys for which nodal loads are requested. Fill missing dofs by 0.0.
+        :param apply_load_factor: defaults to False -> no factors applied.
         :returns: nodal load vector (ndarray)
         """
         if self.is_lead:
-            force = np.zeros(self.ndofs)
-            for dof in self.loads:
-                if dof in self.dofs:
-                    if apply_load_factor:
-                        force[self.dofs[dof]] = self.loads[dof] * self.loadfactor
-                    else:
-                        force[self.dofs[dof]] = self.loads[dof]
+            if dof_list:
+                force = np.zeros(len(dof_list))
+                for dof in dof_list:
+                    if (dof in self.loads) and (dof in self.dofs):
+                            idx = dof_list.index(dof)
+                            if apply_load_factor:
+                                force[idx] = self.loads[dof] * self.loadfactor
+                            else:
+                                force[idx] = self.loads[dof]
+            else:
+                force = np.zeros(self.ndofs)
+                for dof in self.loads:
+                    if dof in self.dofs:
+                        if apply_load_factor:
+                            force[self.dofs[dof]] = self.loads[dof] * self.loadfactor
+                        else:
+                            force[self.dofs[dof]] = self.loads[dof]
         else:
             force = self.lead.getLoad(dof_list=dof_list, apply_load_factor=apply_load_factor)
 
