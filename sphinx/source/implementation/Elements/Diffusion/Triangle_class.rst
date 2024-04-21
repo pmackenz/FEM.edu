@@ -1,3 +1,5 @@
+.. _diffusion_triangle_class:
+
 Triangle class for Diffusion
 ==============================
 

@@ -1,3 +1,5 @@
+.. _diffusion_material_classes:
+
 Diffusion Material classes
 ==============================
 

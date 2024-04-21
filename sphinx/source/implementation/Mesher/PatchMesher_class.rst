@@ -1,7 +1,9 @@
+.. _patch_mesher_class:
+
 PatchMesher class
 ==========================
 
-For beams and frame components.
+For for meshing quadrilateral two-dimensional domains.
 
 .. figure:: ../../design/images/patch.png
     :alt: ../../design/images/patch.png
@@ -11,8 +13,8 @@ For beams and frame components.
 
 .. note::
 
-    Meshers are currently under development but not yet available with the distribution.
-    Stay tuned for updates.
+    Meshers are currently under development but not yet fully functional with the
+    current distribution.  Stay tuned for updates.
 
 Parent class
 --------------
