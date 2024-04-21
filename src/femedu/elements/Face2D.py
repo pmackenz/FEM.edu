@@ -99,6 +99,48 @@ class Face2D(Faces):
 
         return forces  # this may need a different approach to account for the global load factor
 
+    def computeNodalFlux(self):
+        """
+        Implementation of nodal flux calculation from surface flux.
+
+        Surface out-flux (in-flux) is considered positive (negative).
+
+        The surface is described  as
+
+        .. math::
+
+            {\\boldsymbol\\varphi}(s) = \\sum_k \\phi_k(s) {\\bf X}_k
+
+        where :math:`\\phi_k(s)` is the k-th shape function on `[-1,1]`,
+        and :math:`{\\bf X}_k` is the coordinate of the k-th node.
+
+        The nodal fluxes are obtained as
+
+        .. math::
+
+            {\\bf P}_i = \\int_{-1}^{+1} \\phi_i(s) \\: q_n \\: || \\boldsymbol\\varphi}_{,s} || \\: ds
+
+        """
+        if len(self.nodes) == 2:
+            qn = self.flux
+            dF = qn * np.linalg.norm(self.area)
+            fluxes = np.array([ 0.50000, 0.50000 ]) * dF
+
+        elif len(self.nodes) == 3:
+            qn = self.flux
+
+            dF = qn * np.linalg.norm(self.area)  # surface flux * weights at gauss points
+            fluxes = np.array([ 0.1666666666666667, 0.6666666666666667, 0.1666666666666667 ]) * dF
+
+        else:
+            msg = "{} requires 2 or 3 points - {} given".format(self.__class__.__name__, len(self.nodes))
+            raise TypeError(msg)
+
+        # for i, node in enumerate(self.nodes):
+        #     node.setLoad(forces[i])
+
+        return fluxes  # this may need a different approach to account for the global load factor
+
     def isFace(self, X, N):
         """
         Implementation of the test function.

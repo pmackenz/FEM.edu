@@ -30,15 +30,18 @@ class DiffusionGeneral(Material):
         :param gradPhi: gradient :math:`\\nabla \\phi` of the scalar potential :math:`\\phi`
         :type gradPhi: numpy.ndarray
         """
-        self.gradPhi = gradPhi
-        self.updateState()
+        if isinstance(gradPhi, np.ndarray):
+            self.gradPhi = gradPhi
+            self.updateState()
+        else:
+            raise TypeError
 
     def getGrad(self):
         """
         :returns gradPhi: gradient :math:`\\nabla \\phi` of the scalar potential :math:`\\phi`
         :type gradPhi: numpy.ndarray
         """
-        if self.gradPhi:
+        if isinstance(self.gradPhi,np.ndarray):
             return self.gradPhi
         else:
             return np.zeros(3)
@@ -47,7 +50,7 @@ class DiffusionGeneral(Material):
         """
         :return: flux (numpy.ndarray)
         """
-        if self.flux:
+        if isinstance(self.flux,np.ndarray):
             return self.flux
         else:
             return np.zeros(3)
@@ -74,6 +77,6 @@ class DiffusionGeneral(Material):
         """
         Update the material state after :math:`\\nabla \\phi`
         """
-        if self.gradPhi:
+        if isinstance(self.gradPhi, np.ndarray):
             self.flux = -self.parameters['diffusivity'] * self.gradPhi
 
