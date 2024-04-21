@@ -586,6 +586,44 @@ class Node():
         if not self.is_lead:
             self.lead.setLoadFactor(lam)
 
+    def isClose(self, x, TOL=1.0e-5):
+        """
+        :param x: :py:obj:`nd.array`
+        :return: **True** if x is within **TOL* from this node.
+        """
+        pos = self.pos
+        X = np.array(x)
+
+        this_dim = pos.shape[0]
+        x_dim = X.shape[0]
+
+        if x_dim != this_dim:
+            msg = f"target dimension ({x_dim}) incompatible with Node dimension ({this_dim})"
+            raise TypeError(msg)
+
+        is_close = (np.abs(pos - X) <= TOL).all()
+
+        return is_close
+
+    def distanceTo(self, x):
+        """
+        :param x: :py:obj:`nd.array`
+        :return: scalar distance from x
+        """
+        pos = self.pos
+        X = np.array(x)
+
+        this_dim = pos.shape[0]
+        x_dim = X.shape[0]
+
+        if x_dim != this_dim:
+            msg = f"target dimension ({x_dim}) incompatible with Node dimension ({this_dim})"
+            raise TypeError(msg)
+
+        dist = np.linalg.norm(pos - X)
+
+        return dist
+
     def setRecorder(self, recorder):
         if isinstance(recorder, Recorder):
             self.recorder = recorder
