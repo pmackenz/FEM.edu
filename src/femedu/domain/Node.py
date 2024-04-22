@@ -42,7 +42,8 @@ class Node():
         self.ndofs       = 0
         self.start       = None
         self.elements    = []
-        self._fixity     = []
+        self._fixity     = []  # list for dof keys for fixed dofs
+        self._setU       = {}  # prescribed displacement parameters u0 and u1: u[dof] = u0 + loadfactor*u1
         self.loads       = {}
         self._hasLoad    = False
         self.transform   = None    # nodal transformation object
@@ -134,9 +135,11 @@ class Node():
         """
         provide a list of dof codes that shall be restrained
 
-        see also: :code:`request()`
-
         :param dofs: fix the dof defined by key(s)
+
+        See also:
+           * :py:meth:`femedu.domain.Node.Node.setDOF`
+           * :py:meth:`femedu.domain.Node.Node.request`
         """
         if self.is_lead:
             for dof in dofs:
@@ -150,6 +153,45 @@ class Node():
                     raise TypeError
         else:
             self.lead.fixDOF(*dofs)
+
+    def setDOF(self, dofs=[], values=[]):
+        """
+        alternative to the `fixDOF()` method that
+        allows to set a prescribed value other than `0.0`
+        for each degree of freedom.
+
+        :param dofs: list of dofs, defined by key(s), for which displacement values shall be prescribed.
+        :param values: list of prescribed values for the given list of dofs.
+                       Values may be given as a float or as a list of two values.
+
+                       * If only a single value is given, the respective dof will be set to that value.
+                       * If a list is given, the dof will be set to `value[0] + loadfactor*value[1]`
+
+        See also:
+           * :py:meth:`femedu.domain.Node.Node.fixDOF`
+           * :py:meth:`femedu.domain.System.System.setLoadFactor`
+           * :py:meth:`femedu.domain.Node.Node.request`
+        """
+        if (not dofs) or (len(dofs) != len(values)):
+            msg = "setDOF requires matching non-empty lists of dofs and associated values"
+            raise TypeError(msg)
+
+        if self.is_lead:
+            for dof, val in zip(dofs,values):
+                self.fixDOF(dof)
+                if isinstance(val,float) or isinstance(val,int):
+                    self._setU[dof] = (val, 0.0)
+                elif isinstance(val,list) or isinstance(val,tuple):
+                    if len(val) == 1:
+                        self._setU[dof] = (val[0], 0.0)
+                    elif len(val) == 2:
+                        self._setU[dof] = val
+                    else:
+                        raise TypeError(f"cannot interpret input values for {dof}")
+                else:
+                    raise TypeError
+        else:
+            self.lead.setDOF(dofs, values)
 
     def __floordiv__(self, other):
         """
@@ -209,11 +251,9 @@ class Node():
         """
         use for prescribed displacements
 
-        **NEEDS TO BE IMPLEMENTED**
-
-        :param U:
+        :param U: list or tuple of prescribed values
+        :param dof_list: list or tuple of dof-codes associated with values in U
         :param modeshape: set to True if U represents a mode shape (BOOL)
-        :param dof_list:
         """
         if self.is_lead:
             if isinstance(U,list) or isinstance(U,tuple):
@@ -300,6 +340,16 @@ class Node():
                     self.disp_n  = np.zeros(self.ndofs)
                     self.disp_nn = np.zeros(self.ndofs)
                 U = self.disp
+
+            # apply prescribed displacements
+            for dof in self._setU:
+                if dof in self.dofs:
+                    # the index of dof in self.U
+                    idx = self.dofs[dof]
+                    # the prescribed displacement value
+                    ubar = self._setU[dof][0] + self.loadfactor * self._setU[dof][1]
+                    # set prescribed value in nodal U-vector
+                    U[idx] = ubar
 
             if caller:
                 # we know the calling element.

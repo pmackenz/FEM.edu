@@ -11,15 +11,17 @@ Elements in this group share the following features:
 
 __all__ = (
     "Element",
+    "LinearElement",
     "DrawElement",
     "Faces",
     "Face2D",
     "Face3D",
 )
 
-from .Element import *
-from .DrawElement import *
 from .Faces import *
 from .Face2D import *
 from .Face3D import *
+from .DrawElement import *
+from .Element import *
+from .LinearElement import *
 

@@ -1,7 +1,10 @@
 """
 ==========================================================
-Heat transfer at the corner of a building
+Heat transfer through a wall
 ==========================================================
+
+This problem demonstrates a combination of prescribed temperature
+on the left and prescribed flux on the right side.
 
 Using
 
@@ -19,7 +22,7 @@ from femedu.examples.Example import *
 from femedu.domain import *
 from femedu.mesher import PatchMesher
 from femedu.elements.diffusion import Triangle
-from femedu.materials.Thermal import *
+from femedu.materials import Thermal
 
 
 class ExampleThermal02(Example):
@@ -44,22 +47,22 @@ class ExampleThermal02(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 8  # number of elements through the wall
-        Ny = 8  # number of elements parallel to the wall
-        L = 0.30  # wall thickness in m
-        alpha = 0.50  # refinement parameter for placing nodes 8-11
+        Nx = 5  # number of elements through the wall
+        Ny = 1  # number of elements parallel to the wall
+        Lx = 10.00  # wall thickness in m
+        Ly =  1.00  # wall thickness in m
 
         # ========== setting material parameters ==============
 
         params = dict(
             E=20000.,  # Young's modulus
             nu=0.250,  # Poisson's ratio
-            t=1.00  # thickness of the plate
+            t=1.00     # thickness of the plate
         )
 
         # ========== setting load parameters ==============
 
-        qn = 10.0  # uniform flux normal to x=const
+        qn = 1.00  # uniform flux normal to x=const
 
         # ========== setting analysis parameters ==============
 
@@ -77,104 +80,60 @@ class ExampleThermal02(Example):
 
         # create nodes
 
-        #  5 -------- 6 -------- 7
+        #  2 -------- 3
+        #  |          |
+        #  |          |
         #  |          |          |
-        #  |         11          |
-        #  |          |          |
-        #  2----9---- 3 ---10--- 4
-        #             |          |
-        #             8          |
-        #             |          |
-        #             0 -------- 1
+        #  0 -------- 1
 
         pts = (
-            (0, -L),  # 0
-            (L, -L),  # 1
-            (-L, 0),  # 2
-            (0, 0),  # 3
-            (L, 0),  # 4
-            (-L, L),  # 5
-            (0, L),  # 6
-            (L, L),  # 7
-            (0, -alpha * L),  # 8
-            (-alpha * L, 0),  # 9
-            (alpha * L, 0),  # 10
-            (0, alpha * L),  # 11
+            ( 0,  0),  # 0
+            (Lx,  0),  # 1
+            ( 0, Ly),  # 2
+            (Lx, Ly),  # 3
         )
 
-        mesher1 = PatchMesher(model, pts[2], pts[3], pts[6], pts[5], pts[9], pts[11], None, None)
-        nodes1, elements1 = mesher1.triangleMesh(Ny, Nx, Triangle, Thermal(params))
-
-        mesher2 = PatchMesher(model, pts[3], pts[4], pts[7], pts[6], pts[10], None, None, pts[11])  # center node
-        nodes2, elements2 = mesher2.triangleMesh(Nx, Nx, Triangle, Thermal(params))
-
-        mesher3 = PatchMesher(model, pts[0], pts[1], pts[4], pts[3], None, None, pts[10], pts[8])
-        nodes3, elements3 = mesher3.triangleMesh(Nx, Ny, Triangle, Thermal(params))
-
-        mesher1.tie(mesher2)
-        mesher2.tie(mesher3)
-
-        nodes = nodes1 + nodes2 + nodes3
-        elements = elements1 + elements2 + elements3
+        mesher = PatchMesher(model, pts[0], pts[1], pts[3], pts[2])
+        nodes, elements = mesher.triangleMesh(Nx, Ny, Triangle, Thermal(params))
 
         model.plot(factor=0.0,
-                   title='Meshing the corner in a wall',
+                   title='Uni-directional diffusion',
                    show_reactions=0, show_bc=0, show_loads=0)
 
         model.report()
 
-        # define support(s)
+        # boundary condition(s)
 
         ## find nodes at y==0 and x==0
 
         for node in nodes:
             X = node.getPos()
-            if math.isclose(X[0], 0.0) and X[1] <= 0.0:
-                node.fixDOF('T')  # horizontal support left side
-            if math.isclose(X[1], 0.0) and X[0] <= 0.0:
-                node.fixDOF('T')  # vertical support at y==0
+            if math.isclose(X[0], 0.0):
+                node.fixDOF('T')    # prescribed temperature at x=0.0
+            # if math.isclose(X[0], Lx):
+            #     node.fixDOF('T')  # prescribed temperature at x=Lx
 
         # ==== complete the reference load ====
 
-        loaded_elements = []
-
-        Xo = np.array([L, 0.0])
+        Xo = np.array([Lx, 0.0])
         No = np.array([1.0, 0.0])
 
         for node in nodes:
             X = node.getPos()
-            if math.isclose(X[0], L):
+            if math.isclose(X[0], Lx):
                 print(node)
                 for elem in node.elements:
                     print('+', elem)
                     for face in elem.faces:
                         for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-4 and No @ area / np.linalg.norm(area) > 1.0e-2:
+                            if np.abs((x - Xo) @ No) < 1.0e-2 and No @ area / np.linalg.norm(area) > 1.0e-2:
                                 face.setFlux(qn)
-                                loaded_elements.append(elem)
-
-        Xo = np.array([0.0, L])
-        No = np.array([0.0, 1.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[1], L):
-                print(node)
-                for elem in node.elements:
-                    print('-', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-4 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
-                                loaded_elements.append(elem)
 
         # perform the analysis
         model.setLoadFactor(1.0)
         model.solve()
 
-        # model.report()
-        for elem in loaded_elements:
-            print(elem)
+        model.report()
 
         model.valuePlot('T', show_mesh=True)
 

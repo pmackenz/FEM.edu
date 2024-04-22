@@ -1,28 +1,25 @@
 import numpy as np
-from ..Element import *
+from ..LinearElement import *
 from ...domain.Node import *
 from ...materials.Material import Material
 
-class Triangle(Element):
+class Triangle(LinearElement):
     """
     class: representing a 3-node trangle for diffusion problems
     """
 
     def __init__(self, node0, node1, node2, material):
-        super().__init__((node0, node1, node2), material)
-        self.element_type = DrawElement.TRIANGLE
-        self.createFaces()
 
-        if not self.material.isMaterialType(Material.DIFFUSION):
+        if not material.isMaterialType(Material.DIFFUSION):
             msg = f"Incompatible material type: {self.__class__.__name__} requires type Material.DIFFUSION"
             raise TypeError(msg)
 
-        self._requestDofs('T')
+        super().__init__((node0, node1, node2), material)
 
-        self.distributed_load = [0.0, 0.0, 0.0]
-        self.force    = 0.0
-        self.Forces   = [ np.zeros(1) for k in range(len(self.nodes)) ]
-        self.Kt       = [ [ np.zeros(1) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
+        self.initialize(
+            type=DrawElement.TRIANGLE,
+            dofs=['T']
+                        )
 
         # covariant base vectors (reference system)
         base1 = node1.getPos() - node0.getPos()
@@ -119,9 +116,9 @@ class Triangle(Element):
 
         # internal force
         self.Forces = [
-            Gu @ flux * multiplier,
-            Gs @ flux * multiplier,
-            Gt @ flux * multiplier
+            -Gu @ flux * multiplier,
+            -Gs @ flux * multiplier,
+            -Gt @ flux * multiplier
             ]
 
         # .. applied element load (reference load)

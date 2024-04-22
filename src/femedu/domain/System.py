@@ -314,7 +314,7 @@ class System():
         """
         Solve system of equations and find state of deformation for the given load level.
         """
-        if self.solve:
+        if self.solver:
             self.solver.solve(**kwargs)
             if self.solver.hasConstraint:
                 # spread the news about the new load level throughout the system
