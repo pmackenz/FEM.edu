@@ -1,10 +1,10 @@
 """
 ==========================================================
-Heat transfer through a wall
+Heat transfer through a thick cylinder
 ==========================================================
 
-This problem demonstrates a combination of prescribed temperature
-on the left and prescribed flux on the right side.
+This problem demonstrates the use of prescribed temperature
+on both sides of the wall.
 
 Using
 
@@ -33,7 +33,7 @@ class ExampleThermal01(Example):
     # sphinx_gallery_thumbnail_number = 2
 
     def docString(self):
-        s = """ Heat transfer at the corner of a building
+        s = """ Heat transfer through a thick cylinder
 
     Using
 
@@ -49,10 +49,13 @@ class ExampleThermal01(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 5  # number of elements through the wall
-        Ny = 1  # number of elements parallel to the wall
+        Nx = 16  # number of elements through the wall
+        Ny = 8  # number of elements parallel to the wall
         Lx = 10.00  # wall thickness in m
-        Ly =  1.00  # wall thickness in m
+        Ly =  5.00  # wall thickness in m
+        Ri =  5.00
+        Ro = Ri + Lx
+        alpha = np.radians(45.0)
 
         # ========== setting material parameters ==============
 
@@ -89,17 +92,19 @@ class ExampleThermal01(Example):
         #  0 -------- 1
 
         pts = (
-            ( 0,  0),  # 0
-            (Lx,  0),  # 1
-            ( 0, Ly),  # 2
-            (Lx, Ly),  # 3
+            ( Ri,  0),  # 0
+            ( Ro,  0),  # 1
+            ( Ri*np.cos(alpha), Ri*np.sin(alpha)),  # 2
+            ( Ro*np.cos(alpha), Ro*np.sin(alpha)),  # 3
+            ( Ri*np.cos(alpha/2), Ri*np.sin(alpha/2)),  # 4
+            ( Ro*np.cos(alpha/2), Ro*np.sin(alpha/2)),  # 5
         )
 
-        mesher = PatchMesher(model, pts[0], pts[1], pts[3], pts[2])
+        mesher = PatchMesher(model, pts[0], pts[1], pts[3], pts[2], None, pts[5], None, pts[4])
         nodes, elements = mesher.triangleMesh(Nx, Ny, Triangle, Thermal(params))
 
         model.plot(factor=0.0,
-                   title='Uni-directional diffusion',
+                   title='Radial diffusion',
                    show_reactions=0, show_bc=0, show_loads=0)
 
         model.report()
@@ -110,26 +115,11 @@ class ExampleThermal01(Example):
 
         for node in nodes:
             X = node.getPos()
-            if math.isclose(X[0], 0.0):
-                node.fixDOF('T')    # prescribed temperature at x=0.0
-            # if math.isclose(X[0], Lx):
-            #     node.fixDOF('T')  # prescribed temperature at x=Lx
-
-        # ==== complete the reference load ====
-
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], Lx):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-2 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
+            R = np.linalg.norm(X)
+            if math.isclose(R, Ri, rel_tol=0.02):
+                node.setDOF(['T'],[200.])    # prescribed temperature at x=0.0
+            if math.isclose(R, Ro, rel_tol=0.02):
+                node.setDOF(['T'],[300.])    # prescribed temperature at x=0.0
 
         # perform the analysis
         model.setLoadFactor(1.0)
@@ -146,17 +136,19 @@ class ExampleThermal01(Example):
 
         for node in nodes:
             X = node.getPos()
+            R = np.linalg.norm(X)
             T = node.getDisp('T')
-            R_list.append(X[0])
+            R_list.append(R)
             T_list.append(T)
 
         fig, axs = plt.subplots()
         axs.plot(R_list,T_list,'ro')
         axs.set_title('Nodal Temperature for ALL Nodes')
-        axs.set_xlabel("X distance")
+        axs.set_xlabel("Radial distance")
         axs.set_ylabel('T')
         axs.grid(True)
         plt.show()
+
 
 
 # %%

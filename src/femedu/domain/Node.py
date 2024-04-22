@@ -639,7 +639,7 @@ class Node():
     def isClose(self, x, TOL=1.0e-5):
         """
         :param x: :py:obj:`nd.array`
-        :return: **True** if x is within **TOL* from this node.
+        :return: **True** if x is within **TOL** from this node.
         """
         pos = self.pos
         X = np.array(x)

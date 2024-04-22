@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:03.355** total execution time for 35 files **from all galleries**:
+**00:01.471** total execution time for 36 files **from all galleries**:
 
 .. container::
 
@@ -32,19 +32,22 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal01.py` (``../../galleries/examples/diffusion/plot_thermal01.py``)
-     - 00:02.476
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal03.py` (``../../galleries/examples/diffusion/plot_thermal03.py``)
-     - 00:00.750
-     - 0.0
    * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal02.py` (``../../galleries/examples/diffusion/plot_thermal02.py``)
-     - 00:00.129
+     - 00:01.471
      - 0.0
    * - :ref:`sphx_glr_auto_examples_beams_plot_beam01.py` (``../../galleries/examples/beams/plot_beam01.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_beams_plot_beam02.py` (``../../galleries/examples/beams/plot_beam02.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal01.py` (``../../galleries/examples/diffusion/plot_thermal01.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal03.py` (``../../galleries/examples/diffusion/plot_thermal03.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal04.py` (``../../galleries/examples/diffusion/plot_thermal04.py``)
      - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_frames_plot_frame01.py` (``../../galleries/examples/frames/plot_frame01.py``)

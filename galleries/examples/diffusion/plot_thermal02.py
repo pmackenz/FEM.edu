@@ -3,8 +3,8 @@
 Heat transfer through a wall
 ==========================================================
 
-This problem demonstrates a combination of prescribed temperature
-on the left and prescribed flux on the right side.
+This problem demonstrates the use of prescribed temperature
+on both sides of the wall.
 
 Using
 
@@ -13,6 +13,8 @@ Using
 * :py:class:`materials.Thermal`  (see :ref:`diffusion_material_classes`)
 
 """
+import matplotlib.pyplot as plt
+
 import math
 import sys
 import numpy as np
@@ -47,10 +49,10 @@ class ExampleThermal02(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 5  # number of elements through the wall
-        Ny = 1  # number of elements parallel to the wall
+        Nx = 4  # number of elements through the wall
+        Ny = 3  # number of elements parallel to the wall
         Lx = 10.00  # wall thickness in m
-        Ly =  1.00  # wall thickness in m
+        Ly =  5.00  # wall thickness in m
 
         # ========== setting material parameters ==============
 
@@ -91,9 +93,11 @@ class ExampleThermal02(Example):
             (Lx,  0),  # 1
             ( 0, Ly),  # 2
             (Lx, Ly),  # 3
+            (0.67*Lx, 0),   # 4
+            (0.33*Lx, Ly),  # 5
         )
 
-        mesher = PatchMesher(model, pts[0], pts[1], pts[3], pts[2])
+        mesher = PatchMesher(model, pts[0], pts[1], pts[3], pts[2], pts[4], None, pts[5], None)
         nodes, elements = mesher.triangleMesh(Nx, Ny, Triangle, Thermal(params))
 
         model.plot(factor=0.0,
@@ -109,25 +113,9 @@ class ExampleThermal02(Example):
         for node in nodes:
             X = node.getPos()
             if math.isclose(X[0], 0.0):
-                node.fixDOF('T')    # prescribed temperature at x=0.0
-            # if math.isclose(X[0], Lx):
-            #     node.fixDOF('T')  # prescribed temperature at x=Lx
-
-        # ==== complete the reference load ====
-
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
-
-        for node in nodes:
-            X = node.getPos()
+                node.setDOF(['T'],[200.])    # prescribed temperature at x=0.0
             if math.isclose(X[0], Lx):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-2 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
+                node.setDOF(['T'],[300.])    # prescribed temperature at x=0.0
 
         # perform the analysis
         model.setLoadFactor(1.0)
@@ -136,6 +124,25 @@ class ExampleThermal02(Example):
         model.report()
 
         model.valuePlot('T', show_mesh=True)
+
+        # creating a path plot
+
+        R_list = []
+        T_list = []
+
+        for node in nodes:
+            X = node.getPos()
+            T = node.getDisp('T')
+            R_list.append(X[0])
+            T_list.append(T)
+
+        fig, axs = plt.subplots()
+        axs.plot(R_list,T_list,'ro')
+        axs.set_title('Nodal Temperature for ALL Nodes')
+        axs.set_xlabel("X distance")
+        axs.set_ylabel('T')
+        axs.grid(True)
+        plt.show()
 
 
 # %%

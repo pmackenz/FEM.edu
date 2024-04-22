@@ -9,7 +9,7 @@ Coordinate mapping:
 
 .. math::
 
-    \mathbf{X}=\mathbf{X}_0+\mathbf{G}_i \xi^i \quad i=1,2,3 \quad \xi^i \geqslant 0 ~\&~ \xi^1+\xi^2+\xi^3 \leq 1
+    \mathbf{X}=\mathbf{X}_i \xi^i \quad i=1,2,3 \quad \xi^i \geqslant 0 ~\&~ \xi^1+\xi^2+\xi^3 \leq 1
 
 Definition of covariant and dual base vectors:
 
