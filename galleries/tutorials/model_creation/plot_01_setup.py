@@ -19,8 +19,8 @@ from scratch
 # Loading those class definitions requires the following:
 
 from femedu.domain import System, Node
-from femedu.elements.linear.Truss import *
-from femedu.materials.ElasticSection import *
+from femedu.elements.linear import Truss
+from femedu.materials import ElasticSection
 
 # %%
 # The first line imports the :py:class:`System` and :py:class:`Node` class definitions,
@@ -223,3 +223,23 @@ model.plot(factor=25.0,
 #    Avoid ".jpg" for line-graphics like this one.
 
 model.report()
+
+# %%
+# Truss, beam, and frame elements further allow for plotting of internal forces through the
+# `beamValuePlot(variable,factor=1.0,filename='...')` method.
+#
+# Valid variables are
+#
+# .. list-table::
+#    :widths: 25 75
+#    :header-rows: 0
+#
+#    * - `'F'`
+#      - Axial force (tension positive)
+#    * - `'V'`
+#      - transverse shear force
+#    * - `'M'`
+#      - Bending moment
+#
+
+model.beamValuePlot('F',filename='tutorial01_axial.png')

@@ -12,6 +12,26 @@ Using
 * :py:class:`diffusion.Triangle` (see :ref:`diffusion_triangle_class`)
 * :py:class:`materials.Thermal`  (see :ref:`diffusion_material_classes`)
 
+Theory
+---------
+We shall consider a stationary heat transfer problem on  a thick ring.
+The inner surface of the ring, :math:`r_i`, is heated to :math:`200~K`,
+the outer surface of the ring, :math:`r_o`, to :math:`300~K`.
+
+The thermal equation for an axi-symmetric problem can be expressed as
+
+.. math::
+    \\Delta T = \\frac{1}{r} \\: \\frac{\\partial }{\\partial r}
+    \\left( r \\frac{\\partial T}{\\partial r} \\right) = 0
+
+where :math:`\Delta` is the Laplace operator.
+
+The analytic solution follows as
+
+.. math::
+    T(r) = {\\displaystyle \\frac{T_i \\log(r_o/r) + T_o \\log(r/r_i)}{\\log(r_o/r_i)}}
+
+This solution will be compared against the finite element solution in the last figure.
 """
 import matplotlib.pyplot as plt
 
@@ -49,8 +69,8 @@ class ExampleThermal01(Example):
     def problem(self):
         # ========== setting mesh parameters ==============
 
-        Nx = 16  # number of elements through the wall
-        Ny = 8  # number of elements parallel to the wall
+        Nx = 8  # number of elements through the wall
+        Ny = 4  # number of elements parallel to the wall
         Lx = 10.00  # wall thickness in m
         Ly =  5.00  # wall thickness in m
         Ri =  5.00
@@ -141,11 +161,17 @@ class ExampleThermal01(Example):
             R_list.append(R)
             T_list.append(T)
 
+        # the analytic solution for comparison
+        r = np.linspace(Ri, Ro, 21)
+        T = (200. * np.log(Ro/r) + 300. * np.log(r/Ri)) / np.log(Ro/Ri)
+
         fig, axs = plt.subplots()
-        axs.plot(R_list,T_list,'ro')
+        axs.plot(r,T,'-b',label="analytic solution")
+        axs.plot(R_list,T_list,'ro',label="FEM")
         axs.set_title('Nodal Temperature for ALL Nodes')
         axs.set_xlabel("Radial distance")
         axs.set_ylabel('T')
+        axs.legend()
         axs.grid(True)
         plt.show()
 

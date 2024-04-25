@@ -12,6 +12,26 @@ Using
 * :py:class:`diffusion.Triangle` (see :ref:`diffusion_triangle_class`)
 * :py:class:`materials.Thermal`  (see :ref:`diffusion_material_classes`)
 
+Theory
+---------
+We shall consider a stationary heat transfer problem within a wall.
+The inner surface of the wall, :math:`x=0~m`, is heated to :math:`200~K`,
+the outer surface of the wall, :math:`x=10~m`, to :math:`300~K`.
+
+The thermal equation for the uni-directional problem can be expressed as
+
+.. math::
+    \\Delta T = \\frac{\\partial^2 T}{\\partial r^2}  = 0
+
+where :math:`\Delta` is the Laplace operator.
+
+The analytic solution follows as
+
+.. math::
+    T(x) =  T_i \left(1-\\frac{x}{L}\\right)  + T_o \left(\\frac{x}{L}\\right)
+
+This solution will be compared against the finite element solution in the last figure.
+
 """
 import matplotlib.pyplot as plt
 
@@ -136,11 +156,17 @@ class ExampleThermal02(Example):
             R_list.append(X[0])
             T_list.append(T)
 
+        # the analytic solution for comparison
+        x = np.linspace(0, Lx, 21)
+        T = 200. * (1 - x/Lx) + 300. * x/Lx
+
         fig, axs = plt.subplots()
-        axs.plot(R_list,T_list,'ro')
+        axs.plot(x,T,'-b',label="analytic solution")
+        axs.plot(R_list,T_list,'ro',label="FEM")
         axs.set_title('Nodal Temperature for ALL Nodes')
         axs.set_xlabel("X distance")
         axs.set_ylabel('T')
+        axs.legend()
         axs.grid(True)
         plt.show()
 
