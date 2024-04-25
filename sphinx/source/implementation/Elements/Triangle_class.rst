@@ -44,6 +44,10 @@ Parent class
 ---------------
 * :doc:`Element_class`
 
+See also
+------------
+* :doc:`Triangle6_class`
+
 Class doc
 -------------
 

@@ -5,7 +5,7 @@ from ...materials.Material import Material
 
 class Triangle(LinearElement):
     """
-    class: representing a 3-node trangle for diffusion problems
+    class: representing a 3-node triangle for diffusion problems
     """
 
     def __init__(self, node0, node1, node2, material):

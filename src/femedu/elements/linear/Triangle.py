@@ -4,7 +4,7 @@ from ...domain.Node import *
 
 class Triangle(Element):
     """
-    class: representing a single truss element
+    class: representing a 3-noded plane triangle
     """
 
     def __init__(self, node0, node1, node2, material, label=None):

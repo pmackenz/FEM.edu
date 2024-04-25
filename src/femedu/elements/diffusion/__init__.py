@@ -11,7 +11,9 @@ Elements in this group share the following features:
 
 __all__ = (
     "Triangle",
+    "Triangle6",
 )
 
 from .Triangle import *
+from .Triangle6 import *
 
