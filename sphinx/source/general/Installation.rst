@@ -27,6 +27,7 @@ Requirements
 * :code:`numpy`
 * :code:`scipy`
 * :code:`matplotlib`
+* :code:`pandas`
 
 
 .. rubric:: Footnotes
