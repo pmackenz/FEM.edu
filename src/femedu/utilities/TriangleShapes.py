@@ -10,6 +10,17 @@ class TriangleShapes(ShapeFunctions):
 
     Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
 
+    Triangle shape functions are commonly formulated in triangle coordinates :math:`(\\xi_1,\\xi_2,\\xi_3)`
+    where :math:`\\xi_1+\\xi_2+\\xi_3=1`.  This implementation uses
+    :math:`s\\to\\xi_1` and :math:`t\\to\\xi_2`. The third component is implicitly computed as :math:`\\xi_3=1-\\xi_1-\\xi_2`.
+    The derivatives are returned as
+
+    .. math::
+       \\begin{array}{rcl}
+          \\frac{\\partial }{\\partial s} &=& \\frac{\\partial }{\\partial \\xi_1} - \\frac{\\partial }{\\partial \\xi_3} \\\\[2ex]
+          \\frac{\\partial }{\\partial t} &=& \\frac{\\partial }{\\partial \\xi_2} - \\frac{\\partial }{\\partial \\xi_3}
+       \\end{array}
+
     """
 
     def __init__(self):
@@ -65,15 +76,15 @@ class TriangleShapes(ShapeFunctions):
             if (ns == 0 and nt == 0):
                 PHI = np.array([ u*(2*u-1), s*(2*s-1), t*(2*t-1), 4*u*s, 4*s*t, 4*t*u ])
             elif (ns == 1 and nt == 0):
-                PHI = np.array([ (4*u+1), (4*s-1), 0.0, 4*(u-s), 4*t, -4*t ])
+                PHI = np.array([ -(4*u-1), (4*s-1), 0.0, 4*(u-s), 4*t, -4*t ])
             elif (ns == 0 and nt == 1):
-                PHI = np.array([ (4*u+1), 0.0, (4*t-1), -4*s, 4*s, 4*(u-t) ])
+                PHI = np.array([ -(4*u-1), 0.0, (4*t-1), -4*s, 4*s, 4*(u-t) ])
             elif (ns == 2 and nt == 0):
-                PHI = np.array([ -4.0, 4.0, 0.0,-8.0, 0.0, 0.0 ])
+                PHI = np.array([ 4.0, 4.0, 0.0,-8.0, 0.0, 0.0 ])
             elif (ns == 1 and nt == 1):
-                PHI = np.array([ -4.0, 0.0, 0.0, -4.0, 4.0, -4.0 ])
+                PHI = np.array([ 4.0, 0.0, 0.0, -4.0, 4.0, -4.0 ])
             elif (ns == 0 and nt == 2):
-                PHI = np.array([ -4.0, 0.0, 4.0, 0.0, 0.0, -8.0 ])
+                PHI = np.array([ 4.0, 0.0, 4.0, 0.0, 0.0, -8.0 ])
             else:
                 PHI = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
 
