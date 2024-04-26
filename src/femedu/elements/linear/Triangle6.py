@@ -1,6 +1,9 @@
 import numpy as np
+from copy import deepcopy
+
 from ..Element import *
 from ...domain.Node import *
+from ...utilities import TriangleShapes, TriangleIntegration, GPdataType
 
 class Triangle6(Element):
     """
@@ -9,37 +12,72 @@ class Triangle6(Element):
 
     def __init__(self, node0, node1, node2, node3, node4, node5, material, label=None):
         super().__init__((node0, node1, node2, node3, node4, node5), material, label=label)
-        self.element_type = DrawElement.TRIANGLE
-        self.createFaces()
 
-        if node0.getPos().size == 3:
+        ndim = node0.getPos().size
+
+        if ndim == 3:
             dof_list = ('ux','uy','uz')
             ndof = 3
-        elif node0.getPos().size == 2:
+        elif ndim == 2:
             dof_list = ('ux','uy')
             ndof = 2
         else:
             raise TypeError("dimension of nodes must be 2 or 3")
 
-        self._requestDofs(dof_list)
+        self.initialize(
+            type=DrawElement.TRIANGLE,
+            dofs=dof_list
+                        )
 
-        self.distributed_load = [0.0, 0.0, 0.0]
-        self.force    = 0.0
-        self.Forces   = [ np.zeros(ndof) for k in range(len(self.nodes)) ]
-        self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
+        # select shape functions and integrator for the quadratic triangle
+        self.interpolation = TriangleShapes()
+        self.integrator    = TriangleIntegration()
 
-        # covariant base vectors (reference system)
-        base1 = node1.getPos() - node0.getPos()
-        base2 = node2.getPos() - node0.getPos()
-        self.gcov = np.vstack((base1, base2))
+        (xis, wis) = self.integrator.parameters()
 
-        # metric (reference system)
-        self.GIJ = self.gcov @ self.gcov.T
+        self.gpData = [ GPdataType() for i  in range(len(xis)) ]
 
-        # dual base vectors (reference system)
-        self.gcont = np.linalg.inv(self.GIJ) @ self.gcov
+        for xi, wi, gpData in zip(xis,wis,self.gpData):
 
-        self.area = np.sqrt(np.linalg.det(self.GIJ)) / 2.0
+            gpData.material = deepcopy(material)
+
+            shape   = self.interpolation.shape(  # requesting shape function array
+                order=2,          # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1], # local coordinates for current position
+                n=(0,0))          # no derivative with respect to (s,t)
+
+            dshape1 = self.interpolation.shape(  # d shape function / d xi1
+                order=2,          # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1], # local coordinates for current position
+                n=(1,0))          # first derivative with respect to s
+
+            dshape2 = self.interpolation.shape(  # d shape function / d xi2
+                order=2,          # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1], # local coordinates for current position
+                n=(0,1))          # first derivative with respect to t
+
+            # covariant base vectors (reference system)
+            X = np.zeros(ndim)
+            base1 = np.zeros(ndim)
+            base2 = np.zeros(ndim)
+            for N, dN1, dN2, node in zip(shape, dshape1, dshape2, self.nodes):
+                X     +=  N  * node.getPos()
+                base1 += dN1 * node.getPos()
+                base2 += dN2 * node.getPos()
+
+            gpData.X = X
+            gcov = np.vstack((base1, base2))
+            gpData.base = gcov
+
+            # metric (reference system)
+            GIJ = gcov @ gcov.T
+            gpData.state['GIJ'] = GIJ
+
+            # dual base vectors (reference system)
+            gpData.dual_base = np.linalg.inv(GIJ) @ gcov
+
+            gpData.J = np.sqrt(np.linalg.det(GIJ))
+
 
     def __str__(self):
         s = super(Triangle6, self).__str__()
@@ -60,11 +98,11 @@ class Triangle6(Element):
             * - face ID
               - nodes defining that face
             * - 0
-              - :py:obj:`node 0` to :py:obj:`node 1`
+              - :py:obj:`node 0` to :py:obj:`node 4` to :py:obj:`node 1`
             * - 1
-              - :py:obj:`node 1` to :py:obj:`node 2`
+              - :py:obj:`node 1` to :py:obj:`node 5` to :py:obj:`node 2`
             * - 2
-              - :py:obj:`node 2` to :py:obj:`node 0`
+              - :py:obj:`node 2` to :py:obj:`node 6` to :py:obj:`node 0`
 
 
         :param face: face ID for the laoded face
@@ -75,79 +113,100 @@ class Triangle6(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Triangle, self).resetLoads()
+        super(Triangle6, self).resetLoads()
 
     def updateState(self):
 
-        node0 = self.nodes[0]
-        node1 = self.nodes[1]
-        node2 = self.nodes[2]
+        # initializes internal force and tangent stiffness to zero arrays of the appropriate size.
+        self.reset_matrices()
 
-        Gs = self.gcont[0]
-        Gt = self.gcont[1]
-        Gu = -Gs - Gt
+        (xis, wis) = self.integrator.parameters()
 
-        # covariant base vectors (current system)
+        for xi, wi, gpData in zip(xis,wis,self.gpData):
 
-        gs = node1.getDeformedPos() - node0.getDeformedPos()
-        gt = node2.getDeformedPos() - node0.getDeformedPos()
-        gu = -gs - gt
+            # grab pre-computed quantities
 
-        # metric (current system)
-        gcov = np.vstack((gs, gt))
-        gIJ = gcov @ gcov.T
+            Gs = gpData.dual_base[0]
+            Gt = gpData.dual_base[1]
+            Gu = -Gs - Gt
 
-        # deformation gradient
-        F = np.outer(gs, Gs) + np.outer(gt, Gt)
+            # shape functions
 
-        # strain
-        eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
+            dshape1 = self.interpolation.shape(  # d shape function / d xi1
+                order=2,  # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1],  # local coordinates for current position
+                n=(1, 0))  # first derivative with respect to s
 
-        # update the material state
-        strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
-        self.material.setStrain(strain)
+            dshape2 = self.interpolation.shape(  # d shape function / d xi2
+                order=2,  # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1],  # local coordinates for current position
+                n=(0, 1))  # first derivative with respect to t
 
-        # stress
-        self.stress = self.material.getStress()
+            # initialize covariant base vectors (current system) ...
+            gs = np.zeros_like(Gs) #
+            gt = np.zeros_like(Gt)
 
-        S = np.array( [[self.stress['xx'],self.stress['xy']],[self.stress['xy'],self.stress['yy']]] )
+            # ... compute
+            for dN1, dN2, node in zip(dshape1, dshape2, self.nodes):
+                gs += dN1 * node.getPos()
+                gt += dN2 * node.getPos()
 
-        # tractions
-        ts = S @ Gs
-        tt = S @ Gt
-        tu = S @ Gu
+            gu = -gs - gt
 
-        # initialize arrays
-        gx = Gs[0] * gs + Gt[0] * gt
-        gy = Gs[1] * gs + Gt[1] * gt
+            # deformation gradient
+            F = np.outer(gs, Gs) + np.outer(gt, Gt)
 
-        # compute the kinematic matrices
-        GI = (Gu, Gs, Gt)
+            # strain
+            eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
+            gpData.state['strain'] = eps
 
-        Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
-        Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
-        Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+            # update the material state
+            strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            gpData.material.setStrain(strain)
 
-        BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
+            # stress
+            stress = gpData.material.getStress()
+            gpData.state['stress'] = stress
 
-        # internal force
-        self.Forces = [
-            tu * self.area,
-            ts * self.area,
-            tt * self.area
-            ]
+            S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
-        # tangent stiffness
-        Ct = self.material.getStiffness() * self.area
+            # tractions
+            ts = S @ Gs
+            tt = S @ Gt
+            tu = S @ Gu
 
-        Kt = []
-        for Gi, Bi in zip(GI, BI):
-            Krow = []
-            for Gj, Bj in  zip(GI, BI):
-                Krow.append( Bi.T @ Ct @ Bj )
-            Kt.append( Krow )
+            # initialize components of the B-matrix ...
+            Bs = dshape1
+            Bt = dshape2
 
-        self.Kt = Kt
+            # initialize arrays
+            gx = Gs[0] * gs + Gt[0] * gt
+            gy = Gs[1] * gs + Gt[1] * gt
+
+            # compute the kinematic matrices
+            GI = (Gu, Gs, Gt)
+
+            Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
+            Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
+            Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+
+            BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
+
+            # internal force
+            area = gpData.J * wi
+
+            # self.Forces = [
+            #     tu * area,
+            #     ts * area,
+            #     tt * area
+            #     ]
+
+            # tangent stiffness
+            Ct = gpData.material.getStiffness() * area
+
+            for Krow, Gi, Bi in zip(self.Kt, GI, BI):
+                for KIJ, Gj, Bj in  zip(Krow, GI, BI):
+                    KIJ += Bi.T @ Ct @ Bj
 
         # .. applied element load (reference load)
         self.computeSurfaceLoads()

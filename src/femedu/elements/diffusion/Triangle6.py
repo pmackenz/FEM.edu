@@ -96,11 +96,11 @@ class Triangle6(LinearElement):
             * - face ID
               - nodes defining that face
             * - 0
-              - :py:obj:`node 0` to :py:obj:`node 1`
+              - :py:obj:`node 0` to :py:obj:`node 4` to :py:obj:`node 1`
             * - 1
-              - :py:obj:`node 1` to :py:obj:`node 2`
+              - :py:obj:`node 1` to :py:obj:`node 5` to :py:obj:`node 2`
             * - 2
-              - :py:obj:`node 2` to :py:obj:`node 0`
+              - :py:obj:`node 2` to :py:obj:`node 6` to :py:obj:`node 0`
 
 
         :param face: face ID for the loaded face
