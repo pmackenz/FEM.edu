@@ -151,10 +151,16 @@ class ExamplePlate02b(Example):
 
         model.addElement(elemA, elemB)
 
+        elemA.setSurfaceLoad(face=2, pn=1.0)
         elemB.setSurfaceLoad(face=2, pn=1.0)
 
         model.setLoadFactor(0.0)
-        model.solve()
+
+        # model.solver.assemble()
+        # model.solver.showKt()
+        #
+        # model.solve()
+
         #model.report()  # activate this line for lots of debug info
         model.plot(factor=0.0, title="Undeformed system", filename="plate02_undeformed.png", show_bc=1)
 

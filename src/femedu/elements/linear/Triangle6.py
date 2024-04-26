@@ -148,8 +148,8 @@ class Triangle6(Element):
 
             # ... compute
             for dN1, dN2, node in zip(dshape1, dshape2, self.nodes):
-                gs += dN1 * node.getPos()
-                gt += dN2 * node.getPos()
+                gs += dN1 * node.getDeformedPos(self)
+                gt += dN2 * node.getDeformedPos(self)
 
             gu = -gs - gt
 
@@ -176,21 +176,23 @@ class Triangle6(Element):
             tu = S @ Gu
 
             # initialize components of the B-matrix ...
-            Bs = dshape1
-            Bt = dshape2
+            dshapeX = dshape1 * Gs[0] + dshape2 * Gt[0]
+            dshapeY = dshape1 * Gs[1] + dshape2 * Gt[1]
 
             # initialize arrays
             gx = Gs[0] * gs + Gt[0] * gt
             gy = Gs[1] * gs + Gt[1] * gt
 
             # compute the kinematic matrices
-            GI = (Gu, Gs, Gt)
+            ##GI = (Gu, Gs, Gt)
 
-            Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
-            Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
-            Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+            # Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
+            # Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
+            # Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
 
-            BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
+            BI = np.array([ [dNx*gx, dNy*gy, dNx*gy + dNy*gx] for (dNx,dNy) in zip(dshapeX,dshapeY) ])
+
+            # BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
 
             # internal force
             area = gpData.J * wi
@@ -204,8 +206,12 @@ class Triangle6(Element):
             # tangent stiffness
             Ct = gpData.material.getStiffness() * area
 
-            for Krow, Gi, Bi in zip(self.Kt, GI, BI):
-                for KIJ, Gj, Bj in  zip(Krow, GI, BI):
+            # for Krow, Gi, Bi in zip(self.Kt, GI, BI):
+            #     for KIJ, Gj, Bj in  zip(Krow, GI, BI):
+            #         KIJ += Bi.T @ Ct @ Bj
+
+            for Krow, Bi in zip(self.Kt, BI):
+                for KIJ, Bj in  zip(Krow, BI):
                     KIJ += Bi.T @ Ct @ Bj
 
         # .. applied element load (reference load)
@@ -224,14 +230,16 @@ class Triangle6(Element):
         for I, face in enumerate(self.faces):
             loads = face.computeNodalForces()
 
-            # indexing
-            J = I+1
+            # indexing: face-ID matches the start node
+            M = I+3  # the middle node
+            J = I+1  # the end node
             if J>2:
                 J -= 3
 
             # add to element load vectors
             self.Loads[I] += loads[0]
-            self.Loads[J] += loads[1]
+            self.Loads[M] += loads[1]
+            self.Loads[J] += loads[2]
             if loads.shape[0]>2:
                 numNodes = len(self.nodes)
                 if numNodes == 6:

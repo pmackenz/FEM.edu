@@ -1,3 +1,5 @@
+.. _Element_classes:
+
 Element classes
 ==========================
 
@@ -26,6 +28,8 @@ for common element types.
 
 
 .. dropdown:: Inherited methods
+
+    .. _DrawElement_class:
 
     .. automodule:: femedu.elements.DrawElement
       :members:

@@ -70,7 +70,7 @@ class Element(DrawElement):
     def initialize(self, type=DrawElement.UNKNOWN, dofs=[] ):
         """
 
-        :param type: define `DrawElement.TYPE` for plotting. See :ref:`DrawElement_class` for available options.
+        :param type: define `DrawElement.TYPE` for plotting. See :py:meth:`femedu.elements.DrawElement` under **Inherited methods** for available options.
         :param dofs: list of dofs used by this element. Example: `["ux","uy"]` for 2d-displacements.
         """
         self.element_type = type

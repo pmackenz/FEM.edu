@@ -179,10 +179,26 @@ class DrawElement():
         implementation of a generic :code:`TRIANGLE` type
         """
         c = PlotCurve()
-        if len(self.nodes) >= 3:
+        if len(self.nodes) >= 6:
+
+            # 6-noded triangle
+
+            c+= self.nodes[0].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[3].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[1].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[4].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[2].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[5].getDeformedPos(self, factor, **kwargs)
+            c+= self.nodes[0].getDeformedPos(self, factor, **kwargs)
+
+        elif len(self.nodes) >= 3:
+
+            # 3-noded triangle
+
             for node in self.nodes[:3]:
                 c += node.getDeformedPos(self, factor, **kwargs)
             c+= self.nodes[0].getDeformedPos(self, factor, **kwargs)
+
         return c.asTuple()
 
     def drawTetrahedron(self, factor, **kwargs):
