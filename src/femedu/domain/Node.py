@@ -710,8 +710,10 @@ class Node():
         """
         if self.is_lead:
             # rotate states (n)->(n-1) and current->(n)
-            self.disp_nn = self.disp_n.copy()
-            self.disp_n  = self.disp.copy()
+            if isinstance(self.disp_n, np.ndarray):
+                self.disp_nn = self.disp_n.copy()
+            if isinstance(self.disp, np.ndarray):
+                self.disp_n  = self.disp.copy()
             self.loadfactor_nn = self.loadfactor_n
             self.loadfactor_n  = self.loadfactor
 

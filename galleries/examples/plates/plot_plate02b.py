@@ -154,19 +154,45 @@ class ExamplePlate02b(Example):
         elemA.setSurfaceLoad(face=2, pn=1.0)
         elemB.setSurfaceLoad(face=2, pn=1.0)
 
+        model.setLoadFactor(1.0)
+
+        nd0.setDisp([0.0,  0.0])
+        nd1.setDisp([5.0,  0.0])
+        nd2.setDisp([5.0, -5.0])
+        nd3.setDisp([0.0, -5.0])
+        nd4.setDisp([2.5,  0.0])
+        nd5.setDisp([5.0, -2.5])
+        nd6.setDisp([2.5, -5.0])
+        nd7.setDisp([0.0, -2.5])
+        nd8.setDisp([2.5, -2.5])
+
+        elemA.updateState()
+        elemB.updateState()
+
+        model.report()
+
+        model.plot(factor=1.0, filename="plate02b_deformed.png")
+
+
+
+
         model.setLoadFactor(0.0)
 
         # model.solver.assemble()
         # model.solver.showKt()
         #
-        # model.solve()
+        model.solve()
 
-        #model.report()  # activate this line for lots of debug info
-        model.plot(factor=0.0, title="Undeformed system", filename="plate02_undeformed.png", show_bc=1)
+        model.report()  # activate this line for lots of debug info
+        model.plot(factor=0.0, title="Undeformed system", filename="plate02b_undeformed.png", show_bc=1)
+
+
+
+
 
         model.setLoadFactor(1.0)
         model.solve()
-        model.plot(factor=1.0, filename="plate02_deformed.png")
+        model.plot(factor=1.0, filename="plate02b_deformed.png")
 
         model.report()
 

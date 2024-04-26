@@ -81,8 +81,9 @@ class Triangle6(Element):
 
     def __str__(self):
         s = super(Triangle6, self).__str__()
-        s += "\n    strain: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStrain())
-        s += "\n    stress: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(**self.material.getStress())
+        for gp, gpdata in enumerate(self.gpData):
+            s += "\n    strain {}: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(gp, **gpdata.material.getStrain())
+            s += "\n    stress {}: xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(gp, **gpdata.material.getStress())
         if np.array(self.distributed_load).any():
             s += "\n    element forces added to node:"
             for i, P in enumerate(self.Loads):
@@ -170,10 +171,10 @@ class Triangle6(Element):
 
             S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
-            # tractions
-            ts = S @ Gs
-            tt = S @ Gt
-            tu = S @ Gu
+            # # tractions
+            # ts = S @ Gs
+            # tt = S @ Gt
+            # tu = S @ Gu
 
             # initialize components of the B-matrix ...
             dshapeX = dshape1 * Gs[0] + dshape2 * Gt[0]
@@ -203,6 +204,9 @@ class Triangle6(Element):
             #     tt * area
             #     ]
 
+            # stress * area
+            stress_vec = np.array([stress['xx'], stress['yy'], stress['xy']]) * area
+
             # tangent stiffness
             Ct = gpData.material.getStiffness() * area
 
@@ -210,7 +214,8 @@ class Triangle6(Element):
             #     for KIJ, Gj, Bj in  zip(Krow, GI, BI):
             #         KIJ += Bi.T @ Ct @ Bj
 
-            for Krow, Bi in zip(self.Kt, BI):
+            for Krow, Fi, Bi in zip(self.Kt, self.Forces, BI):
+                Fi += Bi.T @ stress_vec
                 for KIJ, Bj in  zip(Krow, BI):
                     KIJ += Bi.T @ Ct @ Bj
 
