@@ -31,7 +31,7 @@ class Triangle6(Element):
 
         # select shape functions and integrator for the quadratic triangle
         self.interpolation = TriangleShapes()
-        self.integrator    = TriangleIntegration()
+        self.integrator    = TriangleIntegration(order=2)
 
         (xis, wis) = self.integrator.parameters()
 
@@ -129,7 +129,6 @@ class Triangle6(Element):
 
             Gs = gpData.dual_base[0]
             Gt = gpData.dual_base[1]
-            Gu = -Gs - Gt
 
             # shape functions
 
@@ -158,7 +157,8 @@ class Triangle6(Element):
             F = np.outer(gs, Gs) + np.outer(gt, Gt)
 
             # strain
-            eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
+            # eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
+            eps = 0.5 * ( F.T @ F - np.eye(np.size(gs)) )
             gpData.state['strain'] = eps
 
             # update the material state
@@ -171,11 +171,6 @@ class Triangle6(Element):
 
             S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
-            # # tractions
-            # ts = S @ Gs
-            # tt = S @ Gt
-            # tu = S @ Gu
-
             # initialize components of the B-matrix ...
             dshapeX = dshape1 * Gs[0] + dshape2 * Gt[0]
             dshapeY = dshape1 * Gs[1] + dshape2 * Gt[1]
@@ -185,24 +180,12 @@ class Triangle6(Element):
             gy = Gs[1] * gs + Gt[1] * gt
 
             # compute the kinematic matrices
-            ##GI = (Gu, Gs, Gt)
-
-            # Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
-            # Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
-            # Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+            GI = np.vstack((dshapeX,dshapeY)).T
 
             BI = np.array([ [dNx*gx, dNy*gy, dNx*gy + dNy*gx] for (dNx,dNy) in zip(dshapeX,dshapeY) ])
 
-            # BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
-
             # internal force
             area = gpData.J * wi
-
-            # self.Forces = [
-            #     tu * area,
-            #     ts * area,
-            #     tt * area
-            #     ]
 
             # stress * area
             stress_vec = np.array([stress['xx'], stress['yy'], stress['xy']]) * area
@@ -210,14 +193,12 @@ class Triangle6(Element):
             # tangent stiffness
             Ct = gpData.material.getStiffness() * area
 
-            # for Krow, Gi, Bi in zip(self.Kt, GI, BI):
-            #     for KIJ, Gj, Bj in  zip(Krow, GI, BI):
-            #         KIJ += Bi.T @ Ct @ Bj
-
-            for Krow, Fi, Bi in zip(self.Kt, self.Forces, BI):
+            for Krow, Fi, Gi, Bi in zip(self.Kt, self.Forces, GI, BI):
                 Fi += Bi.T @ stress_vec
-                for KIJ, Bj in  zip(Krow, BI):
-                    KIJ += Bi.T @ Ct @ Bj
+                KGi = Gi @ S * area
+                for KIJ, Gj, Bj in  zip(Krow, GI, BI):
+                    KGij = KGi @ Gj
+                    KIJ += Bi.T @ Ct @ Bj + KGij * np.eye(np.size(gs))
 
         # .. applied element load (reference load)
         self.computeSurfaceLoads()
@@ -245,17 +226,7 @@ class Triangle6(Element):
             self.Loads[I] += loads[0]
             self.Loads[M] += loads[1]
             self.Loads[J] += loads[2]
-            if loads.shape[0]>2:
-                numNodes = len(self.nodes)
-                if numNodes == 6:
-                    K = I + 3
-                elif numNodes == 8 or numNodes == 9:
-                    K = I + 4
-                else:
-                    msg = "Force data provided from Face2D inconsistent with element data"
-                    raise TypeError(msg)
 
-                self.Loads[K] += loads[2]
 
     def getStress(self):
         return self.Stress

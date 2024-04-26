@@ -191,7 +191,7 @@ class ExamplePlate02b(Example):
 
 
         model.setLoadFactor(1.0)
-        model.solve()
+        model.solve(verbose=1)
         model.plot(factor=1.0, filename="plate02b_deformed.png")
 
         model.report()
