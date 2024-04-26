@@ -9,6 +9,7 @@ __all__ = (
     "LineShapes",
     "QuadShapes",
     "TriangleShapes",
+    "GPdataType"
 )
 
 from .LineIntegration import *
@@ -20,3 +21,5 @@ from .BrickIntegration import *
 from .LineShapes import *
 from .QuadShapes import *
 from .TriangleShapes import *
+
+from .GPdataType import *

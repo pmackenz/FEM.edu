@@ -28,29 +28,6 @@ class LinearElement(Element):
         """
         super(LinearElement, self).__init__(nodes, material, label=label)
 
-    def initialize(self, type=DrawElement.UNKNOWN, dofs=[] ):
-        """
-
-        :param type: define `DrawElement.TYPE` for plotting. See :ref:`DrawElement_class` for available options.
-        :param dofs: list of dofs used by this element. Example: `["ux","uy"]` for 2d-displacements.
-        """
-        self.element_type = type
-
-        if dofs:
-            self._requestDofs(dofs)
-        else:
-            raise TypeError("mandatory list of dofs is missing for element {}".format(self))
-
-        self.createFaces()
-
-        nnodes = len(self.nodes)
-        ndofs  = len(dofs)
-
-        self.distributed_load = [ 0.0 for i in range(nnodes) ]
-        self.force    = 0.0
-        self.Forces   = [ np.zeros(ndofs) for k in range(len(self.nodes)) ]
-        self.Kt       = [ [ np.zeros((ndofs,ndofs)) for k in range(nnodes) ] for m in range(nnodes) ]
-
     def getForce(self):
         """
         Request the internal force vector (stress driven force only; **no applied element loads**)
