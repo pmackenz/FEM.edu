@@ -4,7 +4,13 @@ A square patch made of two triangular plate elements
 ===============================================================
 
 Basic implementation test with applied loads.
-    Testing the tangent stiffness computation.
+    Testing the tangent stiffness computation
+    for a :func:`Triangle` (using linear shape functions).
+
+Using
+
+* :py:class:`elements.linear.Triangle` (see :ref:`triangle_class`)
+* :py:class:`materials.PlaneStress`  (see :ref:`plane_stress_material_class`)
 
 .. code::
 

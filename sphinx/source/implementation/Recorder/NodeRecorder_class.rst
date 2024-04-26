@@ -6,7 +6,7 @@ Data recorder class specialized for collecting nodal data, i.e., DOFs.
 Parent class
 --------------
 
-* :doc:`Recorder_class`
+* :ref:`recorder_class`
 
 Class doc
 ----------

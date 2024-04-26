@@ -1,3 +1,5 @@
+.. _plot_support_classes:
+
 Plot Support classes
 ==========================
 All plotters are based on an abstract plotter class that defines the fundamental
@@ -6,18 +8,18 @@ of those features.
 
 In addition, all :doc:`../Elements/Element_class` inherit plot support methods from :code:`DrawElement`.
 
+.. dropdown::  Abstract Plotter class
 
-.. automodule:: femedu.plotter.AbstractPlotter
-   :members:
+    .. automodule:: femedu.plotter.AbstractPlotter
+       :members:
 
-Derived Classes
--------------------
+.. dropdown::  Derived Classes
 
-.. toctree::
-    :maxdepth: 1
+    .. toctree::
+        :maxdepth: 1
 
-    Plotter_class.rst
-    Plotter3D_class.rst
-    ElementPlotter_class.rst
-    ElementPlotter3D_class.rst
+        Plotter_class.rst
+        Plotter3D_class.rst
+        ElementPlotter_class.rst
+        ElementPlotter3D_class.rst
 

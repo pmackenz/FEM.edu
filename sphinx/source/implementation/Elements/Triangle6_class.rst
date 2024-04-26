@@ -1,3 +1,5 @@
+.. _triangle6_class:
+
 Triangle6 class
 ==========================
 

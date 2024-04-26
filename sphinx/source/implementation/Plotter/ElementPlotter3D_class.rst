@@ -3,7 +3,7 @@ ElementPlotter3D class
 
 Parent class
 ---------------
-* `Plot Support Classes`
+* :ref:`plot_support_classes`
 
 Class doc
 -------------

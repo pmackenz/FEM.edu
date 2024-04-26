@@ -9,7 +9,7 @@ Data recorder class specialized for collecting element data, e.g.,
 Parent class
 --------------
 
-* :doc:`Recorder_class`
+* :ref:`recorder_class`
 
 Class doc
 ----------

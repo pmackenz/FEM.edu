@@ -1,3 +1,5 @@
+.. _plane_stress_material_class:
+
 PlaneStress material class
 ============================
 

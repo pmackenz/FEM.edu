@@ -47,32 +47,50 @@ over a quad-shaped domain, assuming a function
 
 
 
-Abstract Shape Function Class
---------------------------------
+.. dropdown::  Abstract Shape Function Class
 
-.. automodule:: femedu.utilities.ShapeFunctions
-  :members:
-
-
-Derived Classes
--------------------
-
-.. automodule:: femedu.utilities.LineShapes
-  :members:
+    .. automodule:: femedu.utilities.ShapeFunctions
+      :members:
 
 
-.. automodule:: femedu.utilities.TriangleShapes
-  :members:
+.. dropdown::  Derived Classes
+
+    .. tab-set::
+
+        .. tab-item:: Lines
+
+            .. automodule:: femedu.utilities.LineShapes
+              :members:
 
 
-.. automodule:: femedu.utilities.QuadShapes
-  :members:
+        .. tab-item:: Triangles
+
+            .. automodule:: femedu.utilities.TriangleShapes
+              :members:
 
 
-.. .. automodule:: femedu.utilities.TetraShapes
-..   :members:
+        .. tab-item:: Quads
+
+            .. automodule:: femedu.utilities.QuadShapes
+              :members:
 
 
-.. .. automodule:: femedu.utilities.BrickShapes
-..   :members:
+        .. tab-item:: Tetrahedrals
+
+            .. note::
+
+                This functionality is not yet available.
+
+            .. .. automodule:: femedu.utilities.TetraShapes
+            ..   :members:
+
+
+        .. tab-item:: Bricks
+
+            .. note::
+
+                This functionality is not yet available.
+
+            .. .. automodule:: femedu.utilities.BrickShapes
+            ..   :members:
 

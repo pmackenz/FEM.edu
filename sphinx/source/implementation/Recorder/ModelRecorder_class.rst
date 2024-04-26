@@ -6,7 +6,7 @@ Data recorder class specialized for collecting system level data, i.e., analysis
 Parent class
 --------------
 
-* :doc:`Recorder_class`
+* :ref:`recorder_class`
 
 Class doc
 ----------

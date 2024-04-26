@@ -13,18 +13,18 @@ This class represents no particular element but rather defines common functional
     Meshers are currently under development but not yet available with the distribution.
     Stay tuned for updates.
 
+.. dropdown::  Mesher base class
 
-.. automodule:: femedu.mesher.Mesher
-  :members:
+    .. automodule:: femedu.mesher.Mesher
+      :members:
 
 
-Derived Classes
--------------------
+.. dropdown::  Derived Classes
 
-.. toctree::
-    :maxdepth: 1
+    .. toctree::
+        :maxdepth: 1
 
-    CurveMesher_class.rst
-    PatchMesher_class.rst
-    TriPatchMesher_class.rst
-    SolidMesher_class.rst
+        CurveMesher_class.rst
+        PatchMesher_class.rst
+        TriPatchMesher_class.rst
+        SolidMesher_class.rst

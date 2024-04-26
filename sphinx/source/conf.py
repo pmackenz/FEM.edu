@@ -30,6 +30,7 @@ extensions  = ['sphinx.ext.autosectionlabel']
 extensions += ["myst_parser"]
 extensions += ["sphinx.ext.autodoc"]
 extensions += ['sphinx_git']
+extensions += ["sphinx_design"]
 #extensions += ['sphinx_substitution_extensions']
 extensions += ['sphinx_gallery.gen_gallery']
 

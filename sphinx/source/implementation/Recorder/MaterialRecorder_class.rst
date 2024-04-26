@@ -10,7 +10,7 @@ Data recorder class specialized for collecting material data, e.g.,
 Parent class
 --------------
 
-* :doc:`Recorder_class`
+* :ref:`recorder_class`
 
 Class doc
 ----------

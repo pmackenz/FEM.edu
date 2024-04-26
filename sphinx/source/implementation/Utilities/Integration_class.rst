@@ -18,7 +18,7 @@ Integrating a 4th-order function f(s,t) over a triangular domain
 
 .. code:: python
 
-    integrator = TrangleIntegration(order=4)
+    integrator = TriangleIntegration(order=4)
     F = 0.0
     xis, wis = integrator.parameters()
     for xi, wi in zip(xis, wis):
@@ -40,32 +40,30 @@ Integrating a tri-quadratic function g(s,t,u) over a brick-shaped domain
     print(f"Int_V g(s,t,u) dV = {F}")
 
 
-Abstract Integration Class
---------------------------------
+.. dropdown::  Abstract Integration Class
 
-.. automodule:: femedu.utilities.Integration
-  :members:
-
-
-Derived Classes
--------------------
-
-.. automodule:: femedu.utilities.LineIntegration
-  :members:
+    .. automodule:: femedu.utilities.Integration
+      :members:
 
 
-.. automodule:: femedu.utilities.TriangleIntegration
-  :members:
+.. dropdown::  Derived Classes
+
+    .. automodule:: femedu.utilities.LineIntegration
+      :members:
 
 
-.. automodule:: femedu.utilities.QuadIntegration
-  :members:
+    .. automodule:: femedu.utilities.TriangleIntegration
+      :members:
 
 
-.. automodule:: femedu.utilities.TetraIntegration
-  :members:
+    .. automodule:: femedu.utilities.QuadIntegration
+      :members:
 
 
-.. automodule:: femedu.utilities.BrickIntegration
-  :members:
+    .. automodule:: femedu.utilities.TetraIntegration
+      :members:
+
+
+    .. automodule:: femedu.utilities.BrickIntegration
+      :members:
 
