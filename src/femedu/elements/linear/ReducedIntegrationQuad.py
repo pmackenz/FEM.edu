@@ -3,6 +3,7 @@
 4-node quadrilateral - small displacement
 ==============================================
 complete bi-linear interpolation
+with selective reduced integration for shear
 
 .. code::
 
@@ -19,7 +20,7 @@ from ..Element import *
 from ...domain.Node import *
 from ...utilities import QuadIntegration, QuadShapes
 
-class Quad(Element):
+class ReducedIntegrationQuad(Element):
     """
     class: representing a plane 4-node quadrilateral
 
@@ -30,7 +31,7 @@ class Quad(Element):
     """
 
     def __init__(self, node0, node1, node2, node3, material, label=None):
-        super(Quad, self).__init__((node0, node1, node2, node3), material, label=label)
+        super(ReducedIntegrationQuad, self).__init__((node0, node1, node2, node3), material, label=label)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
@@ -59,13 +60,36 @@ class Quad(Element):
 
         X  = np.array([ node.getPos() for node in self.nodes ])
 
-        # initialization step
+        ## initialization step
+
+        interpolation = QuadShapes()
+
+        # reduced integration
+        # -------------------------
+        xi = (0.0, 0.0)   # gauss point at the center
+        wi = 4.0          # weight at the center
+
+        dphi_ds = interpolation.shape(1, *xi, n=(1, 0))
+        dphi_dt = interpolation.shape(1, *xi, n=(0, 1))
+        Grad = np.vstack((dphi_ds, dphi_dt))
+
+        # reference configuration
+
+        DPhi0 = (Grad @ X).T
+        self.J0 = np.linalg.det(DPhi0)   # material model already includes thickness
+
+        # dual base (contra-variant)
+        self.Grad0 = np.linalg.inv(DPhi0).T @ Grad
+
+        self.material0 = deepcopy(material)
+        self.stress0   = {}
+
+        # full integration
+        # -------------------------
         integrator = QuadIntegration(order=2)
         xis, wis = integrator.parameters()
 
         gpt = 0
-
-        interpolation = QuadShapes()
 
         for xi, wi in zip(xis, wis):
 
@@ -92,7 +116,7 @@ class Quad(Element):
 
 
     def __str__(self):
-        s = super(Quad, self).__str__()
+        s = super(ReducedIntegrationQuad, self).__str__()
         for igpt, material in enumerate(self.material):
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
             s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
@@ -128,7 +152,7 @@ class Quad(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Quad, self).resetLoads()
+        super(ReducedIntegrationQuad, self).resetLoads()
 
     def updateState(self):
 
@@ -145,17 +169,63 @@ class Quad(Element):
         # create array of deformed nodal coordinates
         xt = np.array([ node.getDeformedPos() for node in self.nodes ])
 
-        gpt = 0
-
         # interpolation = QuadShapes()   # we are doing that and the isoparametric transformation in the constructor
 
+        # reduced integration
+        # -------------------------
+        xi = (0.,0.)
+        wi = 4.0
+
+        Grad = self.Grad0  # pre-computed in __init__
+        wi *= self.J0  # J includes the thickness of the plate
+
+        # spatial configuration
+        # -------------------------
+
+        # deformation gradient
+        F = (Grad @ xt).T
+
+        # compute small strain tensor
+        eps = 0.5 * (F + F.T) - np.eye(self.ndof)
+
+        # update the material state
+        strain0 = {'xx': eps[0, 0], 'yy': eps[1, 1], 'xy': eps[0, 1] + eps[1, 0]}
+
+        self.material0.setStrain(strain0)
+
+        # 2nd Piola-Kirchhoff stress
+        stress = self.material0.getStress()
+
+        S = np.array([[stress['xx'], stress['xy']], [stress['xy'], stress['yy']]])
+
+        # store stress for reporting
+        self.stress0 = {'xx': S[0, 0], 'xy': S[0, 1], 'yx': S[1, 0], 'yy': S[1, 1]}
+
+        Ones = np.eye(self.ndof)
+        # compute kinematic matrices
+        BI = [np.array([Grad[0, K] * Ones[:, 1] + Grad[1, K] * Ones[:, 0]])   # the XY component is XY + YX ("gammaXY = 2 epsXY")
+              for K in range(nnds)]
+
+        # internal forces
+        ##for i, force in enumerate(self.Forces):
+        ##    force += S @ Grad[:, i] * wi  # wi already includes J
+
+        # tangent stiffness
+        Ct = self.material0.getStiffness() * wi
+
+        for I, Bi in enumerate(BI):
+            GCti = Bi.T * Ct[2,2]
+            for J, Bj in enumerate(BI):
+                Kt[I][J] += GCti @ Bj
+
+
+        # full integration
+        # -------------------------
         xis, wis = integrator.parameters()
 
-        for xi, wi in zip(xis, wis):
+        gpt = 0
 
-            # dphi_ds = interpolation.shape(1, *xi, n=(1,0))
-            # dphi_dt = interpolation.shape(1, *xi, n=(0,1))
-            # Grad = np.vstack((dphi_ds, dphi_dt))
+        for xi, wi in zip(xis, wis):
 
             # reference configuration
             # -------------------------
@@ -173,7 +243,9 @@ class Quad(Element):
             eps = 0.5 * ( F + F.T ) - np.eye(self.ndof)
 
             # update the material state
-            strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            # ... replacing the shear strain at the gauss-points by the center shear strain
+            #strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':strain0['xy']}
 
             self.material[gpt].setStrain(strain)
 
@@ -188,8 +260,7 @@ class Quad(Element):
             Ones = np.eye(self.ndof)
             # compute kinematic matrices
             BI = [ np.array([ Grad[0,K]*Ones[:,0],                         # the XX component
-                              Grad[1,K]*Ones[:,1],                         # the YY component
-                              Grad[0,K]*Ones[:,1] + Grad[1,K]*Ones[:,0] ]) # the XY component is XY + YX ("gammaXY = 2 epsXY")
+                              Grad[1,K]*Ones[:,1]])                        # the YY component
                    for K in range(nnds) ]
 
             # internal forces
@@ -200,7 +271,7 @@ class Quad(Element):
             Ct = self.material[gpt].getStiffness() * wi
 
             for I, Bi in enumerate(BI):
-                GCti = Bi.T @ Ct
+                GCti = Bi.T @ Ct[0:2,0:2]
                 for J, Bj in enumerate(BI):
                     Kt[I][J] += GCti @ Bj
 

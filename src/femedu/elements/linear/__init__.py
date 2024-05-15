@@ -6,6 +6,8 @@ __all__ = (
     "Triangle",
     "Triangle6",
     "Quad",
+    "ReducedIntegrationQuad",
+    "HRQuad",
     "Quad8",
     "Quad9",
     "Truss",
@@ -19,6 +21,8 @@ __all__ = (
 
 from .Beam2D import *
 from .Quad import *
+from .ReducedIntegrationQuad import *
+from .HRQuad import *
 from .Triangle import *
 from .Triangle6 import *
 from .Truss import *

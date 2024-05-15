@@ -26,10 +26,10 @@ Basic implementation test with applied loads.
         t  =  1.0
 
     Element loads:
-        node 0: [ 0.0, 0.0]
-        node 1: [ 5.0, 0.0]
-        node 2: [ 5.0, 0.0]
-        node 3: [ 0.0, 0.0]
+        node 0: [ 0.0,  0.0]
+        node 1: [10.0,  0.0]
+        node 2: [10.0, 10.0]
+        node 3: [ 0.0,  0.0]
 
 Author: Peter Mackenzie-Helnwein
 """
@@ -39,7 +39,8 @@ from femedu.examples import Example
 
 from femedu.domain import System, Node
 from femedu.solver import NewtonRaphsonSolver
-from femedu.elements.linear import Quad
+#from femedu.elements.linear import Quad
+from femedu.elements.linear import ReducedIntegrationQuad as Quad
 from femedu.materials import PlaneStress
 
 
@@ -71,10 +72,10 @@ class ExamplePlate07(Example):
         t  =  1.0
         
     Element loads:
-        node 0: [ 0.0, 0.0]
-        node 1: [ 5.0, 0.0]
-        node 2: [ 5.0, 0.0]
-        node 3: [ 0.0, 0.0]
+        node 0: [ 0.0,  0.0]
+        node 1: [10.0,  0.0]
+        node 2: [10.0, 10.0]
+        node 3: [ 0.0,  0.0]
     
     2nd Piola-Kirchhoff stress:
         S_XX =  w                  =  1.000
@@ -133,6 +134,7 @@ class ExamplePlate07(Example):
         model.addElement(elemA)
 
         elemA.setSurfaceLoad(face=1, pn=1.0)
+        elemA.setSurfaceLoad(face=3, pn=1.0)
 
         model.plot(factor=0.0, title="Undeformed system", filename="plate07_undeformed.png", show_bc=1)
 
@@ -163,7 +165,7 @@ class ExamplePlate07(Example):
 
         nd0.fixDOF('ux', 'uy')
         nd1.fixDOF('uy')
-        nd3.fixDOF('ux')
+        #nd3.fixDOF('ux')
 
         model.setLoadFactor(1.0)
         model.solve()

@@ -2,7 +2,8 @@
 ==============================================
 4-node quadrilateral - small displacement
 ==============================================
-complete bi-linear interpolation
+Hellinger-Reissner formulation for a quad with bi-linear
+displacement interpolation.
 
 .. code::
 
@@ -19,7 +20,7 @@ from ..Element import *
 from ...domain.Node import *
 from ...utilities import QuadIntegration, QuadShapes
 
-class Quad(Element):
+class HRQuad(Element):
     """
     class: representing a plane 4-node quadrilateral
 
@@ -30,7 +31,7 @@ class Quad(Element):
     """
 
     def __init__(self, node0, node1, node2, node3, material, label=None):
-        super(Quad, self).__init__((node0, node1, node2, node3), material, label=label)
+        super(HRQuad, self).__init__((node0, node1, node2, node3), material, label=label)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
@@ -92,7 +93,7 @@ class Quad(Element):
 
 
     def __str__(self):
-        s = super(Quad, self).__str__()
+        s = super(HRQuad, self).__str__()
         for igpt, material in enumerate(self.material):
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
             s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
@@ -128,7 +129,7 @@ class Quad(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Quad, self).resetLoads()
+        super(HRQuad, self).resetLoads()
 
     def updateState(self):
 
