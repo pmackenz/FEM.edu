@@ -1,7 +1,7 @@
 from .Integration import Integration
 
 class TriangleIntegration(Integration):
-    """
+    r"""
     Provides integration points and weights for a triangular domain (2d)
     """
 

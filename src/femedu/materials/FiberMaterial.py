@@ -88,7 +88,7 @@ if __name__ == "__main__":
     ax1.plot(eps, sig, '-r', label='stress')
     ax1.grid(True)
     ax1.set_xlabel('strain $\\varepsilon$')
-    ax1.set_ylabel('stress $\sigma$')
+    ax1.set_ylabel('stress $\\sigma$')
     ax1.legend()
 
     ax2.plot(eps, Et, '-.b', label='tangent modulus')

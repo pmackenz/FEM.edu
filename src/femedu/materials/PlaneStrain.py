@@ -1,7 +1,7 @@
 from .Material import *
 
 class PlaneStrain(Material):
-    """
+    r"""
     class: representing a 2d Plane Stress Material
 
     """
@@ -22,7 +22,7 @@ class PlaneStrain(Material):
         return self.parameters['t']
 
     def setStrain(self, eps):
-        """
+        r"""
         update state for a user provided axial strain value
 
         :param eps:  strain or strain tensor
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     ax1.plot(eps, sig, '-r', label='stress')
     ax1.grid(True)
     ax1.set_xlabel('strain $\\varepsilon$')
-    ax1.set_ylabel('stress $\sigma$')
+    ax1.set_ylabel('stress $\\sigma$')
     ax1.legend()
 
     ax2.plot(eps, Et, '-.b', label='tangent modulus')

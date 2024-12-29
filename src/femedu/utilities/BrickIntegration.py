@@ -1,7 +1,7 @@
 from .Integration import Integration
 
 class BrickIntegration(Integration):
-    """
+    r"""
     Provides integration points and weights for brick-like domains (3d)
     """
 

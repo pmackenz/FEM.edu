@@ -191,7 +191,7 @@ class ExampleFrame03(Example):
 
         plt.plot(lambdas,detKt,'--*r')
         plt.grid(True)
-        plt.xlabel('Load factor, $ \lambda $')
+        plt.xlabel('Load factor, $ \\lambda $')
         plt.ylabel("Stability index, $ {det}\: {\\bf K}_t $")
         plt.show()
 

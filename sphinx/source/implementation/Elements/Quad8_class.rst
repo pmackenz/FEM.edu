@@ -3,6 +3,7 @@ Quad8 class
 
 Parent class
 ---------------
+
 * :doc:`Element_class`
 
 Class doc

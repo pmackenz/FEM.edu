@@ -147,12 +147,12 @@ class System():
 # --------- Arc-length control functions: forward to Solver ------------
 
     def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):
-        """
+        r"""
         Initializes parameters for the arc-length constraint.
 
         .. math::
 
-           g({\\bf u}, \\lambda)) := \\alpha ||\\bar {\\bf P}|| (\\lambda-\\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
+           g({\bf u}, \lambda)) := \alpha ||\bar {\bf P}|| (\lambda-\lambda_n)^2 + ({\bf u} - {\bf u}_n)({\bf u} - {\bf u}_n) - \Delta s^2 = 0
 
         .. note::
 
@@ -324,11 +324,11 @@ class System():
             raise NotImplementedError(msg)
 
     def checkStability(self, **kwdargs):
-        """
+        r"""
         Computes the stability index as
 
-        * :math:`\mathop{det}([{\\bf K}_t])` for systems with less than 25 d.o.f.s
-        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\\bf K}_t`
+        * :math:`\mathop{det}([{\bf K}_t])` for systems with less than 25 d.o.f.s
+        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\bf K}_t`
 
         **Implemented** by :py:class:`Solver`.
 
@@ -532,7 +532,7 @@ class System():
 
         ax1.grid(True)
         ax1.set_xlabel('component of displacement, $ u_i$')
-        ax1.set_ylabel('load factor, $\lambda$')
+        ax1.set_ylabel('load factor, $\\lambda$')
         ax1.legend()
 
         if self.track_stability:
@@ -636,7 +636,7 @@ class System():
 # ------------ operational support methods --------------
 
     def setLoadFactor(self, lam):
-        """
+        r"""
         Set the target load factor to **lam**
 
         The entered load pattern is considered a reference load,

@@ -5,14 +5,14 @@ import scipy as sc
 import matplotlib.pyplot as plt
 
 class Solver():
-    """
+    r"""
     Abstract class for any solver implementation.
 
     This class describes the functions needed by any solver
     """
 
     def __init__(self):
-        """
+        r"""
         Initialize a solver instance with empty elements and nodes lists.
 
         Provides a link to the model
@@ -49,7 +49,7 @@ class Solver():
         self.constraints = constraints
 
     def fetchState(self):
-        """
+        r"""
         Fetch the current :code:`state` of the solver.
 
         .. list-table:: **state** is defined as a dictionary with the following contents:
@@ -85,7 +85,7 @@ class Solver():
         return state
 
     def pushState(self, state):
-        """
+        r"""
         Pushes :code:`state` to the solver.
         The solver will use that data to update it's internal state.
 
@@ -133,7 +133,7 @@ class Solver():
             raise TypeError("'lam1' missing from state")
 
     def setLoadFactor(self, lam):
-        """
+        r"""
         Set the target load factor to **lam**
 
         This enables load control and disables alternative control methods
@@ -149,7 +149,7 @@ class Solver():
         self.hasConstraint = False
 
     def setDisplacementControl(self, node, dof, target):
-        """
+        r"""
         activate displacement control for the next load step
         """
         if dof in node.dofs:
@@ -164,11 +164,11 @@ class Solver():
             raise TypeError(msg)
 
     def assemble(self, force_only=False):
-        """
+        r"""
         A general assembler for mixed element types.
 
-        This method will build the out-of-balance force vector (residuum :math:`{\\bf R}`)
-        and the tangent stiffness matrix (:math:`{\\bf K}_t`) used by most solvers.
+        This method will build the out-of-balance force vector (residuum :math:`{\bf R}`)
+        and the tangent stiffness matrix (:math:`{\bf K}_t`) used by most solvers.
 
         Specialized solvers may overload this method.
 
@@ -260,14 +260,12 @@ class Solver():
 
     def solve(self, **kwargs):
         """
-
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def initialize(self):
         """
-
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
@@ -279,7 +277,7 @@ class Solver():
         raise NotImplementedError(msg)
 
     def on_converged(self):
-        """
+        r"""
         This function needs to be called once a converged state was achieved by the solver.
 
         It tells all components to update its state to "converged"
@@ -300,7 +298,7 @@ class Solver():
         self.loadfactor_n  = self.loadfactor
 
     def revert(self):
-        """
+        r"""
         This function needs to be called if the iterative procedure fails to converge.
 
         It will revert the entire system to the last converged state.
@@ -315,11 +313,11 @@ class Solver():
             const.revert()
 
     def checkStability(self, verbose=True, **kwargs):
-        """
+        r"""
         Computes the stability index as
 
-        * :math:`\mathop{det}([{\\bf K}_t])` for systems with less than 25 d.o.f.s
-        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\\bf K}_t`
+        * :math:`\mathop{det}([{\bf K}_t])` for systems with less than 25 d.o.f.s
+        * :math:`\min\lambda_i` where :math:`\lambda_i` are the eigenvalues of :math:`{\bf K}_t`
 
         :param verbose: set to **True** for log info
         :param num_eigen: if set to a value greater than 0, show the **num_eigen** eigenvalues
@@ -358,8 +356,8 @@ class Solver():
         return detKt
 
     def getBucklingMode(self, mode=0, **kwargs):
-        """
-        Perform an eigen-analysis on :math:`{\\bf K}_t` for the requested **mode**.
+        r"""
+        Perform an eigen-analysis on :math:`{\bf K}_t` for the requested **mode**.
         Default is the mode with the smallest absolute eigenvalue (:math:`\min\{\lambda_i\}`)
 
         The mode shape will be pushed to the nodes.
@@ -424,13 +422,13 @@ class Solver():
         return normR
 
     def resetForces(self):
-        """
+        r"""
         Reset force vector to **all zeros**.
         """
         self.P = np.zeros(self.sdof)
 
     def resetDisplacements(self):
-        """
+        r"""
         Reset displacement vector to **all zeros**.
         """
         self.sysU = np.zeros(self.sdof)
@@ -510,14 +508,14 @@ class Solver():
 
 
     def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):
-        """
+        r"""
         This method may be implemented by a nonlinear solver
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def stepArcLength(self, verbose=False):
-        """
+        r"""
         This method may be implemented by a nonlinear solver
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
@@ -533,7 +531,7 @@ class Solver():
         self.record = False
 
     def recordThisStep(self):
-        """
+        r"""
         initiate writing of the current state to all existing recorders.
         (system, nodes, elements, materials - as supported by those objects)
 

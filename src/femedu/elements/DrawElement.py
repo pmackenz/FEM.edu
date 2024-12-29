@@ -24,7 +24,7 @@ class PlotCurve():
 
 
 class DrawElement():
-    """
+    r"""
     class for drawing any element
 
     element types are:
@@ -68,7 +68,7 @@ class DrawElement():
         return (test_type & self.element_type)
 
     def draw(self, factor=0.0, modeshape=False, **kwargs):
-        """
+        r"""
         Returns a series of coordinate vectors representing the _x_, _y_, and _z_ values
         of points for plotting the deformed shape the current element (:code:`self`).
         For the undeformed element, set :code:`factor=0.0`.
@@ -95,7 +95,7 @@ class DrawElement():
 
 
     def drawLine(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`LINE` type
         """
         c = PlotCurve()
@@ -105,7 +105,7 @@ class DrawElement():
         return c.asTuple()
 
     def drawCurve(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`CURVE` type
         """
         Xi = self.nodes[0].getPos()
@@ -175,7 +175,7 @@ class DrawElement():
 
 
     def drawTriangle(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`TRIANGLE` type
         """
         c = PlotCurve()
@@ -202,7 +202,7 @@ class DrawElement():
         return c.asTuple()
 
     def drawTetrahedron(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`TETRAHEDRON` type
         """
         c = PlotCurve()
@@ -213,7 +213,7 @@ class DrawElement():
         return c.asTuple()
 
     def drawQuad(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`QUAD` type
         """
         c = PlotCurve()
@@ -224,7 +224,7 @@ class DrawElement():
         return c.asTuple()
 
     def drawBrick(self, factor, **kwargs):
-        """
+        r"""
         implementation of a generic :code:`BRICK` type
         """
         c = PlotCurve()

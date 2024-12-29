@@ -1,4 +1,4 @@
-"""
+r"""
 ============================
 9-node quadrilateral
 ============================
@@ -23,7 +23,7 @@ from ...domain.Node import *
 from ...utilities import QuadIntegration, QuadShapes
 
 class Quad9(Element):
-    """
+    r"""
     class: representing a plane 9-node quadrilateral
 
     This element works as 2D plate, loaded in-plane, and as a 3D membrane element.
@@ -108,7 +108,7 @@ class Quad9(Element):
         return s
 
     def setSurfaceLoad(self, face, pn, ps=0):
-        """
+        r"""
         .. list-table::
             :header-rows: 1
 
@@ -220,7 +220,7 @@ class Quad9(Element):
         self.Kt = Kt
 
     def computeSurfaceLoads(self):
-        """
+        r"""
         compute surface loads using faces
 
         This method should be called during :py:meth:`updateState()` by every

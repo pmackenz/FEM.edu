@@ -3,7 +3,7 @@ import numpy as np
 from ..solver.Solver import Solver
 
 class NewtonRaphsonSolver(Solver):
-    """
+    r"""
     An iterative solver for load-controlled nonlinear analysis.
     """
 
@@ -11,7 +11,7 @@ class NewtonRaphsonSolver(Solver):
         super(NewtonRaphsonSolver, self).__init__()
 
     def solve(self, max_steps=10, verbose=False, **kwargs):
-        """
+        r"""
         :param max_step: maximum number of iterations (int)
         :param verbose: set to :code:`True` for additional information
         """
@@ -56,7 +56,7 @@ class NewtonRaphsonSolver(Solver):
         return normR
 
     def solveSingleStep(self):
-        """
+        r"""
         Helper function performing a single solution of the linearized system
 
         Called by **solve()**. (internal use only)
@@ -103,7 +103,7 @@ class NewtonRaphsonSolver(Solver):
             node._updateDisp(dU[idxK])
 
     def assemble(self, force_only=False):
-        """
+        r"""
         inherited from :code:`Solver` class.
         """
         super(NewtonRaphsonSolver, self).assemble(force_only=force_only)
@@ -119,7 +119,7 @@ class NewtonRaphsonSolver(Solver):
         return P
 
     def getResiduum(self):
-        """
+        r"""
         ** NEEDS REDESIGN TO WORK WITH SMART NODES **
         """
 
@@ -130,7 +130,7 @@ class NewtonRaphsonSolver(Solver):
         return self.R.copy()
 
     def pushState(self, state):
-        """
+        r"""
         Pushes :code:`state` to the solver.
         The solver will use that data to update it's internal state.
 
@@ -163,12 +163,12 @@ class NewtonRaphsonSolver(Solver):
     # arc-length control
 
     def initArcLength(self, load_increment=1., alpha=0.0, tolerance=1.0e-12):
-        """
+        r"""
         Initializes parameters for the arc-length constraint.
 
         .. math::
 
-           g({\\bf u}, \\lambda)) := \\alpha ||\\bar {\\bf P}|| (\\lambda-\\lambda_n)^2 + ({\\bf u} - {\\bf u}_n)({\\bf u} - {\\bf u}_n) - \Delta s^2 = 0
+           g({\bf u}, \lambda)) := \alpha ||\bar {\bf P}|| (\lambda-\lambda_n)^2 + ({\bf u} - {\bf u}_n)({\bf u} - {\bf u}_n) - \Delta s^2 = 0
 
 
         :param load_increment:   load increment used to calibrate the constraint
@@ -199,7 +199,7 @@ class NewtonRaphsonSolver(Solver):
         self.useArcLength  = True
 
     def stepArcLength(self, verbose=False, max_iter=10):
-        """
+        r"""
         Progresses the model state by one arc-length.
 
         .. note::

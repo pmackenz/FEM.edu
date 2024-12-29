@@ -1,4 +1,4 @@
-"""
+r"""
 ==============================================
 4-node quadrilateral - small displacement
 ==============================================
@@ -20,7 +20,7 @@ from ...domain.Node import *
 from ...utilities import QuadIntegration, QuadShapes
 
 class Quad(Element):
-    """
+    r"""
     class: representing a plane 4-node quadrilateral
 
     This element works as 2D plate, loaded in-plane, and as a 3D membrane element.
@@ -104,7 +104,7 @@ class Quad(Element):
         return s
 
     def setSurfaceLoad(self, face, pn, ps=0):
-        """
+        r"""
         .. list-table::
             :header-rows: 1
 
@@ -210,7 +210,7 @@ class Quad(Element):
         self.Kt = Kt
 
     def computeSurfaceLoads(self):
-        """
+        r"""
         compute surface loads using faces
 
         This method should be called during :py:meth:`updateState()` by every

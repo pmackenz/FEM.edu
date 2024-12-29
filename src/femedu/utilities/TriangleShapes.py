@@ -4,22 +4,23 @@ import numpy as np
 from .ShapeFunctions import ShapeFunctions
 
 class TriangleShapes(ShapeFunctions):
-    """
+    r"""
     Shape functions or their `*n-th` mixed derivative
-    for the unit-triangle (two-dimensional domain :math:`(s,t)\in[0,+1]\\times[0,+1]` with :math:`s+t\le +1`).
+    for the unit-triangle (two-dimensional domain :math:`(s,t)\in[0,+1]\times[0,+1]` with :math:`s+t\le +1`).
 
     Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
 
-    Triangle shape functions are commonly formulated in triangle coordinates :math:`(\\xi_1,\\xi_2,\\xi_3)`
-    where :math:`\\xi_1+\\xi_2+\\xi_3=1`.  This implementation uses
-    :math:`s\\to\\xi_1` and :math:`t\\to\\xi_2`. The third component is implicitly computed as :math:`\\xi_3=1-\\xi_1-\\xi_2`.
+    Triangle shape functions are commonly formulated in triangle coordinates :math:`(\xi_1,\xi_2,\xi_3)`
+    where :math:`\xi_1+\xi_2+\xi_3=1`.
+    This implementation uses :math:`s\to\xi_1` and :math:`t\to\xi_2`.
+    The third component is implicitly computed as :math:`\xi_3=1-\xi_1-\xi_2`.
     The derivatives are returned as
 
     .. math::
-       \\begin{array}{rcl}
-          \\frac{\\partial }{\\partial s} &=& \\frac{\\partial }{\\partial \\xi_1} - \\frac{\\partial }{\\partial \\xi_3} \\\\[2ex]
-          \\frac{\\partial }{\\partial t} &=& \\frac{\\partial }{\\partial \\xi_2} - \\frac{\\partial }{\\partial \\xi_3}
-       \\end{array}
+       \begin{array}{rcl}
+          \frac{\partial }{\partial s} &=& \frac{\partial }{\partial \xi_1} - \frac{\partial }{\partial \xi_3} \\[2ex]
+          \frac{\partial }{\partial t} &=& \frac{\partial }{\partial \xi_2} - \frac{\partial }{\partial \xi_3}
+       \end{array}
 
     """
 

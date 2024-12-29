@@ -1,7 +1,7 @@
 
 
 class Transformation():
-    """
+    r"""
     Nodal transformation class
 
     A transformation may be attached to Nodes or to Elements.

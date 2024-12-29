@@ -1,7 +1,7 @@
 from .Integration import Integration
 
 class QuadIntegration(Integration):
-    """
+    r"""
     Provides integration points and weights for quadrilateral domains (2D)
     """
 

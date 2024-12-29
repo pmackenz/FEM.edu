@@ -5,7 +5,7 @@ from ...materials.Material import Material
 from ...utilities import TriangleShapes, TriangleIntegration
 
 class Triangle6(LinearElement):
-    """
+    r"""
     class: representing a 6-node triangle for diffusion problems
     """
 
@@ -89,7 +89,7 @@ class Triangle6(LinearElement):
         return s
 
     def setSurfaceLoad(self, face, qn):
-        """
+        r"""
         .. list-table::
             :header-rows: 1
 
@@ -110,7 +110,7 @@ class Triangle6(LinearElement):
             self.faces[face].setLoad(qn, 0.0)
 
     def resetLoads(self):
-        super(Triangle, self).resetLoads()
+        super(Triangle6, self).resetLoads()
 
     def updateState(self):
 
@@ -148,7 +148,7 @@ class Triangle6(LinearElement):
         self.computeSurfaceLoads()
 
     def computeSurfaceLoads(self):
-        """
+        r"""
         compute surface loads using faces
 
         This method should be called during :py:meth:`updateState()` by every

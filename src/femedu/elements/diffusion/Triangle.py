@@ -4,7 +4,7 @@ from ...domain.Node import *
 from ...materials.Material import Material
 
 class Triangle(LinearElement):
-    """
+    r"""
     class: representing a 3-node triangle for diffusion problems
     """
 

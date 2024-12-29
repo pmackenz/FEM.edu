@@ -5,17 +5,14 @@ from .Transformation import *
 from ..recorder.Recorder import Recorder
 
 class Node():
-    """
+    r"""
     class: representing a single Node
+
+    :param x0: Initial position (List)
     """
     COUNT = 0
 
     def __init__(self, x0, y0=None, z0=None):
-        """
-
-        :param x0: Initial position (List)
-
-        """
         self.ID = Node.COUNT
         Node.COUNT += 1
 
@@ -69,25 +66,25 @@ class Node():
         return "Node_{}(x={}, u={})".format(self.ID, self.pos, self.disp)
 
     def getID(self):
-        """
+        r"""
         :returns: the node ID (``str``)
         """
         return "Node_{}".format(self.ID)
 
     def getLead(self):
-        """
+        r"""
         :returns: pointer to the **lead** node (``Node``)
         """
         return self.lead
 
     def getLeadID(self):
-        """
+        r"""
         :returns: the node ID of the **lead** node (``str``)
         """
         return self.lead.getID()
 
     def request(self, dof_list, caller):
-        """
+        r"""
         send list or individual dof code. Common codes:
 
         .. list-table::
@@ -132,7 +129,7 @@ class Node():
             return self.lead.request(dof_list=dof_list, caller=caller)
 
     def fixDOF(self, *dofs):
-        """
+        r"""
         provide a list of dof codes that shall be restrained
 
         :param dofs: fix the dof defined by key(s)
@@ -155,7 +152,7 @@ class Node():
             self.lead.fixDOF(*dofs)
 
     def setDOF(self, dofs=[], values=[]):
-        """
+        r"""
         alternative to the `fixDOF()` method that
         allows to set a prescribed value other than `0.0`
         for each degree of freedom.
@@ -165,7 +162,7 @@ class Node():
                        Values may be given as a float or as a list of two values.
 
                        * If only a single value is given, the respective dof will be set to that value.
-                       * If a list is given, the dof will be set to `value[0] + loadfactor*value[1]`
+                       * If a list is given, the dof will be set to :code:`value[0] + loadfactor*value[1]`
 
         See also:
            * :py:meth:`femedu.domain.Node.Node.fixDOF`
@@ -194,7 +191,8 @@ class Node():
             self.lead.setDOF(dofs, values)
 
     def __floordiv__(self, other):
-        """
+        r"""
+        This is a short form for :py:meth:`Node.fixDOF(other)`
 
         :param other:
         :return: self
@@ -206,7 +204,7 @@ class Node():
             return self.lead.__floordiv__(other)
 
     def isFixed(self, dof):
-        """
+        r"""
 
         :param dof: dof code as defined in :code:`request()`
         """
@@ -216,7 +214,7 @@ class Node():
             return self.lead.isFixed(dof)
 
     def areFixed(self):
-        """
+        r"""
         To be used by the assembly routines.
 
         return a list of indices pointing to fixed dofs in this node.
@@ -232,7 +230,7 @@ class Node():
 
 
     def getFixedDofs(self):
-        """
+        r"""
         :returns: a list of fixed dofs by dof-code strings.
         """
         if self.is_lead:
@@ -248,7 +246,7 @@ class Node():
             raise TypeError(msg)
 
     def setDisp(self, U, dof_list=None, modeshape=False):
-        """
+        r"""
         use for prescribed displacements
 
         :param U: list or tuple of prescribed values
@@ -279,7 +277,7 @@ class Node():
             self.lead.setDisp(U, dof_list=dof_list, modeshape=modeshape)
 
     def _updateDisp(self, dU):
-        """
+        r"""
         For internal use by solvers only
 
         :param dU: displacement correction from last iteration step.
@@ -292,7 +290,7 @@ class Node():
         """
 
     def pushU(self):
-        """
+        r"""
         Store the current displacement vector for later restore using :code:`popU()`.
         """
         self.disp_pushed.append({'U':self.disp.copy(), 'lam':self.loadfactor})
@@ -300,7 +298,7 @@ class Node():
             self.disp_pushed.popleft()
 
     def popU(self):
-        """
+        r"""
         Restore a previously pushed displacement vector (using :code:`pushU()`).
         """
         if len(self.disp_pushed):
@@ -311,8 +309,8 @@ class Node():
             raise TypeError("no pushed displacement data available")
 
     def getDisp(self, dofs=None, caller=None, **kwargs):
-        """
-        return a vector (nd.array) of (generalized) displacements.
+        r"""
+        return a vector (`nd.array`) of (generalized) displacements.
 
         If a :code:`caller` is given, the element-specific d.o.f.s will be returned as a sequence
         in the same order as given by the element's :code:`request()` call.
@@ -383,8 +381,8 @@ class Node():
             return self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
 
     def getDeltaU(self, previous_step=False):
-        """
-        :return: delta u = (current u) -  (last converged u)
+        r"""
+        :return: delta u = (current u) - (last converged u)
         """
         if self.is_lead:
             if previous_step:
@@ -396,8 +394,8 @@ class Node():
             return self.lead.getDeltaU(previous_step=previous_step)
 
     def getNormDeltaU2(self, previous_step=False):
-        """
-        :return: norm of delta u = (current u) -  (last converged u)
+        r"""
+        :return: norm of delta u = (current u) - (last converged u)
         :return: 0.0 if node is a "follower"
         """
         if self.is_lead:
@@ -407,22 +405,22 @@ class Node():
             return 0.0
 
     def getPos(self, caller=None, **kwargs):
-        """
+        r"""
         :param caller: pointer to calling element
         :return: initial position vector
         """
         return self.pos
 
     def getDeformedPos(self, caller=None, factor=1.0, **kwargs):
-        """
-        Return deformed position :math:`{\\bf x} = {\\bf X} + f \\: {\\bf u}`
+        r"""
+        Return deformed position :math:`{\bf x} = {\bf X} + f \: {\bf u}`
 
         If a caller is specified, the node will adjust the output to the d.o.f.s specified by the
         element's request() call. (called during initialization.)
 
         :param caller: pointer to the calling element.
         :param factor: deformation magnification factor, :math:`f`.
-        :return: deformed position vector, :math:`{\\bf x}`.
+        :return: deformed position vector, :math:`{\bf x}`.
         """
         if self.is_lead:
             if self.pos.shape[0] == 1:
@@ -465,7 +463,7 @@ class Node():
             return self.pos + factor * disp
 
     def getIdx4Element(self, elem):
-        """
+        r"""
         :return: an index list to nodal dofs associated with the attached **elem** within the global dof list
         """
         if self.is_lead:
@@ -478,7 +476,7 @@ class Node():
             return self.lead.getIdx4Element(elem)
 
     def getIdx4DOFs(self, dofs=[]):
-        """
+        r"""
         :return: an index list to this node's dofs in the global list of dofs
         """
         if self.is_lead:
@@ -500,17 +498,18 @@ class Node():
             return self.lead.getIdx4DOFs(dofs=dofs)
 
     def addTransformation(self, T):
-        """
-        Attach a transformation object to this node.
+        r"""
+        Attach a :py:meth:`femedu.domain.Transformation` object to this node.
         The transformation defines a local coordinate system.
-        If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
-        Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
+
+        * If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
+        * Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
         """
         if T and isinstance(T, Transformation):
             self.transform = T
 
     def addLoad(self, loads, dofs):
-        """
+        r"""
         Nodes are applied as components energetically linked to any degree of freedom provided at this node.
 
         For example, in a 2D-problem with the x-axis to the right and the y-axis pointing up,
@@ -537,8 +536,7 @@ class Node():
             self.lead.addLoad(loads, dofs)
 
     def setLoad(self, loads, dofs):
-        """
-
+        r"""
         :param loads: list of force components
         :param dofs:  associated list of DOFs to which respective loads are to be applied
         """
@@ -552,7 +550,6 @@ class Node():
 
     def resetLoad(self):
         """
-
         """
         if self.is_lead:
             self.loads = {}
@@ -561,7 +558,7 @@ class Node():
             self.lead.resetLoad()
 
     def getLoad(self, dof_list=None, apply_load_factor=False):
-        """
+        r"""
         :param dof_list: list (or tuple) if dof-keys for which nodal loads are requested. Fill missing dofs by 0.0.
         :param apply_load_factor: defaults to False -> no factors applied.
         :returns: nodal load vector (ndarray)
@@ -590,7 +587,7 @@ class Node():
         return force
 
     def hasLoad(self):
-        """
+        r"""
         :returns: **True** if this node has **any** loads (bool)
         """
         if self.is_lead:
@@ -617,7 +614,7 @@ class Node():
         self.resetLoad()
 
     def setLoadFactor(self, lam):
-        """
+        r"""
         Set the target load factor to **lam**
 
         .. warning::
@@ -637,7 +634,7 @@ class Node():
             self.lead.setLoadFactor(lam)
 
     def isClose(self, x, TOL=1.0e-5):
-        """
+        r"""
         :param x: :py:obj:`nd.array`
         :return: **True** if x is within **TOL** from this node.
         """
@@ -656,7 +653,7 @@ class Node():
         return is_close
 
     def distanceTo(self, x):
-        """
+        r"""
         :param x: :py:obj:`nd.array`
         :return: scalar distance from x
         """
@@ -681,7 +678,7 @@ class Node():
             self.recorder = None
 
     def recordThisStep(self, load_level):
-        """
+        r"""
         record current state of the system
         """
         if self.recorder and self.recorder.isActive():
@@ -705,7 +702,7 @@ class Node():
             self.recorder.disable()
 
     def on_converged(self):
-        """
+        r"""
         This method is called every time a solver signals a converged solution.
         """
         if self.is_lead:
@@ -726,7 +723,7 @@ class Node():
         return self.is_lead
 
     def make_follower(self, lead):
-        """
+        r"""
         this command tells the current node (**self**) to "follow" whatever the **lead** node is doing.
 
         :param lead: pointer to the lead node
@@ -767,13 +764,13 @@ class Node():
             self.followers.append(follower)
 
     def setTrialState(self):
-        """
+        r"""
         This will set a suitable trial position for the
         arc-length method to
 
         .. math::
 
-           {\\bf u}^{(0)}_{n+1} = 2{\\bf u}^{(\\infty)}_{n} - {\\bf u}^{(\\infty)}_{n-1}
+           {\bf u}^{(0)}_{n+1} = 2{\bf u}^{(\infty)}_{n} - {\bf u}^{(\infty)}_{n-1}
 
         This should be used by a solution algorithm but not by regular
         user input.

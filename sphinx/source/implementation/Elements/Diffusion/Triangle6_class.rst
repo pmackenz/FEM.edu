@@ -3,8 +3,6 @@
 Triangle6 class for Diffusion
 ==============================
 
-
-
 Parent class
 ---------------
 * :doc:`../Element_class`

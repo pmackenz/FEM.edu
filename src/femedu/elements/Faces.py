@@ -3,7 +3,7 @@ import sys
 
 
 class Faces():
-    """
+    r"""
     abstract class: representing one face of a 2D or 3D element
     """
 
@@ -26,17 +26,17 @@ class Faces():
         return s
 
     def initialize(self):
-        """
+        r"""
         This is a virtual method.  Any class derived from :py:class:`Faces` must implement this function.
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def setLoad(self, pn, ps):
-        """
+        r"""
         Defines surface loading on this Face.
         Coordinates n and s are outward normal and tangent directions, respectively.
-        The local tangent is defined from the first to th esecond (to the third) node.
+        The local tangent is defined from the first to the second (to the third) node.
 
         :param pn: normal force per unit length
         :param ps: tangential force per unit length
@@ -44,7 +44,7 @@ class Faces():
         self.load = [ pn, ps ]
 
     def setFlux(self, qn, influx=False):
-        """
+        r"""
         Defines a scalar surface flux on this Face.
         Coordinates n is the outward normal.
 
@@ -57,21 +57,21 @@ class Faces():
             self.flux =  qn  # internally, we always consider qn an out-flux
 
     def computeNodalForces(self):
-        """
+        r"""
         This is a virtual method.  Any class derived from :py:class:`Faces` must implement this function.
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def computeNodalFlux(self):
-        """
+        r"""
         This is a virtual method.  Any class derived from :py:class:`Faces` must implement this function.
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         raise NotImplementedError(msg)
 
     def isFace(self, X, N):
-        """
+        r"""
         Abstract interface for test function.
 
         .. note::

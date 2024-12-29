@@ -5,9 +5,9 @@ from .ShapeFunctions import ShapeFunctions
 from .LineShapes import LineShapes
 
 class QuadShapes(ShapeFunctions):
-    """
+    r"""
     Shape functions or their :code:`*n-th` mixed derivative
-    for the bi-unit-square (two-dimensional domain :math:`(s,t)\in[-1,+1]\\times[-1,+1]`.
+    for the bi-unit-square (two-dimensional domain :math:`(s,t)\in[-1,+1]\times[-1,+1]`.
 
     Derivatives are with respect to the normalized coordinate and need to be scaled accordingly.
 
@@ -17,7 +17,7 @@ class QuadShapes(ShapeFunctions):
         super(QuadShapes, self).__init__(ShapeFunctions.QUADS)
 
     def shape(self, order, s, t, n=(0,0), serendipity=False):
-        '''
+        r'''
 
         :param order: polynomial order of the shape functions. Options: 0,1,2,
         :param s:    first coordinate of point of interest on interval [-1,1]

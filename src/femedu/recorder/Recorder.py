@@ -5,9 +5,9 @@ from ..domain import Node
 
 
 class Recorder():
-    """A time history recorder
+    r"""A time history recorder
 
-    :param \**kwargs: additional parameters passed through to specialized recorders.
+    :param kwargs: additional parameters passed through to specialized recorders.
         See below for more details.
 
     :Keyword Arguments:
@@ -94,7 +94,7 @@ class Recorder():
         self.materialvars = materialvars
 
     def fetchRecord(self, keys=None, source=None):
-        """
+        r"""
         Request recorded time history data for the listed keys.
 
         :param keys: If a single key is given as a string, a single `np.array()` is returned.
@@ -155,7 +155,7 @@ class Recorder():
             return {}
 
     def addData(self, dta):
-        """
+        r"""
         *For internal use only.*
 
         :param dta: variable code as key and scalar value pairs.

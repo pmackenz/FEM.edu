@@ -1,7 +1,7 @@
 from .Faces import *
 
 class Face3D(Faces):
-    """
+    r"""
     Implementation representing one face of a 3D brick or tetrahedral element
 
     The face may be defined by
@@ -22,7 +22,7 @@ class Face3D(Faces):
         super(Face3D, self).__init__(id, *nds, **kwargs)
         
     def initialize(self):
-        """
+        r"""
         This method computes area and normals for :py:class:`Face3D`.
         
         It is called by the constructor of the :py:class:`Faces` class.
@@ -34,7 +34,7 @@ class Face3D(Faces):
         super(Face3D, self).initialize()
 
     def isFace(self, X, N):
-        """
+        r"""
         Implementation of the test function.
 
         :param X: position vector for a point

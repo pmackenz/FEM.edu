@@ -5,7 +5,7 @@ from ...materials.Material import *
 from ...domain.Node import *
 
 class Frame2D(Element):
-    """
+    r"""
     class: representing a 2D frame element
 
     **Assumptions**
@@ -15,7 +15,7 @@ class Frame2D(Element):
     * Navier's and Bernoulli-Euler assumptions (plane sections and shear rigidity)
     * Linear elastic material (may change future releases)
 
-    The element is using dofs :math:`u` (:code:`ux`), :math:`v` (:code:`uy`) and :math:`\\theta` (:code:`rz`)
+    The element is using dofs :math:`u` (:code:`ux`), :math:`v` (:code:`uy`) and :math:`\theta` (:code:`rz`)
 
     .. list-table:: Internal variables
 

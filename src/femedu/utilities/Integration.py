@@ -22,7 +22,7 @@ class Integration():
         return self.xi
 
     def parameters(self):
-        """
+        r"""
         This is a short form of
 
         .. code::
@@ -35,7 +35,7 @@ class Integration():
         return (self.xi, self.w)
 
     def gauss1D(self, nGP, biunit=False):
-        """
+        r"""
         Gauss integration data for :py:data:`nGP` on the domain :math:`[-1,+1]`
 
         For internal use only.
@@ -64,7 +64,7 @@ class Integration():
         return (xi, w)
 
     def dunavant(self, p=0):
-        """
+        r"""
         Triangular domain integration for polynomial of order <= p
 
         For internal use only.

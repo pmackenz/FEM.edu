@@ -6,7 +6,7 @@ from ...domain.Node import *
 from ...utilities import TriangleShapes, TriangleIntegration, GPdataType
 
 class Triangle6(Element):
-    """
+    r"""
     class: representing a 6-noded plane triangle
     """
 
@@ -92,7 +92,7 @@ class Triangle6(Element):
         return s
 
     def setSurfaceLoad(self, face, pn, ps=0):
-        """
+        r"""
         .. list-table::
             :header-rows: 1
 
@@ -204,7 +204,7 @@ class Triangle6(Element):
         self.computeSurfaceLoads()
 
     def computeSurfaceLoads(self):
-        """
+        r"""
         compute surface loads using faces
 
         This method should be called during :py:meth:`updateState()` by every

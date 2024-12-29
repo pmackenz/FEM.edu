@@ -1,23 +1,23 @@
 from .Solver import *
 
 class LinearSolver(Solver):
-    """
+    r"""
     A linear system solver
 
-    This solver implies :math:`\{{\\bf P}\} = [{\\bf K}] \{{\\bf u}\}`
+    This solver implies :math:`\{{\bf P}\} = [{\bf K}] \{{\bf u}\}`
     """
 
     def __init__(self):
         super().__init__()
 
     def solve(self, **kwargs):
-        """
+        r"""
         Solves the system assuming the given load is the total load
         and the obtained displacement is the **total** displacement.
 
         .. note::
 
-           This method will not verify whether or not the linear assumption is correct.
+           This method will not verify wether or not the linear assumption is correct.
            The resulting forces may be out of equilibrium if the system experiences
            nonlinear behavior under the given load.
 
@@ -75,13 +75,13 @@ class LinearSolver(Solver):
 
 
     def assemble(self, force_only=False):
-        """
+        r"""
         inherited from :code:`Solver` class.
         """
         super(LinearSolver, self).assemble(force_only=force_only)
 
     def pushState(self, state):
-        """
+        r"""
         Pushes :code:`state` to the solver.
         The solver will use that data to update it's internal state.
 

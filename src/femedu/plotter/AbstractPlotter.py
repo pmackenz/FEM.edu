@@ -8,7 +8,7 @@ from matplotlib.colors import ListedColormap, BoundaryNorm
 
 
 class AbstractPlotter():
-    """
+    r"""
     Defines all supported plot features.
     Implementation is required through derived classes.
     """
@@ -30,7 +30,7 @@ class AbstractPlotter():
         return str(self)
 
     def setMesh(self, nodes, elems):
-        """
+        r"""
         Link the nodes and elements so the ElementPlotter can get information from them.
 
         :param nodes:    list of node pointers
@@ -40,7 +40,7 @@ class AbstractPlotter():
         self.elements = elems
 
     def setDisplacements(self, disp):
-        """
+        r"""
 
         :param disp:
         """
@@ -48,7 +48,7 @@ class AbstractPlotter():
         raise DeprecationWarning(msg)
 
     def setValues(self, vals):
-        """
+        r"""
 
         :param vals:
         """
@@ -56,7 +56,7 @@ class AbstractPlotter():
         raise DeprecationWarning(msg)
 
     def setReactions(self, R):
-        """
+        r"""
 
         :param R: list or tuple of nodal force vectors
         """
@@ -66,7 +66,7 @@ class AbstractPlotter():
         # raise NotImplementedError(msg)
 
     def setNodalLoads(self, P):
-        """
+        r"""
 
         :param P: list or tuple of nodal force vectors
         """
@@ -76,7 +76,7 @@ class AbstractPlotter():
         # raise NotImplementedError(msg)
 
     def displacementPlot(self, factor=1.0, file=None):
-        """
+        r"""
         Create a deformed system plot
 
         If **file** is given, store the plot to that file.
@@ -89,7 +89,7 @@ class AbstractPlotter():
         raise NotImplementedError(msg)
 
     def valuePlot(self, variable_name='', deformed=False, file=None):
-        """
+        r"""
         Create a plot using colors to identify magnitude of internal force.
 
         If **file** is given, store the plot to that file.
@@ -103,7 +103,7 @@ class AbstractPlotter():
         raise NotImplementedError(msg)
 
     def beamValuePlot(self, variable_name='', factor=0.0, file=None):
-        """
+        r"""
         Create a traditional beam value plot, i.e., moment and shear diagrams.
 
         If **file** is given, store the plot to that file.
@@ -117,7 +117,7 @@ class AbstractPlotter():
         raise NotImplementedError(msg)
 
     def addForces(self, axs):
-        """
+        r"""
         add nodal forces to the plot shown in **axs**
 
         :param axs: axis on which to plot
@@ -126,7 +126,8 @@ class AbstractPlotter():
         raise NotImplementedError(msg)
 
     def set_axes_equal(self, ax):
-        '''Make axes of 3D plot have equal scale so that spheres appear as spheres,
+        r'''
+        Make axes of 3D plot have equal scale so that spheres appear as spheres,
         cubes as cubes, etc..  This is one possible solution to Matplotlib's
         ax.set_aspect('equal') and ax.axis('equal') not working for 3D.
 

@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 class Material():
-    """
+    r"""
     abstract class: representing a generic material
 
     """
@@ -66,7 +66,7 @@ class Material():
         return ( self._type == type )
 
     def getStress(self):
-        """
+        r"""
         request axial stress
 
         :return: sigma
@@ -74,7 +74,7 @@ class Material():
         return self.stress
 
     def getStiffness(self):
-        """
+        r"""
         request axial stiffness
 
         :return: Et ... tangent material stiffness
@@ -82,7 +82,7 @@ class Material():
         return self.Et
 
     def setStrain(self, eps):
-        """
+        r"""
         update state for a user provided axial strain value
 
         :param eps:  strain or strain tensor
@@ -122,7 +122,7 @@ if __name__ == "__main__":
     ax1.plot(eps, sig, '-r', label='stress')
     ax1.grid(True)
     ax1.set_xlabel('strain $\\varepsilon$')
-    ax1.set_ylabel('stress $\sigma$')
+    ax1.set_ylabel('stress $\\sigma$')
     ax1.legend()
 
     ax2.plot(eps, Et, '-.b', label='tangent modulus')

@@ -12,7 +12,7 @@ from .AbstractPlotter import *
 from ..elements.Element import Element
 
 class ElementPlotter(AbstractPlotter):
-    """
+    r"""
     A plotter class that takes a list of nodes and elements from a finite element model
     and plots a deformed mesh, potentially shaded based on a value of a user-specified state
     variable.
@@ -26,7 +26,7 @@ class ElementPlotter(AbstractPlotter):
         super(ElementPlotter, self).__init__()
 
     def displacementPlot(self, factor=1.0, filename=None, modeshape=False, **kwargs):
-        """
+        r"""
         Create a deformed system plot
 
         If **file** is given, store the plot to that file.
@@ -34,7 +34,7 @@ class ElementPlotter(AbstractPlotter):
 
         :param factor: displacement scaling factor
         :param file: filename (str)
-        :param  \*\*kwargs: see list of optional parameters below.
+        :param  kwargs: see list of optional parameters below.
 
         :keywords: optional parameters
 
@@ -53,6 +53,7 @@ class ElementPlotter(AbstractPlotter):
                     (defaults to :py:obj:`stress`)
 
         """
+
         #
         # setup for principal stress|strain plot
         #
@@ -474,7 +475,7 @@ class ElementPlotter(AbstractPlotter):
                       head_width=headWidth, head_length=headLength)
 
     def addForces(self, axs, loads=False, reactions=False, factor=0.0, dofs=('ux','uy','rz')):
-        """
+        r"""
         add nodal forces to the plot shown in **axs**
 
         :param axs: axis on which to plot

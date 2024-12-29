@@ -2,7 +2,7 @@ from .Material import *
 
 
 class SectionMaterial(Material):
-    """
+    r"""
     class: representing an integrated Section Material
 
     """
