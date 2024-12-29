@@ -23,12 +23,12 @@ The thermal equation for the uni-directional problem can be expressed as
 .. math::
     \\Delta T = \\frac{\\partial^2 T}{\\partial r^2}  = 0
 
-where :math:`\Delta` is the Laplace operator.
+where :math:`\\Delta` is the Laplace operator.
 
 The analytic solution follows as
 
 .. math::
-    T(x) =  T_i  + q_n \: x
+    T(x) =  T_i  + q_n \\: x
 
 This solution will be compared against the finite element solution in the last figure.
 

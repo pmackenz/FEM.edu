@@ -119,7 +119,7 @@ class ExampleTruss06(Example):
         plt.plot(data, load)
         plt.grid(True)
         plt.xlabel('displacements $ u_i $')
-        plt.ylabel('load factor $ \lambda $')
+        plt.ylabel('load factor $ \\lambda $')
         plt.legend(['$ u_x $','$ u_x $'])
         plt.show()
 
@@ -128,13 +128,13 @@ class ExampleTruss06(Example):
 
         ax0.plot(load, data[:,0])
         ax0.grid(True)
-        ax0.set_xlabel('load factor $ \lambda $')
+        ax0.set_xlabel('load factor $ \\lambda $')
         ax0.set_ylabel('displacements $ u_i $')
         ax0.legend(['$ u_x $'])
 
         ax1.plot(load, data[:,1])
         ax1.grid(True)
-        ax1.set_xlabel('load factor $ \lambda $')
+        ax1.set_xlabel('load factor $ \\lambda $')
         ax1.set_ylabel('displacements $ u_i $')
         ax1.legend(['$ u_y $'])
 

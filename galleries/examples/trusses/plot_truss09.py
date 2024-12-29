@@ -183,7 +183,7 @@ class ExampleTruss09(Example):
 
         plt.grid(True)
         plt.xlabel('displacements $ u_i $')
-        plt.ylabel('load factor $ \lambda $')
+        plt.ylabel('load factor $ \\lambda $')
         plt.legend(['$ u_x $','$ u_y $'])
         plt.savefig("truss09_deformation_history.png")
         plt.show()

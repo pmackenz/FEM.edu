@@ -214,8 +214,8 @@ class ExampleFrame01(Example):
 
         ax.plot(lambdas,detKt,'--*r')
         ax.grid(True)
-        ax.set_xlabel('Load factor, $ \lambda $')
-        ax.set_ylabel("Stability index, $ {det}\: {\\bf K}_t $")
+        ax.set_xlabel('Load factor, $ \\lambda $')
+        ax.set_ylabel("Stability index, $ {det}\\: {\\bf K}_t $")
 
         fig.savefig("frame1_stability.png")
         fig.show()

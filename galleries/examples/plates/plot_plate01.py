@@ -11,11 +11,11 @@ Basic implementation test with all prescribed displacements.
      |     |
      v     v
      3-----2 -> u=5
-     |\  b | >
-     | \   | >
-     |  \  | > (w = 1.0)
-     |   \ | >
-     | a  \| >
+     |\\  b | >
+     | \\   | >
+     |  \\  | > (w = 1.0)
+     |   \\ | >
+     | a  \\| >
      0-----1 -> u=5
 
     width:  10.
@@ -70,11 +70,11 @@ class ExamplePlate01(Example):
      |     |
      v     v
      3-----2 -> u=5
-     |\  b | >
-     | \   | >
-     |  \  | > (w = 1.0)
-     |   \ | >
-     | a  \| >
+     |\\  b | >
+     | \\   | >
+     |  \\  | > (w = 1.0)
+     |   \\ | >
+     | a  \\| >
      0-----1 -> u=5
     
     width:  10.

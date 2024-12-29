@@ -5,9 +5,9 @@ A first 1D spring system with nicer plots
 
 .. code::
 
-                o---/\/\/\---o---/\/\/\---o
-   x---/\/\/\---o                         o--->
-                o-------/\/\/\/\/\--------o
+                o---/\\/\\/\\---o---/\\/\\/\\---o
+   x---/\\/\\/\\---o                         o--->
+                o-------/\\/\\/\\/\\/\\--------o
 
    x ... fixed node
    o ... free node (moving in x-direction)

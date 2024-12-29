@@ -24,7 +24,7 @@ The thermal equation for an axi-symmetric problem can be expressed as
     \\Delta T = \\frac{1}{r} \\: \\frac{\\partial }{\\partial r}
     \\left( r \\frac{\\partial T}{\\partial r} \\right) = 0
 
-where :math:`\Delta` is the Laplace operator.
+where :math:`\\Delta` is the Laplace operator.
 
 The analytic solution follows as
 

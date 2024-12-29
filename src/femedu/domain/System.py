@@ -542,8 +542,8 @@ class System():
             ax2.plot(detKt, loadfactors,'-r')
             ax2.plot(np.zeros_like(loadfactors), loadfactors,'-k', lw=2)
             ax2.grid(True)
-            ax2.set_xlabel('stability index, $ det({\\bf K}_t) $ or $ \min |\lambda| $')
-            ax2.set_ylabel('load factor, $\lambda$')
+            ax2.set_xlabel('stability index, $ det({\\bf K}_t) $ or $ \\min |\\lambda| $')
+            ax2.set_ylabel('load factor, $\\lambda$')
 
         plt.savefig("history_plots.png", bbox_inches='tight')
         plt.show()
@@ -611,7 +611,7 @@ class System():
 
         # perform eigenvalue analysis
         lam = self.getBucklingMode(mode=mode, **kwargs)
-        title_text = f"Mode Shape for $ \lambda = {lam:.2f} $"
+        title_text = f"Mode Shape for $ \\lambda = {lam:.2f} $"
         self.plot(factor=factor, filename=filename, title=title_text, modeshape=True)
 
     def report(self):

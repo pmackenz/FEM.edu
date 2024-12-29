@@ -18,11 +18,11 @@ Using
      ^     ^
      |     |
      3--6--2 -> free
-     |\  b | >
-     | \   | >
+     |\\  b | >
+     | \\   | >
      7  8  5 > (w = 1.0)
-     |   \ | >
-     | a  \| >
+     |   \\ | >
+     | a  \\| >
      0--4--1 -> free
 
     width:  10.
@@ -95,11 +95,11 @@ class ExamplePlate02b(Example):
      ^     ^
      |     |
      3--6--2 -> free
-     |\  b | >
-     | \   | >
+     |\\  b | >
+     | \\   | >
      7  8  5 > (w = 1.0)
-     |   \ | >
-     | a  \| >
+     |   \\ | >
+     | a  \\| >
      0--4--1 -> free
 
     width:  10.
@@ -174,8 +174,6 @@ class ExamplePlate02b(Example):
         model.plot(factor=1.0, filename="plate02b_deformed.png")
 
 
-
-
         model.setLoadFactor(0.0)
 
         # model.solver.assemble()
@@ -185,9 +183,6 @@ class ExamplePlate02b(Example):
 
         model.report()  # activate this line for lots of debug info
         model.plot(factor=0.0, title="Undeformed system", filename="plate02b_undeformed.png", show_bc=1)
-
-
-
 
 
         model.setLoadFactor(1.0)
