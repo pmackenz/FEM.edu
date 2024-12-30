@@ -34,8 +34,8 @@ class Frame2dTransformation(FrameTransformation):
 
     def __init__(self, dir1=None, dir2=None, angle=None):
 
-        dir1_is_vector = dir1 and (isinstance(dir1, np.ndarray) or isinstance(dir1, list))
-        dir2_is_vector = dir2 and (isinstance(dir2, np.ndarray) or isinstance(dir2, list))
+        dir1_is_vector = (isinstance(dir1, np.ndarray) or isinstance(dir1, list))
+        dir2_is_vector = (isinstance(dir2, np.ndarray) or isinstance(dir2, list))
 
         if dir1_is_vector and len(dir1)==2:
             dir1 = np.append(dir1, [0.0])

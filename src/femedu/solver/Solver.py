@@ -222,20 +222,49 @@ class Solver():
             Fe = element.getForce()     # Element State Update occurs here
             Pe = element.getLoad()      # Element State Update occurs here
             for (i,ndI) in enumerate(element.nodes):
+                # fetch dof mapping for node I
                 idxK = ndI.getIdx4Element(element)
+                # fetch nodal transformation matrix for node I
+                Ti = ndI.getLocalTransformationMap()
+                hasTi = isinstance(Ti, np.ndarray)
 
                 # system reference load vector
                 if isinstance(Pe[i], np.ndarray):
-                    Psys[idxK] += Pe[i]
+                    # fetch and transform P_I
+                    if hasTi:
+                        PI = Ti.T @ Pe[i]
+                    else:
+                        PI = Pe[i]
+                    # assemble the load vector
+                    Psys[idxK] += PI
 
+                # fetch and transform P_I
+                if hasTi:
+                    FI = Ti.T @ Fe[i]
+                else:
+                    FI = Fe[i]
                 # system residual force vector
-                Fsys[idxK] += Fe[i]
+                Fsys[idxK] += FI
 
                 # system tangent stiffness matrix
                 if not force_only:
                     for (j,ndJ) in enumerate(element.nodes):
+                        # fetch dof mapping for node J
                         idxM = ndJ.getIdx4Element(element)
-                        Ksys[idxK[:, np.newaxis], idxM] += element.Kt[i][j]
+                        # fetch nodal transformation matrix for node J
+                        Tj = ndJ.getLocalTransformationMap()
+                        hasTj = isinstance(Tj,np.ndarray)
+                        # fetch and transform K_IJ
+                        if hasTi and hasTj:
+                            KIJ = Ti.T @ element.Kt[i][j] @ Tj
+                        elif hasTi:
+                            KIJ = Ti.T @ element.Kt[i][j]
+                        elif hasTj:
+                            KIJ = element.Kt[i][j] @ Tj
+                        else:
+                            KIJ = element.Kt[i][j]
+                        # add to system matrix
+                        Ksys[idxK[:, np.newaxis], idxM] += KIJ
 
         # system residual force vector
         self.P = Psys
@@ -249,7 +278,7 @@ class Solver():
                         #idx = node.lead.start + node.dofs[dof]
                         idx = node.getIdx4DOFs(dofs=[dof])[0]
 
-                        ubar = node.getDisp(dof)
+                        ubar = node.getDisp(dof, local=True)
 
                         self.R[idx]    = ubar * 1.0e3
                         Ksys[:, idx]   = np.zeros(ndof)   # the range might need adjustment for constraints

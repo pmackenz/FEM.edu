@@ -21,9 +21,9 @@ class Transformation():
         self.dir2  = dir2
         self.axis  = axis
 
-        dir1_is_vector = dir1 and (isinstance(dir1, np.ndarray) or isinstance(dir1, list))
-        dir2_is_vector = dir2 and (isinstance(dir2, np.ndarray) or isinstance(dir2, list))
-        axis_is_vector = axis and (isinstance(axis, np.ndarray) or isinstance(axis, list))
+        dir1_is_vector = (isinstance(dir1, np.ndarray) or isinstance(dir1, list))
+        dir2_is_vector = (isinstance(dir2, np.ndarray) or isinstance(dir2, list))
+        axis_is_vector = (isinstance(axis, np.ndarray) or isinstance(axis, list))
 
         if dir1_is_vector and dir2_is_vector:
             g1 = np.array(dir1)

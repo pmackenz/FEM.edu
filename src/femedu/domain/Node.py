@@ -43,7 +43,7 @@ class Node():
         self._setU       = {}  # prescribed displacement parameters u0 and u1: u[dof] = u0 + loadfactor*u1
         self.loads       = {}
         self._hasLoad    = False
-        self.transform   = None    # nodal transformation object
+        self._transform  = None    # nodal transformation object
         self.dof_maps    = {}      # dof_idx maps for attached elements
 
         self.setRecorder(None)
@@ -51,15 +51,25 @@ class Node():
         self.setLoadFactor(1.0)
 
     def __str__(self):
+        float_formatter = "{:.3f}".format
+        np.set_printoptions(formatter={'float_kind': float_formatter})
+
         s  = "Node_{}:\n    x:    {}".format(self.ID, self.pos)
         if not self.is_lead:
             s +=  "\n    following {}".format(self.lead.getID())
+        if self._transform:
+            T = self._transform.getT()
+            s += f"\n    local: x={T[:,0]}, y={T[:,1]}, z={T[:,2]}"
         if self._fixity:
             s += f"\n    fix:  {self._fixity}"
         load = self.getLoad()
         if isinstance(load, np.ndarray) and not np.isclose(np.linalg.norm(load), 0.0):
             s += f"\n    P:    {load}"
         s += f"\n    u:    {self.disp}"
+
+        float_formatter = "{:g}".format
+        np.set_printoptions(formatter={'float_kind': float_formatter})
+
         return s
 
     def __repr__(self):
@@ -339,6 +349,14 @@ class Node():
                     self.disp_nn = np.zeros(self.ndofs)
                 U = self.disp
 
+            # so far, U is in global coordinates.
+            # see if local coordinates were requested
+            if 'local' in kwargs and kwargs['local'] == True:
+                # check if we have a nodal transformation attached
+                if isinstance(self._transform, Transformation):
+                    T = self._transform.getT()
+                    U = T.T @ U
+
             # apply prescribed displacements
             for dof in self._setU:
                 if dof in self.dofs:
@@ -497,6 +515,17 @@ class Node():
         else:
             return self.lead.getIdx4DOFs(dofs=dofs)
 
+    def getLocalTransformationMap(self, dofs=[]):
+        r"""
+        :return: Transformation matrix
+        """
+        if isinstance(self._transform, Transformation):
+            T = self._transform.getT()
+        else:
+            T = None
+
+        return T
+
     def addTransformation(self, T):
         r"""
         Attach a :py:meth:`femedu.domain.Transformation` object to this node.
@@ -506,7 +535,7 @@ class Node():
         * Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
         """
         if T and isinstance(T, Transformation):
-            self.transform = T
+            self._transform = T
 
     def addLoad(self, loads, dofs):
         r"""

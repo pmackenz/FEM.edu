@@ -100,7 +100,12 @@ class NewtonRaphsonSolver(Solver):
         # update nodal displacements
         for node in self.nodes:
             idxK = node.getIdx4DOFs()
-            node._updateDisp(dU[idxK])
+            Tk = node.getLocalTransformationMap()
+            if isinstance(Tk, np.ndarray):
+                DU = Tk @ dU[idxK]
+            else:
+                DU = dU[idxK]
+            node._updateDisp(DU)
 
     def assemble(self, force_only=False):
         r"""
@@ -109,11 +114,21 @@ class NewtonRaphsonSolver(Solver):
         super(NewtonRaphsonSolver, self).assemble(force_only=force_only)
 
     def getDisplacements(self):
+        r"""
+        .. warning::
+
+            This method only works if all nodes have the same dof list (!)
+        """
         U = self.sysU.copy()
         U.shape = (self.nNodes, self.ndof)
         return U
 
     def getForces(self):
+        r"""
+        .. warning::
+
+            This method only works if all nodes have the same dof list (!)
+        """
         P = self.P.copy() * self.loadfactor
         P.shape = (self.nNodes, self.ndof)
         return P

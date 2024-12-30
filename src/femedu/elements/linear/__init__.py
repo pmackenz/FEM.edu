@@ -27,3 +27,4 @@ from .Triangle import *
 from .Triangle6 import *
 from .Truss import *
 from .Spring import *
+from .Frame2D import *
