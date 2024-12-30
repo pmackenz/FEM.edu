@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:53.573** total execution time for 39 files **from all galleries**:
+**00:01.822** total execution time for 39 files **from all galleries**:
 
 .. container::
 
@@ -32,116 +32,116 @@ Computation times
    * - Example
      - Time
      - Mem (MB)
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate11.py` (``../../galleries/examples/plates/plot_plate11.py``)
-     - 00:45.839
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_benchmark01.py` (``../../galleries/examples/plates/plot_benchmark01.py``)
-     - 00:14.183
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate10.py` (``../../galleries/examples/plates/plot_plate10.py``)
-     - 00:13.699
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss09.py` (``../../galleries/examples/trusses/plot_truss09.py``)
-     - 00:05.503
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate05.py` (``../../galleries/examples/plates/plot_plate05.py``)
-     - 00:04.695
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss08.py` (``../../galleries/examples/trusses/plot_truss08.py``)
-     - 00:03.677
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate06.py` (``../../galleries/examples/plates/plot_plate06.py``)
-     - 00:03.449
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss07.py` (``../../galleries/examples/trusses/plot_truss07.py``)
-     - 00:03.023
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_frames_plot_frame05.py` (``../../galleries/examples/frames/plot_frame05.py``)
-     - 00:02.472
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss06.py` (``../../galleries/examples/trusses/plot_truss06.py``)
-     - 00:01.528
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate08.py` (``../../galleries/examples/plates/plot_plate08.py``)
-     - 00:01.369
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_springs_plot_spring_system01.py` (``../../galleries/examples/springs/plot_spring_system01.py``)
-     - 00:01.201
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate07.py` (``../../galleries/examples/plates/plot_plate07.py``)
-     - 00:01.174
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal03.py` (``../../galleries/examples/diffusion/plot_thermal03.py``)
-     - 00:00.878
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate04.py` (``../../galleries/examples/plates/plot_plate04.py``)
-     - 00:00.839
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_frames_plot_frame03.py` (``../../galleries/examples/frames/plot_frame03.py``)
-     - 00:00.839
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_mixed_plot_mixed01.py` (``../../galleries/examples/mixed/plot_mixed01.py``)
-     - 00:00.837
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_frames_plot_frame01.py` (``../../galleries/examples/frames/plot_frame01.py``)
-     - 00:00.814
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate_element_modes.py` (``../../galleries/examples/plates/plot_plate_element_modes.py``)
-     - 00:00.671
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss05.py` (``../../galleries/examples/trusses/plot_truss05.py``)
-     - 00:00.644
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal01.py` (``../../galleries/examples/diffusion/plot_thermal01.py``)
-     - 00:00.591
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate03.py` (``../../galleries/examples/plates/plot_plate03.py``)
-     - 00:00.550
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate09.py` (``../../galleries/examples/plates/plot_plate09.py``)
-     - 00:00.539
-     - 0.0
    * - :ref:`sphx_glr_auto_examples_frames_plot_frame04.py` (``../../galleries/examples/frames/plot_frame04.py``)
-     - 00:00.538
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_frames_plot_frame02.py` (``../../galleries/examples/frames/plot_frame02.py``)
-     - 00:00.513
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate02b.py` (``../../galleries/examples/plates/plot_plate02b.py``)
-     - 00:00.501
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss02.py` (``../../galleries/examples/trusses/plot_truss02.py``)
-     - 00:00.456
-     - 0.0
-   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal04.py` (``../../galleries/examples/diffusion/plot_thermal04.py``)
-     - 00:00.410
+     - 00:01.822
      - 0.0
    * - :ref:`sphx_glr_auto_examples_beams_plot_beam01.py` (``../../galleries/examples/beams/plot_beam01.py``)
-     - 00:00.400
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_beams_plot_beam02.py` (``../../galleries/examples/beams/plot_beam02.py``)
-     - 00:00.308
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal01.py` (``../../galleries/examples/diffusion/plot_thermal01.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal02.py` (``../../galleries/examples/diffusion/plot_thermal02.py``)
-     - 00:00.293
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_plates_plot_plate02.py` (``../../galleries/examples/plates/plot_plate02.py``)
-     - 00:00.244
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal03.py` (``../../galleries/examples/diffusion/plot_thermal03.py``)
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss01.py` (``../../galleries/examples/trusses/plot_truss01.py``)
-     - 00:00.229
+   * - :ref:`sphx_glr_auto_examples_diffusion_plot_thermal04.py` (``../../galleries/examples/diffusion/plot_thermal04.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_frames_plot_frame01.py` (``../../galleries/examples/frames/plot_frame01.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_frames_plot_frame02.py` (``../../galleries/examples/frames/plot_frame02.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_frames_plot_frame03.py` (``../../galleries/examples/frames/plot_frame03.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_frames_plot_frame05.py` (``../../galleries/examples/frames/plot_frame05.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_mixed_plot_mixed01.py` (``../../galleries/examples/mixed/plot_mixed01.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_benchmark01.py` (``../../galleries/examples/plates/plot_benchmark01.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_plates_plot_plate01.py` (``../../galleries/examples/plates/plot_plate01.py``)
-     - 00:00.224
+     - 00:00.000
      - 0.0
-   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss03.py` (``../../galleries/examples/trusses/plot_truss03.py``)
-     - 00:00.215
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate02.py` (``../../galleries/examples/plates/plot_plate02.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate02b.py` (``../../galleries/examples/plates/plot_plate02b.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate03.py` (``../../galleries/examples/plates/plot_plate03.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate04.py` (``../../galleries/examples/plates/plot_plate04.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate05.py` (``../../galleries/examples/plates/plot_plate05.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate06.py` (``../../galleries/examples/plates/plot_plate06.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate07.py` (``../../galleries/examples/plates/plot_plate07.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate08.py` (``../../galleries/examples/plates/plot_plate08.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate09.py` (``../../galleries/examples/plates/plot_plate09.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate10.py` (``../../galleries/examples/plates/plot_plate10.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate11.py` (``../../galleries/examples/plates/plot_plate11.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_plates_plot_plate_element_modes.py` (``../../galleries/examples/plates/plot_plate_element_modes.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_springs_plot_spring_system01.py` (``../../galleries/examples/springs/plot_spring_system01.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_springs_plot_spring_system02.py` (``../../galleries/examples/springs/plot_spring_system02.py``)
-     - 00:00.142
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss01.py` (``../../galleries/examples/trusses/plot_truss01.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss02.py` (``../../galleries/examples/trusses/plot_truss02.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss03.py` (``../../galleries/examples/trusses/plot_truss03.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_examples_trusses_plot_truss04.py` (``../../galleries/examples/trusses/plot_truss04.py``)
-     - 00:00.089
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss05.py` (``../../galleries/examples/trusses/plot_truss05.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss06.py` (``../../galleries/examples/trusses/plot_truss06.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss07.py` (``../../galleries/examples/trusses/plot_truss07.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss08.py` (``../../galleries/examples/trusses/plot_truss08.py``)
+     - 00:00.000
+     - 0.0
+   * - :ref:`sphx_glr_auto_examples_trusses_plot_truss09.py` (``../../galleries/examples/trusses/plot_truss09.py``)
+     - 00:00.000
      - 0.0
    * - :ref:`sphx_glr_auto_tutorials_model_creation_plot_01_setup.py` (``../../galleries/tutorials/model_creation/plot_01_setup.py``)
      - 00:00.000
