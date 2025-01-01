@@ -11,9 +11,9 @@ __all__ = (
     'Solid2dTransformation'
 )
 
-from .System import System
-from .Node   import Node
-from .Transformation import Transformation
+from .System                import System
+from .Node                  import Node
+from .Transformation        import Transformation
 from .FrameTransformation   import FrameTransformation
 from .Frame2dTransformation import Frame2dTransformation
 from .BeamTransformation    import BeamTransformation

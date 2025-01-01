@@ -40,7 +40,7 @@ class NewtonRaphsonSolver(Solver):
                 if self.record:
                     self.recordThisStep()
 
-                break
+                break  # converged! break the iteration loop
 
             # Solve for equilibrium
             self.solveSingleStep()
@@ -100,12 +100,7 @@ class NewtonRaphsonSolver(Solver):
         # update nodal displacements
         for node in self.nodes:
             idxK = node.getIdx4DOFs()
-            Tk = node.getLocalTransformationMap()
-            if isinstance(Tk, np.ndarray):
-                DU = Tk @ dU[idxK]
-            else:
-                DU = dU[idxK]
-            node._updateDisp(DU)
+            node._updateDisp(dU[idxK])
 
     def assemble(self, force_only=False):
         r"""

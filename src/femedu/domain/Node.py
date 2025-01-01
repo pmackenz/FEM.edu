@@ -1,7 +1,9 @@
+from copy import deepcopy
+
 import numpy as np
 from collections import deque
 
-from .Transformation import *
+from ..elements import Element
 from ..recorder.Recorder import Recorder
 
 class Node():
@@ -59,7 +61,9 @@ class Node():
             s +=  "\n    following {}".format(self.lead.getID())
         if self._transform:
             T = self._transform.getT()
-            s += f"\n    local: x={T[:,0]}, y={T[:,1]}, z={T[:,2]}"
+            s += f"\n    local: x={T[:,0]}, y={T[:,1]}"
+            if T.shape[1]>2:
+                s += f", z={T[:,2]}"
         if self._fixity:
             s += f"\n    fix:  {self._fixity}"
         load = self.getLoad()
@@ -132,6 +136,10 @@ class Node():
 
             # remember the dof_idx map for this element for future interaction
             self.dof_maps[caller] = dof_idx
+
+            # let any attached transformation know that the nodal dof-list has changed.
+            if self._transform:
+                self._transform.refreshMaps()
 
             return tuple(dof_idx)
 
@@ -293,7 +301,11 @@ class Node():
         :param dU: displacement correction from last iteration step.
         """
         if self.is_lead:
-            self.disp += dU
+
+            if self._transform:
+                self.disp += self.v2g(dU, self)
+            else:
+                self.disp += dU
 
         """
         Do not forward that call to the lead node or that increment will be duplicated.
@@ -353,9 +365,12 @@ class Node():
             # see if local coordinates were requested
             if 'local' in kwargs and kwargs['local'] == True:
                 # check if we have a nodal transformation attached
-                if isinstance(self._transform, Transformation):
-                    T = self._transform.getT()
-                    U = T.T @ U
+                #if isinstance(self._transform, Transformation):
+                if self._transform:
+                    #
+                    # see Element.getLoad() and Element.getForce() methods
+                    #
+                    U = self.v2l(U, self)
 
             # apply prescribed displacements
             for dof in self._setU:
@@ -486,16 +501,26 @@ class Node():
         """
         if self.is_lead:
             if elem in self.dof_maps:
-                return self.start + np.array(self.dof_maps[elem], dtype=int)
+                if self._transform:
+                    # Transformation may expand the reach of an element to other components, hence, use all available dofs
+                    return self.getIdx4DOFs()
+                else:
+                    # use the subset of dofs used by this element
+                    return self.start + np.array(self.dof_maps[elem], dtype=int)
             else:
                 msg = f"Element {elem} not in dof_map for node {self.ID}"
                 raise TypeError(msg)
         else:
             return self.lead.getIdx4Element(elem)
 
-    def getIdx4DOFs(self, dofs=[]):
+    def getIdx4DOFs(self, dofs=[], local=False):
         r"""
-        :return: an index list to this node's dofs in the global list of dofs
+        :param dofs:  a list of named dofs for which an index is requested.
+                      The returned list will be in the same order as listed in **dofs**.
+        :param local: by default return index to the global list of dofs.
+                      Set :code:`local=True` to return index to this node's list of dofs.
+
+        :return: an index list to this node's dofs
         """
         if self.is_lead:
 
@@ -510,16 +535,21 @@ class Node():
                     msg = f"dof {dof} not present at node {self.ID}"
                     raise TypeError(msg)
 
-            return self.start + np.array(idx, dtype=int)
+            ans = np.array(idx, dtype=int)
+            if not local:
+                ans += self.start
+
+            return ans
 
         else:
-            return self.lead.getIdx4DOFs(dofs=dofs)
+            return self.lead.getIdx4DOFs(dofs=dofs, local=local)
 
     def getLocalTransformationMap(self, dofs=[]):
         r"""
         :return: Transformation matrix
         """
-        if isinstance(self._transform, Transformation):
+        #if isinstance(self._transform, Transformation):
+        if self._transform:
             T = self._transform.getT()
         else:
             T = None
@@ -534,7 +564,9 @@ class Node():
         * If a transformation is given, all loads and prescribed displacements are assumed in that local coordinate system.
         * Furthermore, all nodal displacements, velocity, or acceleration will be reported in that local coordinate system.
         """
-        if T and isinstance(T, Transformation):
+        from .Transformation import Transformation
+        if isinstance(T, Transformation):
+            T.registerClient(self) # register this Node with the transformation
             self._transform = T
 
     def addLoad(self, loads, dofs):
@@ -807,3 +839,83 @@ class Node():
         self.disp       = 2.0 * self.disp_n - self.disp_nn
         self.loadfactor = 2.0 * self.loadfactor_n - self.loadfactor_nn
 
+    def hasTransform(self):
+        return (self._transform != None)
+
+    def v2l(self, U, caller=None):
+        """
+        transform a nodal vector from global to local coordinates
+
+        This is commonly used by Elements to transform nodal forces to the Node's local
+        system such that the :code:`Solver.assemble` method receives forces in local coordinates.
+
+        :param U: vector to be transformed
+        :param caller: pointer to the calling element
+        :return: the transformed vector
+        """
+        # build a full length nodal vector
+        if isinstance(caller, Element):
+            Unode = np.zeros(self.ndofs)                           # initialize to zeros
+            map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
+            Unode[map] = U                                         # fill in element vector to nodal vector
+        else:
+            Unode = deepcopy(U)
+
+        if self._transform:
+            Ulocal = self._transform.v2l(Unode, self)
+        else:
+            Ulocal = Unode
+
+        return Ulocal
+
+    def v2g(self, U, caller=None):
+        """
+        transform a nodal vector from local to global coordinates
+
+        This is commonly used by the solver to transform nodal displacements from the Node's local to the global
+        system such that the :code:`Node` class can store displacements internally in global coordinates.
+
+        :param U: vector to be transformed
+        :param caller: pointer to the calling element
+        :return: the transformed vector
+        """
+        # build a full length nodal vector
+        if isinstance(caller, Element):
+            Unode = np.zeros(self.ndofs)                           # initialize to zeros
+            map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
+            Unode[map] = U                                         # fill in element vector to nodal vector
+        else:
+            Unode = deepcopy(U)
+
+        if self._transform:
+            Uglobal = self._transform.v2g(Unode, self)
+        else:
+            Uglobal = Unode
+
+        return Uglobal
+
+    def m2l(self, M, caller=None):
+        """
+        transform a nodal matrix from global to local coordinates
+
+        This is commonly used by Elements to transform nodal forces to the Node's local
+        system such that the :code:`Solver.assemble` method receives stiffness in local coordinates.
+
+        :param M: vector to be transformed
+        :param caller: pointer to the calling element
+        :return: the transformed matrix
+        """
+        # build a full length nodal vector
+        if isinstance(caller, Element):
+            Mnode = np.zeros((self.ndofs,self.ndofs))              # initialize to zeros
+            map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
+            Mnode[map[:, np.newaxis],map] = M                                     # fill in element matrix to nodal vector
+        else:
+            Mnode = deepcopy(M)
+
+        if self._transform:
+            Mlocal = self._transform.m2l(Mnode, self)
+        else:
+            Mlocal = Mnode
+
+        return Mlocal

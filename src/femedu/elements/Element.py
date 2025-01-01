@@ -1,3 +1,6 @@
+from copy import deepcopy
+from select import KQ_NOTE_TRACK
+
 import numpy as np
 import os
 import sys
@@ -238,8 +241,10 @@ class Element(DrawElement):
         if local_nodes:
             for local_id in local_nodes:
                 if local_id >= 0 and local_id < len(self.transforms):
+                    T.registerClient(self)    # register this Element with the transformation
                     self.transforms[local_id] = T
         else:
+            T.registerClient(self)            # register this Element with the transformation
             self.transforms = [ T for nd in self.nodes ]
 
     def getPos(self, node, **kwargs):
@@ -271,7 +276,13 @@ class Element(DrawElement):
         :return:
         """
         self.updateState()
-        return self.Forces
+
+        # make sure forces are returned in each respective node's local coordinates
+        forces = []
+        for node, force in zip(self.nodes, self.Forces):
+            forces.append(node.v2l(force, self))
+
+        return forces
 
     def getLoad(self, apply_load_factor=False):
         r"""
@@ -290,8 +301,13 @@ class Element(DrawElement):
         # .. applied element load (reference load)
         self.computeSurfaceLoads()
 
-        if isinstance(self.Loads, np.ndarray):
-            Loads = [ np.array(x) for x in self.Loads ]
+        if isinstance(self.Loads, (list,tuple,np.ndarray)):
+            Loads = []
+            for node, load in zip(self.nodes, self.Loads):
+                if isinstance(load, np.ndarray):
+                    Loads.append(node.v2l(load, self))
+                else:
+                    Loads.append(None)
             return Loads
         elif self.Loads:
             return self.Loads
@@ -323,7 +339,30 @@ class Element(DrawElement):
         :return: the current tangent stiffness matrix
         """
         self.updateState()
-        return self.Kt
+
+        KT = deepcopy(self.Kt)
+
+        for i, ndI in enumerate(self.nodes):
+            for j, ndJ in enumerate(self.nodes):
+                #
+                # this can be an expensive operation.
+                # check if really needed and avoid identity operations:
+                #
+                if (ndI.hasTransform() or ndJ.hasTransform()):
+                    KTij = KT[i][j]
+
+                    # transform KTij
+                    # ... as a sequence of vector-like transformations
+                    KTij = KTij.T
+                    if ndJ.hasTransform():
+                        KTij = ndJ.m2l(KTij, self)
+
+                    KTij = KTij.T
+                    if ndI.hasTransform():
+                        KTij = ndI.m2l(KTij, self)
+
+                    KT[i][j] = KTij
+        return KT
 
     def updateState(self):
         """
