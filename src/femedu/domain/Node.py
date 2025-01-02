@@ -854,20 +854,22 @@ class Node():
         :return: the transformed vector
         """
         if self.is_lead:
-            # build a full length nodal vector
-            if isinstance(caller, Element):
-                Unode = np.zeros(self.ndofs)                           # initialize to zeros
-                map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
-                Unode[map] = U                                         # fill in element vector to nodal vector
-            else:
-                Unode = deepcopy(U)
 
             if self._transform:
+                # build a full length nodal vector
+                if isinstance(caller, Element):
+                    Unode = np.zeros(self.ndofs)                           # initialize to zeros
+                    map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
+                    Unode[map] = U                                         # fill in element vector to nodal vector
+                else:
+                    Unode = deepcopy(U)
+
                 Ulocal = self._transform.v2l(Unode, self)
             else:
-                Ulocal = Unode
+                Ulocal = deepcopy(U)
 
             return Ulocal
+
         else:
             return self.lead.v2l(U, caller=caller)
 
@@ -883,18 +885,20 @@ class Node():
         :return: the transformed vector
         """
         if self.is_lead:
-            # build a full length nodal vector
-            if isinstance(caller, Element):
-                Unode = np.zeros(self.ndofs)                           # initialize to zeros
-                map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
-                Unode[map] = U                                         # fill in element vector to nodal vector
-            else:
-                Unode = deepcopy(U)
+
 
             if self._transform:
+                # build a full length nodal vector
+                if isinstance(caller, Element):
+                    Unode = np.zeros(self.ndofs)  # initialize to zeros
+                    map = self.getIdx4DOFs(caller.getDofs(), local=True)  # get a map from element dogs to node dofs
+                    Unode[map] = U  # fill in element vector to nodal vector
+                else:
+                    Unode = deepcopy(U)
+
                 Uglobal = self._transform.v2g(Unode, self)
             else:
-                Uglobal = Unode
+                Uglobal = deepcopy(U)
 
             return Uglobal
 
@@ -913,18 +917,19 @@ class Node():
         :return: the transformed matrix
         """
         if self.is_lead:
-            # build a full length nodal vector
-            if isinstance(caller, Element):
-                Mnode = np.zeros((self.ndofs,self.ndofs))              # initialize to zeros
-                map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
-                Mnode[map[:, np.newaxis],map] = M                                     # fill in element matrix to nodal vector
-            else:
-                Mnode = deepcopy(M)
 
             if self._transform:
+                # build a full length nodal vector
+                if isinstance(caller, Element):
+                    Mnode = np.zeros((self.ndofs,self.ndofs))              # initialize to zeros
+                    map = self.getIdx4DOFs(caller.getDofs(), local=True)   # get a map from element dogs to node dofs
+                    Mnode[map[:, np.newaxis],map] = M                                     # fill in element matrix to nodal vector
+                else:
+                    Mnode = deepcopy(M)
+
                 Mlocal = self._transform.m2l(Mnode, self)
             else:
-                Mlocal = Mnode
+                Mlocal = deepcopy(M)
 
             return Mlocal
 
