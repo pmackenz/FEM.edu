@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project   = 'FEM.edu'
-copyright = '2023, Peter Mackenzie-Helnwein'
+copyright = '2023, 2024, 2025, Peter Mackenzie-Helnwein'
 author    = 'Peter Mackenzie-Helnwein'
 release   = 'FEM.edu-v1.0.1'
 
