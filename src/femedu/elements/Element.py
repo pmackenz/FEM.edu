@@ -315,7 +315,7 @@ class Element(DrawElement):
             return [ None for k in self.nodes ]
 
     def computeSurfaceLoads(self):
-        self.Loads = []
+        self.Loads = [ None for nd0 in self.nodes ]
 
     def getLabel(self):
         if self.label:
