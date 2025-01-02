@@ -229,9 +229,6 @@ class Solver():
             for (i,ndI) in enumerate(element.nodes):
                 # fetch dof mapping for node I
                 idxK = ndI.getIdx4Element(element)
-                # fetch nodal transformation matrix for node I
-                Ti = ndI.getLocalTransformationMap()
-                hasTi = isinstance(Ti, np.ndarray)
 
                 # system reference load vector
                 if isinstance(Pe[i], np.ndarray):
