@@ -2,6 +2,29 @@
 About the Developers
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Release Series 1.1.*
+=======================
+
+.. list-table::
+    :class: borderless
+    :width: 95
+    :widths: 30 70
+
+    * - |PeterMH|
+      - **Peter Mackenzie-Helnwein**
+
+            |
+            | Research Associate Professor
+            | Dept. of Civil and Environmental Engineering
+            | University of Washington, Seattle, United States
+            |
+            | Lead developer
+
+
+
+Release Series 1.0.*
+=======================
+
 .. list-table::
     :class: borderless
     :width: 95
@@ -41,8 +64,10 @@ About the Developers
             | Graduate, Ph.D. (2023)
             | University of Washington, Seattle, United States
 
-New to the Team
+Credits
 ==========================
+
+Special thanks for great discussions in aid of the development process goes to:
 
 .. list-table::
     :class: borderless

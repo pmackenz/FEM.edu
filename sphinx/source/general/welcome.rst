@@ -54,3 +54,5 @@ Revision Log
 
 .. git_changelog::
     :revisions: 3
+
+:ref:`full_revision_log`

@@ -17,6 +17,7 @@
    tutorials.rst
    design.rst
    implementation/implementation.rst
+   general/revision_log.rst
 
 
 
