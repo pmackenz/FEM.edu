@@ -1,3 +1,6 @@
+from multiprocessing.connection import answer_challenge
+from xmlrpc.client import INVALID_ENCODING_CHAR
+
 import numpy as np
 
 ###
@@ -6,6 +9,8 @@ import numpy as np
 ### remove this section onve ALL plotting has been moved into suitable plotter classes
 ###
 import matplotlib.pyplot as plt
+from fontTools.misc.textTools import caselessSort
+
 ###
 ### end of deprecated section
 ###
@@ -125,16 +130,198 @@ class System():
         self.useArcLength = False
 
     def getSolver(self):
-        """
+        r"""
         Provides a pointer to the current solver instance.
 
         This function is used to get access to the solver and give instructions directly to that solver.
         """
         return self.solver
 
+# --------- modeling assist functions ----------------
+
+    def _is_node_on_line(self, node, pos, dir, tol=1.e-3):
+        tvec = np.array(dir)
+        tvec /= np.linalg.norm(tvec)  # normalized tangent vector
+
+        R = node.getPos() - np.array(pos)
+        distX = tvec @ R
+        distR = R - distX * tvec
+        dist = np.linalg.norm(distR)
+
+        return (dist < tol)
+
+
+    def findNodesAt(self, pos, tol=1.e-3):
+        r"""
+        Find any node within distance tol from the given target position (**pos**).
+
+        If a 2d position is given for a 3d-problem, the input target defines a cylinder with a vertical axis (3rd direction) and radius **tol**.
+
+        If a 3d position is given for a 2d-problem, the 3rd coordinate of **pos** will be ignored.
+
+        :param pos: a coordinate tuple (2d or 3d) defining th etarget position
+        :param tol: search radius for find. Any node within distance **tol** will be returned.
+        :return: a list of tuples (node_pointer, distance)
+        """
+        ans = []
+
+        for node in self.nodes:
+            dist = node.distanceTo(pos)
+            if dist<tol:
+                ans.append((node,dist))
+
+        return ans
+
+    def findNodesAlongLine(self, pos, dir, tol=1.e-3):
+        r"""
+        Find any node within distance tol from the given target position (**pos**).
+
+        If a 2d position is given for a 3d-problem, the input target defines a cylinder with a vertical axis (3rd direction) and radius **tol**.
+
+        If a 3d position is given for a 2d-problem, the 3rd coordinate of **pos** will be ignored.
+
+        :param pos: a coordinate tuple (2d or 3d) defining th etarget position
+        :param dir: direction vector defining the orientation of the line
+        :param tol: search radius for find. Any node within distance **tol** will be returned.
+        :return: a list of tuples (node_pointer, distance)
+        """
+        ans = []
+
+        for node in self.nodes:
+            if self._is_node_on_line(node, pos, dir, tol=tol):
+                ans.append((node, node.distanceTo(pos)))
+
+        return ans
+
+    def findNodesOnPlane(self, pos, dir, tol=1.e-3):
+        r"""
+        Find any node within distance tol from the reference plane.
+
+        The plane is defined by
+
+        .. math::
+            | {\bf n} \cdot ( {\bf X}_{node} - {\bf X}_0 ) | < TOL
+
+        where
+        :math:`{\bf n}` is the unit normal vector to the plane (normalized **dir**),
+        :math:`{\bf X}_{node}` is the position vector of any node, and
+        :math:`{\bf X}_0 )` is the position vector of a reference point on the plane (**pos**),
+
+        :param pos: a coordinate tuple (2d or 3d) defining th etarget position
+        :param dir: normal vector to the target plane
+        :param tol: search radius for find. Any node within distance **tol** will be returned.
+        :return: a list of tuples (node_pointer, distance)
+        """
+        X0 = np.array(pos)             # reference point
+        nvec = np.array(dir)
+        nvec /= np.linalg.norm(nvec)   # normalized normal vector
+
+        ans = []
+
+        for node in self.nodes:
+            dist = np.abs( nvec @ (node.getPos() - X0) )
+            if dist<tol:
+                ans.append((node,dist))
+
+        return ans
+
+    def findFacesAlongLine(self, pos, dir, orientation=0, tol=1.e-2):
+        r"""
+        Find any element faces within distance tol from the given target position (**pos**).
+        If a 2d position is given for a 3d-problem, the input target defines a cylinder with a vertical axis (3rd direction) and radius **tol**.
+        If a 3d position is given for a 2d-problem, the 3rd coordinate of **pos** will be ignored.
+
+
+        .. list-table::
+            :header-rows: 1
+
+            * - orientation
+              - filter
+            * - `0`
+              - Any face aligned with the plane will be returned
+            * - `+1`
+              - Only faces with an outward normal pointing to the right of **dir** will be selected.
+            * - `-1`
+              - Only faces with an outward normal pointing to the left of **dir** will be selected.
+
+
+
+        :param pos: a coordinate tuple (2d or 3d) defining th etarget position
+        :param dir: direction vector defining the orientation of the line
+        :param orientation: search filter
+        :param tol: search radius for find. Any node within distance **tol** will be returned.
+        :return: a list of tuples (node_pointer, distance)
+        """
+        ans = []
+
+        Xo = np.array(pos)
+        To = np.array(dir)
+        To /= np.linalg.norm(To)
+
+        match len(dir):
+            case 2:
+                No = np.array([[ 0.0, 1.0],[ -1.0, 0.0]]) @ To  # rotate to the right
+            case 3:
+                msg = "findFacesAlongLine requires a 2d-analysis.  Use findEdgesAlongLine() for shells and findFacesOnPlane() for 3d solids."
+                raise TypeError(msg)
+
+        boundary_nodes = self.findNodesAlongLine(pos, dir, tol=tol)
+
+        for node, dnode in boundary_nodes:
+            for elem in node.elements:
+                print('+', elem)
+                for face in elem.faces:
+                    for x, area in zip(face.pos, face.area):
+                        match orientation:
+                            case 0:   # both sides
+                                dist      = np.abs((x - Xo) @ No)
+                                area_test = np.abs( No @ area / np.linalg.norm(area) )
+                            case -1:  # left side only
+                                dist      = -(x - Xo) @ No
+                                area_test = -No @ area / np.linalg.norm(area)
+                            case 1:   # right side only
+                                dist      = (x - Xo) @ No
+                                area_test = No @ area / np.linalg.norm(area)
+
+                        if  dist < tol and area_test > (1. - 10. * tol):
+                            ans.append((elem,face))
+
+        return ans
+
+    def findFacesOnPlane(self, pos, dir, orientation=0, tol=1.e-3):
+        r"""
+        Find any element faces within distance tol from the given target position (**pos**).
+
+        If a 2d position is given for a 3d-problem, the input target defines a cylinder with a vertical axis (3rd direction) and radius **tol**.
+
+        If a 3d position is given for a 2d-problem, the 3rd coordinate of **pos** will be ignored.
+
+
+        .. list-table::
+            :header-rows: 1
+
+            * - orientation
+              - filter
+            * - `0`
+              - Any face aligned with the plane will be returned
+            * - `+1`
+              - Only faces with an outward normal pointing in the direction of **dir** will be selected.
+            * - `-1`
+              - Only faces with an outward normal pointing against the direction of **dir** will be selected.
+
+
+        :param pos: a coordinate tuple (2d or 3d) defining th etarget position
+        :param dir: normal vector to the target plane
+        :param orientation: search filter
+        :param tol: search radius for find. Any node within distance **tol** will be returned.
+        :return: a list of tuples (element_ptr, face_ptr)
+        """
+        ans = []
+        return ans
+
 # --------- displacement control functions ----------------
     def setDisplacementControl(self, node, dof, target):
-        """
+        r"""
         activate displacement control for the next load step
 
         :param node:     pointer to the controlling node
@@ -166,7 +353,7 @@ class System():
             self.solver.initArcLength(load_increment=load_increment, alpha=alpha, tolerance=tolerance)
 
     def stepArcLength(self, verbose=False, max_iter=10):
-        """
+        r"""
         Progresses the model state by one arc-length.
 
         .. note::
@@ -184,7 +371,7 @@ class System():
     # --------- recorder methods ------------------------------
 
     def initRecorder(self, **kwargs):
-        """
+        r"""
         initializes data arrays for gathering of load history data
 
         :keyword variables: list of variables or d.o.f.-codes to be recorded
