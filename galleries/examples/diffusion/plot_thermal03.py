@@ -138,35 +138,13 @@ class ExampleThermal03(Example):
 
         loaded_elements = []
 
-        Xo = np.array([L, 0.0])
-        No = np.array([1.0, 0.0])
+        for elem, face in model.findFacesAlongLine((L, 0.0), (0.0, 1.0), orientation=+1):
+            face.setFlux(qn)
+            loaded_elements.append(elem)
 
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], L):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-4 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
-                                loaded_elements.append(elem)
-
-        Xo = np.array([0.0, L])
-        No = np.array([0.0, 1.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[1], L):
-                print(node)
-                for elem in node.elements:
-                    print('-', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-4 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
-                                loaded_elements.append(elem)
+        for elem, face in model.findFacesAlongLine((0.0, L), (-1.0, 0.0), orientation=+1):
+            face.setFlux(qn)
+            loaded_elements.append(elem)
 
         # perform the analysis
         model.setLoadFactor(1.0)

@@ -1,4 +1,4 @@
-"""
+r"""
 ==========================================================
 Heat transfer through a thick cylinder
 ==========================================================
@@ -21,15 +21,15 @@ the outer surface of the ring, :math:`r_o`, to :math:`300~K`.
 The thermal equation for an axi-symmetric problem can be expressed as
 
 .. math::
-    \\Delta T = \\frac{1}{r} \\: \\frac{\\partial }{\\partial r}
-    \\left( r \\frac{\\partial T}{\\partial r} \\right) = 0
+    \Delta T = \frac{1}{r} \: \frac{\partial }{\partial r}
+    \left( r \frac{\partial T}{\partial r} \right) = 0
 
-where :math:`\\Delta` is the Laplace operator.
+where :math:`\Delta` is the Laplace operator.
 
 The analytic solution follows as
 
 .. math::
-    T(r) = {\\displaystyle \\frac{T_i \\log(r_o/r) + T_o \\log(r/r_i)}{\\log(r_o/r_i)}}
+    T(r) = {\displaystyle \frac{T_i \log(r_o/r) + T_o \log(r/r_i)}{\log(r_o/r_i)}}
 
 This solution will be compared against the finite element solution in the last figure.
 """
@@ -47,7 +47,7 @@ from femedu.elements.diffusion import Triangle
 from femedu.materials import Thermal
 
 
-class ExampleThermal01(Example):
+class ExampleThermal04(Example):
 
     # sphinx_gallery_start_ignore
     # sphinx_gallery_thumbnail_number = 2
@@ -182,5 +182,5 @@ class ExampleThermal01(Example):
 #
 
 if __name__ == "__main__":
-    ex = ExampleThermal01()
+    ex = ExampleThermal04()
     ex.run()

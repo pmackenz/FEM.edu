@@ -1,4 +1,4 @@
-"""
+r"""
 ==========================================================
 Heat transfer through a wall
 ==========================================================
@@ -21,14 +21,14 @@ the outer surface of the wall, :math:`x=10~m`, to :math:`300~K`.
 The thermal equation for the uni-directional problem can be expressed as
 
 .. math::
-    \\Delta T = \\frac{\\partial^2 T}{\\partial r^2}  = 0
+    \Delta T = \frac{\partial^2 T}{\partial r^2}  = 0
 
-where :math:`\\Delta` is the Laplace operator.
+where :math:`\Delta` is the Laplace operator.
 
 The analytic solution follows as
 
 .. math::
-    T(x) =  T_i  + q_n \\: x
+    T(x) =  T_i  + q_n \: x
 
 This solution will be compared against the finite element solution in the last figure.
 
@@ -77,9 +77,9 @@ class ExampleThermal01(Example):
         # ========== setting material parameters ==============
 
         params = dict(
-            E=20000.,  # Young's modulus
-            nu=0.250,  # Poisson's ratio
-            t=1.00     # thickness of the plate
+            E  = 20000.,  # Young's modulus
+            nu = 0.250,   # Poisson's ratio
+            t  = 1.00     # thickness of the plate
         )
 
         # ========== setting load parameters ==============
@@ -126,30 +126,15 @@ class ExampleThermal01(Example):
 
         # boundary condition(s)
 
-        ## find nodes at y==0 and x==0
+        ## find nodes at x==0
+        left_boundary_nodes = model.findNodesAlongLine((0.0,0.0), (0.0,1.0))
+        for node, dist in left_boundary_nodes:
+            node.fixDOF('T')    # prescribed temperature at x=0.0
 
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], 0.0):
-                node.fixDOF('T')    # prescribed temperature at x=0.0
-            # if math.isclose(X[0], Lx):
-            #     node.fixDOF('T')  # prescribed temperature at x=Lx
-
-        # ==== complete the reference load ====
-
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], Lx):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs((x - Xo) @ No) < 1.0e-2 and No @ area / np.linalg.norm(area) > 1.0e-2:
-                                face.setFlux(qn)
+        ## complete the reference load at x=Lx (right edge)
+        right_boundary_faces = model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0), orientation=+1)
+        for _, face in right_boundary_faces:
+            face.setFlux(qn)
 
         # perform the analysis
         model.setLoadFactor(1.0)
