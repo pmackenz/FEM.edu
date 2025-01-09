@@ -1,4 +1,4 @@
-"""
+r"""
 ===============================================================
 A square patch made of one quadrilateral plate elements
 ===============================================================
@@ -47,7 +47,7 @@ class ExamplePlate08(Example):
 
     # sphinx_gallery_start_ignore
     def docString(self):
-        s = """
+        s = r"""
     ## A square patch made of one quadrilateral plate elements
 
     Basic implementation test with applied loads.
@@ -75,6 +75,7 @@ class ExamplePlate08(Example):
         return s
 
     # sphinx_gallery_end_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def problem(self):
 
         params = dict(

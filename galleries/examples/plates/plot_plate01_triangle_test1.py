@@ -1,4 +1,4 @@
-"""
+r"""
 ======================================================
 A square patch made of two triangular plate elements
 ======================================================
@@ -11,11 +11,11 @@ Basic implementation test with all prescribed displacements.
      |     |
      v     v
      3-----2 -> u=5
-     |\\  b | >
-     | \\   | >
-     |  \\  | > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |\  b | >
+     | \   | >
+     |  \  | > (w = 1.0)
+     |   \ | >
+     | a  \| >
      0-----1 -> u=5
 
     width:  10.
@@ -60,7 +60,7 @@ class ExamplePlate01(Example):
 
     # sphinx_gallery_start_ignore
     def docString(self):
-        s = """
+        s = r"""
     ## A square patch made of two triangular plate elements
 
     Basic implementation test with all prescribed displacements.  
@@ -70,11 +70,11 @@ class ExamplePlate01(Example):
      |     |
      v     v
      3-----2 -> u=5
-     |\\  b | >
-     | \\   | >
-     |  \\  | > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |\  b | >
+     | \   | >
+     |  \  | > (w = 1.0)
+     |   \ | >
+     | a  \| >
      0-----1 -> u=5
     
     width:  10.
@@ -108,6 +108,7 @@ class ExamplePlate01(Example):
         return s
 
     # sphinx_gallery_end_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def problem(self):
 
         params = dict(

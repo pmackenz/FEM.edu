@@ -47,6 +47,7 @@ from femedu.materials import PlaneStress
 class ExamplePlate07(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def docString(self):
         s = """
     ## A square patch made of one quadrilateral plate elements
@@ -154,7 +155,7 @@ class ExamplePlate07(Example):
 
         # %%
         # Note the three rigid body modes (lam=0.0). It can be shown that all three
-        # are limear combinations of translations in x and y-directions and a
+        # are linear combinations of translations in x and y-directions and a
         # rigid body rotation.
         #
 

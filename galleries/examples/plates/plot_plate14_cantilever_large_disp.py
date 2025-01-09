@@ -82,44 +82,22 @@ class ExamplePlate11(Example):
 
         # define support(s)
 
-        ## find nodes at y==0 and x==0
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0], 0.0):
-                node.fixDOF('ux','uy')    # fix left side
+        ## find nodes at x==0
+        for node, _ in model.findNodesAlongLine((0.0, 0.0), (0.0, 1.0)):
+            node.fixDOF('ux', 'uy')
 
         # ==== complete the reference load ====
 
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
+        # the section at the right end
+        for _, face in model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0), orientation=+1):
+            face.setLoad(px, -pxy)
 
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0],Lx):
-                # locate the node at the centerline
-                if math.isclose(X[1],Ly/2.):
-                    end_node = node
-                # load the end faces
-                for elem in node.elements:
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(px, -pxy)
+        # durface loading on the top face
+        for _, face in model.findFacesAlongLine((0.0, Ly), (1.0, 0.0), orientation=-1):
+            face.setLoad(-py, 0.0)
 
-        Xo = np.array([0.0, Ly])
-        No = np.array([0.0, 1.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[1],Ly):
-                for elem in node.elements:
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(-py, 0.0)
-
-        #model.report()
+        # find the node on the beam axis (y==Ly/2) at the end of the beam (x==Lx)
+        end_node, _ = model.findNodesAt((Lx, Ly/2))[0]
 
         # set up a recorder
         model.initRecorder(variables=['ux','uy'], nodes=[end_node])

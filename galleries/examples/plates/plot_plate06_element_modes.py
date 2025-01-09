@@ -1,6 +1,6 @@
-"""
+r"""
 ===============================================================
-A square patch made of one quadrilateral plate elements
+Element Testing: Analyzing Modes and Energy
 ===============================================================
 
 Basic implementation test with applied loads.
@@ -33,6 +33,9 @@ Basic implementation test with applied loads.
 
 Author: Peter Mackenzie-Helnwein
 """
+
+# sphinx_gallery_thumbnail_number = 5
+
 import numpy as np
 
 from femedu.examples import Example
@@ -89,7 +92,7 @@ for k in range(8):
 
 # %%
 # Note the three rigid body modes (lam=0.0). It can be shown that all three
-# are limear combinations of translations in x and y-directions and a
+# are linear combinations of translations in x and y-directions and a
 # rigid body rotation.
 #
 

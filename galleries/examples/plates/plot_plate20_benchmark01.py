@@ -91,53 +91,31 @@ class ExampleBenchmark01(Example):
         # the left model
         #
 
-        Xo = np.array([L1, 0.0])
-        No = np.array([1.0, 0.0])
+        ## fix left side
+        for node, _ in model.findNodesAlongLine((0.0, 0.0), (0.0, 1.0)):
+            node.fixDOF('ux', 'uy')
 
-        for node in nodes:
-            X = node.getPos()
+        ## define loads ...
+        for _, face in model.findFacesAlongLine((L1,0.0), (0.0,1.0), orientation=+1):
+            face.setLoad(px, pxy)
 
-            # define support(s) ...
-            if math.isclose(X[0], 0.0):
-                node.fixDOF('ux','uy')    # fix left side
+        ## locate the node at the centerline
+        nodeA, dist = model.findNodesAt((L1, L2+L3))[0]
 
-            # define loads ...
-            if math.isclose(X[0],L1):
-                # locate the node at the centerline
-                if math.isclose(X[1],L2+L3):
-                    nodeA = node
-                # load the end faces
-                for elem in node.elements:
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(px, pxy)
         #
         # the right model
         #
 
-        Xo = np.array([2.25*L1, 0.0])
-        No = np.array([1.0, 0.0])
+        ## fix left side
+        for node, _ in model.findNodesAlongLine((1.25*L1, 0.0), (0.0, 1.0)):
+            node.fixDOF('ux', 'uy')
 
-        for node in nodes:
-            X = node.getPos()
+        ## define loads ...
+        for _, face in model.findFacesAlongLine((2.25*L1,0.0), (0.0,1.0), orientation=+1):
+            face.setLoad(px, pxy)
 
-            # define support(s) ...
-            if math.isclose(X[0], 1.25*L1):
-                node.fixDOF('ux','uy')    # fix left side
-
-            # define loads ...
-            X = node.getPos()
-            if math.isclose(X[0],2.25*L1):
-                # locate the node at the centerline
-                if math.isclose(X[1],L2+L3):
-                    nodeB = node
-                # load the end faces
-                for elem in node.elements:
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(px, pxy)
+        ## locate the node at the centerline
+        nodeB, dist = model.findNodesAt((2.25*L1, L2+L3))[0]
 
         #model.report()
 

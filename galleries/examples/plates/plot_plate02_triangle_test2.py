@@ -1,4 +1,4 @@
-"""
+r"""
 ===============================================================
 A square patch made of two triangular plate elements
 ===============================================================
@@ -18,11 +18,11 @@ Using
      ^     ^
      |     |
      3-----2 -> free
-     |\\  b | >
-     | \\   | >
-     |  \\  | > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |\  b | >
+     | \   | >
+     |  \  | > (w = 1.0)
+     |   \ | >
+     | a  \| >
      0-----1 -> free
 
     width:  10.
@@ -74,8 +74,9 @@ from femedu.materials import PlaneStress
 class ExamplePlate02(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def docString(self):
-        s = """
+        s = r"""
     ## A square patch made of two triangular plate elements
 
     Basic implementation test with applied loads.
@@ -85,11 +86,11 @@ class ExamplePlate02(Example):
      ^     ^
      |     |
      3-----2 -> free
-     |\\  b | >
-     | \\   | >
-     |  \\  | > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |\  b | >
+     | \   | >
+     |  \  | > (w = 1.0)
+     |   \ | >
+     | a  \| >
      0-----1 -> free
     
     width:  10.

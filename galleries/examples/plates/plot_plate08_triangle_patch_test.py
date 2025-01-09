@@ -26,6 +26,7 @@ from femedu.materials import PlaneStress
 class ExamplePlate03(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 3
     def docString(self):
         s = """
     ## Patch test for triangular plate under in-plane loading
@@ -177,7 +178,7 @@ class ExamplePlate03(Example):
 
         model.report()
 
-        model.plot(factor=100., filename="plate03_deformed.png")
+        model.plot(factor=25., filename="plate03_deformed.png")
 
 
 # %%

@@ -1,4 +1,4 @@
-"""
+r"""
 ===============================================================
 A square patch made of two triangular plate elements
 ===============================================================
@@ -18,11 +18,11 @@ Using
      ^     ^
      |     |
      3--6--2 -> free
-     |\\  b | >
-     | \\   | >
+     |\  b | >
+     | \   | >
      7  8  5 > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |   \ | >
+     | a  \| >
      0--4--1 -> free
 
     width:  10.
@@ -85,7 +85,7 @@ class ExamplePlate02b(Example):
 
     # sphinx_gallery_start_ignore
     def docString(self):
-        s = """
+        s = r"""
     ## A square patch made of two triangular plate elements
 
     Basic implementation test with applied loads.
@@ -95,11 +95,11 @@ class ExamplePlate02b(Example):
      ^     ^
      |     |
      3--6--2 -> free
-     |\\  b | >
-     | \\   | >
+     |\  b | >
+     | \   | >
      7  8  5 > (w = 1.0)
-     |   \\ | >
-     | a  \\| >
+     |   \ | >
+     | a  \| >
      0--4--1 -> free
 
     width:  10.

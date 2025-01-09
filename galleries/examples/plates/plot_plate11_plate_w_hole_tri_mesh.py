@@ -132,19 +132,8 @@ class ExamplePlate05(Example):
 
         # ==== complete the reference load ====
 
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0],Lx):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(px, 0.0)
+        for elem, face in model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0)):
+            face.setLoad(px, 0.0)
 
         model.report()
 

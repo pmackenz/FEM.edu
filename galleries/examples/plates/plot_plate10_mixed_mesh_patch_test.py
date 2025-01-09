@@ -1,9 +1,9 @@
 """
-==========================================================
-Patch test for triangular plate under in-plane loading
-==========================================================
+=========================================================================================================
+Patch test for mixed mesh of triangular and quadrilateral plate elements under in-plane loading
+=========================================================================================================
 
-PatchMesher test for the LinearTriangle (Constant Strain Triangle)
+PatchMesher test for the mixed mesh of triangular and quadrilateral plate elements.
 
 """
 import math
@@ -21,9 +21,10 @@ from femedu.mesher import *
 class ExamplePlate04(Example):
 
     # sphinx_gallery_start_ignore
+    # sphinx_gallery_thumbnail_number = 2
     def docString(self):
         s = """
-    ## Patch test for triangular plate under in-plane loading
+    ## Patch test for mixed mesh triangular and quadrilateral plate under in-plane loading
 
     The patch test is an empirical minimum test which every finite element has to pass to ensure convergence with mesh refinement.
 
@@ -121,20 +122,8 @@ class ExamplePlate04(Example):
 
         # ==== complete the reference load ====
 
-        Xo = np.array([Lx, 0.0])
-        No = np.array([1.0, 0.0])
-
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0],Lx):
-                print(node)
-                for elem in node.elements:
-                    print('+', elem)
-                    for face in elem.faces:
-                        for x, area in zip(face.pos, face.area):
-                            if np.abs( (x - Xo) @ No ) < 1.0e-2 and  No @ area / np.linalg.norm(area):
-                                face.setLoad(px, 0.0)
-
+        for elem, face in model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0)):
+            face.setLoad(px, 0.0)
 
         #model.report()
 
@@ -145,7 +134,7 @@ class ExamplePlate04(Example):
 
         #model.report()
 
-        model.plot(factor=10., filename="plate04_deformed.png")
+        model.plot(factor=25., filename="plate04_deformed.png")
 
 
 # %%

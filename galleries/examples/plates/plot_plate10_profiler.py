@@ -24,7 +24,7 @@ from femedu.materials import PlaneStress
 from femedu.mesher import *
 
 
-class ExamplePlate10(Example):
+class ExamplePlate14(Example):
 
     # sphinx_gallery_start_ignore
     def docString(self):
@@ -116,33 +116,20 @@ class ExamplePlate10(Example):
 
         # ==== build the reference load ====
 
-        # nodal loads
-        dir = np.array([1.,0.])    # normal to surface
-        x0  = np.array([Lx,0.0])   # reference point on the surface
-        for node in nodes:
-            X = node.getPos()
-            if math.isclose(X[0],Lx):
-                print(node.getID(), node.getPos())
-                for elem in node.elements:
-                    print('+', elem.getID(), end=' ')
-                    for face in elem.faces:
-                        dist = np.allclose( [ (x - x0) @ dir for x in face.pos ], 0.0 ) \
-                            and np.allclose( [ t @ dir for t in face.tangent ], 0.0, atol=0.05)
-                        if dist:
-                            print(face.id, ":", face.area, end=' ')
-                            face_idx = int(face.id[-1])
-                            elem.setSurfaceLoad(face_idx, px, pxy)
-                    print()
+        # the section at the right end
+        for elem, face in model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0), orientation=+1):
+            print('+', elem.getID(), face.id, ":", face.area)
+            face.setLoad(px, pxy)
 
-        #model.plot(factor=0, title="undeformed system", filename="plate06_undeformed.png", show_bc=1, show_loads=1)
+        model.plot(factor=0, title="undeformed system", filename="plate14_undeformed.png", show_bc=1, show_loads=1)
 
         model.setLoadFactor(1.0)
         model.solve()
 
-        #model.plot(factor=1., filename="plate06_deformed.png")
+        #model.plot(factor=1., filename="plate14_deformed.png")
 
-        #model.solver.showKt(filename="plate06_spy_Kt.png")
-        #np.save("plate6_Kt.npy",model.solver.Kt)
+        #model.solver.showKt(filename="plate14_spy_Kt.png")
+        #np.save("plate14_Kt.npy",model.solver.Kt)
 
 
 # %%
@@ -157,7 +144,7 @@ if __name__ == "__main__":
 
     import cProfile
 
-    ex = ExamplePlate10()
+    ex = ExamplePlate14()
 
     if SPARSE:
         cProfile.run('ex.run()','profile_data_sparse.txt')
