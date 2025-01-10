@@ -217,10 +217,33 @@ class DrawElement():
         implementation of a generic :code:`QUAD` type
         """
         c = PlotCurve()
-        if len(self.nodes) >= 4:
-            for node in self.nodes[:4]:
-                c += node.getDeformedPos(self, factor, **kwargs)
-            c+= self.nodes[0].getDeformedPos(self, factor, **kwargs)
+        match len(self.nodes):
+            case 4:
+                for node in self.nodes[:4]:
+                    c += node.getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
+            case 8:
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[4].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[1].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[5].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[2].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[6].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[3].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[7].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
+            case 9:
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[4].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[1].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[5].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[2].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[6].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[3].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[7].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[8].getDeformedPos(self, factor, **kwargs)
+
         return c.asTuple()
 
     def drawBrick(self, factor, **kwargs):

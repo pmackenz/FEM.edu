@@ -1,3 +1,7 @@
+from dis import JUMP_BACKWARD
+
+from fontTools.misc.textTools import caselessSort
+
 from .Mesher import *
 from ..domain import Node, System
 
@@ -63,6 +67,20 @@ class PatchMesher(Mesher):
         #     msg="Incompatible element type: {} in {}".format(element_type.__class__.__name__, sys._getframe().f_code.co_name)
         #     raise TypeError(msg)
 
+        match element_type.__name__:
+            case 'Quad':
+                return self._quad4_mesh(NeX, NeY, element_type, material, **kwargs)
+            case 'Quad8':
+                return self._quad8_mesh(NeX, NeY, element_type, material, **kwargs)
+            case 'Quad9':
+                return self._quad9_mesh(NeX, NeY, element_type, material, **kwargs)
+            case _:
+                msg = "{} does not support element type {}".format(self.__class__.__name__, element_type.__name__)
+                raise TypeError(msg)
+
+
+    def _quad4_mesh(self, NeX, NeY, element_type, material, **kwargs):
+
         # local coordinates
         ss = np.linspace(-1.,1.,NeX+1)
         tt = np.linspace(-1.,1.,NeY+1)
@@ -96,8 +114,49 @@ class PatchMesher(Mesher):
 
         return (nodes, elements)
 
+    def _quad8_mesh(self, NeX, NeY, element_type, material, **kwargs):
+        msg = "{} does not yet support element type {}".format(self.__class__.__name__, element_type.__name__)
+        raise TypeError(msg)
+
+    def _quad9_mesh(self, NeX, NeY, element_type, material, **kwargs):
+
+        # local coordinates
+        ss = np.linspace(-1.,1.,2*NeX+1)
+        tt = np.linspace(-1.,1.,2*NeY+1)
+
+        nodes    = []
+        elements = []
+
+        for t in tt:
+            row = []
+            for s in ss:
+                # mapping from local to global coordinates
+                X, Y = self.map(s,t)
+                nd = Node(X,Y)
+                row.append(nd)
+            nodes.append(row)
+
+        for J in range(0, 2*NeY, 2):
+            for I in range(0, 2*NeX, 2):
+                node_list = [ nodes[J][I], nodes[J][I+2], nodes[J+2][I+2], nodes[J+2][I],      # corner nodes
+                              nodes[J][I+1], nodes[J+1][I+2], nodes[J+2][I+1], nodes[J+1][I],  # midside nodes
+                              nodes[J+1][I+1] ]                                                # center node
+                elem = element_type(*node_list, deepcopy(material))
+                elements.append(elem)
+
+        nodes = [ nd for row in nodes for nd in row ]
+
+        if self.model and isinstance(self.model, System):
+            self.model.addNode(*nodes)
+            self.model.addElement(*elements)
+
+        self.nodes    = nodes
+        self.elements = elements
+
+        return (nodes, elements)
+
     def triangleMesh(self, NeX, NeY, element_type, material, **kwargs):
-        """
+        r"""
         2D mesher using triangular elements
 
         This is an abstract class - requires implementation in subclass
@@ -110,9 +169,17 @@ class PatchMesher(Mesher):
         :var nodes: list of created :py:class:`Node` objects
         :var elements: list of created (subclass of) :py:class:`Element` objects
         """
-        # if not element_type.isType(Element.TRIANGLE):
-        #     msg="Incompatible element type: {} in {}".format(element_type.__class__.__name__, sys._getframe().f_code.co_name)
-        #     raise TypeError(msg)
+
+        match element_type.__name__:
+            case 'Triangle':
+                return self._triangle3_mesh(NeX, NeY, element_type, material, **kwargs)
+            case 'Triangle6':
+                return self._triangle6_mesh(NeX, NeY, element_type, material, **kwargs)
+            case _:
+                msg = "{} does not support element type {}".format(self.__class__.__name__, element_type.__name__)
+                raise TypeError(msg)
+
+    def _triangle3_mesh(self, NeX, NeY, element_type, material, **kwargs):
 
         # local coordinates
         ss = np.linspace(-1.,1.,NeX+1)
@@ -146,6 +213,46 @@ class PatchMesher(Mesher):
             self.model.addElement(*elements)
 
         self.nodes    = nodes
+        self.elements = elements
+
+        return (nodes, elements)
+
+    def _triangle6_mesh(self, NeX, NeY, element_type, material, **kwargs):
+
+        # local coordinates
+        ss = np.linspace(-1., 1., 2*NeX + 1)
+        tt = np.linspace(-1., 1., 2*NeY + 1)
+
+        nodes = []
+        elements = []
+
+        for t in tt:
+            row = []
+            for s in ss:
+                # mapping from local to global coordinates
+                X, Y = self.map(s, t)
+                nd = Node(X, Y)
+                row.append(nd)
+            nodes.append(row)
+
+        for j in range(0, 2*NeY, 2):
+            for i in range(0, 2*NeX, 2):
+                node_list = [nodes[j][i], nodes[j][i+2], nodes[j+2][i],           # corner nodes
+                             nodes[j][i+1], nodes[j+1][i+1], nodes[j+1][i]]       # midside nodes
+                elem = element_type(*node_list, deepcopy(material))
+                elements.append(elem)
+                node_list = [nodes[j+2][i+2], nodes[j+2][i], nodes[j][i+2],       # corner nodes
+                             nodes[j+2][i+1], nodes[j+1][i+1], nodes[j+1][i+2]]   # midside nodes
+                elem = element_type(*node_list, deepcopy(material))
+                elements.append(elem)
+
+        nodes = [nd for row in nodes for nd in row]
+
+        if self.model and isinstance(self.model, System):
+            self.model.addNode(*nodes)
+            self.model.addElement(*elements)
+
+        self.nodes = nodes
         self.elements = elements
 
         return (nodes, elements)
