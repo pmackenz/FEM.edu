@@ -87,15 +87,19 @@ class Triangle(Element):
         Gt = self.gcont[1]
         Gu = -Gs - Gt
 
-        # covariant base vectors (current system)
+        # covariant base vectors (reference system)
+        gso = self.gcov[0]
+        gto = self.gcov[1]
+        guo = -gso - gto
 
+        # covariant base vectors (current system)
         gs = node1.getDeformedPos() - node0.getDeformedPos()
         gt = node2.getDeformedPos() - node0.getDeformedPos()
         gu = -gs - gt
 
         # metric (current system)
-        gcov = np.vstack((gs, gt))
-        gIJ = gcov @ gcov.T
+        # gcov = np.vstack((gs, gt))
+        # gIJ = gcov @ gcov.T
 
         # deformation gradient
         F = np.outer(gs, Gs) + np.outer(gt, Gt)
@@ -118,15 +122,15 @@ class Triangle(Element):
         tu = S @ Gu
 
         # initialize arrays
-        gx = Gs[0] * gs + Gt[0] * gt
-        gy = Gs[1] * gs + Gt[1] * gt
+        gxo = Gs[0] * gso + Gt[0] * gto
+        gyo = Gs[1] * gso + Gt[1] * gto
 
         # compute the kinematic matrices
         GI = (Gu, Gs, Gt)
 
-        Bu = [Gu[0]*gx, Gu[1]*gy, Gu[1]*gx + Gu[0]*gy]
-        Bs = [Gs[0]*gx, Gs[1]*gy, Gs[1]*gx + Gs[0]*gy]
-        Bt = [Gt[0]*gx, Gt[1]*gy, Gt[1]*gx + Gt[0]*gy]
+        Bu = [Gu[0]*gxo, Gu[1]*gyo, Gu[1]*gxo + Gu[0]*gyo]
+        Bs = [Gs[0]*gxo, Gs[1]*gyo, Gs[1]*gxo + Gs[0]*gyo]
+        Bt = [Gt[0]*gxo, Gt[1]*gyo, Gt[1]*gxo + Gt[0]*gyo]
 
         BI = ( np.array(Bu), np.array(Bs), np.array(Bt) )
 
