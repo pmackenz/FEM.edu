@@ -243,6 +243,7 @@ class DrawElement():
                 c += self.nodes[7].getDeformedPos(self, factor, **kwargs)
                 c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
                 c += self.nodes[8].getDeformedPos(self, factor, **kwargs)
+                c += self.nodes[0].getDeformedPos(self, factor, **kwargs)
 
         return c.asTuple()
 
