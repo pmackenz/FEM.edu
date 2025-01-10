@@ -3,20 +3,22 @@
 Benchmark problem: Wedged Plate - geometrically linear theory
 ======================================================================
 
-Using PatchMesher to model the plate
+**Features**
+
+* Using PatchMesher to model the plate
+* nodal boundary conditions using location-based search
+* face loads using location-based search
+* linear (small deformation) Triangle and Quad elements
+* history plot feature
 
 """
-import math
-import sys
 import numpy as np
 
 from femedu.examples import Example
 
-from femedu.domain import System, Node
-from femedu.solver import NewtonRaphsonSolver
-from femedu.solver import LinearSolver
-from femedu.elements.linear import Triangle
-from femedu.elements.linear import Quad
+from femedu.domain import System
+from femedu.solver import NewtonRaphsonSolver, LinearSolver
+from femedu.elements.linear import Quad, Triangle
 from femedu.materials import PlaneStress
 from femedu.mesher import *
 
@@ -55,22 +57,25 @@ class Example19_Benchmark01(Example):
 
         # ========== setting load parameters ==============
 
-        px = 0.0  # uniform load normal to x=Lx
-        py = 0.0  # uniform load normal to y=Ly
+        px = 0.0          # uniform load normal to x=Lx
         pxy = 100.0 / L3  # uniform shear load on x=L1
 
         # ========== setting analysis parameters ==============
 
+        USE_NONLINEAR_SOLVER = False  # set to True if using an inelastic material
+
         target_load_level = 5.00  # reference load
-        max_steps = 5  # number of load steps: 2 -> [0.0, 1.0]
+        max_steps = 3  # number of load steps: 2 -> [0.0, 1.0]
 
         #
         # ==== Build the system model ====
         #
 
         model = System()
-        #model.setSolver(LinearSolver())
-        model.setSolver(NewtonRaphsonSolver())
+        if USE_NONLINEAR_SOLVER:
+            model.setSolver(NewtonRaphsonSolver())
+        else:
+            model.setSolver(LinearSolver())
 
         # create nodes
 
