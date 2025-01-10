@@ -284,7 +284,9 @@ class System():
                                 area_test = No @ area / np.linalg.norm(area)
 
                         if  dist < tol and area_test > (1. - 10. * tol):
-                            ans.append((elem,face))
+                            # avoid duplication
+                            if (elem,face) not in ans:
+                                ans.append((elem,face))
 
         return ans
 
