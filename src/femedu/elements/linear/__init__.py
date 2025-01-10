@@ -21,6 +21,7 @@ __all__ = (
 
 from .Beam2D import *
 from .Quad import *
+from .Quad9 import *
 from .ReducedIntegrationQuad import *
 from .HRQuad import *
 from .Triangle import *
