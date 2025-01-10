@@ -66,15 +66,15 @@ class Triangle6(Element):
                 base2 += dN2 * node.getPos()
 
             gpData.X = X
-            gcov = np.vstack((base1, base2))
-            gpData.base = gcov
+            self.gcov = np.vstack((base1, base2))
+            gpData.base = self.gcov
 
             # metric (reference system)
-            GIJ = gcov @ gcov.T
+            GIJ = self.gcov @ self.gcov.T
             gpData.state['GIJ'] = GIJ
 
             # dual base vectors (reference system)
-            gpData.dual_base = np.linalg.inv(GIJ) @ gcov
+            gpData.dual_base = np.linalg.inv(GIJ) @ self.gcov
 
             gpData.J = np.sqrt(np.linalg.det(GIJ))
 
@@ -142,23 +142,26 @@ class Triangle6(Element):
                 s=xi[0], t=xi[1],  # local coordinates for current position
                 n=(0, 1))  # first derivative with respect to t
 
+            # grab covariant base vectors (reference system) ...
+            gso = self.gcov[0]
+            gto = self.gcov[1]
+            gu0 = -gso - gto
+
             # initialize covariant base vectors (current system) ...
-            gs = np.zeros_like(Gs) #
+            gs = np.zeros_like(Gs)  #
             gt = np.zeros_like(Gt)
 
             # ... compute
             for dN1, dN2, node in zip(dshape1, dshape2, self.nodes):
                 gs += dN1 * node.getDeformedPos(self)
                 gt += dN2 * node.getDeformedPos(self)
-
-            gu = -gs - gt
+            # gu = -gs - gt
 
             # deformation gradient
             F = np.outer(gs, Gs) + np.outer(gt, Gt)
 
             # strain
-            # eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
-            eps = 0.5 * ( F.T @ F - np.eye(np.size(gs)) )
+            eps = 0.5 * ( F + F.T ) - np.eye(np.size(gso))
             gpData.state['strain'] = eps
 
             # update the material state
@@ -176,13 +179,13 @@ class Triangle6(Element):
             dshapeY = dshape1 * Gs[1] + dshape2 * Gt[1]
 
             # initialize arrays
-            gx = Gs[0] * gs + Gt[0] * gt
-            gy = Gs[1] * gs + Gt[1] * gt
+            gxo = Gs[0] * gso + Gt[0] * gto
+            gyo = Gs[1] * gso + Gt[1] * gto
 
             # compute the kinematic matrices
             GI = np.vstack((dshapeX,dshapeY)).T
 
-            BI = np.array([ [dNx*gx, dNy*gy, dNx*gy + dNy*gx] for (dNx,dNy) in zip(dshapeX,dshapeY) ])
+            BI = np.array([ [dNx*gxo, dNy*gyo, dNx*gyo + dNy*gxo] for (dNx,dNy) in zip(dshapeX,dshapeY) ])
 
             # internal force
             area = gpData.J * wi
