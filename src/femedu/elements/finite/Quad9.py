@@ -72,8 +72,8 @@ class Quad9(Element):
 
         for xi, wi in zip(xis, wis):
 
-            dphi_ds = interpolation.shape(1, *xi, n=(1,0))
-            dphi_dt = interpolation.shape(1, *xi, n=(0,1))
+            dphi_ds = interpolation.shape(2, *xi, n=(1,0))
+            dphi_dt = interpolation.shape(2, *xi, n=(0,1))
             Grad = np.vstack((dphi_ds, dphi_dt))
 
             # reference configuration
@@ -92,7 +92,6 @@ class Quad9(Element):
             self.stress.append({})
             gpt += 1
 
-        pass
 
 
     def __str__(self):

@@ -139,10 +139,24 @@ class QuadShapes(ShapeFunctions):
         #   quadratic shape functions: 9-node quad
         #
             line = LineShapes()
-            phi_s = line.shape(order=2, xi=s, n=n[0])
-            phi_t = line.shape(order=2, xi=t, n=n[1])
+            phi_s = line.shape(order=2, xi=2*s-1, n=n[0])
+            phi_t = line.shape(order=2, xi=2*t-1, n=n[1])
 
             PHI = phi_s*phi_t  # this is an element-by element multiplication
+
+            PHI = np.array(
+                [
+                    phi_s[0] * phi_t[0],  # bottom left
+                    phi_s[1] * phi_t[0],  # bottom right
+                    phi_s[1] * phi_t[1],  # top right
+                    phi_s[0] * phi_t[1],  # top left
+                    phi_s[2] * phi_t[0],  # bottom center
+                    phi_s[1] * phi_t[2],  # right center
+                    phi_s[2] * phi_t[1],  # top center
+                    phi_s[0] * phi_t[2],  # left center
+                    phi_s[2] * phi_t[2]   # center center
+                ]
+            )
 
         elif (order == 3):
         #
@@ -150,8 +164,8 @@ class QuadShapes(ShapeFunctions):
         #   these require rotations!
         #
             line = LineShapes()
-            phi_s = line.shape(order=3, xi=s, n=n[0])
-            phi_t = line.shape(order=3, xi=t, n=n[1])
+            phi_s = line.shape(order=3, xi=2*s-1, n=n[0])
+            phi_t = line.shape(order=3, xi=2*t-1, n=n[1])
 
             PHI = phi_s*phi_t  # this is an element-by element multiplication
 
