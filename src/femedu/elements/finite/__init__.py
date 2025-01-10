@@ -11,6 +11,7 @@ Elements in this group share the following features:
 
 __all__ = (
     "Triangle",
+    "Triangle6",
     "Quad",
     "Quad8",
     "Quad9",
@@ -23,5 +24,6 @@ from .Quad import *
 from .Quad8 import *
 from .Quad9 import *
 from .Triangle import *
+from .Triangle6 import *
 from .Truss import *
 
