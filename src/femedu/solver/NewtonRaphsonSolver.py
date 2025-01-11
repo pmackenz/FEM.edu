@@ -27,6 +27,12 @@ class NewtonRaphsonSolver(Solver):
         # compute force vector and tangent stiffness
             self.assemble()
 
+            # vals=(
+            #     np.sum(self.P), np.linalg.norm(self.P),
+            #     np.sum(self.R), np.linalg.norm(self.R)
+            # )
+            # print("assembly has sum(P)={:.3g}   norm(P)={:.3g}   sum(R)={:.3g}   norm(R)={:.3g}".format(*vals))
+
             # we are using , force_only=False and simply reuse self.Kt from that run (!)
             normR = self.checkResiduum(verbose, force_only=False)
 

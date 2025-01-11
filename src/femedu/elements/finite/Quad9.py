@@ -63,8 +63,8 @@ class Quad9(Element):
         X  = np.array([ node.getPos() for node in self.nodes ])
 
         # initialization step
-        integrator = QuadIntegration(order=3)
-        xis, wis = integrator.parameters()
+        self.integrator = QuadIntegration(order=4)
+        xis, wis = self.integrator.parameters()
 
         gpt = 0
 
@@ -136,13 +136,11 @@ class Quad9(Element):
     def updateState(self):
 
         # initialization step
-        integrator = QuadIntegration(order=3)
 
         nnds = len(self.nodes)
         ndof = self.ndof       # mechanical element
 
         self.Forces = [ np.zeros(ndof) for k in range(nnds) ]
-        R  = [ np.zeros((ndof,ndof)) for i in range(nnds) ]
         Kt = [ [ np.zeros((ndof,ndof)) for i in range(nnds) ] for j in range(nnds) ]
 
         # create array of deformed nodal coordinates
@@ -152,7 +150,7 @@ class Quad9(Element):
 
         # interpolation = QuadShapes()   # we are doing that and the isoparametric transformation in the constructor
 
-        xis, wis = integrator.parameters()
+        xis, wis = self.integrator.parameters()
 
         for xi, wi in zip(xis, wis):
 
@@ -225,6 +223,23 @@ class Quad9(Element):
         This method should be called during :py:meth:`updateState()` by every
         element supporting surface loads
 
+        Nodes are mapped between the element and each Face2D as follows
+
+        .. list-table:: Mapping element node IDs to face node IDs
+            :header-rows: 1
+
+            * - Face ID
+              - Face nodes (0,1,2)
+            * - 0
+              - (0,4,1)
+            * - 0
+              - (1,5,2)
+            * - 0
+              - (2,6,3)
+            * - 0
+              - (3,7,0)
+
+
         """
         self.Loads = [ np.zeros_like(self.Forces[I]) for I in range(len(self.nodes)) ]
 
@@ -238,7 +253,7 @@ class Quad9(Element):
 
             # add to element load vectors
             self.Loads[I] += loads[0]
-            self.Loads[J] += loads[1]
+            self.Loads[J] += loads[2]
             if loads.shape[0]>2:
                 numNodes = len(self.nodes)
                 if numNodes == 8 or numNodes == 9:
@@ -247,7 +262,7 @@ class Quad9(Element):
                     msg = "Force data provided from Face2D inconsistent with element data"
                     raise TypeError(msg)
 
-                self.Loads[K] += loads[2]
+                self.Loads[K] += loads[1]
 
     def getStress(self):
         return self.Stress

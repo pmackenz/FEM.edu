@@ -168,7 +168,8 @@ class Quad9(Element):
             # -------------------------
 
             # deformation gradient
-            F = (Grad @ xt).T
+            F  = (Grad @ xt).T
+            Fo = (Grad @ xo).T
 
             # compute Green-Lagrange strain tensor
             #eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
@@ -187,9 +188,9 @@ class Quad9(Element):
             self.stress[gpt] = stress
 
             # compute kinematic matrices
-            BI = [ np.array([ Grad[0,K],                       # the XX component
-                              Grad[1,K],                       # the YY component
-                              Grad[0,K] + Grad[1,K] ])         # the XY component is XY + YX ("gammaXY = 2 epsXY")
+            BI = [np.array([Grad[0, K] * Fo[:, 0],  # the XX component
+                            Grad[1, K] * Fo[:, 1],  # the YY component
+                            Grad[0, K] * Fo[:, 1] + Grad[1, K] * Fo[:, 0]])    # the XY component is XY + YX ("gammaXY = 2 epsXY")
                    for K in range(nnds) ]
 
             # internal forces
