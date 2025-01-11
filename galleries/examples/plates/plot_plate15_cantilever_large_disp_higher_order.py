@@ -6,14 +6,13 @@ Bending a cantilever beam using Quad9 elements
 Using PatchMesher to model the beam
 
 """
-import math
-import sys
 import numpy as np
 
 from femedu.examples import Example
 
 from femedu.domain import System
 from femedu.solver import NewtonRaphsonSolver
+#from femedu.elements.linear import Quad9
 from femedu.elements.finite import Quad9
 from femedu.materials import PlaneStress
 from femedu.mesher import *
@@ -58,14 +57,8 @@ class ExamplePlate15(Example):
 
         # ========== setting analysis parameters ==============
 
-        target_load_level = 100.00  # reference load
-        max_steps = 21  # number of load steps: 2 -> [0.0, 1.0]
-
         target_load_level = 10.00  # reference load
-        max_steps = 1  # number of load steps: 2 -> [0.0, 1.0]
-
-        # target_load_level = 10.00    # reference load
-        # max_steps = 3                # number of load steps: 2 -> [0.0, 1.0]
+        max_steps = 10  # number of load steps: 2 -> [0.0, 1.0]
 
         # define a list of target load levels
         load_levels = np.linspace(0, target_load_level, max_steps+1)
@@ -109,6 +102,14 @@ class ExamplePlate15(Example):
 
         for lf in load_levels:
             model.setLoadFactor(lf)
+
+            for node, _ in model.findNodesAlongLine((Lx, 0.), (0., 1.)):
+                print(node)
+
+            for _, face in model.findFacesAlongLine((Lx, 0.), (0., 1.)):
+                print(face)
+
+
             model.solve(verbose=True)
 
             # model.report()

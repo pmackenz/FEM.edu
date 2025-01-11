@@ -3,6 +3,13 @@
 Full Revision Log
 ==================
 
+Release 1.0.23
+---------------
+Bringing Quad9 and Triangle6 to the game. Both elements are now available in linear and finite deformation versions.
+
+.. git_changelog::
+    :rev-list: release_1.0.22..release_1.0.23
+
 Release 1.0.22
 ---------------
 .. git_changelog::

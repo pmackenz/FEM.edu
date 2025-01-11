@@ -63,10 +63,7 @@ class Example21_Benchmark01(Example):
         # ========== setting analysis parameters ==============
 
         target_load_level = 5.00  # reference load
-        max_steps = 26  # number of load steps: 2 -> [0.0, 1.0]
-
-        target_load_level = 0.10  # reference load
-        max_steps = 1  # number of load steps: 2 -> [0.0, 1.0]
+        max_steps = 25  # number of load steps: 2 -> [0.0, 1.0]
 
         # define a list of target load levels
         load_levels = np.linspace(0, target_load_level, max_steps+1)
@@ -129,7 +126,7 @@ class Example21_Benchmark01(Example):
 
         model.plot(factor=0, title="undeformed system", filename="benchmark01_undeformed.png", show_bc=1, show_loads=1)
 
-        for lf in np.linspace(0.0, target_load_level, max_steps):
+        for lf in load_levels:
             model.setLoadFactor(lf)
             model.solve(verbose=True)
 

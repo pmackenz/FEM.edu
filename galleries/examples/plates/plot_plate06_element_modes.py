@@ -25,12 +25,6 @@ Basic implementation test with applied loads.
         nu =  0.30
         t  =  1.0
 
-    Element loads:
-        node 0: [ 0.0, 0.0]
-        node 1: [ 5.0, 0.0]
-        node 2: [ 5.0, 0.0]
-        node 3: [ 0.0, 0.0]
-
 Author: Peter Mackenzie-Helnwein
 """
 
@@ -58,7 +52,7 @@ params = dict(
 )
 
 a = 10.     # length of the plate in the x-direction
-b = 10.     # length of the plate in the y-direction
+b = 12.     # length of the plate in the y-direction
 
 model = System()
 model.setSolver(NewtonRaphsonSolver())

@@ -1,13 +1,89 @@
-"""
+r"""
 ==========================================================
-Bending a cantilever beam
+Bending a cantilever beam using Quad elements
 ==========================================================
 
 Using PatchMesher to model the beam
 
+.. dropdown::  Background Theory
+
+    This problem can be approximately validated using Bernoulli-Euler theory for
+    small deformations. The given problem shall be modeled using
+
+    .. list-table::
+        :widths: 20 30 50
+        :header-rows: 1
+
+        * - parameter
+          - value
+          - description
+        * - :math:`E`
+          - 20000.
+          - modulus of elasticity (in ksi)
+        * - :math:`I`
+          - 666.667
+          - area moment of inertia (in :math:`inches^4`)
+        * - :math:`L`
+          - 120.
+          - length of the cantilever (in inches)
+        * - :math:`P`
+          - 30.
+          - force at :math:`x=L` (in kips)
+
+    The general solution then yields
+
+    .. math::
+        v(x) = -\frac{P L^3}{6 EI}\left( \frac{x}{L} \right)^2\left( 3 - \frac{x}{L} \right)
+
+    .. math::
+        \theta(x) = \frac{d}{dx} v(x) = -\frac{P L^2}{2 EI}\left( \frac{x}{L} \right)\left( 2 - \frac{x}{L} \right)
+
+    .. math::
+        M(x) = EI \frac{d}{dx} theta(x) = -\frac{P L}{6} \left( 1 - \frac{x}{L} \right)
+
+    .. math::
+        V(x) = \frac{d}{dx} M(x) = P
+
+    The horizontal movement follows as (:math:`2^{nd}` order accurate)
+
+    .. math::
+        u(x) = \int\limits_{0}^{x} -\theta^2(s) \: ds
+             = -\frac{P^2 L^5}{60 (EI)^2}\left( \frac{x}{L} \right)^3\left( 20 - 15\:\frac{x}{L}+3 \left( \frac{x}{L} \right)^2 \right)
+
+
+
+    .. list-table:: Reference values for a load factor of :math:`\lambda=1.0`
+        :widths: 20 30 50
+        :header-rows: 1
+
+        * - variable
+          - value
+          - description
+        * - :math:`u(L)`
+          - -0.0167962
+          - end displacement (in inches). :math:`u>0` means moving to the right.
+        * - :math:`v(L)`
+          - -1.296
+          - end displacement (in inches). :math:`v>0` means moving up.
+
+
+
+    .. list-table:: Reference values for a load factor of :math:`\lambda=10.0`
+        :widths: 20 30 50
+        :header-rows: 1
+
+        * - variable
+          - value
+          - description
+        * - :math:`u(L)`
+          - -1.67962
+          - end displacement (in inches). :math:`u>0` means moving to the right.
+        * - :math:`v(L)`
+          - -12.96
+          - end displacement (in inches). :math:`v>0` means moving up.
+
+
 """
-import math
-import sys
 import numpy as np
 
 from femedu.examples import Example
@@ -59,14 +135,11 @@ class ExamplePlate14(Example):
 
         # ========== setting analysis parameters ==============
 
-        target_load_level = 100.00    # reference load
-        max_steps = 21                # number of load steps: 2 -> [0.0, 1.0]
-
-        # target_load_level = 10.00    # reference load
-        # max_steps = 3                # number of load steps: 2 -> [0.0, 1.0]
+        target_load_level = 10.00    # reference load
+        max_steps = 10               # number of load steps: 2 -> [0.0, 1.0]
 
         # define a list of target load levels
-        load_levels = np.linspace(0, target_load_level, max_steps)
+        load_levels = np.linspace(0, target_load_level, max_steps+1)
 
         #
         # ==== Build the system model ====
@@ -105,7 +178,7 @@ class ExamplePlate14(Example):
 
         model.plot(factor=0, title="undeformed system", filename="plate11_undeformed.png", show_bc=1, show_loads=1)
 
-        for lf in np.linspace(0.0, target_load_level, max_steps):
+        for lf in load_levels:
 
             model.setLoadFactor(lf)
             model.solve(verbose=True)
