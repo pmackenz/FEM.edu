@@ -246,7 +246,7 @@ class ElementPlotter(AbstractPlotter):
             triangles = []
             for elem in self.elements:
                 if elem.isType(Element.TRIANGLE):
-                    tri = [ vert_ptr[node] for node in elem.nodes ]
+                    tri = [ vert_ptr[node] for node in [ elem.nodes[k] for k in [0,1,2] ] ]
                     triangles.append(tri)
                 elif elem.isType(Element.QUAD):
                     tri = [ vert_ptr[node] for node in [ elem.nodes[k] for k in [0,1,2] ] ]
