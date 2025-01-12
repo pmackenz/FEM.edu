@@ -1,3 +1,5 @@
+.. _Material_classes:
+
 Material class
 ==========================
 

@@ -1,3 +1,5 @@
+.. _Mesher_classes:
+
 Mesher classes
 ==========================
 

@@ -1,3 +1,5 @@
+.. _CurveMesher_class:
+
 CurveMesher class
 ==========================
 

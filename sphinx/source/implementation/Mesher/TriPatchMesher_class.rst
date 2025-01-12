@@ -1,3 +1,5 @@
+.. _tripatch_mesher_class:
+
 TriPatchMesher class
 ==========================
 

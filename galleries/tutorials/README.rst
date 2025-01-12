@@ -6,8 +6,7 @@
 Tutorials Gallery
 ===================
 
-This page contains tutorials plots. Click on any image to see the full image
-and source code.
-
-For examples, see our :ref:`Examples Gallery<examples_gallery>`.
+This page contains tutorials on various tasks, and an overview over available element types.
+Those tutorials provide a quick overview on features and modeling techniques.
+For more full examples, see the :ref:`Examples Gallery<examples_gallery>`.
 

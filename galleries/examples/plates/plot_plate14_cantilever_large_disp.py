@@ -39,7 +39,7 @@ Using PatchMesher to model the beam
         \theta(x) = \frac{d}{dx} v(x) = -\frac{P L^2}{2 EI}\left( \frac{x}{L} \right)\left( 2 - \frac{x}{L} \right)
 
     .. math::
-        M(x) = EI \frac{d}{dx} theta(x) = -\frac{P L}{6} \left( 1 - \frac{x}{L} \right)
+        M(x) = EI \frac{d}{dx} \theta(x) = -\frac{P L}{6} \left( 1 - \frac{x}{L} \right)
 
     .. math::
         V(x) = \frac{d}{dx} M(x) = P
@@ -47,8 +47,8 @@ Using PatchMesher to model the beam
     The horizontal movement follows as (:math:`2^{nd}` order accurate)
 
     .. math::
-        u(x) = \int\limits_{0}^{x} -\theta^2(s) \: ds
-             = -\frac{P^2 L^5}{60 (EI)^2}\left( \frac{x}{L} \right)^3\left( 20 - 15\:\frac{x}{L}+3 \left( \frac{x}{L} \right)^2 \right)
+        u(x) = \int\limits_{0}^{x} -\frac{1}{2} \theta^2(s) \: ds
+             = -\frac{P^2 L^5}{120 (EI)^2}\left( \frac{x}{L} \right)^3\left( 20 - 15\:\frac{x}{L}+3 \left( \frac{x}{L} \right)^2 \right)
 
 
 
@@ -60,7 +60,7 @@ Using PatchMesher to model the beam
           - value
           - description
         * - :math:`u(L)`
-          - -0.0167962
+          - -0.0083981
           - end displacement (in inches). :math:`u>0` means moving to the right.
         * - :math:`v(L)`
           - -1.296
@@ -76,7 +76,7 @@ Using PatchMesher to model the beam
           - value
           - description
         * - :math:`u(L)`
-          - -1.67962
+          - -0.83981
           - end displacement (in inches). :math:`u>0` means moving to the right.
         * - :math:`v(L)`
           - -12.96

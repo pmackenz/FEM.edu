@@ -97,17 +97,17 @@ class TriPatchMesher(Mesher):
             elements = []
 
             patch0 = PatchMesher(self.model, pt0, pt3, pt6, pt5, pt7, pt13, pt15, pt12)
-            nds, elms = patch0.triangleMesh(Ne//2, Ne//2, element_type, material)
+            nds, elms = patch0.quadMesh(Ne//2, Ne//2, element_type, material)
             nodes += nds
             elements += elms
 
             patch0 = PatchMesher(self.model, pt1, pt4, pt6, pt3, pt9, pt14, pt13, pt8)
-            nds, elms = patch0.triangleMesh(Ne//2, Ne//2, element_type, material)
+            nds, elms = patch0.quadMesh(Ne//2, Ne//2, element_type, material)
             nodes += nds
             elements += elms
 
             patch0 = PatchMesher(self.model, pt2, pt5, pt6, pt4, pt11, pt15, pt14, pt10)
-            nds, elms = patch0.triangleMesh(Ne//2, Ne//2, element_type, material)
+            nds, elms = patch0.quadMesh(Ne//2, Ne//2, element_type, material)
             nodes += nds
             elements += elms
 

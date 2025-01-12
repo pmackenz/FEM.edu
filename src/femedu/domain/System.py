@@ -27,11 +27,13 @@ class System():
     class: representing a System model
     """
 
-    def __init__(self):
+    def __init__(self, verbose=False):
         self.nodes       = []
         self.elements    = []
         self.constraints = []
         self.plotter     = Plotter()
+
+        self.verbose = verbose
 
         self.disp        = np.array([])
         self.loads       = np.zeros_like(self.disp)
@@ -82,7 +84,7 @@ class System():
             if newNode not in self.nodes:
                 newNode.setLoadFactor(self.loadfactor)
                 self.nodes.append(newNode)
-            else:
+            elif self.verbose:
                 print('addNode: node {} already exists in system and was not added again'.format(newNode.getID()))
 
     def __add__(self, other):

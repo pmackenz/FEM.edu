@@ -1,8 +1,8 @@
 """
-.. _model_creation_02:
+.. _loading_a_model_03:
 
 ===================================================
-Tutorial 2 - Loading a Model
+Tutorial 3 - Loading a Model
 ===================================================
 This tutorial demonstrated loading techniques in |Application|.
 """
