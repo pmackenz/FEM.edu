@@ -1,5 +1,4 @@
 from copy import deepcopy
-from select import KQ_NOTE_TRACK
 
 import numpy as np
 import os
