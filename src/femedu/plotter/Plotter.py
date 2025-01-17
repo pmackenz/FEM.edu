@@ -116,6 +116,31 @@ class Plotter(AbstractPlotter):
         """
         Create a plot using colors to identify magnitude of internal force.
 
+        .. list-table:: known variable_name
+            :header-rows: 1
+
+            * - keyword
+              - description
+            * - 'ux', 'uy', 'uz'
+              - displacement component in the `x`, `y` or `z` direction
+            * - 'rx', 'ry', 'rz'
+              - rotation around the `x`, `y` or `z` axis
+            * - 'sxx', 'syy', 'szz'
+              - normal stress :math:`\sigma_{xx}`, :math:`\sigma_{yy}`, :math:`\sigma_{zz}`
+            * - 'sxy', 'syz', 'szx'
+              - shear stress :math:`\sigma_{xy}`, :math:`\sigma_{yz}`, :math:`\sigma_{zx}`
+            * - 'epsxx', 'epsyy', 'epszz'
+              - normal strain :math:`\varepsilon_{xx}`, :math:`\varepsilon_{yy}`, :math:`\varepsilon_{zz}`
+            * - 'epsxy', 'epsyz', 'epszx'
+              - engineering shear strain :math:`\gamma_{xy}=2\varepsilon_{xy}`,
+                :math:`\gamma_{yz}=2\varepsilon_{yz}`,
+                :math:`\gamma_{zx}=2\varepsilon_{zx}`
+            * - 'T'
+              - temperature
+            * - 'qx', 'qy', 'qz'
+              - `x`, `y` or `z` component of the temperature gradient, :math:`q_i = \partial T/\partial x_i`
+
+
         If **file** is given, store the plot to that file.
         Use proper file extensions to indicate the desired format (.png, .pdf)
 
@@ -176,7 +201,6 @@ class Plotter(AbstractPlotter):
                     Fy.append(-force[1])
 
             axs.quiver(X,Y, Fx, Fy, color='green')
-
 
 
 if __name__ == "__main__":

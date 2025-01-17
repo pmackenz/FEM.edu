@@ -192,5 +192,44 @@ class Triangle(Element):
     def getStress(self):
         return self.Stress
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
+
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        # this element has a single gauss-point at s = t = u = 1/3
+
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
+        flux     = ('qx','qy','qz')
+
+        value = 0.0
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            tensor = self.material.getStress()
+            if key in tensor:
+                value = tensor[key]
+
+        elif var.lower() in strains:
+            key = var[1:3].lower()
+            tensor = self.material.getStrain()
+            if key in tensor:
+                value = tensor[key]
+
+        elif var.lower() in flux:
+            key = var[1:2]
+            pass
+
+        wi     = self.area / 3.
+        val_wi = value * wi
+
+        for node in self.nodes:
+            node._addToMap(wi, val_wi)
+
+
 
 

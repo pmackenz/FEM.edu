@@ -169,16 +169,30 @@ class ExamplePlate03(Example):
 
         model.report()
 
-        model.plot(factor=0., title="undeformed system", filename="plate03_undeformed.png", show_bc=1)
+        model.plotSystem()
 
         model.setLoadFactor(10.0)
         model.solve()
 
-        model.solver.showKt(filename="plate03_spy_Kt.png")
+        model.solver.showKt()
 
         model.report()
 
-        model.plot(factor=25., filename="plate03_deformed.png")
+        model.plot(factor=25., filename="plate08_deformed.png")
+
+        # tmpl = "{:12.4f} {:12.4f}"
+        # for elem in model.elements:
+        #     print(tmpl.format(elem.area, elem.material.getStress()['xx']))
+
+        # requires femedu-1.0.25 or newer
+        model.valuePlot('sxx', show_mesh=True)
+
+        # tmpl = "{:>12} {:>5} {:12.4f} {:12.4f} {:12.4f}"
+        # for node in model.nodes:
+        #     print(tmpl.format(node.getID(), node._mapped_variable, node._weighted_value, node._weight, node.getMappedValue('sxx')))
+
+        model.valuePlot('syy', show_mesh=True)
+        model.valuePlot('sxy', show_mesh=True)
 
 
 # %%

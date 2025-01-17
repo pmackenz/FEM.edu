@@ -184,7 +184,7 @@ class ElementPlotter(AbstractPlotter):
             plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
-    def valuePlot(self, variable_name='', factor=0.0, filename=None, **kwargs):
+    def valuePlot(self, variable_name='', factor=0.0, filename=None, gaussptvalue=False, **kwargs):
         """
         Create a plot using colors to identify magnitude of internal force.
 
@@ -193,6 +193,7 @@ class ElementPlotter(AbstractPlotter):
 
         :param factor: True | **False**
         :param filename:  (str)
+        :param gaussptvalue: False if variable_name is nodal dof, True if variable_name is a guass-point variable.
         """
         if 'cmap' in kwargs:
             cmap = kwargs['cmap']
@@ -205,7 +206,7 @@ class ElementPlotter(AbstractPlotter):
             if 'linewidth' not in kwargs:
                 kwargs['linewidth'] = 0.125
         else:
-            limits = (-1.e300, 1.e300)
+            limits = [-1.e300, 1.e300]
             show_mesh = False
 
         if 'show_mesh' in kwargs:
@@ -229,18 +230,24 @@ class ElementPlotter(AbstractPlotter):
             for i, node in enumerate(self.nodes):
                 verts.append(node.getPos())
                 vert_ptr[node] = i
-                disps = node.getDisp(variable_name)
+                if gaussptvalue:
+                    val = node.getMappedValue(variable_name)
+                else:
+                    disps = node.getDisp(variable_name)
 
-                if not isinstance(disps, np.ndarray):
-                    print(node)
-                    print(disps)
-                    raise
+                    if not isinstance(disps, np.ndarray):
+                        print(node)
+                        print(disps)
+                        raise
 
-                val = disps[0]
+                    val = disps[0]
+
                 if val < limits[0]: val = np.nan
                 if val > limits[1]: val = np.nan
                 values.append(val)
-            verts = np.array(verts)
+
+            values = np.array(values)
+            verts  = np.array(verts)
 
             # build triangles
             triangles = []
@@ -254,8 +261,27 @@ class ElementPlotter(AbstractPlotter):
                     tri = [ vert_ptr[node] for node in [ elem.nodes[k] for k in [2,3,0] ] ]
                     triangles.append(tri)
 
+
+            # adjust limits in case the range is too small
+            if 'limits' in kwargs:
+                limits = kwargs['limits']
+                minVal = limits[0]
+                maxVal = limits[1]
+            else:
+                minVal = values.min()
+                maxVal = values.max()
+                range = maxVal - minVal
+                maxAbs = np.max([np.abs(minVal), np.abs(maxVal)])
+                if maxAbs < 1.0e-6:
+                    range = 1.0e-6
+                elif range < 0.10 * maxAbs:
+                    range = 0.10 * maxAbs
+                minVal -= 0.05 * range
+                maxVal += 0.05 * range
+
             # plot contours on undeformed elements
             tpc = axs.tripcolor(verts[:,0], verts[:,1], triangles, values,
+                                vmin=minVal, vmax=maxVal,
                                 shading='gouraud', edgecolors='k', cmap=cmap)
             fig.colorbar(tpc)
 
@@ -265,7 +291,7 @@ class ElementPlotter(AbstractPlotter):
             if 'title' in kwargs:
                 axs.set_title(kwargs['title'])
             else:
-                axs.set_title(f"Contours of '{variable_name}'")
+                axs.set_title(f"Contours of '{self.getLabel(variable_name)}'")
 
             #axs.set_xmargin(0.20)
             #axs.set_ymargin(0.20)

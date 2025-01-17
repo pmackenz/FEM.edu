@@ -147,7 +147,11 @@ class ExamplePlate05(Example):
         model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
 
         model.valuePlot('ux')
-        model.valuePlot('uy', show_mesh=True)
+
+        # requires femedu-1.0.25 or newer
+        model.valuePlot('sxx', show_mesh=True)
+        model.valuePlot('syy', show_mesh=True)
+        model.valuePlot('sxy', show_mesh=True)
 
         model.valuePlot('ux', title="Displacement 'ux' using limits=(0.2, 0.8)", limits=(0.2, 0.8))
 

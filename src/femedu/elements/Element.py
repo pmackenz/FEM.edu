@@ -333,6 +333,18 @@ class Element(DrawElement):
         self.updateState()
         return None
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
+
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
+        #raise NotImplementedError(msg)
+        print(msg)
+
     def getStiffness(self):
         r"""
         :return: the current tangent stiffness matrix

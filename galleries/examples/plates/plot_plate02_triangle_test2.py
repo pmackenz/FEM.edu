@@ -177,6 +177,11 @@ class ExamplePlate02(Example):
 
         model.report()
 
+        # requires femedu-1.0.25 or newer
+        model.valuePlot('sxx', show_mesh=True)
+        model.valuePlot('syy', show_mesh=True)
+        model.valuePlot('sxy', show_mesh=True)
+
 
 # %%
 # Run the example by creating an instance of the problem and executing it by calling :py:meth:`Example.run()`

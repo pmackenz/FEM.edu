@@ -154,3 +154,40 @@ class AbstractPlotter():
         ax.set_xlim3d([x_middle - plot_radius, x_middle + plot_radius])
         ax.set_ylim3d([y_middle - plot_radius, y_middle + plot_radius])
         ax.set_zlim3d([z_middle - plot_radius, z_middle + plot_radius])
+
+
+    def getLabel(self, variable):
+        r"""
+        Format known dof code strings as pretty LaTeX code
+
+        :param variable: code string
+        :return: string representing the variable using LaTeX
+        """
+        map = {
+            'sxx': r'$\sigma_{xx}$',
+            'syy': r'$\sigma_{yy}$',
+            'szz': r'$\sigma_{zz}$',
+            'sxy': r'$\sigma_{xy}$',
+            'syz': r'$\sigma_{yz}$',
+            'szx': r'$\sigma_{zx}$',
+            'epsxx': r'$\varepsion_{xx}$',
+            'epsyy': r'$\varepsion_{yy}$',
+            'epszz': r'$\varepsion_{zz}$',
+            'epsxy': r'$\gamma_{xy}$',
+            'epsyz': r'$\gamma_{yz}$',
+            'epszx': r'$\gamma_{zx}$',
+            'qx': r'$q_{x}$',
+            'qy': r'$q_{y}$',
+            'qz': r'$q_{z}$',
+            'ux': r'$u_{x}$',
+            'uy': r'$u_{y}$',
+            'uz': r'$u_{z}$',
+            'rx': r'$\theta_{x}$',
+            'ry': r'$\theta_{y}$',
+            'rz': r'$\theta_{z}$',
+        }
+
+        if variable in map:
+            return map[variable]
+        else:
+            return variable

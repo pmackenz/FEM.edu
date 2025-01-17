@@ -570,33 +570,70 @@ class System():
         self.plotter.displacementPlot(factor=factor, **kwargs)
 
     def valuePlot(self, variable, factor=0.0, filename=None, **kwargs):
-        """
+        r"""
         Create a false color contour plot for the selected variable.
         A value of zero (0.0) will be assigned for any variable not
         provided by an element or a node.
 
-        If **filename** is given, store the plot to that file.
-        Use proper file extensions to indicate the desired format (.png, .pdf)
+        .. list-table:: known variables
+            :header-rows: 1
+
+            * - keyword
+              - description
+            * - 'ux', 'uy', 'uz'
+              - displacement component in the `x`, `y` or `z` direction
+            * - 'rx', 'ry', 'rz'
+              - rotation around the `x`, `y` or `z` axis
+            * - 'sxx', 'syy', 'szz'
+              - normal stress :math:`\sigma_{xx}`, :math:`\sigma_{yy}`, :math:`\sigma_{zz}`
+            * - 'sxy', 'syz', 'szx'
+              - shear stress :math:`\sigma_{xy}`, :math:`\sigma_{yz}`, :math:`\sigma_{zx}`
+            * - 'epsxx', 'epsyy', 'epszz'
+              - normal strain :math:`\varepsilon_{xx}`, :math:`\varepsilon_{yy}`, :math:`\varepsilon_{zz}`
+            * - 'epsxy', 'epsyz', 'epszx'
+              - engineering shear strain :math:`\gamma_{xy}=2\varepsilon_{xy}`,
+                :math:`\gamma_{yz}=2\varepsilon_{yz}`,
+                :math:`\gamma_{zx}=2\varepsilon_{zx}`
+            * - 'T'
+              - temperature
+            * - 'qx', 'qy', 'qz'
+              - `x`, `y` or `z` component of the temperature gradient, :math:`q_i = \partial T/\partial x_i`
+
 
         :param variable: string code for variable to show
         :param factor: deformation magnification factor (default is undeformed)
-        :param filename:
+        :param filename: if **filename** is given, store the plot to that file.
+                Use proper file extensions to indicate the desired format (.png, .pdf)
         :type filename: str
         """
+        varIsAtGaussPoint = True
+
+        for node in self.nodes:
+            if node.hasDOF(variable):
+                varIsAtGaussPoint = False
+                break
+
+        if varIsAtGaussPoint:
+            for node in self.nodes:
+                node._resetGaussPointMap(variable)
+            for elem in self.elements:
+                elem.mapGaussPoints(variable)
 
         self.plotter.setMesh(self.nodes, self.elements)
-        self.plotter.valuePlot(variable_name=variable, factor=factor, filename=filename, **kwargs)
+        self.plotter.valuePlot(variable_name=variable,
+                               factor=factor,
+                               gaussptvalue=varIsAtGaussPoint,
+                               filename=filename, **kwargs)
 
     def beamValuePlot(self, variable, factor=0.0, filename=None, **kwargs):
         """
         Create a traditional beam value plot, i.e., moment and shear diagrams.
 
-        If **filename** is given, store the plot to that file.
-        Use proper file extensions to indicate the desired format (.png, .pdf)
 
         :param variable: string code for variable
         :param deformed: True | **False**
-        :param filename:
+        :param filename: if **filename** is given, store the plot to that file.
+                Use proper file extensions to indicate the desired format (.png, .pdf)
         :type filename: str
         """
 
@@ -739,31 +776,22 @@ class System():
         plt.savefig("history_plots.png", bbox_inches='tight')
         plt.show()
 
-    def plotSystem(self, factor=1.0):
+    def plotSystem(self, filename=""):
+        r"""
+        This is a shortcut for
+
+        .. code::
+
+            System.plot(filename=filename,
+                        factor=0.0,
+                        title="Undeformed system",
+                        show_loads=1,
+                        show_reactions=0)
+
+
+        :param filename: if given, save the plot to that file
         """
-        .. warning::
-
-            This method has been marked **DEPRECATED** !
-
-            Use the :code:`System.plot()` method with appropriate :code:`**kwargs` instead.
-        """
-
-        for element_description in self.elements:
-            elem = element_description['element']   # the actual element
-            (x, y) = elem.getCurve(0.0)
-            plt.plot(x, y, '-b')
-
-        for element_description in self.elements:
-            elem = element_description['element']   # the actual element
-            (x, y) = elem.getCurve(factor)
-            plt.plot(x, y, '-r')
-
-        plt.title(f"Deformed system (magnified by {factor:.1f})")
-
-        plt.gca().set_aspect('equal')
-        plt.gca().axis('off')
-        plt.savefig("deformed_system.png", bbox_inches='tight')
-        plt.show()
+        self.plot(filename=filename, factor=0.0, title="Undeformed system", show_loads=1, show_reactions=0)
 
     def pushU(self):
         """

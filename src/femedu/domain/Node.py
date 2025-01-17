@@ -48,6 +48,7 @@ class Node():
         self._transform  = None    # nodal transformation object
         self.dof_maps    = {}      # dof_idx maps for attached elements
 
+        self._resetGaussPointMap()
         self.setRecorder(None)
 
         self.setLoadFactor(1.0)
@@ -168,6 +169,13 @@ class Node():
                     raise TypeError
         else:
             self.lead.fixDOF(*dofs)
+
+    def hasDOF(self, dof):
+        """
+        :param dof: a dof string ID
+        :return: True(False) if dof in(not in) the node's dof-list
+        """
+        return (dof in self.dofs)
 
     def setDOF(self, dofs=[], values=[]):
         r"""
@@ -611,6 +619,7 @@ class Node():
 
     def resetLoad(self):
         """
+        Resets the load vectors
         """
         if self.is_lead:
             self.loads = {}
@@ -658,7 +667,7 @@ class Node():
 
     def resetDisp(self):
         """
-
+        Resets the displacement vector.
         """
         if self.is_lead:
             self.disp_nn = np.zeros(len(self.dofs))
@@ -669,7 +678,7 @@ class Node():
 
     def resetAll(self):
         """
-
+        Resets load and displacement vectors.
         """
         self.resetDisp()
         self.resetLoad()
@@ -839,6 +848,10 @@ class Node():
         self.disp       = 2.0 * self.disp_n - self.disp_nn
         self.loadfactor = 2.0 * self.loadfactor_n - self.loadfactor_nn
 
+    #
+    # Transformation methods
+    #
+
     def hasTransform(self):
         return (self._transform != None)
 
@@ -935,3 +948,52 @@ class Node():
 
         else:
             return self.lead.m2l(M, caller=caller)
+
+    #
+    # Mapping functions for Gauss-point values
+
+    def _resetGaussPointMap(self, var=None):
+        r"""
+        Initialize or reset variable used for
+        mapping gauss-point values to nodes
+        """
+        self._mapped_variable = var
+        self._weighted_value  = 0.0
+        self._weight          = 0.0
+
+        if not self.is_lead:
+            self.lead._resetGaussPointMap(var=var)
+
+    def _addToMap(self, weight, weighted_value):
+        """
+        create nodal weighted sum of values and sum of weights
+        for mapping of gauss-point values to nodes
+
+        :param weight:
+        :param weighted_value:
+        """
+        self._weight         += weight
+        self._weighted_value += weighted_value
+
+        if not self.is_lead:
+            self.lead._addToMap(weight, weighted_value)
+
+    def getMappedValue(self, var=None, ignore_lead=False):
+        r"""
+        Returns the mapped and weighted nodal value.
+
+        :param var:  optional. If a string identifying the variable is given, this function will return zero i fthe current variable does not match
+                     the once provided by the caller.
+        :return:     the weighted nodal average for the requested variable.
+        """
+        if self.is_lead or ignore_lead:
+            if var and var != self._mapped_variable:
+                ans = 0.0
+            else:
+                if self._weight > 0.0:
+                    ans = self._weighted_value / self._weight
+                else:
+                    ans = 0.0
+            return ans
+        else:
+            return self.lead.getMappedValue(var)
