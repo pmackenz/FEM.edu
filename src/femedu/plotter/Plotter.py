@@ -113,7 +113,7 @@ class Plotter(AbstractPlotter):
         plt.show()
 
     def valuePlot(self, deformed=False, file=None, **kwargs):
-        """
+        r"""
         Create a plot using colors to identify magnitude of internal force.
 
         .. list-table:: known variable_name

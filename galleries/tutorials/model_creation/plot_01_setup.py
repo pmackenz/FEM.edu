@@ -163,7 +163,7 @@ nd2.fixDOF(['uy'])        # horizontal roller
 
 # %%
 # Now we are ready to load the model.  This example shall be limited to simple nodal loads.
-# For examples of more complex load patters refer to :ref:`model_creation_02`
+# For examples of more complex load patters refer to :ref:`meshing_02`
 
 nd1.addLoad([-1.0],['uy'])
 

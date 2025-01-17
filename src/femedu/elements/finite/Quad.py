@@ -262,8 +262,6 @@ class Quad(Element):
 
         :param var: variable code for a variable to be mapped from Gauss-points to nodes
         """
-        # this element has a single gauss-point at s = t = u = 1/3
-
         stresses = ('sxx','syy','szz','sxy','syz','szx')
         strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
