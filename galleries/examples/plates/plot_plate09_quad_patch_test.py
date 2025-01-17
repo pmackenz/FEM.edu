@@ -152,7 +152,7 @@ class ExamplePlate09(Example):
         # these are only nodal forces as part of the reference load
         # .. load only the upper node
 
-        model.plot(factor=0., title="undeformed system", filename="plate09_undeformed.png", show_bc=1)
+        model.plot(factor=0., title="undeformed system", show_bc=1)
 
         model.setLoadFactor(0.0)
         model.solve()
@@ -164,11 +164,14 @@ class ExamplePlate09(Example):
         model.setLoadFactor(10.0)
         model.solve()
 
-        model.solver.showKt(filename="plate09_spy_Kt.png")
+        model.solver.showKt()
 
         model.report()
 
-        model.plot(factor=25., filename="plate09_deformed.png")
+        model.plot(factor=25.)
+        model.valuePlot('sxx', show_mesh=1)
+        model.valuePlot('syy', show_mesh=1)
+        model.valuePlot('sxy', show_mesh=1)
 
 
 # %%

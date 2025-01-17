@@ -147,6 +147,10 @@ class ExamplePlate06(Example):
         model.valuePlot('ux')
         model.valuePlot('uy', show_mesh=True)
 
+        model.valuePlot('sxx', show_mesh=1)
+        model.valuePlot('syy', show_mesh=1)
+        model.valuePlot('sxy', show_mesh=1)
+
         model.valuePlot('ux', title="Displacement 'ux' using limits=(0.2, 0.8)", limits=(0.2, 0.8))
 
 
