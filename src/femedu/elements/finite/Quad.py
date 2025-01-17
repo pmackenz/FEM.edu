@@ -53,6 +53,7 @@ class Quad(Element):
 
         self.material  = []   # one material object per integration point
         self.stress    = []   # hold gauss-point stress (1st Piola-Kirchhoff stress)
+        self.strain    = []   # hold gauss-point strain
         self.J         = []   # jacobian at integration point
 
         self.Grad      = []   # derivative of shape functions with respect to global coords
@@ -61,13 +62,14 @@ class Quad(Element):
 
         # initialization step
         integrator = QuadIntegration(order=2)
-        xis, wis = integrator.parameters()
+        self.xis, self.wis = integrator.parameters()
 
         gpt = 0
+        gp2nd_map = []
 
         interpolation = QuadShapes()
 
-        for xi, wi in zip(xis, wis):
+        for xi, wi in zip(self.xis, self.wis):
 
             dphi_ds = interpolation.shape(1, *xi, n=(1,0))
             dphi_dt = interpolation.shape(1, *xi, n=(0,1))
@@ -85,11 +87,17 @@ class Quad(Element):
             # dual base (contra-variant)
             self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
 
+            # populate gauss-point to nodes map
+            map = interpolation.shape(1, *xi, n=(0,0)) * wi
+            gp2nd_map.append(map)
+
             self.material.append(deepcopy(material))
             self.stress.append({})
+            self.strain.append({})
             gpt += 1
 
-        pass
+        self.ngpts      = gpt                    # number of gauss points
+        self._gp2nd_map = np.array(gp2nd_map).T  # gauss-point to nodes map array
 
 
     def __str__(self):
@@ -134,8 +142,6 @@ class Quad(Element):
     def updateState(self):
 
         # initialization step
-        integrator = QuadIntegration(order=2)
-
         nnds = len(self.nodes)
         ndof = self.ndof       # mechanical element
 
@@ -150,9 +156,7 @@ class Quad(Element):
 
         # interpolation = QuadShapes()   # we are doing that and the isoparametric transformation in the constructor
 
-        xis, wis = integrator.parameters()
-
-        for xi, wi in zip(xis, wis):
+        for xi, wi in zip(self.xis, self.wis):
 
             # dphi_ds = interpolation.shape(1, *xi, n=(1,0))
             # dphi_dt = interpolation.shape(1, *xi, n=(0,1))
@@ -174,9 +178,9 @@ class Quad(Element):
             eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
 
             # update the material state
-            strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            self.strain[gpt] = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
 
-            self.material[gpt].setStrain(strain)
+            self.material[gpt].setStrain(self.strain[gpt])
 
             # 2nd Piola-Kirchhoff stress
             stress = self.material[gpt].getStress()
@@ -248,7 +252,43 @@ class Quad(Element):
                 self.Loads[K] += loads[2]
 
     def getStress(self):
-        return self.Stress
+        return self.stress
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
 
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        # this element has a single gauss-point at s = t = u = 1/3
 
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
+
+        values = np.zeros( self.ngpts )
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.stress:   # gauss-point loop
+                if key in gpdata:
+                    values.append(gpdata[key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in strains:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.strain:   # gauss-point loop
+                if key in gpdata:
+                    values.append(gpdata[key])
+                else:
+                    values.append(0.0)
+
+        values = np.array(values)
+
+        for node, Ji, wi, map in zip(self.nodes, self.J, self.wis, self._gp2nd_map):
+            val_wi = map @ values
+            node._addToMap(wi * Ji, val_wi * Ji)

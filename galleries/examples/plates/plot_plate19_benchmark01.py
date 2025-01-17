@@ -139,6 +139,9 @@ class Example19_Benchmark01(Example):
 
         model.valuePlot('ux', filename=f"benchmark01_ux_lf{lf:.2f}.png")
         model.valuePlot('uy', show_mesh=True, filename=f"benchmark01_uy_lf{lf:.2f}.png")
+        model.valuePlot('sxx', show_mesh=True)
+        model.valuePlot('syy', show_mesh=True)
+        model.valuePlot('sxy', show_mesh=True)
 
         # create a history plot for the end node
 
