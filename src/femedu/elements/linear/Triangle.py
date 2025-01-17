@@ -204,7 +204,6 @@ class Triangle(Element):
 
         stresses = ('sxx','syy','szz','sxy','syz','szx')
         strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
-        flux     = ('qx','qy','qz')
 
         value = 0.0
 
@@ -219,10 +218,6 @@ class Triangle(Element):
             tensor = self.material.getStrain()
             if key in tensor:
                 value = tensor[key]
-
-        elif var.lower() in flux:
-            key = var[1:2]
-            pass
 
         wi     = self.area / 3.
         val_wi = value * wi

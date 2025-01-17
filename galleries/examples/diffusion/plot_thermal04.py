@@ -148,6 +148,8 @@ class ExampleThermal04(Example):
         model.report()
 
         model.valuePlot('T', show_mesh=True)
+        model.valuePlot('qx', show_mesh=True)
+        model.valuePlot('qy', show_mesh=True)
 
         # creating a path plot
 

@@ -185,6 +185,9 @@ class AbstractPlotter():
             'rx': r'$\theta_{x}$',
             'ry': r'$\theta_{y}$',
             'rz': r'$\theta_{z}$',
+            'Tx': r'$\partial T/\partial{x}$',
+            'Ty': r'$\partial T/\partial{y}$',
+            'Tz': r'$\partial T/\partial{z}$',
         }
 
         if variable in map:

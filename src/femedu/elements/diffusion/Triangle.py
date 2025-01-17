@@ -109,7 +109,7 @@ class Triangle(LinearElement):
 
         # stress: this is actually the element flux
         flux = self.material.getFlux()
-        self.stress = {'delTx':flux[0], 'delTy':flux[1]}
+        self.stress = {'Tx':gradT[0], 'Ty':gradT[1], 'qx':flux[0], 'qy':flux[1]}
 
         multiplier  = self.area
         multiplier *= self.material.getThickness()
@@ -159,6 +159,34 @@ class Triangle(LinearElement):
 
     def getStress(self):
         return self.Stress
+
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
+
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        # this element has a single gauss-point at s = t = u = 1/3
+
+        flux     = ('qx','qy','Tx','Ty')
+
+        value = 0.0
+
+        if var in flux:
+            flow = self.stress
+            if var in flow:
+                value = flow[var]
+
+        wi     = self.area / 3.
+        val_wi = value * wi
+
+        for node in self.nodes:
+            node._addToMap(wi, val_wi)
+
+
+
 
 
 

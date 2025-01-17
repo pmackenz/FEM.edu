@@ -155,6 +155,8 @@ class ExampleThermal03(Example):
             print(elem)
 
         model.valuePlot('T', show_mesh=True)
+        model.valuePlot('qx', show_mesh=True)
+        model.valuePlot('qy', show_mesh=True)
 
 
 # %%
