@@ -110,9 +110,9 @@ class Triangle(Element):
 
         # update the material state
 
-        strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+        self.strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
 
-        self.material.setStrain(strain)
+        self.material.setStrain(self.strain)
 
         # 2nd Piola-Kirchhoff stress
         stress = self.material.getStress()
@@ -202,7 +202,37 @@ class Triangle(Element):
                 self.Loads[K] += loads[2]
 
     def getStress(self):
-        return self.Stress
+        return self.stress
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
 
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        # this element has a single gauss-point at s = t = u = 1/3
 
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
+
+        value = 0.0
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            tensor = self.material.getStress()
+            if key in tensor:
+                value = tensor[key]
+
+        elif var.lower() in strains:
+            key = var[1:3].lower()
+            tensor = self.material.getStrain()
+            if key in tensor:
+                value = tensor[key]
+
+        wi     = self.area / 3.
+        val_wi = value * wi
+
+        for node in self.nodes:
+            node._addToMap(wi, val_wi)

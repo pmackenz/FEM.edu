@@ -224,7 +224,3 @@ class Triangle(Element):
 
         for node in self.nodes:
             node._addToMap(wi, val_wi)
-
-
-
-
