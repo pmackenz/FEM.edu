@@ -274,7 +274,10 @@ class ExamplePlate07(Example):
 
         model.report()
 
-        model.plot(factor=1.0, filename="plate07_deformed.png")
+        model.plot(factor=1.0)
+        model.valuePlot('sxx', show_mesh=1)
+        model.valuePlot('syy', show_mesh=1)
+        model.valuePlot('sxy', show_mesh=1)
 
 
 # %%

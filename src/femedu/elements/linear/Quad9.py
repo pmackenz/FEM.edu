@@ -20,7 +20,7 @@ from copy import deepcopy
 
 from ..Element import *
 from ...domain.Node import *
-from ...utilities import QuadIntegration, QuadShapes
+from ...utilities import QuadIntegration, QuadShapes, GPdataType
 
 class Quad9(Element):
     r"""
@@ -37,10 +37,12 @@ class Quad9(Element):
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
-        if node0.getPos().size == 3:
+        ndim = node0.getPos().size
+
+        if ndim == 3:
             dof_list = ('ux','uy','uz')
             ndof = 3
-        elif node0.getPos().size == 2:
+        elif ndim == 2:
             dof_list = ('ux','uy')
             ndof = 2
         else:
@@ -54,9 +56,10 @@ class Quad9(Element):
         self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
         self.ndof = ndof
 
-        self.material  = []   # one material object per integration point
-        self.stress    = []   # hold gauss-point stress (1st Piola-Kirchhoff stress)
-        self.J         = []   # jacobian at integration point
+        #self.material  = []   # one material object per integration point
+        #self.stress    = []   # hold gauss-point stress (1st Piola-Kirchhoff stress)
+        #self.strain    = []   # hold gauss-point strain
+        #self.J         = []   # jacobian at integration point
 
         self.Grad      = []   # derivative of shape functions with respect to global coords
 
@@ -64,13 +67,16 @@ class Quad9(Element):
 
         # initialization step
         self.integrator = QuadIntegration(order=4)
-        xis, wis = self.integrator.parameters()
+        self.xis, self.wis = self.integrator.parameters()
+
+        self.gpData = [ GPdataType() for i  in range(len(self.xis)) ]
 
         gpt = 0
+        gp2nd_map = []
 
         interpolation = QuadShapes()
 
-        for xi, wi in zip(xis, wis):
+        for xi, wi, gpData in zip(self.xis, self.wis, self.gpData):
 
             dphi_ds = interpolation.shape(2, *xi, n=(1,0))
             dphi_dt = interpolation.shape(2, *xi, n=(0,1))
@@ -83,20 +89,35 @@ class Quad9(Element):
             # $ D\Phi_0 $
             #
             DPhi0 = (Grad @ X).T
-            self.J.append( np.linalg.det(DPhi0) )  # material model already includes thickness
+            gpData.J = np.linalg.det(DPhi0)   # material model already includes thickness
 
             # dual base (contra-variant)
             self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
 
-            self.material.append(deepcopy(material))
-            self.stress.append({})
+            gp_material = deepcopy(material)
+            gpData.material = gp_material
+            #self.material.append(gp_material)
+
+            # self.stress.append({})
+            # self.strain.append({})
+
+            # populate gauss-point to nodes map
+            raw_map = interpolation.shape(  # requesting shape function array
+                order=1,  # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1],  # local coordinates for current position
+                n=(0, 0))  # no derivative with respect to (s,t)
+            map = raw_map * wi * gpData.J
+            gp2nd_map.append(map)
             gpt += 1
 
+        self.ngpts      = gpt                    # number of gauss points
+        self._gp2nd_map = np.array(gp2nd_map).T  # gauss-point to nodes map array
 
 
     def __str__(self):
         s = super(Quad9, self).__str__()
-        for igpt, material in enumerate(self.material):
+        for igpt, gpData in enumerate(self.gpData):
+            material = gpData.material
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
             s += "\n    stress ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStress())
         if np.array(self.distributed_load).any():
@@ -150,9 +171,7 @@ class Quad9(Element):
 
         # interpolation = QuadShapes()   # we are doing that and the isoparametric transformation in the constructor
 
-        xis, wis = self.integrator.parameters()
-
-        for xi, wi in zip(xis, wis):
+        for xi, wi, gpData in zip(self.xis, self.wis, self.gpData):
 
             # dphi_ds = interpolation.shape(1, *xi, n=(1,0))
             # dphi_dt = interpolation.shape(1, *xi, n=(0,1))
@@ -162,7 +181,7 @@ class Quad9(Element):
             # -------------------------
 
             Grad = self.Grad[gpt]  # pre-computed in __init__
-            wi *= self.J[gpt]      # J includes the thickness of the plate
+            wi *= gpData.J         # J includes the thickness of the plate
 
             # spatial configuration
             # -------------------------
@@ -177,15 +196,16 @@ class Quad9(Element):
 
             # update the material state
             strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            gpData.state['strain'] = strain
 
-            self.material[gpt].setStrain(strain)
+            gpData.material.setStrain(strain)
 
             # 2nd Piola-Kirchhoff stress
-            stress = self.material[gpt].getStress()
+            stress = gpData.material.getStress()
             S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 
             # store stress for reporting
-            self.stress[gpt] = stress
+            gpData.state['stress'] = stress
 
             # compute kinematic matrices
             BI = [np.array([Grad[0, K] * Fo[:, 0],  # the XX component
@@ -198,7 +218,7 @@ class Quad9(Element):
                 force += S @ Grad[:,i] * wi  # wi already includes J
 
             # tangent stiffness
-            Ct = self.material[gpt].getStiffness() * wi
+            Ct = gpData.material.getStiffness() * wi
 
             for I, Bi in enumerate(BI):
                 GCti = Bi.T @ Ct
@@ -261,5 +281,40 @@ class Quad9(Element):
     def getStress(self):
         return self.Stress
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
 
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
+        values = np.zeros( self.ngpts )
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['stress']:
+                    values.append(gpdata.state['stress'][key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in strains:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['strain']:
+                    values.append(gpdata.state['strain'][key])
+                else:
+                    values.append(0.0)
+
+        values = np.array(values)
+
+        for node, map in zip(self.nodes, self._gp2nd_map):
+            wndi   = np.sum(map)
+            val_wi = map @ values
+            node._addToMap(wndi, val_wi)
