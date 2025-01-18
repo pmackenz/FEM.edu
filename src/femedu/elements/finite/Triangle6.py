@@ -31,13 +31,16 @@ class Triangle6(Element):
 
         # select shape functions and integrator for the quadratic triangle
         self.interpolation = TriangleShapes()
-        self.integrator    = TriangleIntegration(order=2)
+        integrator    = TriangleIntegration(order=2)
 
-        (xis, wis) = self.integrator.parameters()
+        (self.xis, self.wis) = integrator.parameters()
 
-        self.gpData = [ GPdataType() for i  in range(len(xis)) ]
+        self.gpData = [ GPdataType() for i  in range(len(self.xis)) ]
 
-        for xi, wi, gpData in zip(xis,wis,self.gpData):
+        gpt = 0
+        gp2nd_map = []
+
+        for xi, wi, gpData in zip(self.xis,self.wis,self.gpData):
 
             gpData.material = deepcopy(material)
 
@@ -77,6 +80,18 @@ class Triangle6(Element):
             gpData.dual_base = np.linalg.inv(GIJ) @ gcov
 
             gpData.J = np.sqrt(np.linalg.det(GIJ))
+
+            # populate gauss-point to nodes map
+            raw_map = self.interpolation.shape(  # requesting shape function array
+                order=1,  # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1],  # local coordinates for current position
+                n=(0, 0))  # no derivative with respect to (s,t)
+            map = raw_map * wi * gpData.J
+            gp2nd_map.append(map)
+            gpt += 1
+
+        self.ngpts      = gpt                    # number of gauss points
+        self._gp2nd_map = np.array(gp2nd_map).T  # gauss-point to nodes map array
 
 
     def __str__(self):
@@ -121,9 +136,7 @@ class Triangle6(Element):
         # initializes internal force and tangent stiffness to zero arrays of the appropriate size.
         self.reset_matrices()
 
-        (xis, wis) = self.integrator.parameters()
-
-        for xi, wi, gpData in zip(xis,wis,self.gpData):
+        for xi, wi, gpData in zip(self.xis,self.wis,self.gpData):
 
             # grab pre-computed quantities
 
@@ -157,12 +170,12 @@ class Triangle6(Element):
             F = np.outer(gs, Gs) + np.outer(gt, Gt)
 
             # strain
-            # eps = 0.5 * ( F + F.T ) - np.eye(np.size(gs))
             eps = 0.5 * ( F.T @ F - np.eye(np.size(gs)) )
             gpData.state['strain'] = eps
 
             # update the material state
             strain = {'xx':eps[0,0], 'yy':eps[1,1], 'xy':eps[0,1]+eps[1,0]}
+            gpData.state['strain'] = strain
             gpData.material.setStrain(strain)
 
             # stress
@@ -229,4 +242,43 @@ class Triangle6(Element):
 
 
     def getStress(self):
-        return self.Stress
+        stress = [ data.state['stress'] for data in self.gpData ]
+        return stress
+
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
+
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
+
+        values = np.zeros( self.ngpts )
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['stress']:
+                    values.append(gpdata.state['stress'][key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in strains:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['strain']:
+                    values.append(gpdata.state['strain'][key])
+                else:
+                    values.append(0.0)
+
+        values = np.array(values)
+
+        for node, map in zip(self.nodes, self._gp2nd_map):
+            wndi   = np.sum(map)
+            val_wi = map @ values
+            node._addToMap(wndi, val_wi)

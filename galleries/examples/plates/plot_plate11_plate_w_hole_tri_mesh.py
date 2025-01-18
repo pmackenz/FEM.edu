@@ -137,14 +137,14 @@ class ExamplePlate05(Example):
 
         model.report()
 
-        model.plot(factor=0, title="undeformed system", filename="plate05_undeformed.png", show_bc=1, show_loads=1)
+        model.plot(factor=0, title="undeformed system", show_bc=1, show_loads=1)
 
         model.setLoadFactor(10.0)
         model.solve()
 
         model.report()
 
-        model.plot(factor=10., filename="plate05_deformed.png", show_bc=1, show_loads=1, show_reactions=1)
+        model.plot(factor=10., show_bc=1, show_loads=1, show_reactions=1)
 
         model.valuePlot('ux')
 

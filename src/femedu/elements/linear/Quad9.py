@@ -53,21 +53,14 @@ class Quad9(Element):
         self.distributed_load = [0.0, 0.0, 0.0, 0.0]   # face loads along the perimeter of the element
         self.force    = 0.0
         self.Forces   = [ np.zeros(ndof) for k in range(len(self.nodes)) ]
-        self.Kt       = [ [ np.zeros(ndof) for k in range(len(self.nodes)) ] for m in range(len(self.nodes)) ]
+        self.Kt       = [ [ np.zeros((ndof,ndof)) for i in range(len(self.nodes)) ] for j in range(len(self.nodes)) ]
         self.ndof = ndof
-
-        #self.material  = []   # one material object per integration point
-        #self.stress    = []   # hold gauss-point stress (1st Piola-Kirchhoff stress)
-        #self.strain    = []   # hold gauss-point strain
-        #self.J         = []   # jacobian at integration point
-
-        self.Grad      = []   # derivative of shape functions with respect to global coords
 
         X  = np.array([ node.getPos() for node in self.nodes ])
 
         # initialization step
-        self.integrator = QuadIntegration(order=4)
-        self.xis, self.wis = self.integrator.parameters()
+        integrator = QuadIntegration(order=4)
+        self.xis, self.wis = integrator.parameters()
 
         self.gpData = [ GPdataType() for i  in range(len(self.xis)) ]
 
@@ -88,18 +81,13 @@ class Quad9(Element):
             #
             # $ D\Phi_0 $
             #
-            DPhi0 = (Grad @ X).T
+            DPhi0 = (Grad @ X).T  # d X^i/d xi_j   with xi_0=s, xi_1=t as the local coordinates
             gpData.J = np.linalg.det(DPhi0)   # material model already includes thickness
 
             # dual base (contra-variant)
-            self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
+            gpData.Grad = np.linalg.inv(DPhi0).T @ Grad
 
-            gp_material = deepcopy(material)
-            gpData.material = gp_material
-            #self.material.append(gp_material)
-
-            # self.stress.append({})
-            # self.strain.append({})
+            gpData.material = deepcopy(material)
 
             # populate gauss-point to nodes map
             raw_map = interpolation.shape(  # requesting shape function array
@@ -180,8 +168,8 @@ class Quad9(Element):
             # reference configuration
             # -------------------------
 
-            Grad = self.Grad[gpt]  # pre-computed in __init__
-            wi *= gpData.J         # J includes the thickness of the plate
+            Grad = gpData.Grad   # pre-computed in __init__
+            wi  *= gpData.J      # J includes the thickness of the plate
 
             # spatial configuration
             # -------------------------
@@ -191,7 +179,6 @@ class Quad9(Element):
             Fo = (Grad @ xo).T
 
             # compute Green-Lagrange strain tensor
-            #eps = 0.5 * ( np.tensordot(F,F,((0,), (0,))) - np.eye(self.ndof) )
             eps = 0.5 * ( F + F.T ) - np.eye(self.ndof)
 
             # update the material state
@@ -279,7 +266,8 @@ class Quad9(Element):
                 self.Loads[K] += loads[1]
 
     def getStress(self):
-        return self.Stress
+        stress = [ data.state['stress'] for data in self.gpData ]
+        return stress
 
     def mapGaussPoints(self, var):
         r"""

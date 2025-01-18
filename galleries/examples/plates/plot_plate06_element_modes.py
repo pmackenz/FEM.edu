@@ -37,7 +37,7 @@ from femedu.examples import Example
 from femedu.domain import System, Node
 from femedu.solver import NewtonRaphsonSolver
 from femedu.elements.linear import Quad
-from femedu.elements.finite import Quad9
+from femedu.elements.linear import Quad9
 from femedu.materials import PlaneStress
 
 # -------------------------------------------------------------

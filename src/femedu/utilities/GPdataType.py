@@ -10,6 +10,7 @@ class GPdataType():
     :param B: B-matrix (kinematic matrix) at current point
     :param C: C-matrix (material tangent) at current point
     :param material: pointer to material object at current point
+    :param Grad: gradient operator [ [ dN1/dx, dN1/dy], [ dN2/dx, dN2/dy], ... ]
     """
 
     def __init__(self):
@@ -21,6 +22,7 @@ class GPdataType():
         self.state     = {}
         self.C         = 1.0
         self.material  = None
+        self.Grad      = None
 
     def __str__(self):
         s  = f'GP @ X={self.base}\n'
@@ -31,4 +33,5 @@ class GPdataType():
         s += f'* B:\n\t{self.B}\n'
         s += f'* C:\n\t{self.C}\n'
         s += f'* material:\n\t{repr(self.material)}'
+        s += f'* Grad:\n\t{self.Grad}'
         return s

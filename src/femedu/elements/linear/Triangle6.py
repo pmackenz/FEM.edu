@@ -245,7 +245,7 @@ class Triangle6(Element):
 
 
     def getStress(self):
-        stress = [ data['stress'] for data in self.gpData ]
+        stress = [ data.state['stress'] for data in self.gpData ]
         return stress
 
     def mapGaussPoints(self, var):
