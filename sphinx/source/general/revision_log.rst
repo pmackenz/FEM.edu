@@ -8,7 +8,7 @@ Release 1.0.25
 Bringing contour plots for gauss-point variables.
 
 .. git_changelog::
-    :rev-list: release_1.0.24..release_1.0.24
+    :rev-list: release_1.0.24..release_1.0.25
 
 Release 1.0.24
 ---------------
