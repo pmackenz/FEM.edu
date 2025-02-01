@@ -180,7 +180,14 @@ class Triangle6(Element):
 
             # stress
             stress = gpData.material.getStress()
-            gpData.state['stress'] = stress
+
+            S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
+
+            # 1st Piola-Kirchhoff stress
+            P = F @ S
+
+            # store stress for reporting
+            gpData.state['stress'] = {'xx':P[0,0], 'xy':P[0,1], 'yx':P[1,0], 'yy':P[1,1]}
 
             S = np.array( [[stress['xx'],stress['xy']],[stress['xy'],stress['yy']]] )
 

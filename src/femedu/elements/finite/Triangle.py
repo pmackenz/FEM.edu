@@ -221,13 +221,15 @@ class Triangle(Element):
 
         if var.lower() in stresses:
             key = var[1:3].lower()
-            tensor = self.material.getStress()
+            #tensor = self.material.getStress()   # 2nd-Piola-Kirchhoff stress
+            tensor = self.stress                  # 1st-Piola-Kirchhoff stress
             if key in tensor:
                 value = tensor[key]
 
         elif var.lower() in strains:
             key = var[1:3].lower()
-            tensor = self.material.getStrain()
+            tensor = self.material.getStrain()  # Green-Lagrange Strain
+            tensor = self.strain
             if key in tensor:
                 value = tensor[key]
 
