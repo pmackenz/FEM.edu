@@ -79,3 +79,16 @@ rst_prolog = """
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
 html_last_updated_fmt = '%b %d, %Y'
+
+# -- custom equation numbers
+#
+# thanks: https://stackoverflow.com/questions/14110790/numbered-math-equations-in-restructuredtext
+def setup(app):
+    #app.add_stylesheet('css/custom.css')
+    app.add_css_file('css/custom.css')
+
+# # thanks: https://stackoverflow.com/questions/50631942/how-does-equation-numbering-work-for-sphinx
+# numfig = True
+# math_numfig = True
+# numfig_secnum_depth = 2
+# math_eqref_format = "Eq.{number}"
