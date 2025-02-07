@@ -43,18 +43,19 @@ class Faces():
         """
         self.load = [ pn, ps ]
 
-    def setFlux(self, qn, influx=False):
+    def setFlux(self, qn, outflux=False):
         r"""
         Defines a scalar surface flux on this Face.
         Coordinates n is the outward normal.
+        **qn** is positive if it is an in-flux
 
         :param qn: normal flux per unit length (or unit area in 3d)
-        :param influx: set to `True` if given value is an in-flux. (same as entering a negative out-flux)
+        :param outflux: set to `True` if given value is an out-flux. (same as entering a negative in-flux)
         """
-        if influx:
-            self.flux = -qn  # internally, we always consider qn an out-flux
+        if outflux:
+            self.flux = -qn  # internally, we always consider qn an in-flux
         else:
-            self.flux =  qn  # internally, we always consider qn an out-flux
+            self.flux = qn  # internally, we always consider qn an in-flux
 
     def computeNodalForces(self):
         r"""

@@ -72,7 +72,6 @@ class ExampleThermal04(Example):
         Nx = 8  # number of elements through the wall
         Ny = 4  # number of elements parallel to the wall
         Lx = 10.00  # wall thickness in m
-        Ly =  5.00  # wall thickness in m
         Ri =  5.00
         Ro = Ri + Lx
         alpha = np.radians(45.0)
@@ -80,9 +79,10 @@ class ExampleThermal04(Example):
         # ========== setting material parameters ==============
 
         params = dict(
-            E=20000.,  # Young's modulus
-            nu=0.250,  # Poisson's ratio
-            t=1.00     # thickness of the plate
+            specific_heat = 1000,  # J/kg.K
+            density       = 2500,  # kg/m3
+            conductivity  =  100,  # W/m.K
+            thickness     =  1.0   # m
         )
 
         # ========== setting load parameters ==============

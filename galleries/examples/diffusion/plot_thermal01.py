@@ -21,14 +21,19 @@ the outer surface of the wall, :math:`x=10~m`, to :math:`300~K`.
 The thermal equation for the uni-directional problem can be expressed as
 
 .. math::
-    \Delta T = \frac{\partial^2 T}{\partial r^2}  = 0
+    \Delta T = \frac{\partial^2 T}{\partial x^2}  = 0
 
 where :math:`\Delta` is the Laplace operator.
 
 The analytic solution follows as
 
 .. math::
-    T(x) =  T_i  + q_n \: x
+    T(x) =  T_i  + \nabla T \: x
+
+with
+
+.. math::
+    \nabla T = -\frac{1}{\lambda} q_x = -\frac{1}{\lambda} (-q_n)
 
 This solution will be compared against the finite element solution in the last figure.
 
@@ -71,20 +76,23 @@ class ExampleThermal01(Example):
 
         Nx = 5  # number of elements through the wall
         Ny = 1  # number of elements parallel to the wall
-        Lx = 10.00  # wall thickness in m
-        Ly =  1.00  # wall thickness in m
+
+        Lx = 10.00  # m ... wall thickness in m
+        Ly =  1.00  # m ... wall thickness in m
+        h  =  0.10  # m ... thickness of the 2d model
 
         # ========== setting material parameters ==============
 
         params = dict(
-            E  = 20000.,  # Young's modulus
-            nu = 0.250,   # Poisson's ratio
-            t  = 1.00     # thickness of the plate
+            specific_heat =  900,  # J/kg.K
+            density       = 2700,  # kg/m3
+            conductivity  =  235,  # W/m.K
+            thickness     =    h   # m
         )
 
         # ========== setting load parameters ==============
 
-        qn = 1.00  # uniform flux normal to x=const
+        qn = 1000.00  # W/m^2 ... uniform in-flux normal to x=Lx=const
 
         # ========== setting analysis parameters ==============
 
@@ -134,7 +142,7 @@ class ExampleThermal01(Example):
         ## complete the reference load at x=Lx (right edge)
         right_boundary_faces = model.findFacesAlongLine((Lx, 0.0), (0.0, 1.0), orientation=+1)
         for _, face in right_boundary_faces:
-            face.setFlux(qn)
+            face.setFlux(qn*h)  # flux is per length
 
         # perform the analysis
         model.setLoadFactor(1.0)
@@ -143,6 +151,7 @@ class ExampleThermal01(Example):
         model.report()
 
         model.valuePlot('T', show_mesh=True)
+        model.valuePlot('qx', show_mesh=True)
 
         # creating a path plot
 
@@ -157,7 +166,8 @@ class ExampleThermal01(Example):
 
         # the analytic solution for comparison
         x = np.linspace(0, Lx, 21)
-        T = 0.0 * (1 - x/Lx) + qn * x
+        delT = -(-qn) / params['conductivity']
+        T = 0.0 * (1 - x/Lx) + delT * x
 
         fig, axs = plt.subplots()
         axs.plot(x,T,'-b',label="analytic solution")

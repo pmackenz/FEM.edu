@@ -103,7 +103,7 @@ class Face2D(Faces):
         r"""
         Implementation of nodal flux calculation from surface flux.
 
-        Surface out-flux (in-flux) is considered positive (negative).
+        Surface in-flux (out-flux) is considered positive (negative).
 
         The surface is described  as
 

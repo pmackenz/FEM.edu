@@ -52,9 +52,10 @@ class ExampleThermal03(Example):
         # ========== setting material parameters ==============
 
         params = dict(
-            E=20000.,  # Young's modulus
-            nu=0.250,  # Poisson's ratio
-            t=1.00  # thickness of the plate
+            specific_heat =  700,   # J/kg.K
+            density       = 1800,   # kg/m3
+            conductivity  =  1.0,   # W/m.K
+            thickness     = 1.00    # m
         )
 
         # ========== setting load parameters ==============

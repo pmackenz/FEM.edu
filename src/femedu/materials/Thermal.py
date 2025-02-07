@@ -24,18 +24,23 @@ class Thermal(DiffusionGeneral):
     :type params: dict
     """
     
-    def __init__(self, params):
+    def __init__(self, params={'conductivity':1., 'specific_heat':1., 'density':1., 'thickness':1.}):
 
-        if 'conductivity' not in params:
-            params['conductivity'] = 1.0
-        if 'specific heat' not in params:
-            params['specific heat'] = 1.0
-        if 'density' not in params:
-            params['density'] = 1.0
+        valid_params = ('conductivity','specific_heat','density','thickness')
+
+        for p in valid_params:
+            if p not in params:
+                params['p'] = 1.0
+
+        for p in params:
+            if p not in valid_params:
+                msg = f"Warning: unknown parameter {p} found in parameter list - ignored"
+                print(msg)
 
         general_params = dict(
             diffusivity = params['conductivity'],
-            capacity    = params['specific heat'],
-            density     = params['density']
+            capacity    = params['specific_heat'],
+            density     = params['density'],
+            thickness   = params['thickness']
         )
         super(Thermal, self).__init__(params=general_params)

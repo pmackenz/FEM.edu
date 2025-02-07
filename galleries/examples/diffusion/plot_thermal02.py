@@ -21,7 +21,7 @@ the outer surface of the wall, :math:`x=10~m`, to :math:`300~K`.
 The thermal equation for the uni-directional problem can be expressed as
 
 .. math::
-    \Delta T = \frac{\partial^2 T}{\partial r^2}  = 0
+    \Delta T = \frac{\partial^2 T}{\partial x^2}  = 0
 
 where :math:`\Delta` is the Laplace operator.
 
@@ -77,9 +77,10 @@ class ExampleThermal02(Example):
         # ========== setting material parameters ==============
 
         params = dict(
-            E=20000.,  # Young's modulus
-            nu=0.250,  # Poisson's ratio
-            t=1.00     # thickness of the plate
+            specific_heat =  900,  # J/kg.K
+            density       = 2700,  # kg/m3
+            conductivity  =  235,  # W/m.K
+            thickness     =  0.10  # m
         )
 
         # ========== setting load parameters ==============

@@ -43,6 +43,13 @@ class Example20_Benchmark01(Example):
 
         Nx = 8      # number of elements in the mesh
         Ny = 4       # number of elements in the mesh
+
+        # Nx = 16      # number of elements in the mesh
+        # Ny = 8       # number of elements in the mesh
+        #
+        # Nx = 32      # number of elements in the mesh
+        # Ny = 16      # number of elements in the mesh
+
         L1 =  48.0
         L2 =  44.0
         L3 =  16.0
