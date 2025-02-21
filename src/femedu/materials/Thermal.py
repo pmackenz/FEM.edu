@@ -30,7 +30,7 @@ class Thermal(DiffusionGeneral):
 
         for p in valid_params:
             if p not in params:
-                params['p'] = 1.0
+                params[p] = 1.0
 
         for p in params:
             if p not in valid_params:

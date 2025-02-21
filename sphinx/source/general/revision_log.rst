@@ -3,6 +3,18 @@
 Full Revision Log
 ==================
 
+Release 1.0.27
+---------------
+
+.. git_changelog::
+    :rev-list: release_1.0.24..release_1.0.25
+
+Release 1.0.26
+---------------
+
+.. git_changelog::
+    :rev-list: release_1.0.24..release_1.0.25
+
 Release 1.0.25
 ---------------
 Bringing contour plots for gauss-point variables.
