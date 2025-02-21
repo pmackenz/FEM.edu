@@ -20,7 +20,10 @@ class PlaneStress(Material):
         self.setStrain({'xx':0.0, 'yy':0.0, 'zz':0.0, 'xy':0.0, 'yz':0.0, 'zx':0.0})
 
     def getThickness(self):
-        return self.parameters['t']
+        if 't' in  self.parameters:
+            return self.parameters['t']
+        else:
+            return 1.0
 
     def updateState(self):
         """
