@@ -215,11 +215,20 @@ class Triangle(Element):
         # this element has a single gauss-point at s = t = u = 1/3
 
         stresses = ('sxx','syy','szz','sxy','syz','szx')
+        membrane = ('nxx','nyy','nxy')
         strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
         value = 0.0
 
         if var.lower() in stresses:
+            key = var[1:3].lower()
+            #tensor = self.material.getStress()   # 2nd-Piola-Kirchhoff stress
+            tensor = self.stress                  # 1st-Piola-Kirchhoff stress
+            if key in tensor:
+                thickness = self.material.getThickness()
+                value = tensor[key]/thickness
+
+        if var.lower() in membrane:
             key = var[1:3].lower()
             #tensor = self.material.getStress()   # 2nd-Piola-Kirchhoff stress
             tensor = self.stress                  # 1st-Piola-Kirchhoff stress

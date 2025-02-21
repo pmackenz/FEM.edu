@@ -257,16 +257,27 @@ class Quad(Element):
         :param var: variable code for a variable to be mapped from Gauss-points to nodes
         """
         stresses = ('sxx','syy','szz','sxy','syz','szx')
+        membrane = ('nxx','nyy','nxy')
         strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
         values = np.zeros( self.ngpts )
 
-        if var.lower() in stresses:
+        if var.lower() in membrane:
             key = var[1:3].lower()
             values = []
             for gpdata in self.stress:   # gauss-point loop
                 if key in gpdata:
                     values.append(gpdata[key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata, material in zip(self.stress, self.material):   # gauss-point loop
+                if key in gpdata:
+                    thickness = material.getThickness()
+                    values.append(gpdata[key]/thickness)
                 else:
                     values.append(0.0)
 

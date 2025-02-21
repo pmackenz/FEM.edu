@@ -271,7 +271,7 @@ class System():
 
         for node, dnode in boundary_nodes:
             for elem in node.elements:
-                print('+', elem)
+                #print('+', elem)
                 for face in elem.faces:
                     for x, area in zip(face.pos, face.area):
                         match orientation:
@@ -594,6 +594,8 @@ class System():
               - engineering shear strain :math:`\gamma_{xy}=2\varepsilon_{xy}`,
                 :math:`\gamma_{yz}=2\varepsilon_{yz}`,
                 :math:`\gamma_{zx}=2\varepsilon_{zx}`
+            * - 'nxx', 'nyy', 'nxy'
+              - membrane forces :math:`n_{xx}=h\sigma_{xx}`, :math:`n_{yy}=h\sigma_{yy}`, :math:`n_{xy}=h\sigma_{xy}`
             * - 'T'
               - temperature
             * - 'qx', 'qy', 'qz'
