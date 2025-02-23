@@ -394,7 +394,7 @@ class ElementPlotter(AbstractPlotter):
                         minY = np.min([minY, np.min(y)])
                         maxY = np.max([maxY, np.max(y)])
                 (xsi, vals) = elem.getInternalForce(variable_name)
-                if xsi.size != 0 and vals.size != 0:
+                if isinstance(xsi, np.ndarray) and isinstance(vals, np.ndarray) and xsi.size != 0 and vals.size != 0:
                     minV = np.min([minV, np.min(vals)])
                     maxV = np.max([maxV, np.max(vals)])
 
@@ -429,13 +429,16 @@ class ElementPlotter(AbstractPlotter):
                         xj = np.array([x[-1],y[-1]])
                         lvec = xj - xi
                         ell  = np.linalg.norm(lvec)
-                        nvec = lvec / ell
+                        if ell > 1.0e-12:
+                            nvec = lvec / ell
+                        else:
+                            nvec = np.array([1.0, 0.0])
                         svec = np.array( [ -nvec[1], nvec[0] ] )
 
                         # variable plot
                         if elem.isType(Element.LINE) or elem.isType(Element.CURVE):
                             (xsi, vals) = elem.getInternalForce(variable_name)
-                            if xsi.size > 0 and vals.size > 0:
+                            if isinstance(xsi, np.ndarray) and isinstance(vals, np.ndarray) and xsi.size > 0 and vals.size > 0:
                                 vals *= scale
 
                                 xv = xi + np.outer(xsi,  lvec)

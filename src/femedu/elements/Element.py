@@ -3,6 +3,8 @@ from copy import deepcopy
 import numpy as np
 import os
 import sys
+import warnings
+
 from .DrawElement import *
 from ..recorder.Recorder import Recorder
 from .Face2D import *
@@ -327,7 +329,9 @@ class Element(DrawElement):
 
     def getInternalForce(self, variable=''):
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
-        raise NotImplementedError(msg)
+        #raise NotImplementedError(msg)
+        warnings.warn(msg)
+        return (None, None)
 
     def getStress(self):
         self.updateState()
@@ -343,7 +347,7 @@ class Element(DrawElement):
         """
         msg = "** WARNING ** {}.{} not implemented".format(self.__class__.__name__, sys._getframe().f_code.co_name)
         #raise NotImplementedError(msg)
-        print(msg)
+        warnings.warn(msg)
 
     def getStiffness(self):
         r"""

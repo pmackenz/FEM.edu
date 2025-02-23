@@ -17,10 +17,12 @@ __all__ = (
     "Faces",
     "Face2D",
     "Face3D",
+    "BeamSolidLink",
 )
 
 from .Beam2D import *
 from .Quad import *
+from .Quad8 import *
 from .Quad9 import *
 from .ReducedIntegrationQuad import *
 from .HRQuad import *
@@ -29,3 +31,4 @@ from .Triangle6 import *
 from .Truss import *
 from .Spring import *
 from .Frame2D import *
+from .BeamSolidLink import *
