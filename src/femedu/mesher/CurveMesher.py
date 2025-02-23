@@ -21,6 +21,18 @@ class CurveMesher(Mesher):
         self.ndim    = len(pts[0])
         self.support = np.array(pts)
 
+    def lineMesh(self, Ne, element_type, material, **kwargs):
+        """
+        nD mesher using line elements
+
+        This is an abstract class - requires implementation in subclass
+
+        :param int Ne: number of elements along the curve
+        :param element_type: compatible element type
+        :param material: a material object
+        """
+        return self.mesh(Ne, element_type, material, **kwargs)
+
     def mesh(self, Ne, element_type, material, **kwargs):
         """
         mesh a curve in 2d/3d using any kind of line element.

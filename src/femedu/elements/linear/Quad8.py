@@ -1,8 +1,8 @@
 r"""
 ============================
-9-node quadrilateral
+8-node quadrilateral
 ============================
-Full bi-quadratic interpolation
+Serendipity element
 
 .. code::
 
@@ -10,7 +10,6 @@ Full bi-quadratic interpolation
           x     y
       x^2   x*y   y^2
         x^2*y x*y^2
-          x^2*y^2
 
 
 """
@@ -22,9 +21,9 @@ from ..Element import *
 from ...domain.Node import *
 from ...utilities import QuadIntegration, QuadShapes, GPdataType
 
-class Quad9(Element):
+class Quad8(Element):
     r"""
-    class: representing a plane 9-node quadrilateral
+    class: representing a plane 8-node serendipity quadrilateral
 
     This element works as 2D plate, loaded in-plane, and as a 3D membrane element.
 
@@ -32,8 +31,11 @@ class Quad9(Element):
     * For 3D membrane behavior, define nodes as three-dimensional nodes
     """
 
-    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, node8, material, label=None):
-        super(Quad9, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7, node8), material, label=label)
+    def __init__(self, node0, node1, node2, node3, node4, node5, node6, node7, material, label=None):
+
+        raise NotImplementedError("Please use Quad9 until Quad8 becomes available")
+
+        super(Quad8, self).__init__((node0, node1, node2, node3, node4, node5, node6, node7), material, label=label)
         self.element_type = DrawElement.QUAD
         self.createFaces()
 
@@ -103,7 +105,7 @@ class Quad9(Element):
 
 
     def __str__(self):
-        s = super(Quad9, self).__str__()
+        s = super(Quad8, self).__str__()
         for igpt, gpData in enumerate(self.gpData):
             material = gpData.material
             s += "\n    strain ({}): xx={xx:.3e} yy={yy:.3e} xy={xy:.3e} zz={zz:.3e}".format(igpt,**material.getStrain())
@@ -140,7 +142,7 @@ class Quad9(Element):
             self.faces[face].setLoad(pn, ps)
 
     def resetLoads(self):
-        super(Quad9, self).resetLoads()
+        super(Quad8, self).resetLoads()
 
     def updateState(self):
 

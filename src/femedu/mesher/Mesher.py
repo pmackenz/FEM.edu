@@ -21,13 +21,13 @@ class Mesher():
         """
         self.offset += np.array([dx, dy])
 
-    def lineMesh(self, NeX, element_type, material, **kwargs):
+    def lineMesh(self, Ne, element_type, material, **kwargs):
         """
         nD mesher using line elements
 
         This is an abstract class - requires implementation in subclass
 
-        :param int NeX: number of elements along the curve
+        :param int Ne: number of elements along the curve
         :param element_type: compatible element type
         :param material: a material object
         """
