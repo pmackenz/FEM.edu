@@ -70,6 +70,8 @@ class PatchMesher(Mesher):
         match element_type.__name__:
             case 'Quad':
                 return self._quad4_mesh(NeX, NeY, element_type, material, **kwargs)
+            case 'ReducedIntegrationQuad':
+                return self._quad4_mesh(NeX, NeY, element_type, material, **kwargs)
             case 'Quad8':
                 return self._quad8_mesh(NeX, NeY, element_type, material, **kwargs)
             case 'Quad9':
