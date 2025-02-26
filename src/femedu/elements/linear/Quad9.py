@@ -91,9 +91,9 @@ class Quad9(Element):
 
             # populate gauss-point to nodes map
             raw_map = interpolation.shape(  # requesting shape function array
-                order=1,  # polynomial order per direction: quadratic
-                s=xi[0], t=xi[1],  # local coordinates for current position
-                n=(0, 0))  # no derivative with respect to (s,t)
+                order=2,                    # polynomial order per direction: quadratic
+                s=xi[0], t=xi[1],           # local coordinates for current position
+                n=(0, 0))                   # no derivative with respect to (s,t)
             map = raw_map * wi * gpData.J
             gp2nd_map.append(map)
             gpt += 1
