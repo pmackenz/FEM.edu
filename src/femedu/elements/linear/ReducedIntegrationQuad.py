@@ -87,11 +87,12 @@ class ReducedIntegrationQuad(Element):
         # full integration
         # -------------------------
         integrator = QuadIntegration(order=2)
-        xis, wis = integrator.parameters()
+        self.xis, self.wis = integrator.parameters()
 
         gpt = 0
+        gp2nd_map = []
 
-        for xi, wi in zip(xis, wis):
+        for xi, wi in zip(self.xis, self.wis):
 
             dphi_ds = interpolation.shape(1, *xi, n=(1,0))
             dphi_dt = interpolation.shape(1, *xi, n=(0,1))
@@ -109,11 +110,16 @@ class ReducedIntegrationQuad(Element):
             # dual base (contra-variant)
             self.Grad.append( np.linalg.inv(DPhi0).T @ Grad)
 
+            # populate gauss-point to nodes map
+            map = interpolation.shape(1, *xi, n=(0,0)) * wi
+            gp2nd_map.append(map)
+
             self.material.append(deepcopy(material))
             self.stress.append({})
             gpt += 1
 
-
+        self.ngpts      = gpt                    # number of gauss points
+        self._gp2nd_map = np.array(gp2nd_map).T  # gauss-point to nodes map array
 
     def __str__(self):
         s = super(ReducedIntegrationQuad, self).__str__()
@@ -221,11 +227,9 @@ class ReducedIntegrationQuad(Element):
 
         # full integration
         # -------------------------
-        xis, wis = integrator.parameters()
-
         gpt = 0
 
-        for xi, wi in zip(xis, wis):
+        for xi, wi in zip(self.xis, self.wis):
 
             # reference configuration
             # -------------------------
@@ -314,5 +318,50 @@ class ReducedIntegrationQuad(Element):
     def getStress(self):
         return self.Stress
 
+    def mapGaussPoints(self, var):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
 
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        """
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        membrane = ('nxx','nyy','nxy')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
+        values = np.zeros( self.ngpts )
+
+        if var.lower() in membrane:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.stress:   # gauss-point loop
+                if key in gpdata:
+                    values.append(gpdata[key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata, material in zip(self.stress, self.material):   # gauss-point loop
+                if key in gpdata:
+                    thickness = material.getThickness()
+                    values.append(gpdata[key]/thickness)
+                else:
+                    values.append(0.0)
+
+        if var.lower() in strains:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.strain:   # gauss-point loop
+                if key in gpdata:
+                    values.append(gpdata[key])
+                else:
+                    values.append(0.0)
+
+        values = np.array(values)
+
+        for node, Ji, wi, map in zip(self.nodes, self.J, self.wis, self._gp2nd_map):
+            val_wi = map @ values
+            node._addToMap(wi * Ji, val_wi * Ji)
