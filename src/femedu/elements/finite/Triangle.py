@@ -204,13 +204,14 @@ class Triangle(Element):
     def getStress(self):
         return self.stress
 
-    def mapGaussPoints(self, var):
+    def mapGaussPoints(self, var, target_node=None):
         r"""
         Initiate mapping of Gauss-point values to nodes.
         This method is an internal method and should not be called by the user.
         Calling that method explicitly will cause faulty nodal values.
 
         :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        :param target_node: pointer to a node.  If given, the element will map only to that node.  Default is map to all nodes.
         """
         # this element has a single gauss-point at s = t = u = 1/3
 
@@ -246,4 +247,5 @@ class Triangle(Element):
         val_wi = value * wi
 
         for node in self.nodes:
-            node._addToMap(wi, val_wi)
+            if target_node == None or node == target_node:
+                node._addToMap(wi, val_wi)

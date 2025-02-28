@@ -318,13 +318,14 @@ class ReducedIntegrationQuad(Element):
     def getStress(self):
         return self.Stress
 
-    def mapGaussPoints(self, var):
+    def mapGaussPoints(self, var, target_node=None):
         r"""
         Initiate mapping of Gauss-point values to nodes.
         This method is an internal method and should not be called by the user.
         Calling that method explicitly will cause faulty nodal values.
 
         :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        :param target_node: pointer to a node.  If given, the element will map only to that node.  Default is map to all nodes.
         """
         stresses = ('sxx','syy','szz','sxy','syz','szx')
         membrane = ('nxx','nyy','nxy')
@@ -363,5 +364,6 @@ class ReducedIntegrationQuad(Element):
         values = np.array(values)
 
         for node, Ji, wi, map in zip(self.nodes, self.J, self.wis, self._gp2nd_map):
-            val_wi = map @ values
-            node._addToMap(wi * Ji, val_wi * Ji)
+            if target_node == None or node == target_node:
+                val_wi = map @ values
+                node._addToMap(wi * Ji, val_wi * Ji)

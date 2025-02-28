@@ -3,12 +3,17 @@
 Full Revision Log
 ==================
 
+Release 1.0.29
+---------------
+
+.. git_changelog::
+    :rev-list: release_1.0.28..release_1.0.29
+
 Release 1.0.28
 ---------------
 
 .. git_changelog::
     :rev-list: release_1.0.27..release_1.0.28
-
 
 Release 1.0.27
 ---------------

@@ -978,7 +978,7 @@ class Node():
         if not self.is_lead:
             self.lead._addToMap(weight, weighted_value)
 
-    def getMappedValue(self, var=None, ignore_lead=False):
+    def _getMappedValues(self, var=None, ignore_lead=False):
         r"""
         Returns the mapped and weighted nodal value.
 
@@ -994,6 +994,31 @@ class Node():
                     ans = self._weighted_value / self._weight
                 else:
                     ans = 0.0
+            return ans
+        else:
+            return self.lead._getMappedValues(var)
+
+    def getMappedValue(self, var=None, ignore_lead=False):
+        r"""
+        Returns the mapped and weighted nodal value.
+
+        :param var:  optional. If a string identifying the variable is given, this function will return zero i fthe current variable does not match
+                     the once provided by the caller.
+        :return:     the weighted nodal average for the requested variable.
+        """
+        if self.is_lead or ignore_lead:
+            if var and var != self._mapped_variable:
+                # reset mapped values
+                self._resetGaussPointMap(var)
+                # compute map
+                for elem in self.elements:
+                    # request map to the current node only
+                    elem.mapGaussPoints(var, target_node=self)
+
+            if self._weight > 0.0:
+                ans = self._weighted_value / self._weight
+            else:
+                ans = 0.0
             return ans
         else:
             return self.lead.getMappedValue(var)

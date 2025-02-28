@@ -231,7 +231,7 @@ class ElementPlotter(AbstractPlotter):
                 verts.append(node.getPos())
                 vert_ptr[node] = i
                 if gaussptvalue:
-                    val = node.getMappedValue(variable_name)
+                    val = node._getMappedValues(variable_name)
                 else:
                     disps = node.getDisp(variable_name)
 

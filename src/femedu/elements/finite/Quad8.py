@@ -251,5 +251,53 @@ class Quad8(Element):
     def getStress(self):
         return self.Stress
 
+    def mapGaussPoints(self, var, target_node=None):
+        r"""
+        Initiate mapping of Gauss-point values to nodes.
+        This method is an internal method and should not be called by the user.
+        Calling that method explicitly will cause faulty nodal values.
 
+        :param var: variable code for a variable to be mapped from Gauss-points to nodes
+        :param target_node: pointer to a node.  If given, the element will map only to that node.  Default is map to all nodes.
+        """
+        stresses = ('sxx','syy','szz','sxy','syz','szx')
+        membrane = ('nxx','nyy','nxy')
+        strains  = ('epsxx','epsyy','epszz','epsxy','epsyz','epszx')
 
+        values = np.zeros( self.ngpts )
+
+        if var.lower() in stresses:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['stress']:
+                    thickness = gpdata.material.getThickness()
+                    values.append(gpdata.state['stress'][key]/thickness)
+                else:
+                    values.append(0.0)
+
+        if var.lower() in membrane:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['stress']:
+                    values.append(gpdata.state['stress'][key])
+                else:
+                    values.append(0.0)
+
+        if var.lower() in strains:
+            key = var[1:3].lower()
+            values = []
+            for gpdata in self.gpData:   # gauss-point loop
+                if key in gpdata.state['strain']:
+                    values.append(gpdata.state['strain'][key])
+                else:
+                    values.append(0.0)
+
+        values = np.array(values)
+
+        for node, map in zip(self.nodes, self._gp2nd_map):
+            if target_node == None or node == target_node:
+                wndi   = np.sum(map)
+                val_wi = map @ values
+                node._addToMap(wndi, val_wi)

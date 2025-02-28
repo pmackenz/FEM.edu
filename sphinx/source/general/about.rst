@@ -95,6 +95,14 @@ Special thanks for great discussions in aid of the development process goes to:
             |
             | Educational components, Structural Stability
 
+    * -
+      - **Ewan Steers**
+
+            |
+            | Graduate Student in CEE @ UW, Seattle
+            |
+            | Thank you for improving the mapping of gauss point data to nodes.
+
 
 .. |PeterMH| image:: ../images/peter-mackenzie-helnwein.jpeg
     :alt: image of Peter
