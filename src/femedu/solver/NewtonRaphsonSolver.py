@@ -4,7 +4,12 @@ from ..solver.Solver import Solver
 
 class NewtonRaphsonSolver(Solver):
     r"""
-    An iterative solver for load-controlled nonlinear analysis.
+    An iterative solver for general nonlinear analysis.
+
+    This implementation only uses data models and methods provided by :code:`numpy`.
+    The implementation is stable and relatively easy to read, though, it comes at the cost of
+    a full storage demand for the stiffness matrix.
+
     """
 
     def __init__(self):

@@ -364,8 +364,8 @@ class Node():
                 U = self.disp_mode
             else:
                 if not isinstance(self.disp, np.ndarray):
-                    self.disp    = np.zeros(self.ndofs)
-                    self.disp_n  = np.zeros(self.ndofs)
+                    self.disp = np.zeros(self.ndofs)
+                    self.disp_n = np.zeros(self.ndofs)
                     self.disp_nn = np.zeros(self.ndofs)
                 U = self.disp
 
@@ -373,22 +373,25 @@ class Node():
             # see if local coordinates were requested
             if 'local' in kwargs and kwargs['local'] == True:
                 # check if we have a nodal transformation attached
-                #if isinstance(self._transform, Transformation):
+                # if isinstance(self._transform, Transformation):
                 if self._transform:
                     #
                     # see Element.getLoad() and Element.getForce() methods
                     #
                     U = self.v2l(U, self)
 
-            # apply prescribed displacements
-            for dof in self._setU:
-                if dof in self.dofs:
-                    # the index of dof in self.U
-                    idx = self.dofs[dof]
-                    # the prescribed displacement value
-                    ubar = self._setU[dof][0] + self.loadfactor * self._setU[dof][1]
-                    # set prescribed value in nodal U-vector
-                    U[idx] = ubar
+            # *** the following code segment was moved to Node.getFixedDisp(...)
+            # *** this will be used inside Solver and classes derived from it.
+
+            # # apply prescribed displacements
+            # for dof in self._setU:
+            #     if dof in self.dofs:
+            #         # the index of dof in self.U
+            #         idx = self.dofs[dof]
+            #         # the prescribed displacement value
+            #         ubar = self._setU[dof][0] + self.loadfactor * self._setU[dof][1]
+            #         # set prescribed value in nodal U-vector
+            #         U[idx] = ubar
 
             if caller:
                 # we know the calling element.
@@ -405,7 +408,7 @@ class Node():
             else:
                 # we do not know who is requesting displacements, so provide all requested or ALL if no dofs were specified.
                 if dofs:
-                    if isinstance(dofs,str):
+                    if isinstance(dofs, str):
                         dofs = [dofs]
                     ans = []
                     for dof in dofs:
@@ -420,6 +423,81 @@ class Node():
 
         else:
             return self.lead.getDisp(dofs=dofs, caller=caller, **kwargs)
+
+    def getFixedDisp(self, dofs=None, caller=None, **kwargs):
+        r"""
+        return a vector (`nd.array`) of **user-prescribed** (generalized) displacements.
+
+        If a :code:`caller` is given, the element-specific d.o.f.s will be returned as a sequence
+        in the same order as given by the element's :code:`request()` call.
+
+        If a :code:`dof_list` is given, d.o.f.s will be returned as the sequence given by that list.
+        A zero value will be returned for all d.o.f.s that do not exist at this node.
+
+        .. note::
+
+            A single d.o.f., e.g., "ux", can be requested using :code:`getFixedDisp(dofs=('ux',))`.
+            Do not forget the :code:`,` to indicate the definition of a single-element tuple.
+
+        :param caller: pointer to element
+        :param dofs: tuple or list of d.o.f. keys
+        :return: nodal displacement vector
+        """
+        if self.is_lead:
+            U = np.zeros(self.ndofs)
+
+            # apply prescribed displacements
+            for dof in self._setU:
+                if dof in self.dofs:
+                    # the index of dof in self.U
+                    idx = self.dofs[dof]
+                    # the prescribed displacement value
+                    ubar = self._setU[dof][0] + self.loadfactor * self._setU[dof][1]
+                    # set prescribed value in nodal U-vector
+                    U[idx] = ubar
+
+            # so far, U is in global coordinates.
+            # see if local coordinates were requested
+            if 'local' in kwargs and kwargs['local'] == True:
+                # check if we have a nodal transformation attached
+                # if isinstance(self._transform, Transformation):
+                if self._transform:
+                    #
+                    # see Element.getLoad() and Element.getForce() methods
+                    #
+                    U = self.v2l(U, self)
+
+            if caller:
+                # we know the calling element.
+                # ... ignoring dofs and using dof list from element map
+
+                if caller not in self.dof_maps:
+                    msg = "caller not registered with this node"
+                    raise TypeError(msg)
+
+                idx = self.dof_maps[caller]
+                ans = U[idx]
+                return np.array(ans)
+
+            else:
+                # we do not know who is requesting displacements, so provide all requested or ALL if no dofs were specified.
+                if dofs:
+                    if isinstance(dofs, str):
+                        dofs = [dofs]
+                    ans = []
+                    for dof in dofs:
+                        if dof in self.dofs:
+                            ans.append(U[self.dofs[dof]])
+                        else:
+                            ans.append(0.0)
+                else:
+                    ans = U
+
+                return np.array(ans)
+
+        else:
+            return self.lead.getFixedDisp(dofs=dofs, caller=caller, **kwargs)
+
 
     def getDeltaU(self, previous_step=False):
         r"""
