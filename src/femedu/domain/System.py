@@ -142,7 +142,7 @@ class System():
 # --------- modeling assist functions ----------------
 
     def _is_node_on_line(self, node, pos, dir, tol=1.e-3):
-        tvec = np.array(dir)
+        tvec = np.array(dir,dtype=np.float64)
         tvec /= np.linalg.norm(tvec)  # normalized tangent vector
 
         R = node.getPos() - np.array(pos)
@@ -256,8 +256,8 @@ class System():
         """
         ans = []
 
-        Xo = np.array(pos)
-        To = np.array(dir)
+        Xo = np.array(pos, dtype=np.float64)
+        To = np.array(dir, dtype=np.float64)
         To /= np.linalg.norm(To)
 
         match len(dir):
