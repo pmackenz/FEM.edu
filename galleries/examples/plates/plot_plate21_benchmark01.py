@@ -17,7 +17,8 @@ import numpy as np
 from femedu.examples import Example
 
 from femedu.domain import System
-from femedu.solver import NewtonRaphsonSolver
+# from femedu.solver import NewtonRaphsonSolver
+from femedu.solver import NewtonRaphsonSolverSparse as NewtonRaphsonSolver
 from femedu.elements.finite import Quad9, Triangle6
 from femedu.materials import PlaneStress
 from femedu.mesher import *
