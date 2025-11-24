@@ -79,8 +79,11 @@ class ElementPlotter(AbstractPlotter):
             lw2 = 2
 
         if self.plot3D:
-            fig = plt.figure(figsize=(10, 10))
-            axs = fig.gca(projection='3d')
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig, axs = kwargs['use_axis']
+            else:
+                fig = plt.figure(figsize=(10, 10))
+                axs = fig.gca(projection='3d')
 
             # plot the undeformed elements
             for elem in self.elements:
@@ -114,7 +117,7 @@ class ElementPlotter(AbstractPlotter):
             self.set_axes_equal(axs)
 
         else:
-            if 'use_axis' in kwargs:
+            if 'use_axis' in kwargs and kwargs['use_axis']:
                 fig, axs = kwargs['use_axis']
             else:
                 fig, axs = plt.subplots()
@@ -220,7 +223,11 @@ class ElementPlotter(AbstractPlotter):
             return
 
         else:
-            fig, axs = plt.subplots()
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig, axs = kwargs['use_axis']
+            else:
+                fig, axs = plt.subplots()
+
             axs.set_aspect('equal')
 
             # build vertices
@@ -298,7 +305,10 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         if filename:
-            plt.savefig(filename, bbox_inches='tight')
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig.savefig(filename, bbox_inches='tight')
+            else:
+                plt.savefig(filename, bbox_inches='tight')
         plt.show()
 
     def xyPlot(self, X, Y, filename=None, show_arrows=False, **kwargs):
@@ -315,7 +325,10 @@ class ElementPlotter(AbstractPlotter):
         :param str xlabel: x-axis label (optional)
         :param str ylabel: y-axis label (optional)
         """
-        fig, axs = plt.subplots()
+        if 'use_axis' in kwargs and kwargs['use_axis']:
+            fig, axs = kwargs['use_axis']
+        else:
+            fig, axs = plt.subplots()
 
         xlbl, xi = X.getData()
 
@@ -347,7 +360,11 @@ class ElementPlotter(AbstractPlotter):
         #axs.set_ymargin(0.10)
 
         if filename:
-            plt.savefig(filename, bbox_inches='tight')
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig.savefig(filename, bbox_inches='tight')
+            else:
+                plt.savefig(filename, bbox_inches='tight')
+
         plt.show()
 
     def beamValuePlot(self, variable_name='', factor=0.0, filename=None, show_arrows=False, **kwargs):
@@ -368,12 +385,18 @@ class ElementPlotter(AbstractPlotter):
         if self.plot3D:
             raise NotImplementedError
 
-            fig = plt.figure(figsize=(10, 10))
-            axs = fig.gca(projection='3d')
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig, axs = kwargs['use_axis']
+            else:
+                fig = plt.figure(figsize=(10, 10))
+                axs = fig.gca(projection='3d')
             self.set_axes_equal(axs)
 
         else:
-            fig, axs = plt.subplots()
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig, axs = kwargs['use_axis']
+            else:
+                fig, axs = plt.subplots()
 
             minX =  1.e20
             maxX = -1.e20
@@ -480,7 +503,11 @@ class ElementPlotter(AbstractPlotter):
             axs.set_axis_off()
 
         if filename:
-            plt.savefig(filename, bbox_inches='tight')
+            if 'use_axis' in kwargs and kwargs['use_axis']:
+                fig.savefig(filename, bbox_inches='tight')
+            else:
+                plt.savefig(filename, bbox_inches='tight')
+
         plt.show()
 
     def _arrow(self,axs,x,y,dx,dy,val,show_point=True):

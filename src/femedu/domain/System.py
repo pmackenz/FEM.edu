@@ -778,7 +778,7 @@ class System():
         plt.savefig("history_plots.png", bbox_inches='tight')
         plt.show()
 
-    def plotSystem(self, filename=""):
+    def plotSystem(self, filename="", **kwargs):
         r"""
         This is a shortcut for
 
@@ -793,7 +793,7 @@ class System():
 
         :param filename: if given, save the plot to that file
         """
-        self.plot(filename=filename, factor=0.0, title="Undeformed system", show_loads=1, show_reactions=0)
+        self.plot(filename=filename, factor=0.0, title="Undeformed system", show_loads=1, show_reactions=0, **kwargs)
 
     def pushU(self):
         """
